@@ -1,0 +1,66 @@
+frame -1,-1,7,9
+scale 2
+
+O = point(0,0)
+r=6.7
+c=circle (O,r)
+lh=line(c,45:)
+lph=line(O,45:)
+la=line(O,80:)
+lb=line(O,25:)
+
+dummy.A=intersection(la,c)
+dummy.B=intersection(lb,c)
+dummy.C=intersection(lph,c)
+
+# Ca=intersection(lh,c) : this caused problems
+
+A'=intersection(la,lh)
+B'=intersection(lb,lh)
+
+
+draw 
+  c
+  A
+  B
+  A'
+  B'
+  C
+  O
+  "ha" A.A' 45: 
+  "hb" B.B' 90: 
+  "da" C.A' 45: 
+  "db" C.B' 90: 
+  "r" O.A 180: 
+  "r" O.B 90:
+  "r" O.C 90:
+  
+  (A'.O.C)
+  (B'.O.C)
+end
+
+draw dashed
+  lh
+  lph
+  la
+  lb
+end
+
+label
+  A  45:
+  B  90:
+  A' 20:
+  B' 90:
+  C  90:
+  O  -90:
+  
+  O,C,A' right
+  O,C,B' right
+  
+  C,O,A 
+  B,O,C
+end
+
+
+
+

@@ -1,0 +1,67 @@
+frame -5,-1,5,9
+scale 2
+
+O = point(0,0)
+r=6.7
+c=circle (O,r)
+
+la=line(O,90:)
+lh=line(c,60:)
+lb=line(O,60:)
+lh2=line(c,120:)
+lb2=line(O,120:)
+
+
+dummy.A=intersection(la,c)
+dummy.B=intersection(lb,c)
+dummy.B2=intersection(lb2,c)
+
+A'=intersection(la,lh)
+
+lp=line(B,B2)
+
+B'=intersection(lp,la)
+
+draw
+  c
+  O
+  A
+  A'
+  B
+  B2
+  B'
+  
+  "h"  A.A'  45:
+  "h'" A.B'  45: 
+  "da" A'.B  45:
+  "r"  O.A  180: 
+  "r"  O.B   90:
+  "l"  B.B' -90:
+  
+  (A'.B'.B)
+  (O.B'.B)
+end
+
+draw dashed
+la
+lb
+lh
+lb2
+lh2
+lp
+end
+
+label
+  O    0:
+  A   45:
+  A'  45:
+  B   30:
+  B' 140:
+  B2 160:
+  A',B',B right
+  O,B',B  right
+end
+
+
+
+

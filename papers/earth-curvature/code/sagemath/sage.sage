@@ -31,4 +31,7 @@ eqx = xp==e*x/z
 eqy = yp==((y-h)/z)*e+h
 eqz = zp==z
 
-print solve([eqx,eqy,eqz,],x,y,z,h,e,r)
+print solve([eqx,eqy,eqz],x,y,z,h,e,r)
+
+
+print solve([eqx,eqy,eqz,eq1,eq2],h,e,r)

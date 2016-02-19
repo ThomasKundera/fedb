@@ -224,7 +224,9 @@
   pictures that flatters takes for a ``proof'' that the Earth could not be
   round.
 
-  <big-figure|<image|code/gnuplot/distance.eps|12cm|||>|<label|fighorizonplot>>
+  <\big-figure>
+    <image|code/gnuplot/distances.eps|12cm|||>
+  </big-figure|<label|fighorizonplot>>
 
   <subsection|A note about looming and mirages>
 
@@ -293,13 +295,11 @@
   On Figure <reference|figatana>, is plotted the value of angle
   <math|\<alpha\>> in function of the altitude in kilometers. At <math|10 km>
   of altitude, the angle is about 3<degreesign>, an unnoticeable value
-  without tools. one has to reach about <math|100 km> to see a deviation of
-  10<degreesign> from the ground.
+  without tools. one has to reach about <math|100 km> to see a clearly
+  noticeable deviation of 10<degreesign> from the ground.
 
   So anyone expecting to see something significant at a lower altitude is
-  misleads.
-
-  \;
+  misleaded.
 
   <section|Shape of the horizon>
 
@@ -351,13 +351,13 @@
   above two equations:
 
   <\eqnarray*>
-    <tformat|<table|<row|<cell|d<rsup|2><rsub|a>+l<rsup|2>+<around*|(|r-h<rprime|'>|)><rsup|2>>|<cell|=>|<cell|<around*|(|h+h<rprime|'>|)><rsup|2>+l<rsup|2>+r<rsup|2>>>|<row|<cell|d<rsup|2><rsub|a>+r<rsup|2>+h<rprime|'><rsup|2>-2rh<rprime|'>>|<cell|=>|<cell|h<rsup|2>+h<rprime|'><rsup|2>+2hh<rprime|'>+r<rsup|2>>>|<row|<cell|d<rsup|2><rsub|a>-2rh<rprime|'>>|<cell|=>|<cell|h<rsup|2>+2hh<rprime|'>>>|<row|<cell|d<rsup|2><rsub|a>-h<rsup|2>>|<cell|=>|<cell|h<rprime|'><around*|(|2h+2r|)>>>|<row|<cell|h<rprime|'>>|<cell|=>|<cell|<frac|d<rsup|2><rsub|a>-h<rsup|2>|2h+2r>>>|<row|<cell|h<rprime|'>>|<cell|=>|<cell|<frac|h<rsup|2>+2rh-h<rsup|2>|2h+2r>>>|<row|<cell|h<rprime|'>>|<cell|=>|<cell|<frac|rh|r+h><eq-number><inactive|<label|eqhp>>>>>>
+    <tformat|<table|<row|<cell|d<rsup|2><rsub|a>+l<rsup|2>+<around*|(|r-h<rprime|'>|)><rsup|2>>|<cell|=>|<cell|<around*|(|h+h<rprime|'>|)><rsup|2>+l<rsup|2>+r<rsup|2>>>|<row|<cell|d<rsup|2><rsub|a>+r<rsup|2>+h<rprime|'><rsup|2>-2rh<rprime|'>>|<cell|=>|<cell|h<rsup|2>+h<rprime|'><rsup|2>+2hh<rprime|'>+r<rsup|2>>>|<row|<cell|d<rsup|2><rsub|a>-2rh<rprime|'>>|<cell|=>|<cell|h<rsup|2>+2hh<rprime|'>>>|<row|<cell|d<rsup|2><rsub|a>-h<rsup|2>>|<cell|=>|<cell|h<rprime|'><around*|(|2h+2r|)>>>|<row|<cell|h<rprime|'>>|<cell|=>|<cell|<frac|d<rsup|2><rsub|a>-h<rsup|2>|2h+2r>>>|<row|<cell|h<rprime|'>>|<cell|=>|<cell|<frac|h<rsup|2>+2rh-h<rsup|2>|2h+2r>>>|<row|<cell|h<rprime|'>>|<cell|=>|<cell|<frac|rh|r+h><eq-number><label|eqhp>>>>>
   </eqnarray*>
 
   Taking again Equation (<reference|eqhr>):
 
   <\eqnarray*>
-    <tformat|<table|<row|<cell|r<rsup|2>>|<cell|=>|<cell|l<rsup|2>+<around*|(|r-h<rprime|'>|)><rsup|2>>>|<row|<cell|r<rsup|2>>|<cell|=>|<cell|l<rsup|2>+r<rsup|2>+h<rprime|'><rsup|2>-2rh<rprime|'>>>|<row|<cell|0>|<cell|=>|<cell|l<rsup|2>+<frac|r<rsup|2>h<rsup|2>|<around*|(|r+h|)><rsup|2>>-2r<frac|r<rsup|>h|r+h>>>|<row|<cell|0>|<cell|=>|<cell|l<rsup|2><around*|(|r+h|)><rsup|2>+r<rsup|2>h<rsup|2>-2r<rsup|2>h<around*|(|r+h|)>>>|<row|<cell|0>|<cell|=>|<cell|l<rsup|2><around*|(|r+h|)><rsup|2>+r<rsup|2>h<rsup|2>-2r<rsup|3>h-2r<rsup|2>h<rsup|2>>>|<row|<cell|0>|<cell|=>|<cell|l<rsup|2><around*|(|r+h|)><rsup|2>-2r<rsup|3>h-r<rsup|2>h<rsup|2>>>|<row|<cell|l<rsup|2><around*|(|r+h|)><rsup|2>>|<cell|=>|<cell|2r<rsup|3>h+r<rsup|2>h<rsup|2>>>|<row|<cell|l<rsup|2>>|<cell|=>|<cell|<frac|hr<rsup|2><around*|(|2r+h|)>|<around*|(|r+h|)><rsup|2>>>>|<row|<cell|l>|<cell|=>|<cell|r<sqrt|<frac|h<around*|(|2r+h|)>|<around*|(|r+h|)><rsup|2>>><eq-number><label|eqhl>>>>>
+    <tformat|<table|<row|<cell|r<rsup|2>>|<cell|=>|<cell|l<rsup|2>+<around*|(|r-h<rprime|'>|)><rsup|2>>>|<row|<cell|r<rsup|2>>|<cell|=>|<cell|l<rsup|2>+r<rsup|2>+h<rprime|'><rsup|2>-2rh<rprime|'>>>|<row|<cell|0>|<cell|=>|<cell|l<rsup|2>+<frac|r<rsup|2>h<rsup|2>|<around*|(|r+h|)><rsup|2>>-2r<frac|r<rsup|>h|r+h>>>|<row|<cell|0>|<cell|=>|<cell|l<rsup|2><around*|(|r+h|)><rsup|2>+r<rsup|2>h<rsup|2>-2r<rsup|2>h<around*|(|r+h|)>>>|<row|<cell|0>|<cell|=>|<cell|l<rsup|2><around*|(|r+h|)><rsup|2>+r<rsup|2>h<rsup|2>-2r<rsup|3>h-2r<rsup|2>h<rsup|2>>>|<row|<cell|0>|<cell|=>|<cell|l<rsup|2><around*|(|r+h|)><rsup|2>-2r<rsup|3>h-r<rsup|2>h<rsup|2>>>|<row|<cell|l<rsup|2><around*|(|r+h|)><rsup|2>>|<cell|=>|<cell|2r<rsup|3>h+r<rsup|2>h<rsup|2>>>|<row|<cell|l<rsup|2>>|<cell|=>|<cell|<frac|hr<rsup|2><around*|(|2r+h|)>|<around*|(|r+h|)><rsup|2>>>>|<row|<cell|l>|<cell|=>|<cell|r<frac|<sqrt|h<around*|(|2r+h|)>>|r+h><eq-number><label|eqhl>>>>>
   </eqnarray*>
 
   The radius and location of the horizon circle is now known.
@@ -371,6 +371,10 @@
 
   Note the fact that the equation impose <math|z\<in\><around*|[|-l,l|]>>, it
   will be used later.
+
+  This is the equation of a circle of radiul <math|l> and center
+  <math|B<rprime|'><around*|(|0,h<rprime|'>,0|)>> on plane
+  <math|<around*|(|B<rprime|'>,x,z|)>>
 
   <subsection|Some words about camera projection>
 
@@ -447,9 +451,16 @@
 
   \;
 
+  <\equation*>
+    M<rprime|'><choice|<tformat|<table|<row|<cell|x=zx<rprime|'>/\<varepsilon\>>>|<row|<cell|z=\<varepsilon\><frac|y-h|y<rprime|'>-h>>>>>>
+  </equation*>
+
+  So
+
+  \;
+
   <\equation>
-    M<rprime|'><choice|<tformat|<table|<row|<cell|x=z
-    x<rprime|'>/\<varepsilon\>>>|<row|<cell|z=\<varepsilon\><frac|y-h|y<rprime|'>-h>>>>>><label|eqmpr>
+    M<rprime|'><choice|<tformat|<table|<row|<cell|x=x<rprime|'><frac|y-h|y<rprime|'>-h>>>|<row|<cell|z=\<varepsilon\><frac|y-h|y<rprime|'>-h>>>>>><label|eqmpr>
   </equation>
 
   <subsection|Shape of the horizon viewed from an horizontal pinhole camera>
@@ -462,32 +473,32 @@
   <math|\<varepsilon\>\<ll\>l>):
 
   <\equation*>
-    <tabular|<tformat|<table|<row|<cell|M<rprime|'>>|<cell|>|<cell|<choice|<tformat|<table|<row|<cell|x=z
-    x<rprime|'>/\<varepsilon\>>>|<row|<cell|z=\<varepsilon\><frac|y-h|y<rprime|'>-h>>>|<row|<cell|z
+    <tabular|<tformat|<table|<row|<cell|M<rprime|'>>|<cell|>|<cell|<choice|<tformat|<table|<row|<cell|x=x<rprime|'><frac|y-h|y<rprime|'>-h>>>|<row|<cell|z=\<varepsilon\><frac|y-h|y<rprime|'>-h>>>|<row|<cell|z
     \<in\><around*|[|\<varepsilon\>,l|]>>>|<row|<cell|x<rsup|2>+z<rsup|2>=l<rsup|2>>>|<row|<cell|y=h<rprime|'>>>>>>>>>>>
   </equation*>
 
   Posing <math|H=h<rprime|'>-h> and <math|Y<rprime|'>=y<rprime|'>-h>:
 
   <\eqnarray*>
-    <tformat|<table|<row|<cell|<around*|(|<frac|Hx<rprime|'>|Y<rprime|'>>|)><rsup|2>+<around*|(|\<varepsilon\><frac|H|Y<rprime|'>>|)><rsup|2>>|<cell|=>|<cell|l<rsup|2>>>|<row|<cell|H<rsup|2>x<rprime|'><rsup|2>+\<varepsilon\><rsup|2>H<rsup|2>>|<cell|=>|<cell|l<rsup|2>Y<rprime|'><rsup|2>>>|<row|<cell|l<rsup|2>Y<rprime|'><rsup|2>-H<rsup|2>x<rprime|'><rsup|2>>|<cell|=>|<cell|\<varepsilon\><rsup|2>H<rsup|2>>>|<row|<cell|<frac|Y<rprime|'><rsup|2>|<frac|\<varepsilon\><rsup|2>H<rsup|2>|l<rsup|2>>>-<frac|x<rprime|'><rsup|2>|<frac|\<varepsilon\><rsup|2>H<rsup|2>|H<rsup|2>>>>|<cell|=>|<cell|1>>>>
+    <tformat|<table|<row|<cell|<around*|(|<frac|Hx<rprime|'>|Y<rprime|'>>|)><rsup|2>+<around*|(|\<varepsilon\><frac|H|Y<rprime|'>>|)><rsup|2>>|<cell|=>|<cell|l<rsup|2>>>|<row|<cell|H<rsup|2>x<rprime|'><rsup|2>+\<varepsilon\><rsup|2>H<rsup|2>>|<cell|=>|<cell|l<rsup|2>Y<rprime|'><rsup|2>>>|<row|<cell|l<rsup|2>Y<rprime|'><rsup|2>-H<rsup|2>x<rprime|'><rsup|2>>|<cell|=>|<cell|\<varepsilon\><rsup|2>H<rsup|2>>>|<row|<cell|<frac|Y<rprime|'><rsup|2>|<frac|\<varepsilon\><rsup|2>H<rsup|2>|l<rsup|2>>>-<frac|x<rprime|'><rsup|2>|\<varepsilon\><rsup|2>>>|<cell|=>|<cell|1>>|<row|<cell|<frac|Y<rprime|'><rsup|2>|<around*|(|<frac|\<varepsilon\><rsup|>H<rsup|>|l<rsup|>>|)><rsup|2>>-<frac|x<rprime|'><rsup|2>|\<varepsilon\><rsup|2>>>|<cell|=>|<cell|1>>>>
   </eqnarray*>
 
-  This is the equation of an hyperbole of\ 
+  This is the equation of an hyperbole of parameters
+  <math|a=><math|<frac|\<varepsilon\><rsup|>H<rsup|>|l<rsup|>>> and
+  <math|b=\<varepsilon\>>
 
   <subsubsection|Plots>
 
   <\eqnarray*>
-    <tformat|<table|<row|<cell|l<rsup|2>Y<rprime|'><rsup|2>-H<rsup|2>x<rprime|'><rsup|2>>|<cell|=>|<cell|\<varepsilon\><rsup|2>H<rsup|2>>>|<row|<cell|l<rsup|2>Y<rprime|'><rsup|2>>|<cell|=>|<cell|\<varepsilon\><rsup|2>H<rsup|2>+H<rsup|2>x<rprime|'><rsup|2>>>|<row|<cell|Y<rprime|'><rsup|2>>|<cell|=>|<cell|<frac|\<varepsilon\><rsup|2>H<rsup|2>+H<rsup|2>x<rprime|'><rsup|2>|l<rsup|2>>>>|<row|<cell|Y<rprime|'><rsup|>>|<cell|=>|<cell|<frac|1|l><sqrt|\<varepsilon\><rsup|2>H<rsup|2>+H<rsup|2>x<rprime|'><rsup|2>>>>|<row|<cell|y<rprime|'><rsup|>>|<cell|=>|<cell|<frac|1|l><sqrt|\<varepsilon\><rsup|2>H<rsup|2>+H<rsup|2>x<rprime|'><rsup|2>>-h>>>>
+    <tformat|<table|<row|<cell|l<rsup|2>Y<rprime|'><rsup|2>-H<rsup|2>x<rprime|'><rsup|2>>|<cell|=>|<cell|\<varepsilon\><rsup|2>H<rsup|2>>>|<row|<cell|l<rsup|2>Y<rprime|'><rsup|2>>|<cell|=>|<cell|\<varepsilon\><rsup|2>H<rsup|2>+H<rsup|2>x<rprime|'><rsup|2>>>|<row|<cell|Y<rprime|'><rsup|2>>|<cell|=>|<cell|<frac|\<varepsilon\><rsup|2>H<rsup|2>+H<rsup|2>x<rprime|'><rsup|2>|l<rsup|2>>>>|<row|<cell|Y<rprime|'><rsup|>>|<cell|=>|<cell|<frac|1|l><sqrt|\<varepsilon\><rsup|2>H<rsup|2>+H<rsup|2>x<rprime|'><rsup|2>>>>|<row|<cell|Y<rprime|'><rsup|>>|<cell|=>|<cell|<frac|H|l><sqrt|\<varepsilon\><rsup|2>+x<rprime|'><rsup|2>>>>|<row|<cell|y<rprime|'><rsup|>>|<cell|=>|<cell|<frac|H|l><sqrt|\<varepsilon\><rsup|2>+x<rprime|'><rsup|2>>+h>>>>
   </eqnarray*>
 
   \;
 
-  When we plot we realize there might be an error in the computation (a
-  factor ten is needed on the sensor size to see the curve, which
-  shouldlikely be visible at 500km):
+  On Figure <reference|FigShape1>, we can see that for low altitude (here, up
+  to <math|100 km>), the variation\ 
 
-  <big-figure|<image|code/gnuplot/horizon_shape.eps|12cm|||>|>
+  <big-figure|<image|code/gnuplot/horizon_shape.eps|12cm|||>|<label|FigShape1>>
 </body>
 
 <\initial>
@@ -500,6 +511,7 @@
 <\references>
   <\collection>
     <associate|FigPinHole|<tuple|9|?>>
+    <associate|FigShape1|<tuple|10|?>>
     <associate|Fighl|<tuple|8|?>>
     <associate|Figure 1|<tuple|2|?>>
     <associate|SectVanishing|<tuple|3|?>>
@@ -541,6 +553,7 @@
     <associate|auto-41|<tuple|5.5|?>>
     <associate|auto-42|<tuple|5.5.1|?>>
     <associate|auto-43|<tuple|10|?>>
+    <associate|auto-44|<tuple|10|?>>
     <associate|auto-5|<tuple|2|1>>
     <associate|auto-6|<tuple|1.3|2>>
     <associate|auto-7|<tuple|2|2>>
@@ -591,6 +604,8 @@
       <tuple|normal||<pageref|auto-35>>
 
       <tuple|normal||<pageref|auto-40>>
+
+      <tuple|normal||<pageref|auto-43>>
     </associate>
     <\associate|toc>
       <vspace*|1fn><with|font-series|<quote|bold>|math-font-series|<quote|bold>|1<space|2spc>Presentation

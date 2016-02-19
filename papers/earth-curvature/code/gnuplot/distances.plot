@@ -1,7 +1,7 @@
 # gnuplot
 
 set terminal postscript eps size 10,6 enhanced color font 'Helvetica,20' linewidth 2
-set output 'distance.eps'
+set output 'distances.eps'
 
 r = 6371
 

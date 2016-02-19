@@ -6,7 +6,7 @@ set output 'horizon_circle_radius.eps'
 r = 6371000
 
 hp(h)=r*h/(r+h)
-l(h)=r*sqrt((h*(2*r+h)/((r+h)*(r+h))))
+l(h)=r*sqrt(h*(2*r+h))/(r+h)
 
 set xrange [0:100]
 #set yrange [-0.024:0.024]

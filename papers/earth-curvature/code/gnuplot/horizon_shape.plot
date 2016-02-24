@@ -15,7 +15,7 @@ f(x,h)=1000*H(h)*sqrt(e*e+x*x)/l(h)
 
 set xrange [-0.018:0.018] # 24x36
 set yrange [-12:12]
-set xlabel "mm"
+set xlabel "m"
 set ylabel "mm"
 
 

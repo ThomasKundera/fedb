@@ -8,7 +8,6 @@ Dognuplot:
 Doeukleides:
 	cd eukleides && $(MAKE)
 
-
 Doasymptote:
 	cd asymptote && $(MAKE)
 

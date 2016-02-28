@@ -301,6 +301,10 @@
   So anyone expecting to see something significant at a lower altitude is
   misleaded.
 
+  <subsection|A note about ``8 inches per miles squared''>
+
+  \;
+
   <section|Shape of the horizon>
 
   <subsection|The question is not simple>
@@ -540,19 +544,19 @@
     <associate|auto-3|<tuple|1|1>>
     <associate|auto-30|<tuple|4.3|?>>
     <associate|auto-31|<tuple|7|?>>
-    <associate|auto-32|<tuple|5|?>>
-    <associate|auto-33|<tuple|5.1|?>>
-    <associate|auto-34|<tuple|5.2|?>>
-    <associate|auto-35|<tuple|8|?>>
-    <associate|auto-36|<tuple|5.3|?>>
-    <associate|auto-37|<tuple|5.4|?>>
-    <associate|auto-38|<tuple|5.4.1|?>>
-    <associate|auto-39|<tuple|5.4.2|?>>
+    <associate|auto-32|<tuple|4.4|?>>
+    <associate|auto-33|<tuple|5|?>>
+    <associate|auto-34|<tuple|5.1|?>>
+    <associate|auto-35|<tuple|5.2|?>>
+    <associate|auto-36|<tuple|8|?>>
+    <associate|auto-37|<tuple|5.3|?>>
+    <associate|auto-38|<tuple|5.4|?>>
+    <associate|auto-39|<tuple|5.4.1|?>>
     <associate|auto-4|<tuple|1.2|1>>
-    <associate|auto-40|<tuple|9|?>>
-    <associate|auto-41|<tuple|5.5|?>>
-    <associate|auto-42|<tuple|5.5.1|?>>
-    <associate|auto-43|<tuple|10|?>>
+    <associate|auto-40|<tuple|5.4.2|?>>
+    <associate|auto-41|<tuple|9|?>>
+    <associate|auto-42|<tuple|5.5|?>>
+    <associate|auto-43|<tuple|5.5.1|?>>
     <associate|auto-44|<tuple|10|?>>
     <associate|auto-5|<tuple|2|1>>
     <associate|auto-6|<tuple|1.3|2>>

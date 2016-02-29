@@ -385,9 +385,8 @@
   <subsubsection|Horizontal camera>
 
   To simplify, we imagine that our camera is hold straight, so that the
-  sensor is vertical, parallel to the <math|<around*|(|x,y|)>> plane cutting
-  the z plane at <math|z=\<varepsilon\>> and the hole located on the <math|y>
-  axis at <math|P<around*|(|0,h,0|)>>.
+  sensor is vertical and included in the <math|<around*|(|x,y|)>> plane. The
+  hole located on the <math|y> axis at <math|P<around*|(|0,h,\<varepsilon\>|)>>.
 
   The projection equations in this case are very simple.
 
@@ -405,20 +404,21 @@
   <math|M<rsub|yz>=<around*|(|0,y,z|)>> and
   <math|M<rsub|yz><rprime|'>=<around*|(|0,y<rprime|'>,z<rprime|'>|)>>.
 
-  On the plane <math|xz>, line <math|OM<rsub|xz>>, defined by <math|z=ax+b>:
+  On the plane <math|xz>, line <math|M<rsub|xz>M<rprime|'><rsub|xz>>, defined
+  by <math|z=ax+b>:
 
   <\equation*>
-    <choice|<tformat|<table|<row|<cell|0=b>>|<row|<cell|z=ax>>>>>
+    <choice|<tformat|<table|<row|<cell|b=\<varepsilon\>>>|<row|<cell|z=ax+\<varepsilon\>>>>>>
   </equation*>
 
   Thus:
 
   <\equation*>
-    a=<frac|z|x>
+    a=<frac|z-\<varepsilon\>|x>
   </equation*>
 
-  In <math|M<rsub|xz><rprime|'>>, <math|z<rprime|'>=\<varepsilon\>=<frac|z|x>x<rprime|'>>
-  et donc <math|x<rprime|'>=<frac|\<varepsilon\>x|z>>
+  In <math|M<rsub|xz><rprime|'>>, <math|z<rprime|'>=0=<frac|z-\<varepsilon\>|x>x<rprime|'>+\<varepsilon\>>
+  et donc <math|x<rprime|'>=\<varepsilon\>x-<frac|z|\<varepsilon\>>>
 
   \;
 

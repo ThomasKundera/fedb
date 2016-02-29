@@ -26,16 +26,17 @@ draw
   B'
   B''
 
-#  "h"  A.A'  45: 
-#  "da" A'.B  45:   
+"h'"   B.B'   90: 
+"h''"  B.B''  45: 
+"d"    A.B    45:   
 #  "db" B.B'   0:   
 #  "d'" A'.B' 90:   
   
-#  "r" O.A 180: 
-#  "r" O.B 90:
+  "r" O.A 180: 
+  "r" O.B' 90:
 
 #  (A'.O.B)
-#  (A'.O.B')
+(A.O.B)
 end
 
 draw dashed
@@ -50,10 +51,10 @@ label
   A   45:
 #  A'  45:
   B   30:
- B' 45:
+ B' 90:
  B'' 45:
   
-#  O,B,A'  right
+O,A,B  right
 #  O,A',B' right
 end
 

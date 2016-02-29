@@ -303,6 +303,41 @@
 
   <subsection|A note about ``8 inches per miles squared''>
 
+  A common value used by flatters to compute distance to horizon is ``8
+  inches per miles squared''. That formulation cant be correct (it's even no
+  dimensionaly coherent), but it may give an numerical approximation of the
+  correct value in some conditions.
+
+  <big-figure|<image|code/eukleides/eight-inches.eps|8cm|||>|<label|FigEigthInches>>
+
+  It is first important to recall that if one wants to know from how long an
+  object will be visible, the correct method is described in Section
+  <reference|SectVanishing>, not here. The computation done here is only able
+  to measure some ``drop''.
+
+  There are at least two ways to consider a ``drop''. As seen in Figure
+  <inactive|<reference|FigEightInches>>, the ``drop'' can either be
+  <math|h<rprime|'>> (the distance to ground on a local verical) or
+  <math|h<rprime|''>> (distance to ground according to a line normal to the
+  horizontal at <math|A>). The distance can also be computed two ways: either
+  <math|d> being the distance in straight line betwen <math|A> and <math|B>,
+  or, by the arc <math|<wide|AB<rprime|'>|\<invbreve\>>> or
+  <math|<wide|AB<rprime|''>|\<invbreve\>>>, which would be the value given by
+  any measure on a map.
+
+  This gives us four method to compute that ``drop'' (local or remote verical
+  and straight line or arc) plus the ``eight inches'' one.
+
+  <subsubsection|Computing <math|h<rprime|'>>>
+
+  In triangle OAB:
+
+  <\eqnarray*>
+    <tformat|<table|<row|<cell|OA<rsup|2>+AB<rsup|2>>|<cell|=>|<cell|OB<rsup|2>>>|<row|<cell|r<rsup|2>+d<rsup|2>>|<cell|=>|<cell|<around*|(|r+h<rprime|'>|)><rsup|2>>>|<row|<cell|r<rsup|2>+d<rsup|2>>|<cell|=>|<cell|r<rsup|2>+h<rprime|'><rsup|2>+2rh<rprime|'>>>|<row|<cell|h<rprime|'><rsup|2>+2rh<rprime|'>-d<rsup|2>>|<cell|=>|<cell|0>>>>
+  </eqnarray*>
+
+  We consider the positive solution of the above equation:
+
   \;
 
   <section|Shape of the horizon>
@@ -514,9 +549,10 @@
 
 <\references>
   <\collection>
-    <associate|FigPinHole|<tuple|9|?>>
-    <associate|FigShape1|<tuple|10|?>>
-    <associate|Fighl|<tuple|8|?>>
+    <associate|FigEigthInches|<tuple|8|?>>
+    <associate|FigPinHole|<tuple|10|?>>
+    <associate|FigShape1|<tuple|11|?>>
+    <associate|Fighl|<tuple|9|?>>
     <associate|Figure 1|<tuple|2|?>>
     <associate|SectVanishing|<tuple|3|?>>
     <associate|auto-1|<tuple|1|1>>
@@ -545,19 +581,21 @@
     <associate|auto-30|<tuple|4.3|?>>
     <associate|auto-31|<tuple|7|?>>
     <associate|auto-32|<tuple|4.4|?>>
-    <associate|auto-33|<tuple|5|?>>
-    <associate|auto-34|<tuple|5.1|?>>
-    <associate|auto-35|<tuple|5.2|?>>
-    <associate|auto-36|<tuple|8|?>>
-    <associate|auto-37|<tuple|5.3|?>>
-    <associate|auto-38|<tuple|5.4|?>>
-    <associate|auto-39|<tuple|5.4.1|?>>
+    <associate|auto-33|<tuple|8|?>>
+    <associate|auto-34|<tuple|4.4.1|?>>
+    <associate|auto-35|<tuple|5|?>>
+    <associate|auto-36|<tuple|5.1|?>>
+    <associate|auto-37|<tuple|5.2|?>>
+    <associate|auto-38|<tuple|9|?>>
+    <associate|auto-39|<tuple|5.3|?>>
     <associate|auto-4|<tuple|1.2|1>>
-    <associate|auto-40|<tuple|5.4.2|?>>
-    <associate|auto-41|<tuple|9|?>>
-    <associate|auto-42|<tuple|5.5|?>>
-    <associate|auto-43|<tuple|5.5.1|?>>
-    <associate|auto-44|<tuple|10|?>>
+    <associate|auto-40|<tuple|5.4|?>>
+    <associate|auto-41|<tuple|5.4.1|?>>
+    <associate|auto-42|<tuple|5.4.2|?>>
+    <associate|auto-43|<tuple|10|?>>
+    <associate|auto-44|<tuple|5.5|?>>
+    <associate|auto-45|<tuple|5.5.1|?>>
+    <associate|auto-46|<tuple|11|?>>
     <associate|auto-5|<tuple|2|1>>
     <associate|auto-6|<tuple|1.3|2>>
     <associate|auto-7|<tuple|2|2>>
@@ -573,7 +611,7 @@
     <associate|eqhl|<tuple|8|?>>
     <associate|eqhp|<tuple|7|?>>
     <associate|eqhr|<tuple|6|?>>
-    <associate|eqmmp|<tuple|9|?>>
+    <associate|eqmmp|<tuple|10|?>>
     <associate|eqmpr|<tuple|10|?>>
     <associate|figatana|<tuple|7|?>>
     <associate|figflatflat|<tuple|1|?>>
@@ -605,11 +643,11 @@
 
       <tuple|normal||<pageref|auto-31>>
 
-      <tuple|normal||<pageref|auto-35>>
+      <tuple|normal||<pageref|auto-36>>
 
-      <tuple|normal||<pageref|auto-40>>
+      <tuple|normal||<pageref|auto-41>>
 
-      <tuple|normal||<pageref|auto-43>>
+      <tuple|normal||<pageref|auto-44>>
     </associate>
     <\associate|toc>
       <vspace*|1fn><with|font-series|<quote|bold>|math-font-series|<quote|bold>|1<space|2spc>Presentation
@@ -709,41 +747,45 @@
       <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
       <no-break><pageref|auto-30>>
 
+      <with|par-left|<quote|1tab>|4.4<space|2spc>A note about ``8 inches per
+      miles squared'' <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
+      <no-break><pageref|auto-32>>
+
       <vspace*|1fn><with|font-series|<quote|bold>|math-font-series|<quote|bold>|5<space|2spc>Shape
       of the horizon> <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
-      <no-break><pageref|auto-32><vspace|0.5fn>
+      <no-break><pageref|auto-33><vspace|0.5fn>
 
       <with|par-left|<quote|1tab>|5.1<space|2spc>The question is not simple
       <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
-      <no-break><pageref|auto-33>>
+      <no-break><pageref|auto-34>>
 
       <with|par-left|<quote|1tab>|5.2<space|2spc>Shape of the horizon line
       <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
-      <no-break><pageref|auto-34>>
+      <no-break><pageref|auto-35>>
 
       <with|par-left|<quote|1tab>|5.3<space|2spc>Properties of the horizon
       circle <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
-      <no-break><pageref|auto-36>>
+      <no-break><pageref|auto-37>>
 
       <with|par-left|<quote|1tab>|5.4<space|2spc>Some words about camera
       projection <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
-      <no-break><pageref|auto-37>>
+      <no-break><pageref|auto-38>>
 
       <with|par-left|<quote|2tab>|5.4.1<space|2spc>The camera
       <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
-      <no-break><pageref|auto-38>>
+      <no-break><pageref|auto-39>>
 
       <with|par-left|<quote|2tab>|5.4.2<space|2spc>Horizontal camera
       <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
-      <no-break><pageref|auto-39>>
+      <no-break><pageref|auto-40>>
 
       <with|par-left|<quote|1tab>|5.5<space|2spc>Shape of the horizon viewed
       from an horizontal pinhole camera <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
-      <no-break><pageref|auto-41>>
+      <no-break><pageref|auto-42>>
 
       <with|par-left|<quote|2tab>|5.5.1<space|2spc>Plots
       <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
-      <no-break><pageref|auto-42>>
+      <no-break><pageref|auto-43>>
     </associate>
   </collection>
 </auxiliary>

@@ -338,7 +338,11 @@
 
   We consider the positive solution of the above equation:
 
-  \;
+  <\equation*>
+    h<rprime|'>=<frac|<sqrt|r<rsup|2>+d<rsup|2>>|2>-r
+  </equation*>
+
+  <subsubsection|Computing length of arc <math|AB>>
 
   <section|Shape of the horizon>
 
@@ -583,19 +587,20 @@
     <associate|auto-32|<tuple|4.4|?>>
     <associate|auto-33|<tuple|8|?>>
     <associate|auto-34|<tuple|4.4.1|?>>
-    <associate|auto-35|<tuple|5|?>>
-    <associate|auto-36|<tuple|5.1|?>>
-    <associate|auto-37|<tuple|5.2|?>>
-    <associate|auto-38|<tuple|9|?>>
-    <associate|auto-39|<tuple|5.3|?>>
+    <associate|auto-35|<tuple|4.4.2|?>>
+    <associate|auto-36|<tuple|5|?>>
+    <associate|auto-37|<tuple|5.1|?>>
+    <associate|auto-38|<tuple|5.2|?>>
+    <associate|auto-39|<tuple|9|?>>
     <associate|auto-4|<tuple|1.2|1>>
-    <associate|auto-40|<tuple|5.4|?>>
-    <associate|auto-41|<tuple|5.4.1|?>>
-    <associate|auto-42|<tuple|5.4.2|?>>
-    <associate|auto-43|<tuple|10|?>>
-    <associate|auto-44|<tuple|5.5|?>>
-    <associate|auto-45|<tuple|5.5.1|?>>
-    <associate|auto-46|<tuple|11|?>>
+    <associate|auto-40|<tuple|5.3|?>>
+    <associate|auto-41|<tuple|5.4|?>>
+    <associate|auto-42|<tuple|5.4.1|?>>
+    <associate|auto-43|<tuple|5.4.2|?>>
+    <associate|auto-44|<tuple|10|?>>
+    <associate|auto-45|<tuple|5.5|?>>
+    <associate|auto-46|<tuple|5.5.1|?>>
+    <associate|auto-47|<tuple|11|?>>
     <associate|auto-5|<tuple|2|1>>
     <associate|auto-6|<tuple|1.3|2>>
     <associate|auto-7|<tuple|2|2>>
@@ -643,11 +648,13 @@
 
       <tuple|normal||<pageref|auto-31>>
 
-      <tuple|normal||<pageref|auto-36>>
+      <tuple|normal||<pageref|auto-33>>
 
-      <tuple|normal||<pageref|auto-41>>
+      <tuple|normal||<pageref|auto-38>>
 
-      <tuple|normal||<pageref|auto-44>>
+      <tuple|normal||<pageref|auto-43>>
+
+      <tuple|normal||<pageref|auto-46>>
     </associate>
     <\associate|toc>
       <vspace*|1fn><with|font-series|<quote|bold>|math-font-series|<quote|bold>|1<space|2spc>Presentation
@@ -751,41 +758,46 @@
       miles squared'' <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
       <no-break><pageref|auto-32>>
 
-      <vspace*|1fn><with|font-series|<quote|bold>|math-font-series|<quote|bold>|5<space|2spc>Shape
-      of the horizon> <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
-      <no-break><pageref|auto-33><vspace|0.5fn>
-
-      <with|par-left|<quote|1tab>|5.1<space|2spc>The question is not simple
+      <with|par-left|<quote|2tab>|4.4.1<space|2spc>Computing
+      <with|mode|<quote|math>|h<rprime|'>>
       <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
       <no-break><pageref|auto-34>>
 
+      <vspace*|1fn><with|font-series|<quote|bold>|math-font-series|<quote|bold>|5<space|2spc>Shape
+      of the horizon> <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
+      <no-break><pageref|auto-35><vspace|0.5fn>
+
+      <with|par-left|<quote|1tab>|5.1<space|2spc>The question is not simple
+      <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
+      <no-break><pageref|auto-36>>
+
       <with|par-left|<quote|1tab>|5.2<space|2spc>Shape of the horizon line
       <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
-      <no-break><pageref|auto-35>>
+      <no-break><pageref|auto-37>>
 
       <with|par-left|<quote|1tab>|5.3<space|2spc>Properties of the horizon
       circle <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
-      <no-break><pageref|auto-37>>
+      <no-break><pageref|auto-39>>
 
       <with|par-left|<quote|1tab>|5.4<space|2spc>Some words about camera
       projection <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
-      <no-break><pageref|auto-38>>
+      <no-break><pageref|auto-40>>
 
       <with|par-left|<quote|2tab>|5.4.1<space|2spc>The camera
       <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
-      <no-break><pageref|auto-39>>
+      <no-break><pageref|auto-41>>
 
       <with|par-left|<quote|2tab>|5.4.2<space|2spc>Horizontal camera
       <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
-      <no-break><pageref|auto-40>>
+      <no-break><pageref|auto-42>>
 
       <with|par-left|<quote|1tab>|5.5<space|2spc>Shape of the horizon viewed
       from an horizontal pinhole camera <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
-      <no-break><pageref|auto-42>>
+      <no-break><pageref|auto-44>>
 
       <with|par-left|<quote|2tab>|5.5.1<space|2spc>Plots
       <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
-      <no-break><pageref|auto-43>>
+      <no-break><pageref|auto-45>>
     </associate>
   </collection>
 </auxiliary>

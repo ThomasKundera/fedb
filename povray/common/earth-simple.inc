@@ -93,7 +93,53 @@ pigment {
  } // end of sphere
 
 
+#macro EarthParallel(scaler)
+  torus {
+    Earth_Radius+2*m,20*m
+    rotate <90,0,0>
+    scale <1,1,2000>
+  }
+#end
+
+#macro EarthLatitude(lat,scaler)
+  union{
+    torus {
+      (Earth_Radius+100*m)*cos(lat),2*m
+      scale <scaler,1,1>
+      translate <0,Earth_Radius*sin(lat),0>
+    }
+    torus {
+      (Earth_Radius+100*m)*cos(lat),100*km
+      scale <scaler,1,1>
+      translate <0,-Earth_Radius*sin(lat),0>
+    }
+  }    
+#end
+
+#macro EarthParallels(scaler)
+  #local slices=12;
+  union {
+    #for (i, 1, slices)
+      object {EarthParallel(scaler) rotate <0,i*180/slices,0> }
+    #end
+    pigment {rgb <.1,.1,.9>}
+  }
+#end  
+
+#macro EarthLatitudes(scaler)
+  union {
+    #for (i, 0, 7)
+      object {EarthLatitude(i*pi/12,scaler)}
+    #end
+    pigment {rgb <.1,.1,.9>}
+  }
+#end  
+
+
+ 
 #declare Earth= union{
+  object{EarthParallels(1)}
+  object{EarthLatitudes(1)}
   #switch (myFast)
    #case (1)
     object {fastEarth}

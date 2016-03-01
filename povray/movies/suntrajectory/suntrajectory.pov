@@ -9,9 +9,12 @@
 #include "common.inc"
 #include "frame.inc"
 #include "earth-simple.inc"
+#include "sun_simple.inc"
+
 
 global_settings { ambient_light .5 }
 
+background { color rgb <0.1, 0.1, 0.3> }
 
 camera {
   location <10000*km,15000*km,30000*km>
@@ -26,3 +29,5 @@ camera {
 
 object {Earth}
 
+
+object{fastSun()}

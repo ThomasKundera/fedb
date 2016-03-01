@@ -12,8 +12,6 @@ MENCODER =       $(NICE) -20 mencoder
 
 ENCODEROPTIONS = -mf fps=25:type=png -ovc lavc -lavcopts vcodec=mpeg4:mbd=2:trell:vbitrate=7000 -oac copy
 
-DIREPS  =       .
-
 IMG_FILE =       suntrajectory.png
 
 COMMONPATH = ../../common/

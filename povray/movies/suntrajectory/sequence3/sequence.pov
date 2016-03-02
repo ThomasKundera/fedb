@@ -39,9 +39,11 @@ global_settings { ambient_light .1 }
 #declare camUp=vnormalize(camPos-Earth_Position);
 #declare camLkat=VProject_Plane(Sun_Loc-camPos,camPos-Earth_Position)*.01;
 
-#debug concat("Value is:",vstr(3,camPos,",", 0,3),"\n")
-#debug concat("Value is:",vstr(3,camLkat,",", 0,3),"\n")
-#debug concat("Value is:",vstr(3,camUp,",", 0,3),"\n")
+#debug concat("Earth_Position is: ",vstr(3,Earth_Position ,",", 0,20),"\n")
+#debug concat("Sun_Loc is       : ",vstr(3,Sun_Loc,",", 0,20),"\n")
+#debug concat("camPos is        : ",vstr(3,camPos ,",", 0,20),"\n")
+#debug concat("camLkat is       : ",vstr(3,camLkat,",", 0,20),"\n")
+#debug concat("camUp is         : ",vstr(3,camUp  ,",", 0,20),"\n")
 
 
 cylinder { camPos-<0,-10*m,0>+10*m*vnormalize(camLkat),

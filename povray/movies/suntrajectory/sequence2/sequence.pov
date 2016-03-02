@@ -13,6 +13,8 @@
 #include "earth-simple.inc"
 #include "sun_simple.inc"
 
+#declare Sun_Loc=<-Earth_Distance,0,0>;
+
 // Animation stuff
 #declare duration=.5*j_t;
 #declare timeOffset=1*j_t;
@@ -22,24 +24,33 @@
 global_settings { ambient_light .1 }
 
 #declare Earth_Sun_Angle=360*seconde/a_t;
-#declare Earth_Position=Earth_Distance*<cos(Earth_Sun_Angle*pi/180),0,sin(Earth_Sun_Angle*pi/180)>;
+#declare Earth_Position=Earth_Distance*<cos(Earth_Sun_Angle*pi/180),0,sin(Earth_Sun_Angle*pi/180)>+Sun_Loc;
 
 
-#declare mysphere=sphere {<-Earth_Radius*cos(75*pi/180)+1*m,Earth_Radius*sin(75*pi/180)+1*m,0>,1*m
+#declare mysphere1=sphere {<-(Earth_Radius+100*m)*cos(75*pi/180),(Earth_Radius+100*m)*sin(75*pi/180),0>,1*m
   texture {YaxisTexture}
-  rotate <0,360*seconde/j_t+180,0>
+  rotate <0,360*seconde/j_t+30,0>
+  rotate <0,0,23.44>
+  translate  Earth_Position
+}
+#declare mysphere2=sphere {<-(Earth_Radius+10*km)*cos(75*pi/180),(Earth_Radius+10*km)*sin(75*pi/180),0>,1*m
+  texture {YaxisTexture}
+  rotate <0,360*seconde/j_t+10,0>
   rotate <0,0,23.44>
   translate  Earth_Position
 }
 
 
-#declare finalCameraPos=yCenter(mysphere);
-#declare finalCameraVit=<0,0,0>;
+#declare finalCameraPos      =yCenter(mysphere1);
+#declare almostfinalCameraPos=yCenter(mysphere2);
+#declare finalCameraVit      =<0,0,0>;
 
+sphere { finalCameraPos, 500*m texture {XaxisTextureNT}}
 
 #declare CameraPath = create_spline (
-      array[6] {Earth_Position+<-50*Mm,10*Mm,-50*Mm>  , <1,0,0>,
-                Earth_Position+< 2*Mm ,7*Mm , 2*Mm> , <1,0,0>,
+      array[8] {Earth_Position+<-50*Mm,10*Mm,-50*Mm>  , <1,0,0>,
+                Earth_Position+< 3*Mm ,8*Mm ,-4*Mm>   , <-1,0,0>,
+                almostfinalCameraPos                  , <0,0,0>,
 		finalCameraPos                        , finalCameraVit
       },
   create_hermite_spline + spline_sampling (on))
@@ -60,18 +71,18 @@ evaluate_spline (CameraUp, spline_clock (clock))
 #declare camAngle=40+60*clock*clock*clock;
  
 
-//sphere { finalCameraPos, 100*km texture {XaxisTextureNT}}
 
 
 camera {
   location camPos
-  look_at .99999999*finalCameraPos
+  look_at finalCameraPos+(finalCameraPos-Sun_Loc)*.000000001
+  //look_at <0,0,0>
   up camUp
   angle camAngle
   right -x*image_width/image_height
 }
 
-// object  {frame scale 1*Gm}
+object  {frame scale 5000*km translate Earth_Position}
 
 union {
   object {Earth}
@@ -86,4 +97,4 @@ union {
   translate  Earth_Position
 }
 
-object{fastSun()}
+object{fastSun() translate Sun_Loc}

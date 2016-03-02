@@ -15,7 +15,7 @@
 
 // Animation stuff
 #declare duration=2.5*j_t;
-#declare timeOffset=0;//1.5*j_t;
+#declare timeOffset=1.5*j_t;
 #declare seconde=clock*duration+timeOffset;
 
 

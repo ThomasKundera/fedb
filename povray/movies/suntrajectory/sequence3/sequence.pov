@@ -55,17 +55,10 @@ cylinder { camPos-<0,-10*m,0>+10*m*vnormalize(camLkat),
 camera {
   location camPos
   look_at camLkat
-  up camUp
+  sky camUp
   angle 40
   right -x*image_width/image_height
 }
-
-//object  {frame scale 10*m translate camPos translate 10*m*vnormalize(camLkat)}
-//sphere {camPos, 2*m translate 20*m*vnormalize(camLkat) texture {YaxisTexture}}
-//sphere {camPos, 2*m translate 20*m*vnormalize(camLkat) translate <-2*m,-2*m,-2*m> texture {XaxisTexture}}
-//sphere {camPos, 2*m translate 20*m*vnormalize(camLkat) translate < 2*m, 2*m, 2*m> texture {XaxisTexture}}
-
-
 
 
 union {

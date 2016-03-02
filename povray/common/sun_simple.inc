@@ -11,10 +11,10 @@
   Correct_Pigment_Gamma(
     pigment{
       image_map {
-	jpeg "data/20111230_004615_304-small.jpg"
+	jpeg "data/20111230_004615_304.jpg"
 	map_type 1
       }
-    },.05)
+    },.2)
     finish {
       ambient 2
     }

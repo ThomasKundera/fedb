@@ -41,3 +41,14 @@
                color_map{[0 rgb 0][1 rgb<0,0,3>]}]
    }}
 #end //
+
+
+
+#macro yCenter(OBJECT)
+  #local Result=0.5*( min_extent(OBJECT)+ max_extent(OBJECT));
+  
+  Result
+#end
+
+
+  

@@ -37,18 +37,24 @@ global_settings { ambient_light .1 }
 
 #declare camPos=yCenter(mysphere);
 #declare camUp=vnormalize(camPos-Earth_Position);
-#declare camLkat=VProject_Plane(Sun_Loc-camPos,camPos-Earth_Position);
+#declare camLkat=VProject_Plane(Sun_Loc-camPos,camPos-Earth_Position)*.01;
 
-//#debug concat("Value is:",vstr(3,camPos,",", 0,3),"\n")
-//#debug concat("Value is:",vstr(3,camLkat,",", 0,3),"\n")
-//#debug concat("Value is:",vstr(3,camUp,",", 0,3),"\n")
+#debug concat("Value is:",vstr(3,camPos,",", 0,3),"\n")
+#debug concat("Value is:",vstr(3,camLkat,",", 0,3),"\n")
+#debug concat("Value is:",vstr(3,camUp,",", 0,3),"\n")
 
+
+cylinder { camPos-<0,-10*m,0>+10*m*vnormalize(camLkat),
+	   camPos-<0, 10*m,0>+10*m*vnormalize(camLkat),
+	   1*m
+	   texture {ZaxisTexture}
+	   }
 
 camera {
   location camPos
   look_at camLkat
   up camUp
-  angle 100
+  angle 40
   right -x*image_width/image_height
 }
 

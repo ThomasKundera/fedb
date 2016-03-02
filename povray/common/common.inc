@@ -16,6 +16,14 @@
 #declare mm=    m/1000;
 #declare um=   mm/1000;
 
+// This may change according to what we want to model
+#declare s_t =    1;
+// This wont change soon
+#declare mn_t =   60*s_t;
+#declare h_t  = 3600*s_t;
+#declare j_t  = 24*h_t;
+#declare a_t  = 31556925.98*s_t;
+
 
 
 // From: http://www.f-lohmueller.de/pov_tut/backgrnd/p_sky8f.htm

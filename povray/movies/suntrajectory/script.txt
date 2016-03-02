@@ -1,0 +1,18 @@
+sequence 1:
+duration: 1 day
+
+Approach from away, see the Sun and Earth
+Near Earth, goes in the vinicity of north pole
+
+sequence 2:
+duration: .5 day
+
+Slow down and take the local speed of ground
+
+
+sequence 3:
+duration: 2.5 day
+
+Look at Sun while on ground
+
+

@@ -12,9 +12,9 @@ MENCODER =       $(NICE) -20 mencoder
 
 ENCODEROPTIONS = -mf fps=25:type=png -ovc lavc -lavcopts vcodec=mpeg4:mbd=2:trell:vbitrate=7000 -oac copy
 
-IMG_FILE =       suntrajectory.png
+IMG_FILE =       sequence.png
 
-COMMONPATH = ../../common/
+COMMONPATH = ../../../common/
 
 COMMONFILES = $(COMMONPATH)/common.inc $(COMMONPATH)/frame.inc $(COMMONPATH)/earth-simple.inc
 
@@ -52,7 +52,7 @@ preplqanim:
 	$(POVRAY)$<  povray.ini
 
 movie:
-	$(MENCODER) mf://suntrajectory*.png $(ENCODEROPTIONS) -o output.avi
+	$(MENCODER) mf://sequence*.png $(ENCODEROPTIONS) -o output.avi
 clean:  
 	@/bin/rm *.png
 	

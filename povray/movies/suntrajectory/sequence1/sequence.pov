@@ -1,10 +1,11 @@
 // --------------------------------------------------------------------------------
-// Altitude
+// First sequence
 // 
 // --------------------------------------------------------------------------------
 
-
 #include "colors.inc"
+
+#include "spline.mcr"
 
 #include "common.inc"
 #include "frame.inc"
@@ -13,7 +14,7 @@
 #include "sun_simple.inc"
 
 // Animation stuff
-#declare duration=3*j_t;
+#declare duration=1*j_t;
 #declare seconde=clock*duration;
 
 
@@ -22,7 +23,17 @@ global_settings { ambient_light .1 }
 #declare Earth_Sun_Angle=360*seconde/a_t;
 #declare Earth_Position=Earth_Distance*<cos(Earth_Sun_Angle*pi/180),0,sin(Earth_Sun_Angle*pi/180)>;
 
-#declare camPos=Earth_Position+<20*Mm,10*Mm,20*Mm>;
+#declare CameraPath = create_spline (
+   array[6] { -Earth_Position-<0,0,Earth_Distance/4>, <0,0,0>,
+              <0,1*Gm,100*km>                       , <1,0,0>,
+               Earth_Position+<-10*Mm,5*Mm,-10*Mm>  , <0,0,0>},
+   create_hermite_spline + spline_sampling (on))
+   
+
+evaluate_spline (CameraPath, spline_clock (clock))
+
+
+#declare camPos=spline_pos;
 
 
 camera {

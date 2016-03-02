@@ -11,10 +11,13 @@
   Correct_Pigment_Gamma(
     pigment{
       image_map {
-	jpeg "data/20111230_004615_304.jpg"
+	jpeg "data/20111230_004615_304-small.jpg"
 	map_type 1
       }
-    },.2)
+    },.05)
+    finish {
+      ambient 2
+    }
 }
 
 #declare SunTextureFast=texture {

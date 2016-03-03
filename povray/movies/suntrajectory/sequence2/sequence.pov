@@ -45,7 +45,7 @@ global_settings { ambient_light .1 }
 #declare almostfinalCameraPos=yCenter(mysphere2);
 #declare finalCameraVit      =<0,0,0>;
 
-sphere { finalCameraPos, 50*m texture {XaxisTextureNT}}
+//sphere { finalCameraPos, 50*m texture {XaxisTextureNT}}
 
 #declare CameraPath = create_spline (
       array[8] {Earth_Position+<-50*Mm,10*Mm,-50*Mm>  , <1,0,0>,

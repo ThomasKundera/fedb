@@ -33,7 +33,7 @@ global_settings { ambient_light .1 }
   rotate <0,0,23.44>
   translate  Earth_Position
 }
-#declare mysphere2=sphere {<-(Earth_Radius+10*km)*cos(75*pi/180),(Earth_Radius+10*km)*sin(75*pi/180),0>,1*m
+#declare mysphere2=sphere {<-(Earth_Radius+30*km)*cos(75*pi/180),(Earth_Radius+30*km)*sin(75*pi/180),0>,1*m
   texture {YaxisTexture}
   rotate <0,360*seconde/j_t+10,0>
   rotate <0,0,23.44>
@@ -45,7 +45,7 @@ global_settings { ambient_light .1 }
 #declare almostfinalCameraPos=yCenter(mysphere2);
 #declare finalCameraVit      =<0,0,0>;
 
-sphere { finalCameraPos, 500*m texture {XaxisTextureNT}}
+sphere { finalCameraPos, 50*m texture {XaxisTextureNT}}
 
 #declare CameraPath = create_spline (
       array[8] {Earth_Position+<-50*Mm,10*Mm,-50*Mm>  , <1,0,0>,
@@ -58,31 +58,31 @@ evaluate_spline (CameraPath, spline_clock (clock))
 #declare camPos=spline_pos;
 
 
-#declare CameraUp = create_spline (
+#declare CameraSky = create_spline (
       array[4] {<0,1,0>,vnormalize(<0,1,.1>),
                         vnormalize(<.1,1,0>),
                         vnormalize(camPos-Earth_Position)},
   create_default_spline +spline_sampling (on))
   
-evaluate_spline (CameraUp, spline_clock (clock))
-#declare camUp=spline_pos;
+evaluate_spline (CameraSky, spline_clock (clock))
+#declare camSky=spline_pos;
  
  
-#declare camAngle=40+60*clock*clock*clock;
+#declare camAngle=40;//+60*clock*clock*clock;
  
 
 
 
 camera {
   location camPos
-  look_at finalCameraPos+(finalCameraPos-Sun_Loc)*.000000001
+  look_at finalCameraPos+(Sun_Loc-finalCameraPos)*.000000001
   //look_at <0,0,0>
-  up camUp
+  sky camSky
   angle camAngle
   right -x*image_width/image_height
 }
 
-object  {frame scale 5000*km translate Earth_Position}
+//object  {frame scale 5000*km translate Earth_Position}
 
 union {
   object {Earth}

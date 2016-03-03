@@ -36,15 +36,16 @@ global_settings { ambient_light .1 }
 }
 
 #declare camPos=yCenter(mysphere);
-#declare camUp=vnormalize(camPos-Earth_Position);
+#declare camSky=vnormalize(camPos-Earth_Position);
 #declare camLkat=Sun_Loc; //VProject_Plane(Sun_Loc-camPos,camPos-Earth_Position);
 
+/*
 #debug concat("Earth_Position is: ",vstr(3,Earth_Position ,",", 0,20),"\n")
 #debug concat("Sun_Loc is       : ",vstr(3,Sun_Loc,",", 0,20),"\n")
 #debug concat("camPos is        : ",vstr(3,camPos ,",", 0,20),"\n")
 #debug concat("camLkat is       : ",vstr(3,camLkat,",", 0,20),"\n")
-#debug concat("camUp is         : ",vstr(3,camUp  ,",", 0,20),"\n")
-
+#debug concat("camSky is        : ",vstr(3,camSky  ,",", 0,20),"\n")
+*/
 
 cylinder { camPos-<0,-10*m,0>+10*m*vnormalize(camLkat),
 	   camPos-<0, 10*m,0>+10*m*vnormalize(camLkat),
@@ -55,8 +56,8 @@ cylinder { camPos-<0,-10*m,0>+10*m*vnormalize(camLkat),
 camera {
   location camPos
   look_at camLkat
-  sky camUp
-  angle 100
+  sky camSky
+  angle 40
   right -x*image_width/image_height
 }
 
@@ -74,4 +75,4 @@ union {
   translate  Earth_Position
 }
 
-object{fastSun() scale 1 translate Sun_Loc*.1}
+object{fastSun() scale 1 translate Sun_Loc*1}

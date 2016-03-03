@@ -37,7 +37,9 @@ global_settings { ambient_light .1 }
 
 #declare camPos=yCenter(mysphere);
 #declare camSky=vnormalize(camPos-Earth_Position);
-#declare camLkat=Sun_Loc; //VProject_Plane(Sun_Loc-camPos,camPos-Earth_Position);
+
+
+#declare camLkat=(Sun_Loc+VProject_Plane(Sun_Loc-camPos,camPos-Earth_Position))/2;
 
 /*
 #debug concat("Earth_Position is: ",vstr(3,Earth_Position ,",", 0,20),"\n")

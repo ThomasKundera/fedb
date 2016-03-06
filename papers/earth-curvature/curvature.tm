@@ -261,7 +261,7 @@
 
   The lowering of horizon for a FE model is a bit more tricky to compute
   (there are several incompatibles - and implausible - FE models). Most FE
-  propagandist ,believes the horizon to always stay at ``eye-level''.
+  propagandist believes the horizon to always stay at ``eye-level''.
 
   <subsection|Computation>
 
@@ -498,46 +498,49 @@
   <math|M<rsub|yz><rprime|'>=<around*|(|0,y<rprime|'>,z<rprime|'>|)>>.
 
   On the plane <math|xz>, line <math|M<rsub|xz>M<rprime|'><rsub|xz>>, defined
-  by <math|z=ax+b>:
+  by <math|x=az+b>:
 
   <\equation*>
-    <choice|<tformat|<table|<row|<cell|b=\<varepsilon\>>>|<row|<cell|z=ax+\<varepsilon\>>>>>>
+    <choice|<tformat|<table|<row|<cell|0=a\<varepsilon\>+b\<Rightarrow\>b=-a\<varepsilon\>>>|<row|<cell|x=az+b>>>>>
   </equation*>
 
   Thus:
 
   <\equation*>
-    a=<frac|z-\<varepsilon\>|x>
+    a=<frac|x|z-\<varepsilon\>>
   </equation*>
 
-  In <math|M<rsub|xz><rprime|'>>, <math|z<rprime|'>=0=<frac|z-\<varepsilon\>|x>x<rprime|'>+\<varepsilon\>>
-  et donc <math|x<rprime|'>=\<varepsilon\>x-<frac|z|\<varepsilon\>>>
+  <\equation*>
+    b=-a\<varepsilon\>=-<frac|\<varepsilon\>x|z-\<varepsilon\>>
+  </equation*>
+
+  In <math|M<rsub|xz><rprime|'>>, <math|z<rprime|'>=0>, so
+  <math|x<rprime|'>=><math|<frac|-\<varepsilon\>x|z-\<varepsilon\>>>
 
   \;
 
-  On the plane <math|yz>, line <math|OM<rsub|yz>>, defined by
-  <math|y=a<rprime|'>z+b<rprime|'>>:
+  On the plane <math|yz>, line <math|OM<rsub|yz>>, defined by <math|y=az+b>:
 
   <\equation*>
-    <choice|<tformat|<table|<row|<cell|h=b<rprime|'>>>|<row|<cell|y=a<rprime|'>z+h>>>>>
+    <choice|<tformat|<table|<row|<cell|h=a\<varepsilon\>+b\<Rightarrow\>b=h-a\<varepsilon\>>>|<row|<cell|y=az+b>>>>>
   </equation*>
 
   Thus:
 
   <\equation*>
-    a<rprime|'>=<frac|y-h|z>
+    a=<frac|y-h|z-\<varepsilon\>>
   </equation*>
 
-  In <math|M<rsub|yz><rprime|'>>, <math|y<rprime|'>=a<rprime|'>z<rprime|'>+h>:
+  In <math|M<rsub|yz><rprime|'>>, <math|y<rprime|'>=a*\<times\>0+b>:
 
   <\eqnarray*>
-    <tformat|<table|<row|<cell|y<rprime|'>>|<cell|=>|<cell|<frac|y-h|z>\<varepsilon\>+h>>>>
+    <tformat|<table|<row|<cell|y<rprime|'>>|<cell|=>|<cell|<frac|h-y|z-\<varepsilon\>>\<varepsilon\>+h>>>>
   </eqnarray*>
 
   Finally:
 
   <\equation*>
-    M<around*|(|x,y,z|)>\<Rightarrow\>M<rprime|'><choice|<tformat|<table|<row|<cell|x<rprime|'>=\<varepsilon\>x/z>>|<row|<cell|y<rprime|'>=<frac|y-h|z>\<varepsilon\>+h>>|<row|<cell|z<rprime|'>=\<varepsilon\>>>>>><label|eqmmp>
+    M<around*|(|x,y,z|)>\<Rightarrow\>M<rprime|'><choice|<tformat|<table|<row|<cell|x<rprime|'>=<frac|-\<varepsilon\>x|z-\<varepsilon\>>>>|<row|<cell|y<rprime|'>=<frac|h-y|z-\<varepsilon\>>\<varepsilon\>+h>>|<row|<cell|z<rprime|'>=\<varepsilon\>>>>>><label|eqmmp>
   </equation*>
 
   Lets rewrite this the other way:
@@ -545,7 +548,8 @@
   \;
 
   <\equation*>
-    M<rprime|'><choice|<tformat|<table|<row|<cell|x=zx<rprime|'>/\<varepsilon\>>>|<row|<cell|z=\<varepsilon\><frac|y-h|y<rprime|'>-h>>>>>>
+    M<rprime|'><choice|<tformat|<table|<row|<cell|x=z
+    x<rprime|'>/\<varepsilon\>>>|<row|<cell|z=\<varepsilon\><frac|y-h|y<rprime|'>-h>>>>>>
   </equation*>
 
   So
@@ -664,7 +668,7 @@
     <associate|auto-8|<tuple|2.1|2>>
     <associate|auto-9|<tuple|2.2|2>>
     <associate|eq2|<tuple|3.3.2|4>>
-    <associate|eqata|<tuple|4.4.2|?>>
+    <associate|eqata|<tuple|4|?>>
     <associate|eqd|<tuple|1|?>>
     <associate|eqda|<tuple|3|?>>
     <associate|eqdb|<tuple|3|?>>
@@ -707,11 +711,15 @@
 
       <tuple|normal||<pageref|auto-33>>
 
-      <tuple|normal||<pageref|auto-39>>
+      <tuple|normal||<pageref|auto-40>>
 
-      <tuple|normal||<pageref|auto-44>>
+      <tuple|normal||<pageref|auto-41>>
 
-      <tuple|normal||<pageref|auto-47>>
+      <tuple|normal||<pageref|auto-45>>
+
+      <tuple|normal||<pageref|auto-50>>
+
+      <tuple|normal||<pageref|auto-53>>
     </associate>
     <\associate|toc>
       <vspace*|1fn><with|font-series|<quote|bold>|math-font-series|<quote|bold>|1<space|2spc>Presentation
@@ -821,44 +829,63 @@
       <no-break><pageref|auto-34>>
 
       <with|par-left|<quote|2tab>|4.4.2<space|2spc>Computing length of arc
-      <with|mode|<quote|math>|AB> <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
+      \ <with|mode|<quote|math>|<wide|AB<rprime|'>|\<invbreve\>>>
+      <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
       <no-break><pageref|auto-35>>
 
-      <vspace*|1fn><with|font-series|<quote|bold>|math-font-series|<quote|bold>|5<space|2spc>Shape
-      of the horizon> <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
-      <no-break><pageref|auto-36><vspace|0.5fn>
+      <with|par-left|<quote|2tab>|4.4.3<space|2spc>Computing
+      <with|mode|<quote|math>|h<rprime|''>>
+      <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
+      <no-break><pageref|auto-36>>
 
-      <with|par-left|<quote|1tab>|5.1<space|2spc>The question is not simple
+      <with|par-left|<quote|2tab>|4.4.4<space|2spc>Computing length of arc
+      \ <with|mode|<quote|math>|<wide|AB<rprime|''>|\<invbreve\>>>
       <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
       <no-break><pageref|auto-37>>
 
-      <with|par-left|<quote|1tab>|5.2<space|2spc>Shape of the horizon line
+      <with|par-left|<quote|2tab>|4.4.5<space|2spc>Eight inches
       <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
       <no-break><pageref|auto-38>>
 
-      <with|par-left|<quote|1tab>|5.3<space|2spc>Properties of the horizon
-      circle <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
-      <no-break><pageref|auto-40>>
-
-      <with|par-left|<quote|1tab>|5.4<space|2spc>Some words about camera
-      projection <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
-      <no-break><pageref|auto-41>>
-
-      <with|par-left|<quote|2tab>|5.4.1<space|2spc>The camera
+      <with|par-left|<quote|2tab>|4.4.6<space|2spc>Lets plot that
       <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
-      <no-break><pageref|auto-42>>
+      <no-break><pageref|auto-39>>
 
-      <with|par-left|<quote|2tab>|5.4.2<space|2spc>Horizontal camera
+      <vspace*|1fn><with|font-series|<quote|bold>|math-font-series|<quote|bold>|5<space|2spc>Shape
+      of the horizon> <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
+      <no-break><pageref|auto-42><vspace|0.5fn>
+
+      <with|par-left|<quote|1tab>|5.1<space|2spc>The question is not simple
       <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
       <no-break><pageref|auto-43>>
 
+      <with|par-left|<quote|1tab>|5.2<space|2spc>Shape of the horizon line
+      <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
+      <no-break><pageref|auto-44>>
+
+      <with|par-left|<quote|1tab>|5.3<space|2spc>Properties of the horizon
+      circle <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
+      <no-break><pageref|auto-46>>
+
+      <with|par-left|<quote|1tab>|5.4<space|2spc>Some words about camera
+      projection <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
+      <no-break><pageref|auto-47>>
+
+      <with|par-left|<quote|2tab>|5.4.1<space|2spc>The camera
+      <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
+      <no-break><pageref|auto-48>>
+
+      <with|par-left|<quote|2tab>|5.4.2<space|2spc>Horizontal camera
+      <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
+      <no-break><pageref|auto-49>>
+
       <with|par-left|<quote|1tab>|5.5<space|2spc>Shape of the horizon viewed
       from an horizontal pinhole camera <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
-      <no-break><pageref|auto-45>>
+      <no-break><pageref|auto-51>>
 
       <with|par-left|<quote|2tab>|5.5.1<space|2spc>Plots
       <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
-      <no-break><pageref|auto-46>>
+      <no-break><pageref|auto-52>>
     </associate>
   </collection>
 </auxiliary>

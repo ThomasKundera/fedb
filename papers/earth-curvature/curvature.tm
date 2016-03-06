@@ -540,7 +540,7 @@
   Finally:
 
   <\equation*>
-    M<around*|(|x,y,z|)>\<Rightarrow\>M<rprime|'><choice|<tformat|<table|<row|<cell|x<rprime|'>=\<varepsilon\>x/z>>|<row|<cell|y<rprime|'>=<frac|y-h|z>\<varepsilon\>+h>>|<row|<cell|z<rprime|'>=\<varepsilon\>>>>>><label|eqmmp>
+    M<around*|(|x,y,z|)>\<Rightarrow\>M<rprime|'><choice|<tformat|<table|<row|<cell|x<rprime|'>=<frac|-\<varepsilon\>x|z-\<varepsilon\>>>>|<row|<cell|y<rprime|'>=<frac|h-y|z-\<varepsilon\>>\<varepsilon\>+h>>|<row|<cell|z<rprime|'>=\<varepsilon\>>>>>><label|eqmmp>
   </equation*>
 
   Lets rewrite this the other way:
@@ -548,7 +548,8 @@
   \;
 
   <\equation*>
-    M<rprime|'><choice|<tformat|<table|<row|<cell|x=zx<rprime|'>/\<varepsilon\>>>|<row|<cell|z=\<varepsilon\><frac|y-h|y<rprime|'>-h>>>>>>
+    M<rprime|'><choice|<tformat|<table|<row|<cell|x=z
+    x<rprime|'>/\<varepsilon\>>>|<row|<cell|z=\<varepsilon\><frac|y-h|y<rprime|'>-h>>>>>>
   </equation*>
 
   So

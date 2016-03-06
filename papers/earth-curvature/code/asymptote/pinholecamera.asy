@@ -54,4 +54,3 @@ dot("$M'_{yz}$",pMpyz);
 draw(pMyz--pP,dotted);
 draw(pMp--pMpyz,dotted);
 draw(pM--pMyz,dotted);
-

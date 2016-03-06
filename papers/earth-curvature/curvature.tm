@@ -459,7 +459,7 @@
   vertical axis, then, the equation of the circle can be wrote as:
 
   <\equation>
-    <choice|<tformat|<table|<row|<cell|x<rsup|2>+z<rsup|2>=l<rsup|2>>>|<row|<cell|y=h<rprime|'>>>>>><label|eqhcircle>
+    <choice|<tformat|<table|<row|<cell|x<rsup|2>+z<rsup|2>=l<rsup|2>>>|<row|<cell|y=-h<rprime|'>>>>>><label|eqhcircle>
   </equation>
 
   Note the fact that the equation impose <math|z\<in\><around*|[|-l,l|]>>, it
@@ -478,8 +478,9 @@
   <subsubsection|Horizontal camera>
 
   To simplify, we imagine that our camera is hold straight, so that the
-  sensor is vertical and included in the <math|<around*|(|x,y|)>> plane. The
-  hole located on the <math|y> axis at <math|P<around*|(|0,h,\<varepsilon\>|)>>.
+  sensor is vertical and included in the <math|<around*|(|x,y|)>> plane
+  cutting the z plane at <math|z=\<varepsilon\>>. The hole located on the
+  <math|y> axis at <math|P<around*|(|0,h,0|)>>.
 
   The projection equations in this case are very simple.
 
@@ -500,47 +501,46 @@
   On the plane <math|xz>, line <math|M<rsub|xz>M<rprime|'><rsub|xz>>, defined
   by <math|x=az+b>:
 
+  On the plane <math|xz>, line <math|OM<rsub|xz>>, defined by <math|z=ax+b>:
+
   <\equation*>
-    <choice|<tformat|<table|<row|<cell|0=a\<varepsilon\>+b\<Rightarrow\>b=-a\<varepsilon\>>>|<row|<cell|x=az+b>>>>>
+    <choice|<tformat|<table|<row|<cell|0=b>>|<row|<cell|z=ax>>>>>
   </equation*>
 
   Thus:
 
   <\equation*>
-    a=<frac|x|z-\<varepsilon\>>
+    a=<frac|z|x>
   </equation*>
 
-  <\equation*>
-    b=-a\<varepsilon\>=-<frac|\<varepsilon\>x|z-\<varepsilon\>>
-  </equation*>
-
-  In <math|M<rsub|xz><rprime|'>>, <math|z<rprime|'>=0>, so
-  <math|x<rprime|'>=><math|<frac|-\<varepsilon\>x|z-\<varepsilon\>>>
+  In <math|M<rsub|xz><rprime|'>>, <math|z<rprime|'>=\<varepsilon\>=<frac|z|x>x<rprime|'>>
+  et donc <math|x<rprime|'>=<frac|\<varepsilon\>x|z>>
 
   \;
 
-  On the plane <math|yz>, line <math|OM<rsub|yz>>, defined by <math|y=az+b>:
+  On the plane <math|yz>, line <math|OM<rsub|yz>>, defined by
+  <math|y=a<rprime|'>z+b<rprime|'>>:
 
   <\equation*>
-    <choice|<tformat|<table|<row|<cell|h=a\<varepsilon\>+b\<Rightarrow\>b=h-a\<varepsilon\>>>|<row|<cell|y=az+b>>>>>
+    <choice|<tformat|<table|<row|<cell|h=b<rprime|'>>>|<row|<cell|y=a<rprime|'>z+h>>>>>
   </equation*>
 
   Thus:
 
   <\equation*>
-    a=<frac|y-h|z-\<varepsilon\>>
+    a<rprime|'>=<frac|y-h|z>
   </equation*>
 
-  In <math|M<rsub|yz><rprime|'>>, <math|y<rprime|'>=a*\<times\>0+b>:
+  In <math|M<rsub|yz><rprime|'>>, <math|y<rprime|'>=a<rprime|'>z<rprime|'>+h>:
 
   <\eqnarray*>
-    <tformat|<table|<row|<cell|y<rprime|'>>|<cell|=>|<cell|<frac|h-y|z-\<varepsilon\>>\<varepsilon\>+h>>>>
+    <tformat|<table|<row|<cell|y<rprime|'>>|<cell|=>|<cell|<frac|y-h|z>\<varepsilon\>+h>>>>
   </eqnarray*>
 
   Finally:
 
   <\equation*>
-    M<around*|(|x,y,z|)>\<Rightarrow\>M<rprime|'><choice|<tformat|<table|<row|<cell|x<rprime|'>=<frac|-\<varepsilon\>x|z-\<varepsilon\>>>>|<row|<cell|y<rprime|'>=<frac|h-y|z-\<varepsilon\>>\<varepsilon\>+h>>|<row|<cell|z<rprime|'>=\<varepsilon\>>>>>><label|eqmmp>
+    M<around*|(|x,y,z|)>\<Rightarrow\>M<rprime|'><choice|<tformat|<table|<row|<cell|x<rprime|'>=\<varepsilon\>x/z>>|<row|<cell|y<rprime|'>=<frac|y-h|z>\<varepsilon\>+h>>|<row|<cell|z<rprime|'>=\<varepsilon\>>>>>><label|eqmmp>
   </equation*>
 
   Lets rewrite this the other way:
@@ -548,8 +548,7 @@
   \;
 
   <\equation*>
-    M<rprime|'><choice|<tformat|<table|<row|<cell|x=z
-    x<rprime|'>/\<varepsilon\>>>|<row|<cell|z=\<varepsilon\><frac|y-h|y<rprime|'>-h>>>>>>
+    M<rprime|'><choice|<tformat|<table|<row|<cell|x=zx<rprime|'>/\<varepsilon\>>>|<row|<cell|z=\<varepsilon\><frac|y-h|y<rprime|'>-h>>>>>>
   </equation*>
 
   So
@@ -559,6 +558,8 @@
   <\equation>
     M<rprime|'><choice|<tformat|<table|<row|<cell|x=x<rprime|'><frac|y-h|y<rprime|'>-h>>>|<row|<cell|z=\<varepsilon\><frac|y-h|y<rprime|'>-h>>>>>><label|eqmpr>
   </equation>
+
+  \;
 
   <subsection|Shape of the horizon viewed from an horizontal pinhole camera>
 
@@ -571,10 +572,10 @@
 
   <\equation*>
     <tabular|<tformat|<table|<row|<cell|M<rprime|'>>|<cell|>|<cell|<choice|<tformat|<table|<row|<cell|x=x<rprime|'><frac|y-h|y<rprime|'>-h>>>|<row|<cell|z=\<varepsilon\><frac|y-h|y<rprime|'>-h>>>|<row|<cell|z
-    \<in\><around*|[|\<varepsilon\>,l|]>>>|<row|<cell|x<rsup|2>+z<rsup|2>=l<rsup|2>>>|<row|<cell|y=h<rprime|'>>>>>>>>>>>
+    \<in\><around*|[|\<varepsilon\>,l|]>>>|<row|<cell|x<rsup|2>+z<rsup|2>=l<rsup|2>>>|<row|<cell|y=-h<rprime|'>>>>>>>>>>>
   </equation*>
 
-  Posing <math|H=h<rprime|'>-h> and <math|Y<rprime|'>=y<rprime|'>-h>:
+  Posing <math|H=h<rprime|'>+h> and <math|Y<rprime|'>=y<rprime|'>-h>:
 
   <\eqnarray*>
     <tformat|<table|<row|<cell|<around*|(|<frac|Hx<rprime|'>|Y<rprime|'>>|)><rsup|2>+<around*|(|\<varepsilon\><frac|H|Y<rprime|'>>|)><rsup|2>>|<cell|=>|<cell|l<rsup|2>>>|<row|<cell|H<rsup|2>x<rprime|'><rsup|2>+\<varepsilon\><rsup|2>H<rsup|2>>|<cell|=>|<cell|l<rsup|2>Y<rprime|'><rsup|2>>>|<row|<cell|l<rsup|2>Y<rprime|'><rsup|2>-H<rsup|2>x<rprime|'><rsup|2>>|<cell|=>|<cell|\<varepsilon\><rsup|2>H<rsup|2>>>|<row|<cell|<frac|Y<rprime|'><rsup|2>|<frac|\<varepsilon\><rsup|2>H<rsup|2>|l<rsup|2>>>-<frac|x<rprime|'><rsup|2>|\<varepsilon\><rsup|2>>>|<cell|=>|<cell|1>>|<row|<cell|<frac|Y<rprime|'><rsup|2>|<around*|(|<frac|\<varepsilon\><rsup|>H<rsup|>|l<rsup|>>|)><rsup|2>>-<frac|x<rprime|'><rsup|2>|\<varepsilon\><rsup|2>>>|<cell|=>|<cell|1>>>>
@@ -677,7 +678,7 @@
     <associate|eqhl|<tuple|8|?>>
     <associate|eqhp|<tuple|7|?>>
     <associate|eqhr|<tuple|6|?>>
-    <associate|eqmmp|<tuple|12|?>>
+    <associate|eqmmp|<tuple|10|?>>
     <associate|eqmpr|<tuple|10|?>>
     <associate|figatana|<tuple|7|?>>
     <associate|figflatflat|<tuple|1|?>>

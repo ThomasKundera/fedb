@@ -14,9 +14,9 @@ dot("O",O);
 
 triple pO=(0,0,0);
 
-triple pP=(0,.6,.8);
-triple pM=(2.5,2.2,4);
-path3  plP=plane((2,0,0),(0,1,0),(-1,0,0));
+triple pP=(0,.8,0);
+triple pM=(3,2,4);
+path3  plP=plane((2,0,0),(0,2,0),(0,0,1));
 
 
 dot("P",pP);
@@ -24,38 +24,22 @@ dot("M",pM);
 
 //triple pMp=intersectionpoint(pP--pM,plP);
 
-//real intersect(triple P, triple Q, triple n, triple Z);
-//    returns the intersection time of the extension of 
-//    the line segment PQ with the plane perpendicular
-//    to n and passing through Z.
+real t=intersect(pP,pM,(0,0,1),(0,0,1));
 
-triple V=pP-pM;
-//write(V);
-//triple pPp=pM+10*V;
-
-//write(pPp);
-
-real t=intersect(pM,pP,(0,0,1),(0,0,0));
-
-//write(t);
-
-triple pMp=pM+t*V;
-
-//write(pMp);
-
+triple pMp=point(pP--pM,t);
 dot("M'",pMp);
 
 draw(plP, blue);
-draw(pM--pMp,dashed);
+draw(pP--pM,dashed);
 
-transform3 projxz=planeproject(Y);
-triple pMxy=projxz*pM;
-triple pMpxy=projxz*pMp;
-// 
+transform3 projxy=planeproject(Y);
+triple pMxy=projxy*pM;
+triple pMpxy=projxy*pMp;
+
 dot("$M_{xz}$",pMxy);
 dot("$M'_{xz}$",pMpxy);
-// 
-draw(pMxy--pMpxy,dotted);
+
+draw(pMxy--pO,dotted);
 draw(pMp--pMpxy,dotted);
 draw(pM--pMxy,dotted);
 
@@ -67,14 +51,7 @@ triple pMpyz=projyz*pMp;
 dot("$M_{yz}$",pMyz);
 dot("$M'_{yz}$",pMpyz);
 
-draw(pMyz--pMpyz,dotted);
+draw(pMyz--pP,dotted);
 draw(pMp--pMpyz,dotted);
 draw(pM--pMyz,dotted);
-
-
-//transform3 projxy=planeproject(Z);
-//triple pMy=projxz*pMyz;
-//dot("$M_{z}$",pMy);
-
-
 

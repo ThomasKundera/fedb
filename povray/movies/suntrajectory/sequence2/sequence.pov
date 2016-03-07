@@ -68,7 +68,7 @@ evaluate_spline (CameraSky, spline_clock (clock))
 #declare camSky=spline_pos;
  
  
-#declare camAngle=40;//+60*clock*clock*clock;
+#declare camAngle=40+20*clock*clock*clock*clock*clock*clock;
  
 
 

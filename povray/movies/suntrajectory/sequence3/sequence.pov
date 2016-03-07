@@ -59,7 +59,7 @@ camera {
   location camPos
   look_at camLkat
   sky camSky
-  angle 40
+  angle 60
   right -x*image_width/image_height
 }
 

@@ -1,0 +1,60 @@
+frame -3,-2.5,10,3.5
+scale 1
+
+
+
+P = point(0,0)
+
+pla = point (-2,-2)
+plb = point (-2,2)
+
+pl=line(pla,plb)
+
+O = point(-2,0)
+
+lx=line(O,P)
+ly=line(P,90:)
+
+M = point(8,3)
+
+Ml=line(M,P)
+
+M'=intersection(Ml,pl)
+
+Mx=projection(M,lx)
+My=projection(M,ly)
+
+draw 
+P
+M
+M'
+Mx
+My
+pla.plb
+lx lightgray
+ly lightgray
+"y'" M'.O 0:
+"y" M.Mx 45:
+"x" M.My 45:
+end
+
+draw dotted
+"f" O.P 90:
+O.P
+M.M'
+M.Mx
+M.My
+end
+
+
+label
+P   45:
+M   45:
+M' 180:
+#Mx  45:
+#My  45:
+end
+
+
+
+

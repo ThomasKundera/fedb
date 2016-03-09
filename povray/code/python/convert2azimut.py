@@ -44,6 +44,7 @@ def main():
 
   (iminx,iminy)=imi.size
 
+  print ("iminx="+str(iminx)+"  iminy="+str(iminy)) 
 
   imoray=[]
 
@@ -58,7 +59,7 @@ def main():
     ix=cpt%iminx
     iy=cpt/iminx
     theta=ix*2.*3.141592653/iminx
-    r=iy*1.0/imony
+    r=iy*1.0/iminy
     
     ox=min(int(math.cos(theta)*r*mimonx+mimonx),imonx-1)
     oy=min(int(math.sin(theta)*r*mimony+mimony),imony-1)
@@ -66,12 +67,14 @@ def main():
     #print ("ix="+str(ix)+"   iy="+str(iy)+"   theta="+str(theta)+"   r="+str(r)+"  ox="+str(ox))
     
     #print (ox,oy)
-    
-    imoray[ox][oy][0]+=px[0]
-    imoray[ox][oy][1]+=px[1]
-    imoray[ox][oy][2]+=px[2]
-    imoray[ox][oy][3]+=1
-    
+    try:
+      imoray[ox][oy][0]+=px[0]
+      imoray[ox][oy][1]+=px[1]
+      imoray[ox][oy][2]+=px[2]
+      imoray[ox][oy][3]+=1
+    except:
+      print ("ix="+str(ix)+"   iy="+str(iy)+"   theta="+str(theta)+"   r="+str(r)+"  ox="+str(ox))
+      raise
   
   #while (smothimo(imoray)):
   #  pass

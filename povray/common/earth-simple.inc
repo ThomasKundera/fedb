@@ -2,26 +2,52 @@
 // --------------------------------------------------------------------------------
 // earth-simple.inc
 
-
-#declare Earth_Distance   = 149600000*km; // Distance to Sun
-
-#declare Earth_Radius       = 6371*km;
-#declare Cloud_Altitude     = 5*km;
-
+#include "earth-common.inc"
 
 #declare fastEarth=sphere {<0,0,0>,Earth_Radius pigment {rgb <.4,.4,.4>}}
 
-
-
-#declare EarthTexture=texture {
+#declare MappedEarthTexture=texture {
   pigment{
     image_map {
       jpeg "data/earth_surface_map.jpg"
       map_type 1
+      interpolate 2
     }
   }
 }
 
+#declare MappedEarth=sphere { <0,0,0>,1 texture {MappedEarthTexture} scale Earth_Radius}
 
-#declare Earth=sphere { <0,0,0>,1 texture {EarthTexture} scale Earth_Radius}
 
+#declare Earth_Water= sphere {
+        <0,0,0>, 1
+        texture { WaterTexture }
+        scale Earth_Radius
+        hollow on
+}
+
+#declare Earth_Clouds= sphere{ <0, 0, 0>, Earth_Radius+Cloud_Altitude hollow
+  texture{CloudTextureA scale 1}
+  texture{CloudTextureB scale 1}
+}
+
+#declare Earth= union{
+  #switch (earthType)
+   #case (1)
+    object {MappedEarth}
+   #break
+   #case (2)
+    union {
+      object {Earth_Water}
+      object {Earth_Clouds}
+    }
+   #break
+   #case (3)
+    union {
+      object {MappedEarth}
+      object {Earth_Clouds}
+    }    
+   #else
+    object {MappedEarth}
+   #end
+}

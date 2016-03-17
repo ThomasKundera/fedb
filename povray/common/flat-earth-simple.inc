@@ -4,35 +4,42 @@
 
 #include "earth-common.inc"
 
-#declare fastEarth=sphere {<0,0,0>,Earth_Radius pigment {rgb <.4,.4,.4>}}
+#declare fastEarth=cylinder { <0,0,0>,<0,-.1,0>,1  pigment {rgb <.4,.4,.4>}  scale Earth_Radius}
 
 #declare MappedEarthTexture=texture {
   pigment{
     image_map {
-      jpeg "data/earth_surface_map.jpg"
-      map_type 1
+      jpeg "data/earth_surface_map-flat.jpg"
+      map_type 0
       interpolate 2
+      once
     }
+    translate <-.5,-.5,0>
   }
 }
 
-#declare MappedEarth=sphere { <0,0,0>,1 texture {MappedEarthTexture} scale Earth_Radius}
+//#declare MappedEarth=cylinder { <0,0,0>,<0,0,.1>,1 texture {MappedEarthTexture} rotate <90,0,0> scale Earth_Radius}
+
+#declare MappedEarth=plane { <0,0,1>,0 texture {MappedEarthTexture}  scale Earth_Radius rotate <90,0,0>}
 
 
-#declare Earth_Water= sphere {
-        <0,0,0>, 1
-        texture { WaterTexture }
+#declare Earth_Water= plane {
+        <0,1,0>, 0
+        texture { WaterTexture scale 1 }
         scale Earth_Radius
         hollow on
 }
 
-#declare Earth_Clouds= sphere{ <0, 0, 0>, Earth_Radius+Cloud_Altitude hollow
+#declare Earth_Clouds= plane{ <0, 1 , 0>, Cloud_Altitude hollow
   texture{CloudTextureA scale 1}
   texture{CloudTextureB scale 1}
 }
 
 #declare Earth= union{
   #switch (earthType)
+   #case (0)
+    object {fastEarth}
+   #break
    #case (1)
     object {MappedEarth}
    #break
@@ -42,11 +49,6 @@
       object {Earth_Clouds}
     }
    #break
-   #case (3)
-    union {
-      object {MappedEarth}
-      object {Earth_Clouds}
-    }    
    #else
     object {MappedEarth}
    #end

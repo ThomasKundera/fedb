@@ -16,7 +16,7 @@
 
 
 // Animation stuff
-#declare duration=40*s_t;
+#declare duration=60*s_t;
 #declare seconde=clock*duration;
 
 #declare Altitude=100*m;

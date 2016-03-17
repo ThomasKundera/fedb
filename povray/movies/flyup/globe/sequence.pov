@@ -7,6 +7,7 @@
 #include "earth-simple.inc"
 
 light_source{<100,Earth_Radius+100,100> color White} 
+light_source{<0*km,Earth_Radius+Altitude,0*km>,color White} 
 
 //#declare Altitude=.11*km;
 
@@ -37,4 +38,3 @@ Screen_Object(camtext,<0.1,0.05>,0,true,.01)
 object {Earth rotate <0,long,0> rotate <0,0,lat-90>}
 
 
-light_source{<0*km,Earth_Radius+Altitude,0*km>,color White} 

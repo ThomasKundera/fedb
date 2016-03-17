@@ -21,25 +21,30 @@
 
 #declare Altitude=100*m;
 
+/*
 #switch (seconde)
-#range (1*s_t,10*s_t)
-  #declare Altitude=1*km*seconde/10;
+#range (1*s_t,5*s_t)
+  #declare Altitude=1*km*seconde/5;
 #break
-#range (10*s_t,20*s_t)
-  #declare Altitude=10*km+30*km*(seconde-10)/10;
+#range (5*s_t,20*s_t)
+  #declare Altitude=1*km+30*km*(seconde-5)/15;
 #break
 #range (20*s_t,30*s_t)
-  #declare Altitude=40*km+60*km*(seconde-20)/10;
+  #declare Altitude=31*km+60*km*(seconde-20)/10;
 #break
 #range (30*s_t,40*s_t)
   #declare Altitude=100*km+50*km*(seconde-30)/10;
 #break
 #end
+*/
+
+#declare Altitude=150*km*(seconde*seconde)/(60*60);
+
 
 //#declare Altitude=1*km;
 
 #declare camtext= text  {
-  ttf "timrom.ttf" concat("Altitude: ", str(Altitude/km,0,4), " km") 0.01, <0,0>
+  ttf "timrom.ttf" concat("Altitude: ", str(Altitude/km,0,1), " km") 0.01, <0,0>
   pigment { Red }
   scale <-0.05,0.05,0.05>
   //rotate <0,180,0>

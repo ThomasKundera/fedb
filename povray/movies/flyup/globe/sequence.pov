@@ -11,8 +11,24 @@ light_source{<0*km,Earth_Radius+Altitude,0*km>,color White}
 
 //#declare Altitude=.11*km;
 
+
+#declare h=Altitude;
+#declare r=Earth_Radius;
+#declare hp=r*h/(r+h);
+#declare l=r*sqrt(h*(2*r+h))/(r+h);
+
+#declare LookAtHorizon=true;
+
+#if (LookAtHorizon)
+  #declare camlookat=<l/sqrt(2),Earth_Radius-hp,l/sqrt(2)>;
+#else
+  #declare camlookat=<1,Earth_Radius+Altitude,1>;
+#end
+
+
+
 Set_Camera_Location(<0*km,Earth_Radius+Altitude,0*km>)
-Set_Camera_Look_At( <1,Earth_Radius+Altitude,1>)
+Set_Camera_Look_At(camlookat)
 Set_Camera_Aspect(image_width, image_height)
 //Set_Camera_Aspect_Ratio(-image_width/image_height) // Should works but doesnt
 Set_Camera_Sky(<0,1,0>)

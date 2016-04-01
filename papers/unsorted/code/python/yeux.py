@@ -68,8 +68,7 @@ class enfant(parent):
       return a1
     return a2
 
-
-def main():
+def simpletest():
   p1=parent()
   p2=parent()
   print p1
@@ -78,8 +77,46 @@ def main():
   e2=enfant(p1,p2)
   print e1
   print e2
-  
+
+class generations:
+  def __init__(self,k):
+    self.k=k
+    # instanciation de k parents:
+    self.parents=[]
+    for i in range(self.k):
+      self.parents.append(parent())
+
+  def reproduction(self):
+    enfants=[]
+    for i in range(self.k/2):
+      # Les parents font deux enfants
+      enfants.append(enfant(self.parents[2*i],self.parents[2*i+1]))
+      enfants.append(enfant(self.parents[2*i],self.parents[2*i+1]))
+    # Les enfants enterrent leurs parents, et:
+    self.parents=enfants
     
+  def parentStats(self):
+    self.Bvb=[0,0,0]
+    for p in self.parents :
+      self.Bvb[p.eyeColor]+=1
+      
+  
+  def __str__(self):
+    #for p in self.parents :
+    #  print p
+    self.parentStats()
+    return str(self.Bvb)
+  
+
+
+def main():
+  g=generations(1000)
+  print g
+  for i in range(10):
+    g.reproduction()
+    print g
+  
+
 # --------------------------------------------------------------------------
 if __name__ == '__main__':
   main()

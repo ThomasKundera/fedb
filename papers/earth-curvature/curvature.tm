@@ -594,7 +594,10 @@
   \;
 
   On Figure <reference|FigShape1>, we can see that for low altitude (here, up
-  to <math|100 km>), the variation\ 
+  to <math|100 km>), the actual deviation to straight line is very small.
+  It's very unlikely to be detected bellow 30km, and wont be noticeable with
+  naked eyes below at least 100k. The actual atmosphere effects (not computed
+  here) would even reduce the visibility of the curve.
 
   <big-figure|<image|code/gnuplot/horizon_shape.eps|12cm|||>|<label|FigShape1>>
 </body>
@@ -678,7 +681,7 @@
     <associate|eqhl|<tuple|8|?>>
     <associate|eqhp|<tuple|7|?>>
     <associate|eqhr|<tuple|6|?>>
-    <associate|eqmmp|<tuple|10|?>>
+    <associate|eqmmp|<tuple|12|?>>
     <associate|eqmpr|<tuple|10|?>>
     <associate|figatana|<tuple|7|?>>
     <associate|figflatflat|<tuple|1|?>>

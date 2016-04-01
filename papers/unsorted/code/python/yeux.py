@@ -54,14 +54,32 @@ class parent:
     s+=" "+self.eyeColorString
     return s
 
+# L'enfant est un parent comme un autre...
+class enfant(parent):
+  def __init__(self,p1,p2):
+    self.herc1=self.mix(p1.herc1,p2.herc1)
+    self.herc2=self.mix(p1.herc2,p2.herc2)
+    self.gey1 =self.mix(p1.gey1 ,p2.gey1 )
+    self.gey2 =self.mix(p1.gey2 ,p2.gey2 )
+    self.setEyeColor()
+    
+  def mix(self,a1,a2):
+    if (random.getrandbits(1)):
+      return a1
+    return a2
+
 
 def main():
   p1=parent()
   p2=parent()
-  
   print p1
   print p2
+  e1=enfant(p1,p2)
+  e2=enfant(p1,p2)
+  print e1
+  print e2
+  
     
 # --------------------------------------------------------------------------
 if __name__ == '__main__':
-        main()
+  main()

@@ -14,10 +14,19 @@ kBleu=2
 # false is b
 # true is G
 
+def eyeColorString(color):
+    if (color==kBrun):
+      return "Brun"
+    if (color==kVert):
+      return "Vert"
+    return "Bleu"
+  
+
 class parent:
   def __init__(self):
     self.aleag()
     self.setEyeColor()
+    self.eyeColorString=eyeColorString(self.eyeColor)
 
   def aleag(self):
     self.herc1=random.getrandbits(1)
@@ -30,14 +39,11 @@ class parent:
   def setEyeColor(self):
     if (self.herc1 or self.herc2):
       self.eyeColor=kBrun
-      self.eyeColorString="Brun"
       return
     if (self.gey1 or self.gey2):
       self.eyeColor=kVert
-      self.eyeColorString="Vert"
       return
     self.eyeColor=kBleu
-    self.eyeColorString="Bleu"
     
     
     
@@ -79,10 +85,28 @@ def simpletest():
   print e2
 
 class generations:
-  def __init__(self,k):
+  def __init__(self,k,color1=None,color2=None):
     self.k=k
+    self.c1=color1
+    self.c2=color2
     # instanciation de k parents:
     self.parents=[]
+    if (color1 != None):
+      if (color2==None):
+	while(len(self.parents) != self.k):
+	  p=parent()
+	  if (p.eyeColor == color1):
+	    self.parents.append(p)
+      else:
+	color=[color1,color2]
+	colori=0
+	while(len(self.parents) != self.k):
+	  p=parent()
+	  if (p.eyeColor == color[colori]):
+	    self.parents.append(p)
+	    colori=1-colori
+      return
+      
     for i in range(self.k):
       self.parents.append(parent())
 
@@ -94,12 +118,14 @@ class generations:
       enfants.append(enfant(self.parents[2*i],self.parents[2*i+1]))
     # Les enfants enterrent leurs parents, et:
     self.parents=enfants
+    # Et on shuffle
+    random.shuffle(self.parents)
     
   def parentStats(self):
     self.Bvb=[0,0,0]
     for p in self.parents :
       self.Bvb[p.eyeColor]+=1
-      
+    self.Bvbpc=[100*self.Bvb[0]/self.k,100*self.Bvb[1]/self.k,100*self.Bvb[2]/self.k]
   
   def __str__(self):
     #for p in self.parents :
@@ -108,13 +134,27 @@ class generations:
     return str(self.Bvb)
   
 
+def doForGeneration(g):
+  s=eyeColorString(g.c1)+" "+eyeColorString(g.c2)
+  g.reproduction()
+  g.parentStats()
+  s+=" "+str(g.Bvbpc)
+  
+  print s
+
 
 def main():
-  g=generations(1000)
-  print g
-  for i in range(10):
-    g.reproduction()
-    print g
+  doForGeneration(generations(10000,kBrun,kBrun))  
+  doForGeneration(generations(10000,kVert,kBrun))  
+  doForGeneration(generations(10000,kBleu,kBrun))  
+  doForGeneration(generations(10000,kVert,kVert))  
+  doForGeneration(generations(10000,kVert,kBleu))
+  doForGeneration(generations(10000,kBleu,kBleu))
+  
+ 
+ #  for i in range(10):
+#    g.reproduction()
+#    print g
   
 
 # --------------------------------------------------------------------------

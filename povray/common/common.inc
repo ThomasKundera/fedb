@@ -3,11 +3,12 @@
 // common.inc
 
 
-// 
+//
 #declare myFast=1;
 
 // This may change according to what we want to model
-#declare m =    1/10000;
+#ifndef (m) #declare m =    1/10000; # end
+
 // This wont change soon
 #declare km=    m*1000;
 #declare Mm=   km*1000; // 1000 km

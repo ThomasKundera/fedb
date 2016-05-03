@@ -21,25 +21,17 @@
 
 #declare Altitude=100*m;
 
-/*
-#switch (seconde)
-#range (1*s_t,5*s_t)
-  #declare Altitude=1*km*seconde/5;
-#break
-#range (5*s_t,20*s_t)
-  #declare Altitude=1*km+30*km*(seconde-5)/15;
-#break
-#range (20*s_t,30*s_t)
-  #declare Altitude=31*km+60*km*(seconde-20)/10;
-#break
-#range (30*s_t,40*s_t)
-  #declare Altitude=100*km+50*km*(seconde-30)/10;
-#break
-#end
-*/
 
 #declare Altitude=150*km*(seconde*seconde)/(60*60);
 
+/* next
+#switch (seconde)
+#range (0*s_t,60*s_t)
+#break
+#else
+  #declare Altitude=150*km
+#end
+*/
 
 //#declare Altitude=1*km;
 

@@ -29,6 +29,8 @@ hq:	prephq all
 
 lq:	preplq all
 
+mq:	prepmq all
+
 hqanim:	prephqanim all
 
 lqanim:	preplqanim all
@@ -38,6 +40,9 @@ prephq:
 
 preplq:
 	ln -fs povray_lq.ini povray.ini
+
+prepmq:
+	ln -fs povray_mq.ini povray.ini
 
 prephqanim:
 	ln -fs povray_hq_anim.ini povray.ini

@@ -21,6 +21,6 @@
   }
   
 
-object {IsoSphere}
+//object {IsoSphere}
 
 box { -r,r texture {myBrushedAlu} }

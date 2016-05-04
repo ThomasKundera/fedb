@@ -24,10 +24,15 @@
   pigment{
     rgb <1,1,.8>
   }
+  finish {
+     specular 0.9 roughness 0.02
+     ambient 2
+  }
+  
 }
 
 
-#declare SunBall=sphere {<0,0,0>,1 texture {SunTextureSlow}}
+#declare SunBall=sphere {<0,0,0>,1 texture {SunTextureFast} no_shadow}
 
 #declare SunLightSource=light_source {
     <0, 0, 0>
@@ -35,8 +40,8 @@
     looks_like { SunBall }
   }
   
-#macro fastSun()
-  #local scalef=1;
+#macro fastSun(scalef)
+  //#local scalef=1;
   object {SunLightSource
     scale Sun_Radius/scalef
     //translate <Sun_Distance/scalef,0,0>

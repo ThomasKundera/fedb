@@ -7,6 +7,8 @@ import matplotlib.pyplot as plt
 
 import point
 
+kPi=3.141592653
+
 kDISTDATA=[["Paris"       ,"London"      , timedelta(hours= 1,minutes=10), 200],
            ["Paris"       ,"Buccuresti"  , timedelta(hours= 3,minutes= 5),1868],
            ["Paris"       ,"Warsaw"      , timedelta(hours= 2,minutes=20),1368],
@@ -85,7 +87,25 @@ class FlatLocation:
    
   def distance(self,other):
     return self._p.dist(other._p)
-  
+
+
+class SpherePoint:
+  _r=6751
+  def __init__(self,theta,phi):
+    self._theta=theta
+    self._phi=phi
+
+
+class GlobeLocation:
+  def __init__(self):
+    # Random Earth radius:
+    self._r=6751 # Would be nice to deduce it: 10000*random.random()
+    # Random location
+    self._p=SpherePoint(2*kPi*random.random(),kPi*random.random())
+    
+  def __str__(self):
+    return str(self._p)
+
 
 class City:
   def __init__(self,name):

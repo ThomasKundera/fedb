@@ -37,6 +37,9 @@ class AllFlights:
         y.append(of._distance)
     a, b, r_value, p_value, std_err = scipy.stats.linregress(x,y)
     
+    self._a=a
+    self._b=b
+    
     print ("Distante (km) = "+str(a)+" x Temps (secondes) "+str(b)) 
     
     yp=[]

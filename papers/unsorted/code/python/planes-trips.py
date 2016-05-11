@@ -1,8 +1,9 @@
 #!/usr/bin/env python
+
+import math, random
 from datetime import timedelta
-
 import scipy.stats
-
+import numpy # Yes, I know, I should make a choice
 import matplotlib.pyplot as plt
 
 
@@ -32,7 +33,7 @@ class AllFlights:
       of=OneFlight(item[0],item[1],item[2],item[3])
       self._flights.append(of)
       
-  def find_distance_time_relation(self):
+  def find_distance_time_relation(self,display=False):
     x=[]
     y=[]
     for of in self._flights:
@@ -46,17 +47,15 @@ class AllFlights:
     
     print ("Distante (km) = "+str(a)+" x Temps (secondes) "+str(b)) 
     
-    yp=[]
-    for xv in x:
-      yp.append(a*xv+b)
+    if (display):
+      yp=[]
+      for xv in x:
+        yp.append(a*xv+b)
     
-    plt.scatter(x, y  , color='black')
-    plt.plot   (x, yp , color='blue',linewidth=3)
+      plt.scatter(x, y  , color='black')
+      plt.plot   (x, yp , color='blue',linewidth=3)
 
-    #plt.xticks(())
-    #plt.yticks(())
-
-    #plt.show()
+      plt.show()
     
   def compute_missing_distances(self):
     for of in self._flights:
@@ -65,11 +64,17 @@ class AllFlights:
 
 class FlatLocation:
   def __init__(self):
-    self._x=0
-    self._y=0
+    # Random location
+    self._x=1000*random.random()-500
+    self._y=1000*random.random()-500
     
   def __str__(self):
     return "( "+str(self._x)+" , "+str(self._y)+" )"
+
+  def distance(self,other):
+    return math.sqrt( (self._x-other._x)*(self._x-other._x)
+                     +(self._y-other._y)*(self._y-other._y) )
+
 
 class City:
   def __init__(self,name):
@@ -86,7 +91,17 @@ class City:
       self._distances[ocit]=dist
     else:
       print("WARNING: unexpected duplicated trip: "+str(self)+" "+str(ocit))
-            
+
+  def distance(self,other):
+    return self._loc.distance(other._loc)
+
+
+  def chi2(self):
+    chi=0
+    for c,d in self._distances.items():
+      chi += (self.distance(c)-d)*(self.distance(c)-d)
+    return chi
+           
  
 class AllCities:
   def __init__(self,af):
@@ -99,11 +114,34 @@ class AllCities:
 
     for of in af._flights:
       self._citynames[of._from].append_distance(self._citynames[of._to  ],of._distance)
-      self._citynames[of._to  ].append_distance(self._citynames[of._from],of._distance)
+      # Dont do that
+      #self._citynames[of._to  ].append_distance(self._citynames[of._from],of._distance)
     
   def chi2(self):
+    chi=0
     for n,c in self._citynames.items():
-      print c._loc
+      chi+=c.chi2()
+    return chi
+
+  def attraction_repulsion(self):
+    pass
+  
+  
+  def display(self):
+    x=[]
+    y=[]
+    n=[]
+    for nm,c in self._citynames.items():
+      n.append(nm)
+      x.append(c._loc._x)
+      y.append(c._loc._y)
+      
+      plt.annotate(nm, xy = (c._loc._x,c._loc._y ))
+      
+    plt.scatter(x, y  , color='black')
+
+    plt.show()
+    
 
 
 def main():
@@ -112,7 +150,8 @@ def main():
   af.compute_missing_distances()
 
   ac=AllCities(af)
-  ac.chi2()
+  ac.display()
+  
   
 
 # --------------------------------------------------------------------------

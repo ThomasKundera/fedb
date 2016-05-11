@@ -10,6 +10,7 @@ kDISTDATA=[["Paris","London"     , timedelta(hours=1,minutes=10), 200],
            ["Paris","Buccuresti" , timedelta(hours=3,minutes= 5),1868],
            ["Paris","Warsaw"     , timedelta(hours=2,minutes=20),1368],
            ["Paris","Berlin"     , timedelta(hours=1,minutes=45), 800],
+           ["Paris","Moscow"     , timedelta(hours=3,minutes=50),2485],
           ]
 
 

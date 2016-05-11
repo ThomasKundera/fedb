@@ -7,16 +7,19 @@ import matplotlib.pyplot as plt
 
 import point
 
-kDISTDATA=[["Paris"   ,"London"     , timedelta(hours= 1,minutes=10), 200],
-           ["Paris"   ,"Buccuresti" , timedelta(hours= 3,minutes= 5),1868],
-           ["Paris"   ,"Warsaw"     , timedelta(hours= 2,minutes=20),1368],
-           ["Paris"   ,"Berlin"     , timedelta(hours= 1,minutes=45), 800],
-           ["Paris"   ,"Moscow"     , timedelta(hours= 3,minutes=50),2485],
-           ["Paris"   ,"HongKong"   , timedelta(hours=12,minutes=50),None],
-           ["Paris"   ,"LosAngeles" , timedelta(hours=10,minutes=35),None],
-           ["HongKong","Sydney"     , timedelta(hours= 8,minutes=55),None],
-           ["HongKong","LosAngeles" , timedelta(hours=13,minutes=05),None],
-           ["Sydney"  ,"LosAngeles" , timedelta(hours=13,minutes=40),None],
+kDISTDATA=[["Paris"       ,"London"      , timedelta(hours= 1,minutes=10), 200],
+           ["Paris"       ,"Buccuresti"  , timedelta(hours= 3,minutes= 5),1868],
+           ["Paris"       ,"Warsaw"      , timedelta(hours= 2,minutes=20),1368],
+           ["Paris"       ,"Berlin"      , timedelta(hours= 1,minutes=45), 800],
+           ["Paris"       ,"Moscow"      , timedelta(hours= 3,minutes=50),2485],
+           ["Paris"       ,"HongKong"    , timedelta(hours=12,minutes=50),None],
+           ["Paris"       ,"LosAngeles"  , timedelta(hours=10,minutes=35),None],
+           ["Paris"       ,"Johanesbourg", timedelta(hours=10,minutes=30),None],
+           ["HongKong"    ,"Sydney"      , timedelta(hours= 8,minutes=55),None],
+           ["HongKong"    ,"Johanesbourg", timedelta(hours=12,minutes=50),None],
+           ["HongKong"    ,"LosAngeles"  , timedelta(hours=13,minutes=05),None],
+           ["Sydney"      ,"LosAngeles"  , timedelta(hours=13,minutes=40),None],
+           ["Johanesbourg","Sydney"      , timedelta(hours=11,minutes=50),None],
           ]
 
 kDISTDATAtest=[["A"       ,"B"          , timedelta(hours= 1,minutes=10), 200],
@@ -110,9 +113,9 @@ class City:
       v=o._loc._p-self._loc._p
       d=self._loc._p.dist(o._loc._p)
       vtot+=((d-dt)/d)*v
-      print (str(self)+" to "+str(o)+" is currently at "+str(d)
-                      +", but should be at "+str(dt)
-                      +". So moving by "+str(v)+" ( "+str(vtot)+" )")
+      #print (str(self)+" to "+str(o)+" is currently at "+str(d)
+      #                +", but should be at "+str(dt)
+      #                +". So moving by "+str(v)+" ( "+str(vtot)+" )")
     self._loc._p+=.1*vtot # why .1 ? dunno
 
 

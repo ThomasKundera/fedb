@@ -37,6 +37,8 @@ class AllFlights:
         y.append(of._distance)
     a, b, r_value, p_value, std_err = scipy.stats.linregress(x,y)
     
+    print ("Distante (km) = "+str(a)+" x Temps (secondes) "+str(b)) 
+    
     yp=[]
     for xv in x:
       yp.append(a*xv+b)
@@ -44,8 +46,8 @@ class AllFlights:
     plt.scatter(x, y  , color='black')
     plt.plot   (x, yp , color='blue',linewidth=3)
 
-    plt.xticks(())
-    plt.yticks(())
+    #plt.xticks(())
+    #plt.yticks(())
 
     plt.show()
 

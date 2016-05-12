@@ -37,12 +37,13 @@
     object {MappedEarth}
    #break
    #case (2)
-    union {
       object {Earth_Water}
-      object {Earth_Clouds}
-    }
    #break
    #case (3)
+      object {Earth_Water}
+      object {Earth_Clouds}
+   #break
+   #case (4)
     union {
       object {MappedEarth}
       object {Earth_Clouds}

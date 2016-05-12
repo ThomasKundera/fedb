@@ -12,33 +12,39 @@ import point
 
 kPi=3.141592653
 
-kDISTDATA=[["Paris"       ,"London"      , timedelta(hours= 1,minutes=10), 200],
-           ["Paris"       ,"Buccuresti"  , timedelta(hours= 3,minutes= 5),1868],
-           ["Paris"       ,"Warsaw"      , timedelta(hours= 2,minutes=20),1368],
-           ["Paris"       ,"Berlin"      , timedelta(hours= 1,minutes=45), 800],
-           ["Paris"       ,"Moscow"      , timedelta(hours= 3,minutes=50),2485],
-           ["Paris"       ,"HongKong"    , timedelta(hours=12,minutes=50),None],
-           ["Paris"       ,"LosAngeles"  , timedelta(hours=10,minutes=35),None],
-           ["Paris"       ,"Johanesbourg", timedelta(hours=10,minutes=30),None],
-           ["HongKong"    ,"Sydney"      , timedelta(hours= 8,minutes=55),None],
-           ["HongKong"    ,"Johanesbourg", timedelta(hours=12,minutes=50),None],
-           ["HongKong"    ,"LosAngeles"  , timedelta(hours=13,minutes=05),None],
-           ["Sydney"      ,"LosAngeles"  , timedelta(hours=13,minutes=40),None],
-           ["Johanesbourg","Sydney"      , timedelta(hours=11,minutes=50),None],
+# Distance data: maps.google.fr and distance.to
+# Time of flight data: maps.google.fr
+#                                             ->       <-   Comp  Actual
+#            FROM          TO               H: MN    H: MN   DIST  DIST
+kDISTDATA=[["Paris"       ,"London"      , ( 1,10), ( 1,10), 200,  200],
+           ["Paris"       ,"Buccuresti"  , ( 2,50), ( 3, 5),1868, 1868],
+           ["Paris"       ,"Warsaw"      , ( 2,10), ( 2,20),1368, 1368],
+           ["Paris"       ,"Berlin"      , ( 1,35), ( 1,45), 800,  800],
+           ["Paris"       ,"Moscow"      , ( 3,25), ( 3,50),2485, 2485],
+          #["Paris"       ,"Beijin"      , ( 9,55), (10,55),8217, 8217],
+           ["Paris"       ,"HongKong"    , (11,35), (12,50),None, 9615],
+           ["Paris"       ,"LosAngeles"  , (11,30), (10,35),None, 9085],
+           ["Paris"       ,"Johanesbourg", (10,30), (10,50),None, 8228],
+           ["HongKong"    ,"Sydney"      , ( 9,15), ( 8,55),None, 7385],
+           ["HongKong"    ,"Johanesbourg", (12,40), (12,50),None,10718],
+           ["HongKong"    ,"LosAngeles"  , (13,05), (14,50),None,11647],
+           ["Sydney"      ,"LosAngeles"  , (13,40), (14,45),None,12073],
+           ["Sydney"      ,"Johanesbourg", (14,20), (11,50),None,11040],
           ]
 
-kDISTDATAtest=[["A"       ,"B"          , timedelta(hours= 1,minutes=10), 200],
-           ["A"       ,"C"          , timedelta(hours= 1,minutes=10), 300],
-           ["A"       ,"D"          , timedelta(hours= 1,minutes=10),1000],
-           ["B"       ,"C"          , timedelta(hours= 1,minutes=10), 400],
+kDISTDATAtest=[["A"       ,"B"          , ( 1,10), 200],
+           ["A"       ,"C"          , ( 1,10), 300],
+           ["A"       ,"D"          , ( 1,10),1000],
+           ["B"       ,"C"          , ( 1,10), 400],
           ]
 
 class OneFlight:
-  def __init__(self,frm,to,duration,distance=None):
+  def __init__(self,frm,to,dur1,dur2,distance,realdist):
     self._from=frm
     self._to=to
-    self._duration=duration
+    self._duration=(timedelta(hours=dur1[0],minutes=dur1[1])+timedelta(hours=dur2[0],minutes=dur2[1]))/2
     self._distance=distance
+    self._realdist=realdist
     if (self._distance == None):
       self._compdist=True
     else:
@@ -48,14 +54,15 @@ class OneFlight:
     s=self._from.ljust(12)+" -> "+self._to.ljust(12)+" : ( "+str(self._duration).ljust(8)+" ) : "
     s+=str(int(self._distance)).rjust(5)
     if (self._compdist):
-      s+=" *"
+      s+="* - "
+      s+=str(self._realdist).rjust(5)+" ( "+str(int(100.*(self._distance-self._realdist)/self._realdist))+"% )"
     return s
 
 class AllFlights:
   def __init__(self,farray):
     self._flights=[]
     for item in farray:
-      of=OneFlight(item[0],item[1],item[2],item[3])
+      of=OneFlight(item[0],item[1],item[2],item[3],item[4],item[5])
       self._flights.append(of)
       
   def __str__(self):
@@ -219,7 +226,7 @@ class AllCities:
 
 def main():
   af=AllFlights(kDISTDATA)
-  af.find_distance_time_relation()
+  af.find_distance_time_relation(True)
   af.compute_missing_distances()
   print (af)
   sys.exit(0)

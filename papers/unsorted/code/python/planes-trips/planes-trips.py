@@ -53,8 +53,8 @@ class OneFlight:
       self._compdist=False
     
   def __str__(self):
-    s=self._from.ljust(12)+" -> "+self._to.ljust(12)+" : ( "+str(self._duration).ljust(8)
-    s+=" ("+str(self._dur_to).ljust(8)+" - "+ str(self._dur_from).ljust(8)+" ) "
+    s=self._from.ljust(12)+" -> "+self._to.ljust(12)+" : ( "+str(self._duration).rjust(8)
+    s+=" ("+str(self._dur_to).rjust(8)+" - "+ str(self._dur_from).rjust(8)+" ) "
     s+=" ) : "
     s+=str(int(self._distance)).rjust(5)
     if (self._compdist):

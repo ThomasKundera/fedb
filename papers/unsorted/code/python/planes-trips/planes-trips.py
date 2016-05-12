@@ -42,7 +42,9 @@ class OneFlight:
   def __init__(self,frm,to,dur1,dur2,distance,realdist):
     self._from=frm
     self._to=to
-    self._duration=(timedelta(hours=dur1[0],minutes=dur1[1])+timedelta(hours=dur2[0],minutes=dur2[1]))/2
+    self._dur_to  =timedelta(hours=dur1[0],minutes=dur1[1])
+    self._dur_from=timedelta(hours=dur2[0],minutes=dur2[1])
+    self._duration=(self._dur_to+self._dur_from)/2
     self._distance=distance
     self._realdist=realdist
     if (self._distance == None):
@@ -51,7 +53,9 @@ class OneFlight:
       self._compdist=False
     
   def __str__(self):
-    s=self._from.ljust(12)+" -> "+self._to.ljust(12)+" : ( "+str(self._duration).ljust(8)+" ) : "
+    s=self._from.ljust(12)+" -> "+self._to.ljust(12)+" : ( "+str(self._duration).ljust(8)
+    s+=" ("+str(self._dur_to).ljust(8)+" - "+ str(self._dur_from).ljust(8)+" ) "
+    s+=" ) : "
     s+=str(int(self._distance)).rjust(5)
     if (self._compdist):
       s+="* - "
@@ -67,15 +71,19 @@ class AllFlights:
       
   def __str__(self):
     s="All Flights:\n"
+    s+="FROM            TO               TIME     (To         From     )         D1       D2 ( Err)\n"
     for of in self._flights:
       s+=str(of)+'\n'
+    s+="\nD1 : distance (*: computed from time of flight)\n"
+    s+="D2 : distance (measured on the globe          )\n"
+    s+="Err: Difference between D1 and D2\n"
     return s
   
   def find_distance_time_relation(self,display=False):
     x=[]
     y=[]
     for of in self._flights:
-      if (of._distance != None):
+       if (of._distance != None):
         x.append(of._duration.total_seconds())
         y.append(of._distance)
     a, b, r_value, p_value, std_err = scipy.stats.linregress(x,y)
@@ -226,7 +234,7 @@ class AllCities:
 
 def main():
   af=AllFlights(kDISTDATA)
-  af.find_distance_time_relation(True)
+  af.find_distance_time_relation()
   af.compute_missing_distances()
   print (af)
   sys.exit(0)

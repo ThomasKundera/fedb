@@ -1,12 +1,14 @@
 #!/usr/bin/env python
 
+import sys
+
 import math, random
 from datetime import timedelta
 import scipy.stats
 import matplotlib.pyplot as plt
 
 import point
-import geodesic
+#import geodesic
 
 kPi=3.141592653
 
@@ -37,6 +39,17 @@ class OneFlight:
     self._to=to
     self._duration=duration
     self._distance=distance
+    if (self._distance == None):
+      self._compdist=True
+    else:
+      self._compdist=False
+    
+  def __str__(self):
+    s=self._from.ljust(12)+" -> "+self._to.ljust(12)+" : ( "+str(self._duration).ljust(8)+" ) : "
+    s+=str(int(self._distance)).rjust(5)
+    if (self._compdist):
+      s+=" *"
+    return s
 
 class AllFlights:
   def __init__(self,farray):
@@ -45,6 +58,12 @@ class AllFlights:
       of=OneFlight(item[0],item[1],item[2],item[3])
       self._flights.append(of)
       
+  def __str__(self):
+    s="All Flights:\n"
+    for of in self._flights:
+      s+=str(of)+'\n'
+    return s
+  
   def find_distance_time_relation(self,display=False):
     x=[]
     y=[]
@@ -119,8 +138,8 @@ class City:
   def __init__(self,name):
     self._name=name
     self._distances={}
-    #self._loc=FlatLocation()
-    self._loc=GlobeLocation()
+    self._loc=FlatLocation()
+    #self._loc=GlobeLocation()
     
   def __str__(self):
     return self._name+" "+str(self._loc)
@@ -202,7 +221,9 @@ def main():
   af=AllFlights(kDISTDATA)
   af.find_distance_time_relation()
   af.compute_missing_distances()
-
+  print (af)
+  sys.exit(0)
+  
   ac=AllCities(af)
   chi2=ac.chi2()
   while (chi2>1000):

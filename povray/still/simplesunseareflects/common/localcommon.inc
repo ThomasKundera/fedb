@@ -22,28 +22,6 @@ global_settings { ambient_light 1 }
     scale .001
 }
 
-#declare r=1000;
-
-#declare SunTextureFast=texture {
-  pigment{
-    rgb <2.12,1.7,0.47>
-  }
-  finish {
-     specular 0.9 roughness 0.02
-     ambient 1
-  }
-  
-}
-
-#declare SunBall=sphere {<0,0,0>,1 texture {SunTextureFast} no_shadow scale r}
-
-#declare SunLightSource=light_source {
-    <0, 0, 0>
-    color <1000,600,600>
-    looks_like { SunBall }
-    parallel
-    point_at <0,r*1.00001,0>
-  }
 
 //object {SunLightSource scale r translate <0,r,100*r> rotate <-1,0,0>}
 

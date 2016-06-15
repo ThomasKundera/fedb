@@ -91,7 +91,7 @@ class AllFlights:
     self._a=a
     self._b=b
     
-    print ("Distante (km) = "+str(a)+" x Temps (secondes) "+str(b)) 
+    print ("Distance (km) = "+"{:.2f}".format(a)+" x Time (secondes) "+"{:.0f}".format(b)) 
     
     if (display):
       yp=[]

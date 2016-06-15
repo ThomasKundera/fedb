@@ -600,6 +600,16 @@
   here) would even reduce the visibility of the curve.
 
   <big-figure|<image|code/gnuplot/horizon_shape.eps|12cm|||>|<label|FigShape1>>
+
+  <subsection|Angular representation>
+
+  Another way to represent the same thing is to compute the apparent angular
+  drop of the horizon as a function of the angle under which the curve is
+  seen.
+
+  \;
+
+  \;
 </body>
 
 <\initial>
@@ -666,7 +676,8 @@
     <associate|auto-51|<tuple|5.5|?>>
     <associate|auto-52|<tuple|5.5.1|?>>
     <associate|auto-53|<tuple|13|?>>
-    <associate|auto-54|<tuple|13|?>>
+    <associate|auto-54|<tuple|5.6|?>>
+    <associate|auto-55|<tuple|5.6.1|?>>
     <associate|auto-6|<tuple|1.3|2>>
     <associate|auto-7|<tuple|2|2>>
     <associate|auto-8|<tuple|2.1|2>>

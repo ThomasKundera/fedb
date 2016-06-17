@@ -61,6 +61,12 @@ class OneFlight:
       s+="* - "
       s+=str(self._realdist).rjust(5)+" ( "+str(int(100.*(self._distance-self._realdist)/self._realdist))+"% )"
     return s
+  
+  def texmacs_string(self):
+    s ="|<cell|"+self._from+">|<cell|"+self._to+">|<cell|"+str(self._duration)+">|<cell|"
+    s+=str(self._dur_to)+">|<cell|"+str(self._dur_from)+">|<cell|"+str(int(self._distance))+">>"
+    return s
+
 
 class AllFlights:
   def __init__(self,farray):
@@ -79,6 +85,26 @@ class AllFlights:
     s+="Err: Difference between D1 and D2\n"
     return s
   
+  def texmacs_string_fit(self):
+    s="<small-table|<tabular|<tformat|<table|<row|<cell|From>|<cell|To>|<cell|Time>|<cell|(to>|<cell|from)>|<cell|Distance>>"
+    for of in self._flights[:5]:
+      s+=of.texmacs_string()+'\n'
+    s+=">>>|>"
+    return s
+
+  def write_texmacs_fit(self):
+    f=open("fittable.tm","wt")
+    s="""<TeXmacs|1.99.2>
+    <style|generic>
+
+    <\\body>
+    """
+    f.write(s)
+    f.write(self.texmacs_string_fit())
+    s="</body>\n"
+    f.write(s)
+    f.close()
+  
   def find_distance_time_relation(self,display=False):
     x=[]
     y=[]
@@ -92,15 +118,19 @@ class AllFlights:
     self._b=b
     
     print ("Distance (km) = "+"{:.2f}".format(a)+" x Time (secondes) "+"{:.0f}".format(b)) 
+    self.write_texmacs_fit()
+    
+    yp=[]
+    for xv in x:
+      yp.append(a*xv+b)
+  
+    plt.scatter(x, y  , color='black')
+    plt.plot   (x, yp , color='blue',linewidth=3)
+    plt.xlabel('Time of flight (s)')
+    plt.ylabel('Distance of flight (km)')
+    plt.savefig('plane_fit.png')
     
     if (display):
-      yp=[]
-      for xv in x:
-        yp.append(a*xv+b)
-    
-      plt.scatter(x, y  , color='black')
-      plt.plot   (x, yp , color='blue',linewidth=3)
-
       plt.show()
     
   def compute_missing_distances(self):
@@ -234,7 +264,7 @@ class AllCities:
 
 def main():
   af=AllFlights(kDISTDATA)
-  af.find_distance_time_relation()
+  af.find_distance_time_relation(False)
   af.compute_missing_distances()
   print (af)
   sys.exit(0)

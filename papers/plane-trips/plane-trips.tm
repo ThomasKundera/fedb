@@ -33,7 +33,34 @@
 
   <section|Calibration>
 
-  Using know distance to calibrate
+  Using know distances to calibrate our function:
+
+  The following table was used, data from http://maps.google.fr:
+
+  <small-table|<tabular|<tformat|<table|<row|<cell|From>|<cell|To>|<cell|Time>|<cell|(to>|<cell|from)>|<cell|Distance>>|<row|<cell|Paris>|<cell|London>|<cell|1:10:00>|<cell|1:10:00>|<cell|1:10:00>|<cell|200>>|<row|<cell|Paris>|<cell|Buccuresti>|<cell|2:57:30>|<cell|2:50:00>|<cell|3:05:00>|<cell|1868>>|<row|<cell|Paris
+  >|<cell|Warsaw>|<cell|2:15:00>|<cell|2:10:00>|<cell|2:20:00>|<cell|1368>>|<row|<cell|>|<cell|>|<cell|>|<cell|>|<cell|>|<cell|>>|<row|<cell|>|<cell|>|<cell|>|<cell|>|<cell|>|<cell|>>>>>|>
+
+  FROM \ \ \ \ \ \ \ \ \ \ \ TO \ \ \ \ \ \ \ \ \ \ \ \ \ \ TIME \ \ \ \ (To
+  \ \ \ \ \ \ \ \ From \ \ \ \ ) \ \ \ \ \ \ \ \ D1 \ \ \ \ \ \ D2 ( Err)
+
+  Paris \ \ \ \ \ \ \ -\<gtr\> London \ \ \ \ \ \ : ( \ 1:10:00 ( \ - \ \ )
+  \ ) : \ \ 200
+
+  Paris \ \ \ \ \ \ \ -\<gtr\> \ \ \ : ( \ \ ( \ - \ \ ) \ ) : \ 1868
+
+  \;
+
+  Paris \ \ \ \ \ \ \ -\<gtr\> Berlin \ \ \ \ \ \ : ( \ 1:40:00 ( 1:35:00 -
+  \ 1:45:00 ) \ ) : \ \ 800
+
+  Paris \ \ \ \ \ \ \ -\<gtr\> Moscow \ \ \ \ \ \ : ( \ 3:37:30 ( 3:25:00 -
+  \ 3:50:00 ) \ ) : \ 2485
+
+  \;
+
+  <include|toto.tm>
+
+  <include|code/python/fittable.tm>
 
   <section|Deducing distances>
 
@@ -79,7 +106,7 @@
     <associate|auto-27|<tuple|4|?>>
     <associate|auto-28|<tuple|4.3|?>>
     <associate|auto-29|<tuple|5|?>>
-    <associate|auto-3|<tuple|3|1>>
+    <associate|auto-3|<tuple|1|1>>
     <associate|auto-30|<tuple|4.4|?>>
     <associate|auto-31|<tuple|6|?>>
     <associate|auto-32|<tuple|4.4.1|?>>
@@ -90,7 +117,7 @@
     <associate|auto-37|<tuple|4.4.6|?>>
     <associate|auto-38|<tuple|7|?>>
     <associate|auto-39|<tuple|8|?>>
-    <associate|auto-4|<tuple|1.3|1>>
+    <associate|auto-4|<tuple|2|1|toto.tm>>
     <associate|auto-40|<tuple|5|?>>
     <associate|auto-41|<tuple|5.1|?>>
     <associate|auto-42|<tuple|5.2|?>>
@@ -101,7 +128,7 @@
     <associate|auto-47|<tuple|5.4.2|?>>
     <associate|auto-48|<tuple|10|?>>
     <associate|auto-49|<tuple|5.5|?>>
-    <associate|auto-5|<tuple|2|1>>
+    <associate|auto-5|<tuple|3|1>>
     <associate|auto-50|<tuple|5.5.1|?>>
     <associate|auto-51|<tuple|11|?>>
     <associate|auto-52|<tuple|12|?>>
@@ -134,202 +161,23 @@
 
 <\auxiliary>
   <\collection>
-    <\associate|bib>
-      BibWikiLoomingwiki:Looming
-    </associate>
-    <\associate|figure>
-      <tuple|normal|(from a flatter post)|<pageref|auto-3>>
+    <\associate|table>
+      <tuple|normal||<pageref|auto-3>>
 
-      <tuple|normal|(Credit NASA)|<pageref|auto-5>>
-
-      <tuple|normal||<pageref|auto-17>>
-
-      <tuple|normal||<pageref|auto-22>>
-
-      <tuple|normal|Example of mirage and looming (credit :
-      Wikipedia[<write|bib|BibWikiLoomingwiki:Looming><reference|bib-BibWikiLoomingwiki:Looming>])|<pageref|auto-24>>
-
-      <tuple|normal||<pageref|auto-29>>
-
-      <tuple|normal||<pageref|auto-31>>
-
-      <tuple|normal||<pageref|auto-33>>
-
-      <tuple|normal||<pageref|auto-40>>
-
-      <tuple|normal||<pageref|auto-41>>
-
-      <tuple|normal||<pageref|auto-45>>
-
-      <tuple|normal||<pageref|auto-50>>
-
-      <tuple|normal||<pageref|auto-53>>
+      <tuple|normal||<pageref|auto-4>>
     </associate>
     <\associate|toc>
-      <vspace*|1fn><with|font-series|<quote|bold>|math-font-series|<quote|bold>|1<space|2spc>Presentation
-      of the problem> <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
+      <vspace*|1fn><with|font-series|<quote|bold>|math-font-series|<quote|bold>|1<space|2spc>Presentation>
+      <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
       <no-break><pageref|auto-1><vspace|0.5fn>
 
-      <with|par-left|<quote|1tab>|1.1<space|2spc>Flatters point of view
+      <vspace*|1fn><with|font-series|<quote|bold>|math-font-series|<quote|bold>|2<space|2spc>Calibration>
       <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
-      <no-break><pageref|auto-2>>
+      <no-break><pageref|auto-2><vspace|0.5fn>
 
-      <with|par-left|<quote|1tab>|1.2<space|2spc>What some expects and why it
-      doesnt have much meaning <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
-      <no-break><pageref|auto-4>>
-
-      <with|par-left|<quote|1tab>|1.3<space|2spc>The questions we'll try to
-      answer <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
-      <no-break><pageref|auto-6>>
-
-      <vspace*|1fn><with|font-series|<quote|bold>|math-font-series|<quote|bold>|2<space|2spc>Our
-      tools> <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
-      <no-break><pageref|auto-7><vspace|0.5fn>
-
-      <with|par-left|<quote|1tab>|2.1<space|2spc>Mathematics
-      <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
-      <no-break><pageref|auto-8>>
-
-      <with|par-left|<quote|1tab>|2.2<space|2spc>Povray
-      <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
-      <no-break><pageref|auto-9>>
-
-      <with|par-left|<quote|1tab>|2.3<space|2spc>Data
-      <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
-      <no-break><pageref|auto-10>>
-
-      <with|par-left|<quote|1tab>|2.4<space|2spc>Globe model
-      <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
-      <no-break><pageref|auto-11>>
-
-      <with|par-left|<quote|1tab>|2.5<space|2spc>Flat Earth model
-      <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
-      <no-break><pageref|auto-12>>
-
-      <vspace*|1fn><with|font-series|<quote|bold>|math-font-series|<quote|bold>|3<space|2spc>Disappearance
-      beyond the horizon> <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
-      <no-break><pageref|auto-13><vspace|0.5fn>
-
-      <with|par-left|<quote|1tab>|3.1<space|2spc>Generalities
-      <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
-      <no-break><pageref|auto-14>>
-
-      <with|par-left|<quote|1tab>|3.2<space|2spc>Computation
-      <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
-      <no-break><pageref|auto-15>>
-
-      <with|par-left|<quote|2tab>|3.2.1<space|2spc>A bit of math
-      <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
-      <no-break><pageref|auto-16>>
-
-      <with|par-left|<quote|2tab>|3.2.2<space|2spc>Note about what we call
-      distance between two points on Earth
-      <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
-      <no-break><pageref|auto-18>>
-
-      <with|par-left|<quote|1tab>|3.3<space|2spc>Numeric values
-      <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
-      <no-break><pageref|auto-19>>
-
-      <with|par-left|<quote|2tab>|3.3.1<space|2spc>First example and a useful
-      remark <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
-      <no-break><pageref|auto-20>>
-
-      <with|par-left|<quote|2tab>|3.3.2<space|2spc>Graphes
-      <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
-      <no-break><pageref|auto-21>>
-
-      <with|par-left|<quote|1tab>|3.4<space|2spc>A note about looming and
-      mirages <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
-      <no-break><pageref|auto-23>>
-
-      <with|par-left|<quote|1tab>|3.5<space|2spc>When observing, be precise
-      <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
-      <no-break><pageref|auto-25>>
-
-      <vspace*|1fn><with|font-series|<quote|bold>|math-font-series|<quote|bold>|4<space|2spc>Height
-      of the horizon> <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
-      <no-break><pageref|auto-26><vspace|0.5fn>
-
-      <with|par-left|<quote|1tab>|4.1<space|2spc>Presentation of the problem
-      <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
-      <no-break><pageref|auto-27>>
-
-      <with|par-left|<quote|1tab>|4.2<space|2spc>Computation
-      <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
-      <no-break><pageref|auto-28>>
-
-      <with|par-left|<quote|1tab>|4.3<space|2spc>Numerical values
-      <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
-      <no-break><pageref|auto-30>>
-
-      <with|par-left|<quote|1tab>|4.4<space|2spc>A note about ``8 inches per
-      miles squared'' <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
-      <no-break><pageref|auto-32>>
-
-      <with|par-left|<quote|2tab>|4.4.1<space|2spc>Computing
-      <with|mode|<quote|math>|h<rprime|'>>
-      <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
-      <no-break><pageref|auto-34>>
-
-      <with|par-left|<quote|2tab>|4.4.2<space|2spc>Computing length of arc
-      \ <with|mode|<quote|math>|<wide|AB<rprime|'>|\<invbreve\>>>
-      <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
-      <no-break><pageref|auto-35>>
-
-      <with|par-left|<quote|2tab>|4.4.3<space|2spc>Computing
-      <with|mode|<quote|math>|h<rprime|''>>
-      <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
-      <no-break><pageref|auto-36>>
-
-      <with|par-left|<quote|2tab>|4.4.4<space|2spc>Computing length of arc
-      \ <with|mode|<quote|math>|<wide|AB<rprime|''>|\<invbreve\>>>
-      <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
-      <no-break><pageref|auto-37>>
-
-      <with|par-left|<quote|2tab>|4.4.5<space|2spc>Eight inches
-      <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
-      <no-break><pageref|auto-38>>
-
-      <with|par-left|<quote|2tab>|4.4.6<space|2spc>Lets plot that
-      <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
-      <no-break><pageref|auto-39>>
-
-      <vspace*|1fn><with|font-series|<quote|bold>|math-font-series|<quote|bold>|5<space|2spc>Shape
-      of the horizon> <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
-      <no-break><pageref|auto-42><vspace|0.5fn>
-
-      <with|par-left|<quote|1tab>|5.1<space|2spc>The question is not simple
-      <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
-      <no-break><pageref|auto-43>>
-
-      <with|par-left|<quote|1tab>|5.2<space|2spc>Shape of the horizon line
-      <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
-      <no-break><pageref|auto-44>>
-
-      <with|par-left|<quote|1tab>|5.3<space|2spc>Properties of the horizon
-      circle <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
-      <no-break><pageref|auto-46>>
-
-      <with|par-left|<quote|1tab>|5.4<space|2spc>Some words about camera
-      projection <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
-      <no-break><pageref|auto-47>>
-
-      <with|par-left|<quote|2tab>|5.4.1<space|2spc>The camera
-      <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
-      <no-break><pageref|auto-48>>
-
-      <with|par-left|<quote|2tab>|5.4.2<space|2spc>Horizontal camera
-      <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
-      <no-break><pageref|auto-49>>
-
-      <with|par-left|<quote|1tab>|5.5<space|2spc>Shape of the horizon viewed
-      from an horizontal pinhole camera <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
-      <no-break><pageref|auto-51>>
-
-      <with|par-left|<quote|2tab>|5.5.1<space|2spc>Plots
-      <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
-      <no-break><pageref|auto-52>>
+      <vspace*|1fn><with|font-series|<quote|bold>|math-font-series|<quote|bold>|3<space|2spc>Deducing
+      distances> <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
+      <no-break><pageref|auto-5><vspace|0.5fn>
     </associate>
   </collection>
 </auxiliary>

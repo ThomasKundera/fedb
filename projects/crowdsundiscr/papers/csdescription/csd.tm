@@ -4,7 +4,7 @@
 
 <\body>
   <\doc-data|<doc-title|Topology of Earth surface and distance to the Sun
-  from elementary measures by amteur measures on its
+  from elementary data by amateur measures on its
   surface>|<doc-author|<\author-data|<author-name|TK>>
     \;
   <|author-data>
@@ -28,8 +28,8 @@
 
   <subsection|Proposition>
 
-  Average people of any belief will be invited to make a simple measure of
-  the Sun height in the sky, at gime time from their own location. Those data
+  Average people of any belief will be invited to make simple measures of the
+  Sun height in the sky, at given time, from their own location. Those data
   will be collected and used to fit into both globe and flat model. It is
   expected that one of the model wont be able to converge, if enough reliable
   data are feeded into it, while the other one will converge to a coherent
@@ -54,7 +54,41 @@
   coherent but incompatible distance to Sun and distribution of cities
   according to official cosmology and map.
 
-  \;
+  <section|Implementation>
+
+  <subsection|Measures>
+
+  To keep user's task easy, measure will only concern the length of the
+  shadow cast by a stick of known height.
+
+  Users will be invited to fill the measures database by events of the form:
+
+  <\itemize-dot>
+    <item>User name
+
+    <item>Time of measure
+
+    <item>Location of measure
+
+    <item>Lenght of stick
+
+    <item>Length of cast shadow
+
+    <item>Picture of the set with EXIF data
+  </itemize-dot>
+
+  The database should be accessible in reading by anyone, with an easy way to
+  dump raw data for independent analysis.
+
+  <subsection|Analysis>
+
+  Both models will be feed with the data and try to set the free parameters
+  so that to have the lowest chi-square error on the dataset.
+
+  <section|Conclusion>
+
+  Depending on the convergeance of the data, both mdel will be plausible
+  (unlikely), one will prevail or none will fit.
 
   \;
 
@@ -77,7 +111,7 @@
     <associate|Figure 1|<tuple|2|?>>
     <associate|SectVanishing|<tuple|3|?>>
     <associate|auto-1|<tuple|1|1>>
-    <associate|auto-10|<tuple|2.2|2>>
+    <associate|auto-10|<tuple|3|2>>
     <associate|auto-11|<tuple|2.2.1|2>>
     <associate|auto-12|<tuple|3|2>>
     <associate|auto-13|<tuple|3.1|2>>
@@ -127,9 +161,9 @@
     <associate|auto-53|<tuple|13|?>>
     <associate|auto-54|<tuple|13|?>>
     <associate|auto-6|<tuple|1.3.2|2>>
-    <associate|auto-7|<tuple|1.3.3|2>>
-    <associate|auto-8|<tuple|2|2>>
-    <associate|auto-9|<tuple|2.1|2>>
+    <associate|auto-7|<tuple|2|2>>
+    <associate|auto-8|<tuple|2.1|2>>
+    <associate|auto-9|<tuple|2.2|2>>
     <associate|eq2|<tuple|3.3.2|4>>
     <associate|eqata|<tuple|4|?>>
     <associate|eqd|<tuple|1|?>>

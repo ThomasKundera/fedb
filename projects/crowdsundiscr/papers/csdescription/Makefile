@@ -2,8 +2,8 @@
 
 all: csd.pdf
 
-stars.pdf: csd.tm
-	xvfb-run texmacs --convert csf.tm csd.pdf --quit
+csd.pdf: csd.tm
+	xvfb-run texmacs --convert csd.tm csd.pdf --quit
 
 
 #Docode:

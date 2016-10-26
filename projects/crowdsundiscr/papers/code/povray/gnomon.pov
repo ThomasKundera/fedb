@@ -12,11 +12,13 @@
 #include "frame.inc"
 
 
-light_source{<1*cm,1*m,10*cm> color White} 
+light_source{< 1*cm,1*m,10*cm> color  .3} 
+light_source{<40*cm,1*m,30*cm> color 2  } 
 
 camera {
-  location <10*cm,2*cm,10*cm>
-  look_at  <6,0,6>
+  location <5*cm,30*cm,10*cm>
+  look_at  <0,0,0>
+  angle 45
   sky <0,1,0>
 }
 
@@ -31,7 +33,50 @@ camera {
       cylinder {<0,2*mm,0>,<0,12*mm,0>,17*mm  translate <6*cm,0,6*cm>}
       texture {pigment { DMFWood3} }
     }
-    union {
+    
+    union { // Central marks
+      // Circles every cm
+      #local i=1;
+      #while (i<8)
+        #if ( (i=7))
+          #local d=0.3*mm;
+        #else
+          #local d=0.1*mm;
+        #end
+        torus { 10*i*mm,d }
+        #local i=i+1;
+      #end
+      // Lines every 10°
+      #local i=0;
+
+      #while (i<18)
+        #if ( (i=0) | (i=9) )
+          #local d=0.3*mm;
+        #else
+          #local d=0.1*mm;
+        #end
+        cylinder { <-7*cm,0,0>,<7*cm,0,0> d rotate <0,10*i,0>}
+        #local i=i+1;
+      #end
+      translate <0,1*cm,0>
+      pigment { Black }
+    }
+    
+    union { // Text
+      #local i=0;
+      #while (i<18)
+        text { ttf "timrom.ttf" str(i*10,0,0) 0.2, 0
+          scale 8*mm
+          translate <8*cm,0.1*mm,-2.2*mm>
+          rotate <90,i*10,0>
+        }
+        #local i=i+1;
+      #end
+      translate <0,1.5*cm,0>
+      pigment { Black }
+    }
+    
+    union { // Compass marks
       // 4 marks every 90 degrees
       #local i=0;
       #while (i<4)
@@ -86,7 +131,7 @@ camera {
       translate <6*cm,1*cm,6*cm>
     }
   }
-  cone {<0,0,0>,1*cm <0,20*cm,0>,0 texture {pigment { DMFWood3} } translate <0,1*cm,0>}
+  cone {<0,0,0>,5*mm <0,10*cm,0>,0 texture {pigment { DMFWood3} } translate <0,1*cm,0>}
 }
 
 object {gnomon}
@@ -98,5 +143,5 @@ object {compass (-30) scale 1*mm translate <6*cm,2*mm,6*cm>} // Compass indicati
 box { <-50*cm,0,-50*cm>,<50*cm,-2*cm,50*cm> texture {pigment { DMFWood2} }}
 
 
-object  {frame}
+//object  {frame}
 

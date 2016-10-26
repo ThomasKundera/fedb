@@ -5,7 +5,7 @@
 <\body>
   <\doc-data|<doc-title|Topology of Earth surface and distance to the Sun
   from elementary data by amateur measures on its surface :
-  roadmap>|<doc-author|<\author-data|<author-name|TK>>
+  analysis>|<doc-author|<\author-data|<author-name|TK>>
     \;
   <|author-data>
     \;
@@ -17,83 +17,13 @@
 
   <section|Presentation of the problem>
 
-  <subsection|The question>
+  How to reconstruct a plausible solution from the dataset?
 
-  Shape of the Earth and distance to the Sun is quite well known since
-  Antiquity. However, since the XIX centuty modern ``flat earthers'' are
-  supporting the idea that the Earth is flat, with a close Sun, supposing a
-  global conspiracy to maintain the globe fallacy.
+  <section|Mathematical analysis>
 
-  How to get a good idea of the real shape of the Earth?
+  <subsection|One point>
 
-  <subsection|Proposition>
-
-  Average people of any belief will be invited to make simple measures of the
-  Sun height and direction in the sky, at given time, from their own
-  location. Those data will be collected and used to fit into both globe and
-  flat model. It is expected that one of the model wont be able to converge,
-  if enough reliable data are feeded into it, while the other one will
-  converge to a coherent and stable map of the Earth as it is.
-
-  <subsection|Models>
-
-  <subsubsection|The Globe in the Heliocentric model>
-
-  The Earth is represented by a sphere of floating radius. Cicies will be
-  radomly scattered on it. Convergeance of the model will be nocited by a
-  stable radius and cities distribution on the globe. Definitive proof will
-  be given by a compatible radius and location according to official maps.
-
-  <subsubsection|A Flat Earth model>
-
-  Earth is a flat plane of large size, the Sun is a a finite floating
-  distance above it.
-
-  Convergeance of the model will be nocited by a stable distance to Sun and
-  cities distribution on the surface. Definitive proof will be given by a
-  coherent but incompatible distance to Sun and distribution of cities
-  according to official cosmology and map.
-
-  <subsection|Postulates>
-
-  <subsection|Sun>
-
-  There exists only one Sun casting light on the Earth surface.
-
-  <subsection|Light>
-
-  Light travel in straight line.
-
-  Light speed is fast enough so that we can neglet its travel time when
-  locating the Sun in the sky.
-
-  <section|Implementation>
-
-  <subsection|Measures>
-
-  To keep user's task easy, measure will only concern the length of the
-  shadow cast by a stick of known height.
-
-  Users will be invited to fill the measures database by events of the form:
-
-  <\itemize-dot>
-    <item>User name
-
-    <item>Time of measure
-
-    <item>Location of measure
-
-    <item>Lenght of stick
-
-    <item>Length of cast shadow
-
-    <item>Direction of the shadow relative to magnetic north
-
-    <item>Picture of the set with EXIF data
-  </itemize-dot>
-
-  The database should be accessible in reading by anyone, with an easy way to
-  dump raw data for independent analysis.
+  \;
 
   <subsection|Analysis>
 
@@ -125,18 +55,18 @@
     <associate|Fighl|<tuple|9|?>>
     <associate|Figure 1|<tuple|2|?>>
     <associate|SectVanishing|<tuple|3|?>>
-    <associate|auto-1|<tuple|1|1>>
-    <associate|auto-10|<tuple|2|2>>
-    <associate|auto-11|<tuple|2.1|2>>
-    <associate|auto-12|<tuple|2.2|2>>
-    <associate|auto-13|<tuple|3|2>>
+    <associate|auto-1|<tuple|1|1|csd.tm>>
+    <associate|auto-10|<tuple|3|2|csd.tm>>
+    <associate|auto-11|<tuple|2.2.1|2>>
+    <associate|auto-12|<tuple|3|2>>
+    <associate|auto-13|<tuple|3.1|2>>
     <associate|auto-14|<tuple|3.2|2>>
     <associate|auto-15|<tuple|3.2.1|3>>
     <associate|auto-16|<tuple|1|3>>
     <associate|auto-17|<tuple|3.2.2|3>>
     <associate|auto-18|<tuple|3.3|3>>
     <associate|auto-19|<tuple|3.3.1|4>>
-    <associate|auto-2|<tuple|1.1|1>>
+    <associate|auto-2|<tuple|2|1|csd.tm>>
     <associate|auto-20|<tuple|3.3.2|4>>
     <associate|auto-21|<tuple|2|4>>
     <associate|auto-22|<tuple|3.4|4>>
@@ -147,7 +77,7 @@
     <associate|auto-27|<tuple|4.2|?>>
     <associate|auto-28|<tuple|4|?>>
     <associate|auto-29|<tuple|4.3|?>>
-    <associate|auto-3|<tuple|1.2|1>>
+    <associate|auto-3|<tuple|2.1|1|csd.tm>>
     <associate|auto-30|<tuple|5|?>>
     <associate|auto-31|<tuple|4.4|?>>
     <associate|auto-32|<tuple|6|?>>
@@ -158,7 +88,7 @@
     <associate|auto-37|<tuple|4.4.5|?>>
     <associate|auto-38|<tuple|4.4.6|?>>
     <associate|auto-39|<tuple|7|?>>
-    <associate|auto-4|<tuple|1.3|1>>
+    <associate|auto-4|<tuple|2.2|1|csd.tm>>
     <associate|auto-40|<tuple|8|?>>
     <associate|auto-41|<tuple|5|?>>
     <associate|auto-42|<tuple|5.1|?>>
@@ -169,16 +99,16 @@
     <associate|auto-47|<tuple|5.4.1|?>>
     <associate|auto-48|<tuple|5.4.2|?>>
     <associate|auto-49|<tuple|10|?>>
-    <associate|auto-5|<tuple|1.3.1|1>>
+    <associate|auto-5|<tuple|3|1|csd.tm>>
     <associate|auto-50|<tuple|5.5|?>>
     <associate|auto-51|<tuple|5.5.1|?>>
     <associate|auto-52|<tuple|11|?>>
     <associate|auto-53|<tuple|13|?>>
     <associate|auto-54|<tuple|13|?>>
-    <associate|auto-6|<tuple|1.3.2|2>>
-    <associate|auto-7|<tuple|1.4|2>>
-    <associate|auto-8|<tuple|1.5|2>>
-    <associate|auto-9|<tuple|1.6|2>>
+    <associate|auto-6|<tuple|2.1|2|csd.tm>>
+    <associate|auto-7|<tuple|2.2|2|csd.tm>>
+    <associate|auto-8|<tuple|3|2|csd.tm>>
+    <associate|auto-9|<tuple|2.2|2|csd.tm>>
     <associate|eq2|<tuple|3.3.2|4>>
     <associate|eqata|<tuple|4|?>>
     <associate|eqd|<tuple|1|?>>
@@ -227,33 +157,21 @@
       <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
       <no-break><pageref|auto-6>>
 
-      <with|par-left|<quote|1tab>|1.4<space|2spc>Postulates
-      <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
-      <no-break><pageref|auto-7>>
-
-      <with|par-left|<quote|1tab>|1.5<space|2spc>Sun
-      <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
-      <no-break><pageref|auto-8>>
-
-      <with|par-left|<quote|1tab>|1.6<space|2spc>Light
-      <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
-      <no-break><pageref|auto-9>>
-
       <vspace*|1fn><with|font-series|<quote|bold>|math-font-series|<quote|bold>|2<space|2spc>Implementation>
       <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
-      <no-break><pageref|auto-10><vspace|0.5fn>
+      <no-break><pageref|auto-7><vspace|0.5fn>
 
       <with|par-left|<quote|1tab>|2.1<space|2spc>Measures
       <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
-      <no-break><pageref|auto-11>>
+      <no-break><pageref|auto-8>>
 
       <with|par-left|<quote|1tab>|2.2<space|2spc>Analysis
       <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
-      <no-break><pageref|auto-12>>
+      <no-break><pageref|auto-9>>
 
       <vspace*|1fn><with|font-series|<quote|bold>|math-font-series|<quote|bold>|3<space|2spc>Conclusion>
       <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
-      <no-break><pageref|auto-13><vspace|0.5fn>
+      <no-break><pageref|auto-10><vspace|0.5fn>
     </associate>
   </collection>
 </auxiliary>

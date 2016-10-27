@@ -21,7 +21,7 @@
 
   <section|Mathematical analysis>
 
-  <subsection|One point>
+  <subsection|One data point>
 
   \;
 
@@ -55,7 +55,7 @@
     <associate|Fighl|<tuple|9|?>>
     <associate|Figure 1|<tuple|2|?>>
     <associate|SectVanishing|<tuple|3|?>>
-    <associate|auto-1|<tuple|1|1|csd.tm>>
+    <associate|auto-1|<tuple|1|1>>
     <associate|auto-10|<tuple|3|2|csd.tm>>
     <associate|auto-11|<tuple|2.2.1|2>>
     <associate|auto-12|<tuple|3|2>>
@@ -66,7 +66,7 @@
     <associate|auto-17|<tuple|3.2.2|3>>
     <associate|auto-18|<tuple|3.3|3>>
     <associate|auto-19|<tuple|3.3.1|4>>
-    <associate|auto-2|<tuple|2|1|csd.tm>>
+    <associate|auto-2|<tuple|2|1>>
     <associate|auto-20|<tuple|3.3.2|4>>
     <associate|auto-21|<tuple|2|4>>
     <associate|auto-22|<tuple|3.4|4>>
@@ -77,7 +77,7 @@
     <associate|auto-27|<tuple|4.2|?>>
     <associate|auto-28|<tuple|4|?>>
     <associate|auto-29|<tuple|4.3|?>>
-    <associate|auto-3|<tuple|2.1|1|csd.tm>>
+    <associate|auto-3|<tuple|2.1|1>>
     <associate|auto-30|<tuple|5|?>>
     <associate|auto-31|<tuple|4.4|?>>
     <associate|auto-32|<tuple|6|?>>
@@ -88,7 +88,7 @@
     <associate|auto-37|<tuple|4.4.5|?>>
     <associate|auto-38|<tuple|4.4.6|?>>
     <associate|auto-39|<tuple|7|?>>
-    <associate|auto-4|<tuple|2.2|1|csd.tm>>
+    <associate|auto-4|<tuple|2.2|1>>
     <associate|auto-40|<tuple|8|?>>
     <associate|auto-41|<tuple|5|?>>
     <associate|auto-42|<tuple|5.1|?>>
@@ -99,7 +99,7 @@
     <associate|auto-47|<tuple|5.4.1|?>>
     <associate|auto-48|<tuple|5.4.2|?>>
     <associate|auto-49|<tuple|10|?>>
-    <associate|auto-5|<tuple|3|1|csd.tm>>
+    <associate|auto-5|<tuple|3|1>>
     <associate|auto-50|<tuple|5.5|?>>
     <associate|auto-51|<tuple|5.5.1|?>>
     <associate|auto-52|<tuple|11|?>>
@@ -137,41 +137,21 @@
       of the problem> <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
       <no-break><pageref|auto-1><vspace|0.5fn>
 
-      <with|par-left|<quote|1tab>|1.1<space|2spc>The question
-      <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
-      <no-break><pageref|auto-2>>
+      <vspace*|1fn><with|font-series|<quote|bold>|math-font-series|<quote|bold>|2<space|2spc>Mathematical
+      analysis> <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
+      <no-break><pageref|auto-2><vspace|0.5fn>
 
-      <with|par-left|<quote|1tab>|1.2<space|2spc>Proposition
+      <with|par-left|<quote|1tab>|2.1<space|2spc>One point
       <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
       <no-break><pageref|auto-3>>
 
-      <with|par-left|<quote|1tab>|1.3<space|2spc>Models
+      <with|par-left|<quote|1tab>|2.2<space|2spc>Analysis
       <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
       <no-break><pageref|auto-4>>
 
-      <with|par-left|<quote|2tab>|1.3.1<space|2spc>The Globe in the
-      Heliocentric model <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
-      <no-break><pageref|auto-5>>
-
-      <with|par-left|<quote|2tab>|1.3.2<space|2spc>A Flat Earth model
-      <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
-      <no-break><pageref|auto-6>>
-
-      <vspace*|1fn><with|font-series|<quote|bold>|math-font-series|<quote|bold>|2<space|2spc>Implementation>
-      <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
-      <no-break><pageref|auto-7><vspace|0.5fn>
-
-      <with|par-left|<quote|1tab>|2.1<space|2spc>Measures
-      <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
-      <no-break><pageref|auto-8>>
-
-      <with|par-left|<quote|1tab>|2.2<space|2spc>Analysis
-      <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
-      <no-break><pageref|auto-9>>
-
       <vspace*|1fn><with|font-series|<quote|bold>|math-font-series|<quote|bold>|3<space|2spc>Conclusion>
       <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
-      <no-break><pageref|auto-10><vspace|0.5fn>
+      <no-break><pageref|auto-5><vspace|0.5fn>
     </associate>
   </collection>
 </auxiliary>

@@ -37,32 +37,19 @@
 
   The following table was used, data from http://maps.google.fr:
 
-  <small-table|<tabular|<tformat|<table|<row|<cell|From>|<cell|To>|<cell|Time>|<cell|(to>|<cell|from)>|<cell|Distance>>|<row|<cell|Paris>|<cell|London>|<cell|1:10:00>|<cell|1:10:00>|<cell|1:10:00>|<cell|200>>|<row|<cell|Paris>|<cell|Buccuresti>|<cell|2:57:30>|<cell|2:50:00>|<cell|3:05:00>|<cell|1868>>|<row|<cell|Paris
-  >|<cell|Warsaw>|<cell|2:15:00>|<cell|2:10:00>|<cell|2:20:00>|<cell|1368>>|<row|<cell|>|<cell|>|<cell|>|<cell|>|<cell|>|<cell|>>|<row|<cell|>|<cell|>|<cell|>|<cell|>|<cell|>|<cell|>>>>>|>
-
-  FROM \ \ \ \ \ \ \ \ \ \ \ TO \ \ \ \ \ \ \ \ \ \ \ \ \ \ TIME \ \ \ \ (To
-  \ \ \ \ \ \ \ \ From \ \ \ \ ) \ \ \ \ \ \ \ \ D1 \ \ \ \ \ \ D2 ( Err)
-
-  Paris \ \ \ \ \ \ \ -\<gtr\> London \ \ \ \ \ \ : ( \ 1:10:00 ( \ - \ \ )
-  \ ) : \ \ 200
-
-  Paris \ \ \ \ \ \ \ -\<gtr\> \ \ \ : ( \ \ ( \ - \ \ ) \ ) : \ 1868
-
-  \;
-
-  Paris \ \ \ \ \ \ \ -\<gtr\> Berlin \ \ \ \ \ \ : ( \ 1:40:00 ( 1:35:00 -
-  \ 1:45:00 ) \ ) : \ \ 800
-
-  Paris \ \ \ \ \ \ \ -\<gtr\> Moscow \ \ \ \ \ \ : ( \ 3:37:30 ( 3:25:00 -
-  \ 3:50:00 ) \ ) : \ 2485
-
-  \;
-
-  <include|toto.tm>
-
   <include|code/python/fittable.tm>
 
+  This allow to find the best fit:
+
+  <big-figure|<image|code/python/plane_fit.png|12cm|8cm||>|>
+
+  The fit is pretty good, and gives the following values:
+
+  Distance (km) = 0.25 x Time (secondes) -763
+
   <section|Deducing distances>
+
+  We can now deduce\ 
 
   \;
 
@@ -106,7 +93,7 @@
     <associate|auto-27|<tuple|4|?>>
     <associate|auto-28|<tuple|4.3|?>>
     <associate|auto-29|<tuple|5|?>>
-    <associate|auto-3|<tuple|1|1>>
+    <associate|auto-3|<tuple|1|1|code/python/fittable.tm>>
     <associate|auto-30|<tuple|4.4|?>>
     <associate|auto-31|<tuple|6|?>>
     <associate|auto-32|<tuple|4.4.1|?>>
@@ -117,7 +104,7 @@
     <associate|auto-37|<tuple|4.4.6|?>>
     <associate|auto-38|<tuple|7|?>>
     <associate|auto-39|<tuple|8|?>>
-    <associate|auto-4|<tuple|2|1|toto.tm>>
+    <associate|auto-4|<tuple|1|1>>
     <associate|auto-40|<tuple|5|?>>
     <associate|auto-41|<tuple|5.1|?>>
     <associate|auto-42|<tuple|5.2|?>>
@@ -134,7 +121,7 @@
     <associate|auto-52|<tuple|12|?>>
     <associate|auto-53|<tuple|13|?>>
     <associate|auto-54|<tuple|13|?>>
-    <associate|auto-6|<tuple|2.1|2>>
+    <associate|auto-6|<tuple|3|2>>
     <associate|auto-7|<tuple|2.2|2>>
     <associate|auto-8|<tuple|2.3|2>>
     <associate|auto-9|<tuple|2.4|2>>
@@ -163,8 +150,6 @@
   <\collection>
     <\associate|table>
       <tuple|normal||<pageref|auto-3>>
-
-      <tuple|normal||<pageref|auto-4>>
     </associate>
     <\associate|toc>
       <vspace*|1fn><with|font-series|<quote|bold>|math-font-series|<quote|bold>|1<space|2spc>Presentation>
@@ -177,7 +162,7 @@
 
       <vspace*|1fn><with|font-series|<quote|bold>|math-font-series|<quote|bold>|3<space|2spc>Deducing
       distances> <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
-      <no-break><pageref|auto-5><vspace|0.5fn>
+      <no-break><pageref|auto-4><vspace|0.5fn>
     </associate>
   </collection>
 </auxiliary>

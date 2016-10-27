@@ -16,14 +16,43 @@ light_source{< 1*cm,1*m,10*cm> color  .3}
 light_source{<40*cm,1*m,30*cm> color 2  } 
 
 camera {
-  location <5*cm,30*cm,10*cm>
+  location <2*cm,30*cm,20*cm>
   look_at  <0,0,0>
-  angle 45
+  angle 41
   sky <0,1,0>
 }
 
 
 #declare compass_diameter=15*mm;
+
+
+#declare levelbubble=union{
+  difference {
+    object{
+      Round_Cylinder(<-.6,0,0>,<.6,0,0>,0.2001,0.2,1)
+    }
+    object{
+      Round_Cylinder(<-.6,0,0>,<.6,0,0>,0.2001,0.2,1)
+      scale .9
+    }
+    material {
+      texture{ T_Glass3
+        pigment{ color rgbt<1,0.1,0.9,0.6>}
+        finish { phong 1}
+      } // end of texture
+      interior{ ior 1.35 caustics 0.025}
+    } // end of material
+  }
+  difference {
+    cylinder {<-.6,0,  0>,<.6, 0,0>,.2 scale .899}
+    cylinder {<  0,.1,-1>,< 0,.1,1>,.2         }
+    texture { Water }
+  }
+  rotate <0,0,0>
+}
+
+object {levelbubble scale 1*cm                 translate <-7.5*cm,1*cm,8*cm>}
+object {levelbubble scale 1*cm rotate <0,90,0> translate <-8. *cm,1*cm,7*cm>}
 
 // Gnomon
 #declare gnomon=union{
@@ -31,7 +60,10 @@ camera {
     difference {
       box { <-8.5*cm,0,-8.5*cm>,<8.5*cm,1*cm,8.5*cm>}
       cylinder {<0,2*mm,0>,<0,12*mm,0>,17*mm  translate <6*cm,0,6*cm>}
-      texture {pigment { DMFWood3} }
+      cylinder {<-.6*cm,0,0>,<.6*cm,0,0>,0.2*cm scale 1.2                 translate <-7.5  *cm,1*cm,8*cm>}
+      cylinder {<-.6*cm,0,0>,<.6*cm,0,0>,0.2*cm scale 1.2 rotate <0,90,0> translate <-8.   *cm,1*cm,7*cm>}
+
+      texture {pigment { DMFWood3} rotate <3,25,10> }
     }
     
     union { // Central marks
@@ -64,15 +96,15 @@ camera {
     
     union { // Text
       #local i=0;
-      #while (i<18)
+      #while (i<36)
         text { ttf "timrom.ttf" str(i*10,0,0) 0.2, 0
-          scale 8*mm
-          translate <8*cm,0.1*mm,-2.2*mm>
-          rotate <90,i*10,0>
+          scale <5*mm,5*mm,10*mm>
+          translate <7.5*cm,-1*mm,-2.2*mm>
+          rotate <90,180-i*10,0>
         }
         #local i=i+1;
       #end
-      translate <0,1.5*cm,0>
+      translate <0,.9*cm,0>
       pigment { Black }
     }
     
@@ -140,7 +172,7 @@ object {compass (-30) scale 1*mm translate <6*cm,2*mm,6*cm>} // Compass indicati
 
 
 // Table
-box { <-50*cm,0,-50*cm>,<50*cm,-2*cm,50*cm> texture {pigment { DMFWood2} }}
+box { <-50*cm,0,-50*cm>,<50*cm,-2*cm,50*cm> texture {pigment { DMFWood2}  rotate <-5,-30,-20> }}
 
 
 //object  {frame}

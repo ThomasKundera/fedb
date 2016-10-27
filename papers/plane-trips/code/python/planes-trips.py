@@ -63,7 +63,7 @@ class OneFlight:
     return s
   
   def texmacs_string(self):
-    s ="|<cell|"+self._from+">|<cell|"+self._to+">|<cell|"+str(self._duration)+">|<cell|"
+    s ="|<row|<cell|"+self._from+">|<cell|"+self._to+">|<cell|"+str(self._duration)+">|<cell|"
     s+=str(self._dur_to)+">|<cell|"+str(self._dur_from)+">|<cell|"+str(int(self._distance))+">>"
     return s
 
@@ -86,19 +86,24 @@ class AllFlights:
     return s
   
   def texmacs_string_fit(self):
-    s="<small-table|<tabular|<tformat|<table|<row|<cell|From>|<cell|To>|<cell|Time>|<cell|(to>|<cell|from)>|<cell|Distance>>"
+    s ="<small-table|<tabular|<tformat|<cwith|1|1|1|-1|cell-halign|c>|"
+    s+="<cwith|2|2|6|6|cell-halign|r>|"
+    s+="<cwith|3|3|6|6|cell-halign|r>|"
+    s+="<cwith|4|4|6|6|cell-halign|r>|"
+    s+="<cwith|5|5|6|6|cell-halign|r>|"
+    s+="<cwith|6|6|6|6|cell-halign|r>|"
+    s+="<cwith|1|-1|1|-1|cell-lborder|1px>|<cwith|1|-1|1|-1|cell-rborder|1px>|<cwith|1|-1|1|-1|cell-bborder|1px>|<cwith|1|-1|1|-1|cell-tborder|1px>|"
+    s+="<table|"
+    s+="<row|<cell|<strong|From>>|<cell|<strong|To>>|<cell|<strong|Time>>"
+    s+=    "|<cell|<strong|(to>>|<cell|<strong|from)>>|<cell|<strong|Distance (km)>>>"
     for of in self._flights[:5]:
-      s+=of.texmacs_string()+'\n'
-    s+=">>>|>"
+      s+=of.texmacs_string()
+    s+=">>>|>\n\n"
     return s
 
   def write_texmacs_fit(self):
     f=open("fittable.tm","wt")
-    s="""<TeXmacs|1.99.2>
-    <style|generic>
-
-    <\\body>
-    """
+    s="<TeXmacs|1.99.2>\n\n<style|generic>\n\n<\\body>\n\n"
     f.write(s)
     f.write(self.texmacs_string_fit())
     s="</body>\n"

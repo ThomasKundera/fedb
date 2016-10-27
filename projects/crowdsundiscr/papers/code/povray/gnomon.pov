@@ -63,7 +63,7 @@ object {levelbubble scale 1*cm rotate <0,90,0> translate <-8. *cm,1*cm,7*cm>}
       cylinder {<-.6*cm,0,0>,<.6*cm,0,0>,0.2*cm scale 1.2                 translate <-7.5  *cm,1*cm,8*cm>}
       cylinder {<-.6*cm,0,0>,<.6*cm,0,0>,0.2*cm scale 1.2 rotate <0,90,0> translate <-8.   *cm,1*cm,7*cm>}
 
-      texture {pigment { DMFWood3} rotate <3,25,10> }
+      texture {pigment { DMFWood3} rotate <3,25,10> translate 1*m scale 2*cm}
     }
     
     union { // Central marks
@@ -172,7 +172,7 @@ object {compass (-30) scale 1*mm translate <6*cm,2*mm,6*cm>} // Compass indicati
 
 
 // Table
-box { <-50*cm,0,-50*cm>,<50*cm,-2*cm,50*cm> texture {pigment { DMFWood2}  rotate <-5,-30,-20> }}
+box { <-50*cm,0,-50*cm>,<50*cm,-2*cm,50*cm> texture {pigment { DMFWood2}  rotate <-5,-30,-20> scale 2*cm }}
 
 
 //object  {frame}

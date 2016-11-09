@@ -62,9 +62,11 @@ class OneFlight:
       s+=str(self._realdist).rjust(5)+" ( "+str(int(100.*(self._distance-self._realdist)/self._realdist))+"% )"
     return s
   
-  def texmacs_string(self):
+  def texmacs_string(self,opt=None):
     s ="|<row|<cell|"+self._from+">|<cell|"+self._to+">|<cell|"+str(self._duration)+">|<cell|"
-    s+=str(self._dur_to)+">|<cell|"+str(self._dur_from)+">|<cell|"+str(int(self._distance))+">>"
+    s+=str(self._dur_to)+">|<cell|"+str(self._dur_from)+">|<cell|"+str(int(self._distance))+">"
+    if (opt): s+="|<cell|"+str(int(self._realdist))+">"
+    s+=">"
     return s
 
 
@@ -78,6 +80,12 @@ class AllFlights:
   def __str__(self):
     s="All Flights:\n"
     s+="FROM            TO               TIME     (To         From     )         D1       D2 ( Err)\n"
+    s+="<cwith|2|2|6|6|cell-halign|r>|"
+    s+="<cwith|3|3|6|6|cell-halign|r>|"
+    s+="<cwith|4|4|6|6|cell-halign|r>|"
+    s+="<cwith|5|5|6|6|cell-halign|r>|"
+    s+="<cwith|6|6|6|6|cell-halign|r>|"
+
     for of in self._flights:
       s+=str(of)+'\n'
     s+="\nD1 : distance (*: computed from time of flight)\n"
@@ -101,11 +109,34 @@ class AllFlights:
     s+=">>>|>\n\n"
     return s
 
+  def texmacs_string_dists(self):
+    s ="<small-table|<tabular|<tformat|<cwith|1|1|1|-1|cell-halign|c>|"
+    s+="<cwith|1|-1|1|-1|cell-lborder|1px>|<cwith|1|-1|1|-1|cell-rborder|1px>|<cwith|1|-1|1|-1|cell-bborder|1px>|<cwith|1|-1|1|-1|cell-tborder|1px>|"
+    for i in range (2,len(kDISTDATA)+2):
+       s+="<cwith|"+str(i)+"|"+str(i)+"|6|6|cell-halign|r>|"
+       s+="<cwith|"+str(i)+"|"+str(i)+"|7|7|cell-halign|r>|"
+    s+="<table|"
+    s+="<row|<cell|<strong|From>>|<cell|<strong|To>>|<cell|<strong|Time>>"
+    s+=    "|<cell|<strong|(to>>|<cell|<strong|from)>>|<cell|<strong|D1 (km)>>|<cell|<strong|D2 (km)>>>"
+    for of in self._flights:
+      s+=of.texmacs_string(1)
+    s+=">>>|>\n\n"
+    return s
+
   def write_texmacs_fit(self):
     f=open("fittable.tm","wt")
     s="<TeXmacs|1.99.2>\n\n<style|generic>\n\n<\\body>\n\n"
     f.write(s)
     f.write(self.texmacs_string_fit())
+    s="</body>\n"
+    f.write(s)
+    f.close()
+  
+  def write_texmacs_dists(self):
+    f=open("fittable2.tm","wt")
+    s="<TeXmacs|1.99.2>\n\n<style|generic>\n\n<\\body>\n\n"
+    f.write(s)
+    f.write(self.texmacs_string_dists())
     s="</body>\n"
     f.write(s)
     f.close()
@@ -142,6 +173,10 @@ class AllFlights:
     for of in self._flights:
       if (of._distance == None):
         of._distance=self._a*of._duration.total_seconds()+self._b
+      else:
+        of._distance=self._a*of._duration.total_seconds()+self._b
+        
+    self.write_texmacs_dists()
 
 # Looks useless to hide _p here
 # but when going sphere, may helps to keep the

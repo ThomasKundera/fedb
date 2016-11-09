@@ -28,8 +28,8 @@
   <math|a> and <math|b> vales. Then we can use the equation to infer
   distances between other cities.
 
-  By wisely choosing the cities, we expect to conclude that no flat model can
-  works.
+  By wisely choosing the cities, we expect to conclude that the city space
+  cant be Euclidean.
 
   <section|Calibration>
 
@@ -49,7 +49,23 @@
 
   <section|Deducing distances>
 
-  We can now deduce\ 
+  We can now deduce unknown distances from the relation found above.
+
+  Here is an example of application:
+
+  <include|fittable2.tm>
+
+  D1 is the computed distance according to the fit above. D2 is the actual
+  distance given by Google Map.\ 
+
+  <section|Conclusion>
+
+  Just try to put all those cities on a plane, respecting the distances
+  above.
+
+  \;
+
+  \;
 
   \;
 
@@ -115,14 +131,14 @@
     <associate|auto-47|<tuple|5.4.2|?>>
     <associate|auto-48|<tuple|10|?>>
     <associate|auto-49|<tuple|5.5|?>>
-    <associate|auto-5|<tuple|3|1>>
+    <associate|auto-5|<tuple|3|2>>
     <associate|auto-50|<tuple|5.5.1|?>>
     <associate|auto-51|<tuple|11|?>>
     <associate|auto-52|<tuple|12|?>>
     <associate|auto-53|<tuple|13|?>>
     <associate|auto-54|<tuple|13|?>>
-    <associate|auto-6|<tuple|3|2>>
-    <associate|auto-7|<tuple|2.2|2>>
+    <associate|auto-6|<tuple|2|2|fittable2.tm>>
+    <associate|auto-7|<tuple|4|2>>
     <associate|auto-8|<tuple|2.3|2>>
     <associate|auto-9|<tuple|2.4|2>>
     <associate|eq2|<tuple|3.3.2|4>>
@@ -148,8 +164,13 @@
 
 <\auxiliary>
   <\collection>
+    <\associate|figure>
+      <tuple|normal||<pageref|auto-4>>
+    </associate>
     <\associate|table>
       <tuple|normal||<pageref|auto-3>>
+
+      <tuple|normal||<pageref|auto-6>>
     </associate>
     <\associate|toc>
       <vspace*|1fn><with|font-series|<quote|bold>|math-font-series|<quote|bold>|1<space|2spc>Presentation>
@@ -162,7 +183,11 @@
 
       <vspace*|1fn><with|font-series|<quote|bold>|math-font-series|<quote|bold>|3<space|2spc>Deducing
       distances> <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
-      <no-break><pageref|auto-4><vspace|0.5fn>
+      <no-break><pageref|auto-5><vspace|0.5fn>
+
+      <vspace*|1fn><with|font-series|<quote|bold>|math-font-series|<quote|bold>|4<space|2spc>Conclusion>
+      <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
+      <no-break><pageref|auto-7><vspace|0.5fn>
     </associate>
   </collection>
 </auxiliary>

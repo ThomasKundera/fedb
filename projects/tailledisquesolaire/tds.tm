@@ -57,7 +57,7 @@
   On mesure entre 30' et 32' quelque que soit l'heure de la journée, on
   observe une légère variation annuelle.
 
-  <subsection|Modèle plat>
+  <subsection|Modèle platCoilmpu>
 
   Calcul de <math|d>, la distance au Soleil depuis un point d'observation
   <math|A> de latitude <math|\<varphi\>> et de longitude <math|\<lambda\>>,
@@ -72,7 +72,7 @@
   le Soleil est à midi (12h, soit <math|>43200 s) à la longitude <math|0>, il
   se déplace ensuite pour faire un tour en 24h, soit <math|2\<pi\>> en
   <math|n<rsub|s>=86400> secondes, sa longitude est donc:
-  <math|\<lambda\><rsub|s>= 2\<pi\><frac|t<around*|[|n<rsub|s>|]>|n<rsub|s>>>.
+  <math|\<lambda\><rsub|s>= 2\<pi\><frac|t<around*|[|n<rsub|s>|]>|n<rsub|s>>+\<pi\>>.
 
   Sa distance droite au pôle Nord est de <math|r<rsub|s>=
   <frac|\<varphi\><rsub|s>|\<pi\>>R>.
@@ -86,8 +86,13 @@
   En utilisant la loi des consinus <math|c<rsup|2>=a<rsup|2>+b<rsup|2>-2ab<math-tt|cos>\<gamma\>>,
   on peut écrire:
 
-  <math|d<rsup|2><rsub|d>=r<rsup|2>+r<rsub|s><rsup|2>-2r
-  r<rsub|s><math-tt|cos><around*|(|\<lambda\><rsub|s>-\<lambda\>|)>>
+  <\eqnarray*>
+    <tformat|<table|<row|<cell|d<rsup|2><rsub|d>>|<cell|=>|<cell|r<rsup|2>+r<rsub|s><rsup|2>-2r
+    r<rsub|s><math-tt|cos><around*|(|\<lambda\><rsub|s>-\<lambda\>|)>>>|<row|<cell|d<rsub|d>>|<cell|=>|<cell|<sqrt|r<rsup|2>+r<rsub|s><rsup|2>-2r
+    r<rsub|s><math-tt|cos><around*|(|\<lambda\><rsub|s>-\<lambda\>|)>>>>>>
+  </eqnarray*>
+
+  \;
 
   <subsubsection|Distance au Soleil>
 
@@ -99,7 +104,7 @@
 
   <subsubsection|Variation de taille>
 
-  DVistance à deux temps de mesures: <math|d<around*|(|t<rsub|1>|)>> et
+  Distance à deux temps de mesures: <math|d<around*|(|t<rsub|1>|)>> et
   <math|d<around*|(|t<rsub|2>|)>>\ 
 
   Lorsque les angles sont petits, on peut simplifier
@@ -209,11 +214,11 @@
 <\auxiliary>
   <\collection>
     <\associate|toc>
-      <vspace*|1fn><with|font-series|<quote|bold>|math-font-series|<quote|bold>|1<space|2spc>Presentation
-      of the problem> <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
+      <vspace*|1fn><with|font-series|<quote|bold>|math-font-series|<quote|bold>|1<space|2spc>Présentation
+      du problème> <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
       <no-break><pageref|auto-1><vspace|0.5fn>
 
-      <with|par-left|<quote|1tab>|1.1<space|2spc>The question
+      <with|par-left|<quote|1tab>|1.1<space|2spc>La question
       <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
       <no-break><pageref|auto-2>>
 
@@ -221,45 +226,54 @@
       <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
       <no-break><pageref|auto-3>>
 
-      <with|par-left|<quote|1tab>|1.3<space|2spc>Models
+      <with|par-left|<quote|1tab>|1.3<space|2spc>Modèles
       <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
       <no-break><pageref|auto-4>>
 
-      <with|par-left|<quote|2tab>|1.3.1<space|2spc>The Globe in the
-      Heliocentric model <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
+      <with|par-left|<quote|2tab>|1.3.1<space|2spc>Le Globe dans le modèle
+      héliocentrique <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
       <no-break><pageref|auto-5>>
 
-      <with|par-left|<quote|2tab>|1.3.2<space|2spc>A Flat Earth model
+      <with|par-left|<quote|2tab>|1.3.2<space|2spc>La Terre Plate
       <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
       <no-break><pageref|auto-6>>
 
-      <with|par-left|<quote|1tab>|1.4<space|2spc>Postulates
+      <vspace*|1fn><with|font-series|<quote|bold>|math-font-series|<quote|bold>|2<space|2spc>Analyse>
       <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
-      <no-break><pageref|auto-7>>
+      <no-break><pageref|auto-7><vspace|0.5fn>
 
-      <with|par-left|<quote|1tab>|1.5<space|2spc>Sun
+      <with|par-left|<quote|1tab>|2.1<space|2spc>Modèle héliocentrique
       <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
       <no-break><pageref|auto-8>>
 
-      <with|par-left|<quote|1tab>|1.6<space|2spc>Light
+      <with|par-left|<quote|1tab>|2.2<space|2spc>Modèle plat
       <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
       <no-break><pageref|auto-9>>
 
-      <vspace*|1fn><with|font-series|<quote|bold>|math-font-series|<quote|bold>|2<space|2spc>Implementation>
-      <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
-      <no-break><pageref|auto-10><vspace|0.5fn>
+      <with|par-left|<quote|2tab>|2.2.1<space|2spc>Position du Soleil suivant
+      l'heure (GMT) <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
+      <no-break><pageref|auto-10>>
 
-      <with|par-left|<quote|1tab>|2.1<space|2spc>Measures
+      <with|par-left|<quote|2tab>|2.2.2<space|2spc>Distance à la projection
+      droite du Soleil sur le plan de la Terre
       <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
       <no-break><pageref|auto-11>>
 
-      <with|par-left|<quote|1tab>|2.2<space|2spc>Analysis
+      <with|par-left|<quote|2tab>|2.2.3<space|2spc>Distance au Soleil
       <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
       <no-break><pageref|auto-12>>
 
-      <vspace*|1fn><with|font-series|<quote|bold>|math-font-series|<quote|bold>|3<space|2spc>Conclusion>
+      <with|par-left|<quote|2tab>|2.2.4<space|2spc>Variation de taille
       <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
-      <no-break><pageref|auto-13><vspace|0.5fn>
+      <no-break><pageref|auto-13>>
+
+      <vspace*|1fn><with|font-series|<quote|bold>|math-font-series|<quote|bold>|3<space|2spc>Mesures>
+      <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
+      <no-break><pageref|auto-14><vspace|0.5fn>
+
+      <vspace*|1fn><with|font-series|<quote|bold>|math-font-series|<quote|bold>|4<space|2spc>Conclusions>
+      <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
+      <no-break><pageref|auto-15><vspace|0.5fn>
     </associate>
   </collection>
 </auxiliary>

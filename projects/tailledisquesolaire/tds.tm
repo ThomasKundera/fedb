@@ -26,8 +26,8 @@
 
   <subsection|Proposition>
 
-  Si le Soleil ets proche, son déplacement au dessus de la Terre plate doit
-  le faire apparaitre plus grand à midi que le matoin ou le soir. Une mesure
+  Si le Soleil est proche, son déplacement au dessus de la Terre plate doit
+  le faire apparaître plus grand à midi que le matin ou le soir. Une mesure
   de son diamètre apparent devrait donc permettre de confirmer ou infirmer
   cette hypothèse.
 
@@ -44,11 +44,9 @@
   La Terre est un disque plat de quelques milliers de km de rayon, le Soleil
   tourne au dessus à quelques milliers de km de distance.
 
-  La variation de diamètre apparent sera d'autant plsu grande que la Terre
-  sera grande et le Soleil près. Nous choisirons donc une Terre petite (5000
-  km de rayon) et un Soleil loin: 20000 km de distance. Des valeurs plus
-  petitres pour al Terre sont irréalistes et plus grande pour le Soleil en
-  contradiction avec les modèles platistes.
+  Nous prendrons ici 20000km de rayon pour la Terre et un Soleil à 8000km.
+  Ces valeurs sont indicatives, les platistes sont invités à nous fournir une
+  meilleure valeur.
 
   <section|Analyse>
 
@@ -57,7 +55,7 @@
   On mesure entre 30' et 32' quelque que soit l'heure de la journée, on
   observe une légère variation annuelle.
 
-  <subsection|Modèle platCoilmpu>
+  <subsection|Modèle plat>
 
   Calcul de <math|d>, la distance au Soleil depuis un point d'observation
   <math|A> de latitude <math|\<varphi\>> et de longitude <math|\<lambda\>>,
@@ -83,7 +81,7 @@
   La projection du Soleil sur le plan de la Terre a pour coordonnées
   <math|P<rsub|s>=<around*|(|\<varphi\><rsub|s>,\<lambda\><rsub|s>|)>>
 
-  En utilisant la loi des consinus <math|c<rsup|2>=a<rsup|2>+b<rsup|2>-2ab<math-tt|cos>\<gamma\>>,
+  En utilisant la loi des cosinus <math|c<rsup|2>=a<rsup|2>+b<rsup|2>-2ab<math-tt|cos>\<gamma\>>,
   on peut écrire:
 
   <\eqnarray*>
@@ -114,6 +112,51 @@
 
   <math|\<Delta\><rsub|l>=<frac|d<around*|(|t<rsub|1>|)>|d<around*|(|t<rsub|2>|)>>>
 
+  <subsection|Application numérique>
+
+  Les calculs se font avec un Soleil placé juste au dessus de l'équateur.
+
+  <subsubsection|Variation de taille en fonction de l'heure>
+
+  <\big-figure>
+    <image|code/gnuplot/sizechange.eps|12cm|||>
+  </big-figure|<inactive|<label|figtaille>>Variation de la taille apparente
+  du Soleil sur 24h, vu depuis Strasbourg. La référence 100 est donnée à midi
+  (GMT).>
+
+  Sur la Figure <reference|figtaille>, nous voyons une variation notable de
+  la taille apparente du disque solaire. On voit aussi que l'éloignement
+  n'est jamais suffisant pour en réduire le diamètre de plus de 50% environ.
+  Si on se place entre 10h et 15h environ (afin de limiter les effets de
+  déformations proche de l'horizon), il reste une variation qui dépasse les
+  10%: nettement mesurable.
+
+  <subsubsection|Variation de la hauteur à l'horizon en fonction de l'heure>
+
+  <\big-figure>
+    <image|code/gnuplot/angleabove.eps|12cm|||>
+  <|big-figure>
+    <inactive|<label|figelevation>>Variation de l'élévation du Soleil sur
+    24h, vu depuis Strasbourg.
+  </big-figure>
+
+  Sur la Figure <reference|figelevation>, nous constatons que le Soleil n'est
+  jamais plus bas qu'environ 25<degreesign> au dessus de l'horizon: il ne se
+  couche jamais!
+
+  <subsubsection|Variation de la distance au Soleil en fonction de l'heure>
+
+  <\big-figure>
+    <image|code/gnuplot/distancechange.eps|12cm|||>
+  <|big-figure>
+    <label|figdistance>Variation de la distance au Soleil sur 24h, vu depuis
+    Strasbourg.
+  </big-figure>
+
+  La Figure <reference|figdistance> montre al distance au Soleil au cours de
+  la journée. La variation de distance est très faible et ne peut en aucun
+  cas expliquer l'alternance jour/nuit.
+
   <section|Mesures>
 
   <section|Conclusions>
@@ -141,16 +184,16 @@
     <associate|auto-11|<tuple|2.2.2|2>>
     <associate|auto-12|<tuple|2.2.3|2>>
     <associate|auto-13|<tuple|2.2.4|2>>
-    <associate|auto-14|<tuple|3|2>>
-    <associate|auto-15|<tuple|4|3>>
+    <associate|auto-14|<tuple|2.3|2>>
+    <associate|auto-15|<tuple|2.3.1|3>>
     <associate|auto-16|<tuple|1|3>>
-    <associate|auto-17|<tuple|3.2.2|3>>
-    <associate|auto-18|<tuple|3.3|3>>
-    <associate|auto-19|<tuple|3.3.1|4>>
+    <associate|auto-17|<tuple|2.3.2|3>>
+    <associate|auto-18|<tuple|2|3>>
+    <associate|auto-19|<tuple|2.3.3|4>>
     <associate|auto-2|<tuple|1.1|1>>
-    <associate|auto-20|<tuple|3.3.2|4>>
-    <associate|auto-21|<tuple|2|4>>
-    <associate|auto-22|<tuple|3.4|4>>
+    <associate|auto-20|<tuple|3|4>>
+    <associate|auto-21|<tuple|3|4>>
+    <associate|auto-22|<tuple|4|4>>
     <associate|auto-23|<tuple|3|5>>
     <associate|auto-24|<tuple|3.5|5>>
     <associate|auto-25|<tuple|4|?>>
@@ -203,16 +246,32 @@
     <associate|eqmmp|<tuple|10|?>>
     <associate|eqmpr|<tuple|10|?>>
     <associate|figatana|<tuple|5|?>>
+    <associate|figdistance|<tuple|3|?>>
+    <associate|figelevation|<tuple|2|?>>
     <associate|figflatflat|<tuple|1|?>>
     <associate|fighorizonplot|<tuple|2|?>>
     <associate|figmathorizon|<tuple|1|?>>
     <associate|figspacecurve|<tuple|1|?>>
+    <associate|figtaille|<tuple|2|?>>
     <associate|heq|<tuple|9|?>>
   </collection>
 </references>
 
 <\auxiliary>
   <\collection>
+    <\associate|figure>
+      <tuple|normal|<mark|<arg|body>|<inline-tag|label|<with|mode|<quote|src>|color|<quote|#228>|font-family|<quote|tt>|figtaille>>>Variation
+      de la taille apparente du Soleil sur 24h, vu depuis Strasbourg. La
+      référence 100 est donnée à midi (GMT).|<pageref|auto-16>>
+
+      <\tuple|normal>
+        Variation de l'élévation du Soleil sur 24h, vu depuis Strasbourg.
+      </tuple|<pageref|auto-18>>
+
+      <\tuple|normal>
+        Variation de l'élévation du Soleil sur 24h, vu depuis Strasbourg.
+      </tuple|<pageref|auto-20>>
+    </associate>
     <\associate|toc>
       <vspace*|1fn><with|font-series|<quote|bold>|math-font-series|<quote|bold>|1<space|2spc>Présentation
       du problème> <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
@@ -246,7 +305,7 @@
       <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
       <no-break><pageref|auto-8>>
 
-      <with|par-left|<quote|1tab>|2.2<space|2spc>Modèle plat
+      <with|par-left|<quote|1tab>|2.2<space|2spc>Modèle platCoilmpu
       <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
       <no-break><pageref|auto-9>>
 
@@ -267,13 +326,29 @@
       <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
       <no-break><pageref|auto-13>>
 
+      <with|par-left|<quote|1tab>|2.3<space|2spc>Application numérique
+      <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
+      <no-break><pageref|auto-14>>
+
+      <with|par-left|<quote|2tab>|2.3.1<space|2spc>Variation de taille en
+      fonction de l'heure <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
+      <no-break><pageref|auto-15>>
+
+      <with|par-left|<quote|2tab>|2.3.2<space|2spc>Variation de la hauteur à
+      l'horizon en fonction de l'heure <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
+      <no-break><pageref|auto-17>>
+
+      <with|par-left|<quote|2tab>|2.3.3<space|2spc>Variation de la distance
+      au Soleil en fonction de l'heure <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
+      <no-break><pageref|auto-19>>
+
       <vspace*|1fn><with|font-series|<quote|bold>|math-font-series|<quote|bold>|3<space|2spc>Mesures>
       <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
-      <no-break><pageref|auto-14><vspace|0.5fn>
+      <no-break><pageref|auto-21><vspace|0.5fn>
 
       <vspace*|1fn><with|font-series|<quote|bold>|math-font-series|<quote|bold>|4<space|2spc>Conclusions>
       <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
-      <no-break><pageref|auto-15><vspace|0.5fn>
+      <no-break><pageref|auto-22><vspace|0.5fn>
     </associate>
   </collection>
 </auxiliary>

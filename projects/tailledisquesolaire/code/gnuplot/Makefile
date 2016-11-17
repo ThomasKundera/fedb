@@ -1,7 +1,7 @@
 # Gnuplot Makefile
 
-all: sizechange.eps
+all: sizechange.eps angleabove.eps distancechange.eps
 
-%.eps: %.plot
+%.eps: %.plot common.plot
 	gnuplot $<
 

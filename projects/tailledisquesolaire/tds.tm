@@ -120,9 +120,8 @@
 
   <\big-figure>
     <image|code/gnuplot/sizechange.eps|12cm|||>
-  </big-figure|<inactive|<label|figtaille>>Variation de la taille apparente
-  du Soleil sur 24h, vu depuis Strasbourg. La référence 100 est donnée à midi
-  (GMT).>
+  </big-figure|<label|figtaille>Variation de la taille apparente du Soleil
+  sur 24h, vu depuis Strasbourg. La référence 100 est donnée à midi (GMT).>
 
   Sur la Figure <reference|figtaille>, nous voyons une variation notable de
   la taille apparente du disque solaire. On voit aussi que l'éloignement
@@ -136,8 +135,8 @@
   <\big-figure>
     <image|code/gnuplot/angleabove.eps|12cm|||>
   <|big-figure>
-    <inactive|<label|figelevation>>Variation de l'élévation du Soleil sur
-    24h, vu depuis Strasbourg.
+    <label|figelevation>Variation de l'élévation du Soleil sur 24h, vu depuis
+    Strasbourg.
   </big-figure>
 
   Sur la Figure <reference|figelevation>, nous constatons que le Soleil n'est
@@ -153,7 +152,7 @@
     Strasbourg.
   </big-figure>
 
-  La Figure <reference|figdistance> montre al distance au Soleil au cours de
+  La Figure <reference|figdistance> montre la distance au Soleil au cours de
   la journée. La variation de distance est très faible et ne peut en aucun
   cas expliquer l'alternance jour/nuit.
 
@@ -252,7 +251,7 @@
     <associate|fighorizonplot|<tuple|2|?>>
     <associate|figmathorizon|<tuple|1|?>>
     <associate|figspacecurve|<tuple|1|?>>
-    <associate|figtaille|<tuple|2|?>>
+    <associate|figtaille|<tuple|1|?>>
     <associate|heq|<tuple|9|?>>
   </collection>
 </references>

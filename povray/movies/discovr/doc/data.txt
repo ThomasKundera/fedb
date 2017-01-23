@@ -1,0 +1,13 @@
+Main source of data:
+https://www.nasa.gov/feature/goddard/from-a-million-miles-away-nasa-camera-shows-moon-crossing-face-of-earth
+
+"These images were taken between 3:50 p.m. and 8:45 p.m. EDT on July 16 [2015]"
+
+http://www.worldtimebuddy.com/edt-to-utc-converter
+
+UTC: 2015/07/16-19:50 - 2015/07/17-00:45
+
+
+"showing the moon moving over the Pacific Ocean near North America"
+
+

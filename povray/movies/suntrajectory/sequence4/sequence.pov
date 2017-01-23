@@ -36,7 +36,8 @@ global_settings { ambient_light .1 }
   translate  Earth_Position
 }
 
-#declare myspherelk=sphere {<Earth_Radius,0,0>,1*m translate <0,-10*m,0> rotate <0,0,48.5> rotate <0,7.7,0>
+#declare myspherelk=sphere {
+  <Earth_Radius,0,0>,1*m translate <0,-10*m,0> rotate <0,0,48.5> rotate <0,7.7,0>
   texture {YaxisTexture}
   rotate <0,360*seconde/j_t+180,0>
   rotate <0,0,23.44>
@@ -44,7 +45,7 @@ global_settings { ambient_light .1 }
 }
 
 #declare camPos=yCenter(mysphere);
-#declare camSky=ycenter(myspherelk);
+#declare camSky=yCenter(myspherelk);
 
 
 #declare camLkat=(Sun_Loc+VProject_Plane(Sun_Loc-camPos,camPos-Earth_Position))/2;

@@ -57,6 +57,22 @@
   <math|<wide|v|\<wide-varrightarrow\>>> is the actual speed vector of the
   object <math|<around*|[|m s<rsup|-1>|]>>.
 
+  \;
+
+  In cartesian coordinates, of center <math|O>, center of the Earth, with
+  <math|z> axis oriented south-north, we have:
+  <math|<wide|\<Omega\>|\<wide-varrightarrow\>>=<matrix|<tformat|<table|<row|<cell|0>>|<row|<cell|0>>|<row|<cell|\<omega\>>>>>>>,
+  with <math|w=0.0000727 rad s<rsup|-1>>
+
+  In spherical coordinates, it becomes: <math|<wide|\<Omega\>|\<wide-varrightarrow\>>=<matrix|<tformat|<table|<row|<cell|\<omega\>>>|<row|<cell|0>>|<row|<cell|0>>>>>>,
+  notation <math|<matrix|<tformat|<table|<row|<cell|r>>|<row|<cell|\<theta\>>>|<row|<cell|\<varphi\>>>>>>>.
+
+  \;
+
+  \;
+
+  \;
+
   <section|Application to some concrete cases>
 
   <subsection|Wind (any air masse, clouds, etc.)>

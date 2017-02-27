@@ -25,6 +25,10 @@
 #declare j_t  = 24*h_t;
 #declare a_t  = 31556925.98*s_t;
 
+// Middle-age units
+#declare inch=0.0254*m;
+#declare foot=12*inch;
+
 
 
 // From: http://www.f-lohmueller.de/pov_tut/backgrnd/p_sky8f.htm

@@ -29,10 +29,14 @@ camera {
   angle 50 // 50mm
 }
 
+#declare CupCylH=489*mm+280*mm;
+#declare CupCylR=2025*mm/2;
 
-#declare cpnbr=38.8*inch;
+#declare cpnbr=979*mm;
 #declare cpnbl=cpnbr*sqrt(3)/2;
-#declare cpnhr=19.85*inch;
+#declare cpnhr=489*mm+280*mm;
+
+
 #declare cpnl=(59.5*inch-36*inch)/sin(radians(180-123.7));
 #declare cpna=(cpnbr-cpnhr)/2;
 #declare cpnH=sqrt(cpnl*cpnl-cpna*cpna);
@@ -53,12 +57,12 @@ camera {
   translate <0,-1*cm,0>
 }
  
-#declare cupsubbox=box{<-cpnbr/2,36*inch-2*cm,cpnbl>,<cpnbr/2,36*inch+2*cm,cpnbl-36*inch>}
+#declare cupsubbox=box{<-cpnbr/2,CupCylH-2*cm,cpnbl>,<cpnbr/2,CupCylH+2*cm,0>}
 #declare cupola=union{
     difference {
-    sphere {<0,0,0>,1*cm}
-    cylinder {<0,0           ,0>,<0,36*inch     ,0> 40.6*inch     }
-    cylinder {<0,0      -1*cm,0>,<0,36*inch-1*cm,0> 40.6*inch-1*cm}
+    //sphere {<0,0,0>,1*cm}
+    cylinder {<0,0           ,0>,<0,CupCylH     ,0> CupCylR     }
+    cylinder {<0,0      -1*cm,0>,<0,CupCylH-1*cm,0> CupCylR-1*cm}
     //cylinder {<0,36*inch-2*cm,0>,<0,36*inch+1*cm,0> 38.8*inch     }
     union {
       object {cupsubbox rotate <0,  0,0>}
@@ -69,6 +73,7 @@ camera {
       object {cupsubbox rotate <0,300,0>}    
     }
   }
+  /*
   union {
     object {cupane rotate <123.7-180,0,0>translate <0,36*inch,-cpnbl> rotate <0,  0,0>}
     object {cupane rotate <123.7-180,0,0>translate <0,36*inch,-cpnbl> rotate <0, 60,0>}
@@ -76,7 +81,7 @@ camera {
     object {cupane rotate <123.7-180,0,0>translate <0,36*inch,-cpnbl> rotate <0,180,0>}
     object {cupane rotate <123.7-180,0,0>translate <0,36*inch,-cpnbl> rotate <0,240,0>}
     object {cupane rotate <123.7-180,0,0>translate <0,36*inch,-cpnbl> rotate <0,300,0>}
-  }
+  }*/
   /*
   union {
     object {cupsubbox rotate <0,  0,0>}

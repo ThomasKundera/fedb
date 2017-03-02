@@ -4,7 +4,7 @@
 
 #include "earth-common.inc"
 
-#declare fastEarth=sphere {<0,0,0>,Earth_Radius pigment {rgb <.4,.4,.4>}}
+#declare fastEarth=sphere {<0,0,0>,Earth_Radius pigment {rgb <.8,.4,.4>}}
 
 #declare MappedEarthTexture=texture {
   pigment{
@@ -27,8 +27,8 @@
 }
 
 #declare Earth_Clouds= sphere{ <0, 0, 0>, Earth_Radius+Cloud_Altitude hollow
-  texture{CloudTextureA scale 1}
-  texture{CloudTextureB scale 1}
+  texture{CloudTextureA scale 100}
+  texture{CloudTextureB scale 100}
 }
 
 #declare Earth= union{

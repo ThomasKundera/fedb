@@ -29,12 +29,18 @@ camera {
   angle 50 // 50mm
 }
 
-#declare CupCylH=489*mm+280*mm;
-#declare CupCylR=2025*mm/2;
+#declare CcH=489*mm+280*mm;
+#declare CcR=2025*mm/2;
 
-#declare cpnbr=979*mm;
-#declare cpnbl=cpnbr*sqrt(3)/2;
-#declare cpnhr=489*mm+280*mm;
+#declare CpbR=979*mm;
+#declare CpbL=CpbR*sqrt(3)/2;
+
+#declare CphR=648*mm;
+#declare CphL=CphR*sqrt(3)/2;
+
+#declare CpbH=CcH;
+#declare CphH=2576*mm;
+#declare CpH=CphH-CpbH;
 
 
 #declare cpnl=(59.5*inch-36*inch)/sin(radians(180-123.7));

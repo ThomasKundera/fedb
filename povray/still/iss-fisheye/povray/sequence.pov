@@ -13,6 +13,8 @@
 #declare earthType=4;
 #include "earth-simple.inc"
 
+#declare SideView=true;
+
 global_settings { ambient_light 1 }
 
 light_source {
@@ -24,15 +26,27 @@ light_source {
     color <1,1,1>
 }
 
-camera {
-  fisheye
-  location   <0,60*cm,0>
-  look_at    <0,1000*m,0>
-  sky        <1,0,0>
-  right <1.5,0,0>
-  //angle 132 // 8mm
-  angle 180
-}
+#if (SideView)
+  sphere {<0,60*cm,0> 2*cm pigment {rgb <1,0,0>}}
+  camera {
+    location   <0,60*cm,-3*m>
+    look_at    <0,60*cm,0>
+    sky        <0,1,0>
+    right <1.5,0,0>
+    //angle 132 // 8mm
+    angle 40
+  }
+#else
+  camera {
+    fisheye
+    location   <0,60*cm,0>
+    look_at    <0,1000*m,0>
+    sky        <1,0,0>
+    right <1.5,0,0>
+    //angle 132 // 8mm
+    angle 180
+  }
+#end
 
 #declare CcH=489*mm+280*mm;
 #declare CcR=2025*mm/2;
@@ -117,10 +131,14 @@ camera {
     texture {Brushed_Aluminum}
 }
 
-//difference {
+#if (SideView)
+difference {
+  object {cupola rotate <0,30,0>}
+  plane {<0,0,1>,0*cm}
+}
+#else
   object {cupola rotate <0,0,0>}
-//  plane {<1,0,0>,-30*cm}}
-
+#end
 //object {frame scale 1*m translate <20*cm,20*cm,20*cm>}
 
 

@@ -48,12 +48,10 @@
 #end //
 
 
-
+// Compute the center location of a given object
 #macro yCenter(OBJECT)
   #local Result=0.5*( min_extent(OBJECT)+ max_extent(OBJECT));
   
   Result
 #end
 
-
-  

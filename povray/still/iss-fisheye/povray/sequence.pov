@@ -13,7 +13,7 @@
 #declare earthType=4;
 #include "earth-simple.inc"
 
-#declare SideView=true;
+#declare SideView=false;
 
 global_settings { ambient_light 1 }
 

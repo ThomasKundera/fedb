@@ -10,26 +10,32 @@
 #include "frame.inc"
 #include "sun_simple.inc"
 
+#declare r=6371*km;
 
-global_settings { ambient_light 1 }
+
+//global_settings { ambient_light 1 }
 
 #declare myBrushedAlu=texture {
     Chrome_Metal
+    
     normal {
         bumps -.5
         scale <1, 0.01, 0.01>
     }
-    scale .001
+    scale .00000156*r
 }
 
 
 //object {SunLightSource scale r translate <0,r,100*r> rotate <-1,0,0>}
 
+//box {<0,0,0>,<1,1,1> scale r/10000 translate <r/5000,r*1,r/1000> pigment { color Red }}
+
+//box {<0,0,0>,<1,1,1> scale r/100 translate <r/10,r*1,r> pigment { color Red }}
 
 light_source {
-    <0,r*2.5,100*r>
+    <0,2.5*r,100*r>
     color <1.5,1,1>
-    looks_like { SunBall }
+    looks_like { object {SunBall scale 100*r/150}}
     parallel
     point_at <0,r*1.00001,0>
 }

@@ -68,7 +68,7 @@ pigment {
      finish{emission 1 diffuse 0}
 }
 
-#declare CloudTextureA= texture{ pigment {color rgb<0.1,0.3,0.75>*0.7}
+#declare CloudTextureA= texture{ pigment {color rgb<0.1,0.3,0.75,.3,.3>*0.7}
                  #if (version = 3.7 )  finish {emission 1 diffuse 0}
                  #else                 finish { ambient 1 diffuse 0}
                  #end 
@@ -77,9 +77,9 @@ pigment {
 #declare CloudTextureB= texture{ pigment{ bozo turbulence 0.75
                           octaves 6  omega 0.7 lambda 2 
                           color_map {
-                          [0.0   color rgb  <0.95, 0.95, 0.95>      ]
-                          [0.05  color rgb  <1   , 1   , 1   >*1.25 ]
-                          [0.15  color rgb  <0.85, 0.85, 0.85>      ]
+                          [0.0   color rgb  <0.95, 0.95, 0.95,.9>      ]
+                          [0.05  color rgb  <1   , 1   , 1   ,.9>*1.25 ]
+                          [0.15  color rgb  <0.85, 0.85, 0.85,.9>      ]
                           [0.55  color rgbt <1   , 1   , 1   , 1>*1 ]
                           [1.0   color rgbt <1   , 1   , 1   , 1>*1 ]
                           } // end color_map 

@@ -20,10 +20,10 @@
 // This may change according to what we want to model
 #declare s_t =    1;
 // This wont change soon
-#declare mn_t =   60*s_t;
-#declare h_t  = 3600*s_t;
-#declare j_t  = 24*h_t;
-#declare a_t  = 31556925.98*s_t;
+#declare mn_t =   60*s_t;        // Minut
+#declare h_t  = 3600*s_t;        // Hour
+#declare d_t  =   24*h_t;        // Day
+#declare y_t  = 31556925.98*s_t; // Year
 
 // Middle-age units
 #declare inch=0.0254*m;

@@ -1,15 +1,43 @@
 // --------------------------------------------------------------------------------
-// Second sequence
+// Simple retrograding example
 // 
 // --------------------------------------------------------------------------------
+
+#include "common.inc"
+#include "frame.inc"
+
+// For aesthetic
+#include "night_sky.inc"
+
+// Two objects rotating around a same center
+
+// We dont pretend for a realistic Earth/whatever planet
+// model yet, just respecting the principle.
+r1=100000*km;  // With default units, it makes 100
+r2=200000*km;
+
+// relative rotation speed will follow Newton's laws:
+// P=-mK/r²
+// F= mv²/r
+// P1(r1)=F1(r1)
+// P2(r2)=F2(r2)
+// -mK/r1²=mv1²/r1
+// -mK/r2²=mv2²/r2
+// -K/r1=v1²
+// -K/r2=v2²
+// v1²/v2²=r2/r1
+// v1/v2=\sqrt(r2/r1)
+// speed decrease in square root of radius
+
+vtheta1=2*pi/y_t; // One revolution per year
+
+vheta2=sqrt(r1/r2)*vtheta1; // respecting speed ratio
+
 
 #include "colors.inc"
 
 #include "spline.mcr"
 
-#include "common.inc"
-#include "frame.inc"
-#include "night_sky.inc"
 #declare earthType=1;
 #include "earth-simple.inc"
 #include "sun_simple.inc"

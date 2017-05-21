@@ -14,7 +14,7 @@ ENCODEROPTIONS = -mf fps=25:type=png -ovc lavc -lavcopts vcodec=mpeg4:mbd=2:trel
 
 IMG_FILE =       sequence.png
 
-COMMONPATH = ../../../common/
+COMMONPATH = ../../common/
 
 COMMONFILES = $(COMMONPATH)/common.inc $(COMMONPATH)/frame.inc $(COMMONPATH)/earth-simple.inc
 

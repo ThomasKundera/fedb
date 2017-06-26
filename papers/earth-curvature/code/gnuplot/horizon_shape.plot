@@ -4,7 +4,8 @@ set terminal postscript eps size 10,6 enhanced color font 'Helvetica,20' linewid
 set output 'horizon_shape.eps'
 
 r = 6371000
-e=0.05  # 50mm
+e=0.05  # 50mm 60:
+#e=0.010 # 10mm 132:
 
 
 hp(h)=r*h/(r+h)
@@ -16,9 +17,10 @@ f(x,h)=f0(x/1000,h)
 
 set xrange [-18:18] # 24x36
 set yrange [-12:12]
+#set yrange [-.02:0]
 set xlabel "mm"
 set ylabel "mm"
 
 
-plot f(x,1), f(x,1000), f(x,10000), f(x,30000),f(x,100000)
+plot f(x,1), f(x,2) #, f(x,100), f(x,500),f(x,1000)
 

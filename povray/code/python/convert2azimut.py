@@ -1,10 +1,11 @@
 #!/bin/env python
 
+import os
 from PIL import Image
 import math
 
-imonx=1000
-imony=1000
+imonx=500
+imony=500
 
 mimonx=imonx/2
 mimony=imony/2
@@ -36,12 +37,9 @@ def smothimo(imoray):
   return out
 
 
-
-
-
-def main():
-  imi = Image.open("../../common/data/earth_surface_map.jpg")
-
+def do_convert(basedir,iname,oname):
+  print ("For: "+str(iname))
+  imi = Image.open(os.path.join(basedir,iname))
   (iminx,iminy)=imi.size
 
   print ("iminx="+str(iminx)+"  iminy="+str(iminy)) 
@@ -76,8 +74,9 @@ def main():
       print ("ix="+str(ix)+"   iy="+str(iy)+"   theta="+str(theta)+"   r="+str(r)+"  ox="+str(ox))
       raise
   
-  #while (smothimo(imoray)):
-  #  pass
+  while (smothimo(imoray)):
+    print ("Smoothing...")
+    pass
   imoral=[]
   for lx in imoray:
     for px in lx:
@@ -93,8 +92,17 @@ def main():
   imo=Image.new("RGB",(imonx,imony))
   imo.putdata(imoral)
 
-  imo.save("test.jpg")
+  imo.save(os.path.join(basedir,oname))
 
+
+
+def main():
+  basedir="/home/anyone/system/mnt/data/anyone/flat/sunlightmovie/data"
+  
+  for i in range(0,360):
+    iname=str(i)+".jpg"
+    oname=str(i)+"-flat.jpg"
+    do_convert(basedir,iname,oname)
 
 # --------------------------------------------------------------------------
 if __name__ == '__main__':

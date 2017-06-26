@@ -6,7 +6,10 @@
 
 #declare Earth_Distance   = 149600000*km; // Distance to Sun
 
-#declare Earth_Radius       = 6371*km;
+#ifndef ( Earth_Radius )
+  #declare Earth_Radius       = 6371*km;
+#end
+
 #declare Cloud_Altitude     = 5*km;
 
 

@@ -18,14 +18,14 @@
 
   The idea is to collect timetables of direct flights between different
   cities (better using mean value between two directions to avoid dominant
-  winds effects). Then postulating that the time of fglight is likled to the
-  actual disance between two cities by a simple relation. We'll pose
+  winds effects). Then postulating that the time of flight is linked to the
+  actual distance between two cities by a simple relation. We'll pose
   <math|T=a+b D>, where <math|T> is the time of flight, <math|a> a constant
   (that take into account boarding time, take-off and landing, etc.),
   <math|b> a speed, and D the actual distance.
 
   With a few cities of known distances we fit the data to get the best
-  <math|a> and <math|b> vales. Then we can use the equation to infer
+  <math|a> and <math|b> values. Then we can use the equation to infer
   distances between other cities.
 
   By wisely choosing the cities, we expect to conclude that the city space
@@ -45,7 +45,7 @@
 
   The fit is pretty good, and gives the following values:
 
-  Distance (km) = 0.25 x Time (secondes) -763
+  Distance (km) = 0.25 x Time (seconds) -763
 
   <section|Deducing distances>
 

@@ -1,14 +1,13 @@
 #!/bin/env python
+import math
 
 km=1.
 
 Earth_Radius=6371.*km
 
-pi=3.141592653979328
-
 
 def sphere_volume(r):
-  return 4.*pi*r*r*r/3.
+  return 4.*math.pi*r*r*r/3.
 
 def main():
   alt1=300*km

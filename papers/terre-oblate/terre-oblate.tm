@@ -18,7 +18,7 @@
 
   Le rayon équatorial de la Terre est plus grand que son rayon polaire de
   plus de <math|20 km>. Comment se fait-il que l'équateur ne soit pas une
-  énorme montage?
+  énorme montagne?
 
   La gravité devrait faire tomber l'eau hors de l'équateur vers les pôles, or
   ce n'est pas le cas.
@@ -38,6 +38,14 @@
   contradiction apparente est la pseudo-force centrifuge qui vient modifier
   le potentiel gravitationnel en ajoutant un terme spécifique.
 
+  Une analogie simple est celle d'un liquide en rotation dans un récipient:
+  le liquide va se courber, créant une \S<nbsp>montagne<nbsp>\T sur les
+  bords, qui pourtant est à l'équilibre. Le terme centrifuge des forces
+  appliqués au liquide font que \S<nbsp>l'horizontale<nbsp>\T (par rapport au
+  champs de \S<nbsp>gravité<nbsp>\T ressenti) est incliné.
+
+  \;
+
   Il va donc falloir calculer la valeur de ce terme additionnel, et vérifier
   que la surface de la Terre à \S<nbsp>altitude constante<nbsp>\T est bien
   une iso-potentielle de la somme de ces deux potentiels (ce qui est
@@ -52,7 +60,7 @@
   Cela conduit donc à un calcul assez complexe, que je reprends de Benny
   Lautrup, faute de pouvoir donner une valeur réaliste à partir d'un calcul
   simplifié comme je l'espérais (le calcul simple est effectué dans la même
-  référence, il minimise la réalité du déplacement d'un facteur deux
+  référence, il minimise la réalité du déplacement d'un facteur <math|2>
   environ).
 
   <section|Calculs>
@@ -219,9 +227,6 @@
 
 <\auxiliary>
   <\collection>
-    <\associate|figure>
-      <tuple|normal||<pageref|auto-9>>
-    </associate>
     <\associate|toc>
       <vspace*|1fn><with|font-series|<quote|bold>|math-font-series|<quote|bold>|1<space|2spc>Présentation
       du problème> <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
@@ -240,7 +245,7 @@
       <no-break><pageref|auto-4>>
 
       <with|par-left|<quote|2tab>|3.1.1<space|2spc>Champs de potentiel
-      gravitationnel à la surface d'une élipsoïde de révolution
+      gravitationnel à la surface d'une ellipsoïde de révolution
       <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
       <no-break><pageref|auto-5>>
 
@@ -258,7 +263,7 @@
 
       <vspace*|1fn><with|font-series|<quote|bold>|math-font-series|<quote|bold>|7<space|2spc>Notes
       et références> <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
-      <no-break><pageref|auto-10><vspace|0.5fn>
+      <no-break><pageref|auto-9><vspace|0.5fn>
     </associate>
   </collection>
 </auxiliary>

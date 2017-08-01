@@ -4,11 +4,11 @@
 # https://github.com/phire/Python-Ray-tracer/
 
 from geom3 import Ray3, dot, unit 
-from colour import Colour
+#from colour import Colour
 
 class BlankHit(object):
     """Null hit"""
-    def __init__(self, colour):
+    def __init__(self, colour=None):
         self.mycolour = colour
         self.entry = () # () is positive infinity (oppisit of None)
         self.exit = ()
@@ -43,7 +43,7 @@ class Hit(object):
         self.lights = [None]
         
         # temp ambiant for when colour is called before calcLights
-        self.ambient = Colour(0.8, 0.8, 0.8)
+        self.ambient = None #Colour(0.8, 0.8, 0.8)
 
     def __repr__(self):
         return "Hit " + str(self.obj) + " Along " + str(self.ray) + " entry: " + str(self.entry) + " exit: " + str(self.exit)
@@ -99,7 +99,7 @@ class Hit(object):
                 ret.entry = other.exit
                 ret.mat = other.mat
                 if other.normal2 is None:
-                    print other
+                    print (other)
                 ret.normal = -other.normal2
                 ret.texCords = other.texCords
         return ret
@@ -122,7 +122,7 @@ class Hit(object):
             dir = self.ray.dir
             norm = self.normal
             if norm is None:
-                print self.obj, self.entry, self.exit
+                print (self.obj, self.entry, self.exit)
             Rdir = -2 * dir.dot(norm) * norm + dir
             ray = Ray3(self.ray.pos(self.entry) + Rdir * 0.0000001, Rdir)
             self.reflection = scene.intersect(ray)
@@ -133,9 +133,9 @@ class Hit(object):
 
     def colour(self):
         if self.entry < 0:
-            return Colour(0,0,0)
-        colour = self.mat.litColour(self.normal, self.ambient, self.lights,
-                    -self.ray.dir, self.texCords)
+            return None # Colour(0,0,0)
+        colour = None #self.mat.litColour(self.normal, self.ambient, self.lights,
+                    #-self.ray.dir, self.texCords)
         if self.reflection:
             colour += self.mat.reflectivity * self.reflection.colour() 
         elif self.bgcolour:

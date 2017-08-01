@@ -45,6 +45,7 @@ planetsArray=[
 ]
 sunMass=1.9891E30*kg
 
+earthRadius=6371.0*km
 
 # Moons
 
@@ -111,14 +112,14 @@ class SimpleOrbit(Orbit):
   def get_location(self,t):
     #print (self.offset)
     theta=self.offset+t*2*math.pi/self.period
-    return geom3.Vector3(self.sma*math.cos(theta),0,self.sma*math.sin(theta))
+    return geom3.Point3(self.sma*math.cos(theta),0,self.sma*math.sin(theta))
 
 class SpaceObject:
   def __init__(self,name):
     self.name=name
   
   def get_location(self,t):
-    return geom3.Vector3(0,0,0)
+    return geom3.Point3(0,0,0)
   
   def __str__(self):
     return self.name
@@ -137,10 +138,10 @@ class Satellite(SpaceObject):
     self.planet=p
     
   def get_location(self,t):
-    ploc=self.planet.get_location(t)
-    mloc=self.orbit.get_location(t)
+    ploc=geom3.Vector3(self.planet.get_location(t))
+    mloc=geom3.Vector3(self.orbit.get_location(t))
     #print (mloc)
-    return (mloc+ploc)
+    return (geom3.Point3(mloc+ploc))
   
 
 class SunPlanet(SpaceObject):

@@ -3,6 +3,7 @@
 
 import math
 
+import vector3d
 # Units
 # Distance
 m=1./1000.
@@ -51,18 +52,6 @@ sunMass=1.9891E30*kg
 #             Name  sma      Excentr  inclinaison (° ecliptic) Orbital period, mass, tilt, self period,offset
 Earth_Moons=["Moon",384399*km, 0.0549,  0, 27.321661*d_t, 0,0,0,-math.pi]
 
-
-class Point3D:
-  def __init__(self,x=0.0,y=0.0,z=0.0):
-    self.x = float(x)
-    self.y = float(y)
-    self.z = float(z)
-
-  def __add__(self, other):
-    return Point3D(self.x + other.x, self.y + other.y, self.z + other.z)
-    
-  def __str__( self ):
-    return "( "+str(self.x)+" , "+str(self.y)+" , "+str(self.z)+" )"
 
 # https://stackoverflow.com/questions/20659456/python-implementing-a-numerical-equation-solver-newton-raphson
 class NewtonRaphson:
@@ -121,14 +110,14 @@ class SimpleOrbit(Orbit):
   def get_location(self,t):
     #print (self.offset)
     theta=self.offset+t*2*math.pi/self.period
-    return Point3D(self.sma*math.cos(theta),0,self.sma*math.sin(theta))
+    return vector3d.Point3D(self.sma*math.cos(theta),0,self.sma*math.sin(theta))
 
 class SpaceObject:
   def __init__(self,name):
     self.name=name
   
   def get_location(self,t):
-    return Point3D(0,0,0)
+    return vector3d.Point3D(0,0,0)
   
   def __str__(self):
     return self.name

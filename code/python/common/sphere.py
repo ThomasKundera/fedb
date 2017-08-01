@@ -17,7 +17,7 @@ from hit import Hit
 class Sphere(object):
     """A ray-traceable sphere"""
     
-    def __init__(self, centre, radius, material):
+    def __init__(self, centre, radius, material=None):
         """Create a sphere with a given centre point, radius
         and surface material"""
         self.centre = centre
@@ -63,4 +63,5 @@ if __name__ == "__main__":
     ray = Ray3(Point3(1,0,5), Vector3(0,0,-1))
     missingRay = Ray3(Point3(1,0,5), Vector3(0,0,1))
     assert abs(sphere.intersect(ray) - 4.0) < 0.00001
-assert sphere.intersect(missingRay) is None
+    assert sphere.intersect(missingRay) is None
+

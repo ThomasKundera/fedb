@@ -116,6 +116,10 @@ class Vector3(object):
         """Division of a vector by a float r is scaling by (1/r)"""
         return self.__mul__(1.0/scale)
 
+    def __truediv__(self, scale): # Python3
+        """Division of a vector by a float r is scaling by (1/r)"""
+        return self.__mul__(1.0/scale)
+
     def __neg__(self):
         """Negation of a vector is negation of all its coordinates"""
         return Vector3(-self.dx, -self.dy, -self.dz)
@@ -132,8 +136,8 @@ class Vector3(object):
         """Equality of vectors is equality of all coordinates to within 
        epsilon (defaults to 1.e-10)."""
         return (abs(self.dx - other.dx) < epsilon and
-                 abs(self.dy - other.dy) < epsilon and
-                 abs(self.dz - other.dz) < epsilon)
+                abs(self.dy - other.dy) < epsilon and
+                abs(self.dz - other.dz) < epsilon)
 
     def __ne__(self, other):
         """Inequality of vectors is inequality of any coordinates"""

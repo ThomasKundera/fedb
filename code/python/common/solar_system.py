@@ -2,8 +2,9 @@
 # -*- coding: utf-8 -*-
 
 import math
+import geom3
 
-import vector3d
+
 # Units
 # Distance
 m=1./1000.
@@ -110,14 +111,14 @@ class SimpleOrbit(Orbit):
   def get_location(self,t):
     #print (self.offset)
     theta=self.offset+t*2*math.pi/self.period
-    return vector3d.Point3D(self.sma*math.cos(theta),0,self.sma*math.sin(theta))
+    return geom3.Vector3(self.sma*math.cos(theta),0,self.sma*math.sin(theta))
 
 class SpaceObject:
   def __init__(self,name):
     self.name=name
   
   def get_location(self,t):
-    return vector3d.Point3D(0,0,0)
+    return geom3.Vector3(0,0,0)
   
   def __str__(self):
     return self.name

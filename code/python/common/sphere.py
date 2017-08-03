@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
-# https://github.com/phire/Python-Ray-tracer/
+# https://github.com/phire/Python-Ray-tracer/ Scott Mansell
 
 """A ray-traceable sphere is a sphere with a given
    centre and radius and a given surface material.

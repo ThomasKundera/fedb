@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
-# https://github.com/phire/Python-Ray-tracer/
+# https://github.com/phire/Python-Ray-tracer/ Scott Mansell
 
 from geom3 import Ray3, dot, unit 
 #from colour import Colour

@@ -14,7 +14,7 @@ ua=149597870700*m
 s=1.
 m_t=60.*s
 h_t=3600.*s
-d_t=24*h_t
+d_t=24.*h_t
 Y=31556925.98*s
 # Mass
 kg=1.
@@ -112,7 +112,7 @@ class SimpleOrbit(Orbit):
   def get_location(self,t):
     #print (self.offset)
     theta=self.offset+t*2*math.pi/self.period
-    return geom3.Point3(self.sma*math.cos(theta),0,self.sma*math.sin(theta))
+    return geom3.Point3(self.sma*math.cos(theta),self.sma*math.sin(theta),0)
 
 class SpaceObject:
   def __init__(self,name):
@@ -139,7 +139,8 @@ class Satellite(SpaceObject):
     
   def get_location(self,t):
     ploc=geom3.Vector3(self.planet.get_location(t))
-    mloc=geom3.Vector3(self.orbit.get_location(t))
+    mloc=geom3.Vector3(self. orbit.get_location(t))
+    #print (str(geom3.Point3(mloc+ploc)))
     #print (mloc)
     return (geom3.Point3(mloc+ploc))
   

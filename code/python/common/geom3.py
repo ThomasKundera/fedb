@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
-# https://github.com/phire/Python-Ray-tracer/
+# https://github.com/phire/Python-Ray-tracer/ Scott Mansell
 
 """Geometry module for use with COSC363, 2009.
    Defines Vector3, Point3, Line3, and Ray3 classes for

@@ -4,7 +4,7 @@ import sys,time
 from optparse import OptionParser
 
 import PyQt4
-from PyQt4.QtCore import QUrl
+from PyQt4.QtCore import QUrl, QTimer
 from PyQt4.QtGui import QApplication
 #from PyQt4.QtWidgets import QApplication
 from PyQt4.QtWebKit import QWebPage
@@ -23,7 +23,13 @@ class Render(QWebPage):
     #authheader = "Basic %s" % base64string
     
     QWebPage.__init__(self)  
-    self.loadFinished.connect(self._loadFinished)  
+    self.loadFinished.connect(self._loadFinished)
+
+    # doesnt work as expected
+    self.timeout_timer = QTimer()
+    self.timeout_timer.timeout.connect(self._request_timed_out)
+    self.timeout_timer.start(3 * 1000)
+    #print ('Init timer')
     self.mainFrame().load(self.url)  
     self.app.exec_()  
     time.sleep(5)
@@ -32,11 +38,19 @@ class Render(QWebPage):
     f = open( self.fname, 'wt' )
     f.write( self.mainFrame().toHtml() )
     f.close()
-    self.app.quit()  
+    print("... Done.")
+    self.app.quit()
 
+  def _request_timed_out(self):
+    print('Custom request timeout value exceeded.')
+    self.timeout_timer.stop()
+    self.loadFinished.emit(False)
+    self.app.quit()
+    sys.exit(0)
 
 def main():
     options = get_cmd_options()
+    print ("Start downloading...")
     Render(options.url,options.file)
     
 

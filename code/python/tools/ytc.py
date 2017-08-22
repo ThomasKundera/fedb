@@ -49,11 +49,11 @@ class DomObject:
 
   def h2f(self):
     self.hfnok=True
-    if (os.path.exists(self.hfn)): return
+    #if (os.path.exists(self.hfn)): return
     # dirty
     self.hfnok=False
     from subprocess import call
-    call(["timeout","5","./render.py",'--url',self.url.toString(),'--file',self.hfn])
+    call(["timeout","3","./render.py",'--url',self.url.toString(),'--file',self.hfn])
     if (not os.path.exists(self.hfn)):
       print ("Failed to download: "+str(self.url))
       return

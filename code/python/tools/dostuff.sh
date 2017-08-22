@@ -1,7 +1,5 @@
 #!/bin/bash
 
 cd tmpdata
-grep '<a' Historique\ -\ YouTube.html | grep 'www.youtube.com/watch' | sed -e 's#><#>@<#g' \
-| tr '@' '\n' | grep 'www.youtube.com/watch' | grep 'yt-uix-sessionlink' | tr ' ' '\n' \
-| grep 'www.youtube.com/watch' | grep ';elc=1' | cut -d'"' -f2 > urlist.txt
+grep 'A répondu' Historique\ -\ YouTube.html | sed -e 's#><#>@<#g' | tr '@' '\n' | grep 'A répondu' | cut -d'"' -f2  > urlist.txt 
 

@@ -157,6 +157,7 @@ class Database:
       of.flush()
       item.views=views
     of.write("</ul>\n")
+    of.write("<p>END of DATA\n")
     of.write("</body><html>\n")
     of.close()
     

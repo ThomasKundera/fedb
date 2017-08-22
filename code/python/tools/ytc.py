@@ -25,16 +25,18 @@ class DomObject:
     self.url=url
 
   def buildRoot(self):
-    ufn=self.url.toString()
-    ufn=ufn.remove(0,8)
-    ufn=u2f(ufn)
+    hfn=self.url.toString()
+    hfn=hfn.remove(0,8)
+    hfn=u2f(hfn)
     # str() needed for python < 3
-    self.hfn=os.path.join(kDATA_PATH,'html',str(ufn))
+    self.hfn=os.path.join(kDATA_PATH,'html',str(hfn))
     self.h2f()
+    if (not self.hfnok): return
     tree=html.parse(self.hfn)
     self.root = tree.getroot()
   
   def getViews(self):
+    if (not self.hfnok): return 0
     # <span class="load-more-text"> View all 7 replies </span>
     lmtc=self.root.find_class("load-more-text")
     views=0
@@ -46,11 +48,16 @@ class DomObject:
     return views
 
   def h2f(self):
+    self.hfnok=True
     if (os.path.exists(self.hfn)): return
     # dirty
+    self.hfnok=False
     from subprocess import call
-    call(["./render.py",'--url',self.url.toString(),'--file',self.hfn])
-    
+    call(["timeout","5","./render.py",'--url',self.url.toString(),'--file',self.hfn])
+    if (not os.path.exists(self.hfn)):
+      print ("Failed to download: "+str(self.url))
+      return
+    self.hfnok=True
 
 
 class UrlList:
@@ -81,11 +88,11 @@ class DbItem:
     if (self.views==None):
       bgcolor='#999999'
     elif (self.views==views):
-      bgcolor='#FFFFFF'
+      bgcolor='#AAFFAA'
     else:
       bgcolor='#FF0000'
     
-    return('<li style="background-color:'+bgcolor+';"><a href='+self.url+'</a> ['+str(views)+' / '+str(self.views)+' ] '+self.url+'</li>\n')
+    return('<li style="background-color:'+bgcolor+';"><a href="'+str(QUrl(self.url).toEncoded())+'"</a> ['+str(views)+' / '+str(self.views)+' ] '+self.url+'</li>\n')
     
 
 class Database:
@@ -135,7 +142,13 @@ def main():
   
   db=Database()
   db.loadNew()
-  db.refresh()
+  try:
+    db.refresh()
+  except KeyboardInterrupt:
+    print ("Saving DB...")
+    db.close()
+    print ("...Done.")
+    raise
   db.close()
   
   

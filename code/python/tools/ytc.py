@@ -1,15 +1,25 @@
-#!/usr/bin/env python
+#!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
 import sys,os, time
 import pickle
 
-#import PyQt5
-#from PyQt5.QtCore import QUrl 
-#from PyQt5.QtWidgets import QApplication
-#from PyQt5.QtWebKitWidgets import QWebPage
-#from lxml import html
-from PyQt4.QtCore import QUrl
+try:
+    __import__('PyQt5')
+    kuse_pyqt5 = True
+except ImportError:
+    kuse_pyqt5 = False
+    
+if kuse_pyqt5:
+    from PyQt5.QtCore import QUrl, QTimer
+    from PyQt5.QtWidgets import QApplication
+    from PyQt5.QtWebKitWidgets import QWebPage
+else:
+    import PyQt4
+    from PyQt4.QtCore import QUrl, QTimer
+    from PyQt4.QtGui import QApplication
+
+
 from lxml import html
 
 #import render
@@ -26,7 +36,10 @@ class DomObject:
 
   def buildRoot(self):
     hfn=self.url.toString()
-    hfn=hfn.remove(0,8)
+    if kuse_pyqt5:
+      hfn=hfn[8:-1]
+    else:
+      hfn=ufn.remove(0,8)
     hfn=u2f(hfn)
     # str() needed for python < 3
     self.hfn=os.path.join(kDATA_PATH,'html',str(hfn))
@@ -76,7 +89,11 @@ class UrlList:
       #print line
       url=QUrl(line.strip())
       ufn=url.toString()
-      ufn=ufn.remove(0,8)
+      if kuse_pyqt5:
+        ufn=ufn[8:-1]
+      else:
+        ufn=ufn.remove(0,8)
+      
       ufn=u2f(ufn)
       if (ufn in self.urlh):
         print ("WARNING: duplicates: "+url)

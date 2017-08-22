@@ -1,13 +1,23 @@
-#!/usr/bin/env python
+#!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 import sys,time
 from optparse import OptionParser
 
-import PyQt4
-from PyQt4.QtCore import QUrl, QTimer
-from PyQt4.QtGui import QApplication
-#from PyQt4.QtWidgets import QApplication
-from PyQt4.QtWebKit import QWebPage
+try:
+    __import__('PyQt5')
+    use_pyqt5 = True
+except ImportError:
+    use_pyqt5 = False
+
+if use_pyqt5:
+  from PyQt5.QtCore import QUrl , QTimer
+  from PyQt5.QtWidgets import QApplication
+  from PyQt5.QtWebKitWidgets import QWebPage
+else:
+  import PyQt4
+  from PyQt4.QtCore import QUrl, QTimer
+  from PyQt4.QtGui import QApplication
+  from PyQt4.QtWebKit import QWebPage
 
 # From: https://impythonist.wordpress.com/2015/01/06/ultimate-guide-for-scraping-javascript-rendered-web-pages/
 class Render(QWebPage):  
@@ -66,10 +76,10 @@ def get_cmd_options():
     (options,args) = parser.parse_args()
 
     if not options.url:
-        print 'You must specify an URL.',sys.argv[0],'--help for more details'
+        print ('You must specify an URL.',sys.argv[0],'--help for more details')
         exit(1)
     if not options.file:
-        print 'You must specify a destination file.',sys.argv[0],'--help for more details'
+        print ('You must specify a destination file.',sys.argv[0],'--help for more details')
         exit(1)
 
     return options

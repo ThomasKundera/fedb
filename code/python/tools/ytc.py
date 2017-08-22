@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
-import sys,os
+import sys,os, time
 import pickle
 
 #import PyQt5
@@ -9,12 +9,10 @@ import pickle
 #from PyQt5.QtWidgets import QApplication
 #from PyQt5.QtWebKitWidgets import QWebPage
 #from lxml import html
-import PyQt4
 from PyQt4.QtCore import QUrl
-from PyQt4.QtGui import QApplication
-#from PyQt4.QtWidgets import QApplication
-from PyQt4.QtWebKit import QWebPage
 from lxml import html
+
+#import render
 
 kDATA_PATH="./tmpdata"
 
@@ -22,37 +20,11 @@ def u2f(u):
   return u.replace('/','_').replace('?','_').replace('=','_').replace(';','_').replace('&','_')
 
 
-# From: https://impythonist.wordpress.com/2015/01/06/ultimate-guide-for-scraping-javascript-rendered-web-pages/
-class Render(QWebPage):  
-  def __init__(self, url,fn):  
-    self.app = QApplication(sys.argv)
-    self.fname=fn
-    self.url=url
-    #url = QUrl(url)
-    #username = input('username')
-    #password = input('password')
-
-    #base64string = base64.encodestring('%s:%s' % (username, password))[:-1]
-    #authheader = "Basic %s" % base64string
-    
-    QWebPage.__init__(self)  
-    self.loadFinished.connect(self._loadFinished)  
-    self.mainFrame().load(self.url)  
-    self.app.exec_()  
-  
-  def _loadFinished(self, result):  
-    f = open( self.fname, 'wt' )
-    f.write( self.mainFrame().toHtml() )
-    f.close()
-    self.app.quit()  
-
-
 class DomObject:
   def __init__(self,url):
     self.url=url
 
-  def process(self):
-    print (self.url)
+  def buildRoot(self):
     ufn=self.url.toString()
     ufn=ufn.remove(0,8)
     ufn=u2f(ufn)
@@ -60,16 +32,24 @@ class DomObject:
     self.hfn=os.path.join(kDATA_PATH,'html',str(ufn))
     self.h2f()
     tree=html.parse(self.hfn)
-    root = tree.getroot()
+    self.root = tree.getroot()
+  
+  def getViews(self):
     # <span class="load-more-text"> View all 7 replies </span>
-    lmtc=root.find_class("load-more-text")
-    for l in lmtc:
-      print l.text
-    sys.exit(0)
+    lmtc=self.root.find_class("load-more-text")
+    views=0
+    try:
+      views=int(lmtc[0].text.strip().split(' ')[2])
+    except IndexError:
+      print ("View invalid (set as zero) "+str(self.url))
+
+    return views
 
   def h2f(self):
     if (os.path.exists(self.hfn)): return
-    r = Render(self.url,self.hfn)
+    # dirty
+    from subprocess import call
+    call(["./render.py",'--url',self.url.toString(),'--file',self.hfn])
     
 
 
@@ -82,40 +62,83 @@ class UrlList:
     for line in f.readlines():
       #print line
       url=QUrl(line.strip())
-      if (url in self.urlh):
+      ufn=url.toString()
+      ufn=ufn.remove(0,8)
+      ufn=u2f(ufn)
+      if (ufn in self.urlh):
         print ("WARNING: duplicates: "+url)
       else:
-        self.urlh[url]=url
-    
-  def process(self):
-    for url in self.urlh.values():
-      mdo=DomObject(url)
-      mdo.process()
+        self.urlh[ufn]=url
       
 
 class DbItem:
-  def __init__(self):
-    pass
+  def __init__(self,url):
+    # No way to pickle Qurl, sad.
+    self.url=url.toString()
+    self.views=None
 
+  def htmlWrite(self,views):
+    if (self.views==None):
+      bgcolor='#999999'
+    elif (self.views==views):
+      bgcolor='#FFFFFF'
+    else:
+      bgcolor='#FF0000'
+    
+    return('<li style="background-color:'+bgcolor+';"><a href='+self.url+'</a> ['+str(views)+' / '+str(self.views)+' ] '+self.url+'</li>\n')
+    
 
 class Database:
   def __init__(self):
-    self.dbfn=op.path.join(kDATA_PATH,"database.dat")
-    if (os.path.exists(os.path.join(self.dbfn))):
-      pickle.load(self.data,open(self.dbfn,'rb'))
+    self.data={}
+    self.dbfn=os.path.join(kDATA_PATH,"database.dat")
+    if (os.path.exists(os.path.join(self.dbfn))):      
+      self.data=pickle.load(open(self.dbfn,'rb'))
   
   def close(self):
     pickle.dump(self.data,open(self.dbfn,'wb'))
                   
-               
+  def loadNew(self):
+    urll=UrlList()
+    for ufn in urll.urlh.keys():
+      if (not (ufn in self.data)):
+        print ("New URL to watch: "+str(urll.urlh[ufn]))
+        self.data[ufn]=DbItem(urll.urlh[ufn])
+      else:
+        print ("Known data: "+str(self.data[ufn]))
+        
+  def refresh(self):
+    ofn=os.path.join(kDATA_PATH,"res.html")
+    of=open(ofn,"wt")
+    # maybe there's better option there
+    of.write("<html><head><title>YT comments</title></head><body>\n")
+    of.write("<ul>\n")
+    
+    for item in self.data.values():
+      url=QUrl(item.url) # All that because cant pickle Qurl
+      print (url)
+      mdo=DomObject(url)
+      mdo.buildRoot()
+      views=mdo.getViews()
+      of.write(item.htmlWrite(views))
+      of.flush()
+      item.views=views
+    of.write("</ul>\n")
+    of.write("</body><html>\n")
+    of.close()
+    
 
 
 def main():
   if (not os.path.exists(os.path.join(kDATA_PATH,'html'  ))):
     os.makedirs(os.path.join(kDATA_PATH,'html'  ))
   
-  urll=UrlList()
-  urll.process()
+  db=Database()
+  db.loadNew()
+  db.refresh()
+  db.close()
+  
+  
 
     
 # --------------------------------------------------------------------------

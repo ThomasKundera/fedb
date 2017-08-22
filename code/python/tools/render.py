@@ -13,6 +13,7 @@ if use_pyqt5:
   from PyQt5.QtCore import QUrl , QTimer
   from PyQt5.QtWidgets import QApplication
   from PyQt5.QtWebKitWidgets import QWebPage
+  from PyQt5.QtWebKit import QWebSettings
 else:
   import PyQt4
   from PyQt4.QtCore import QUrl, QTimer
@@ -33,6 +34,8 @@ class Render(QWebPage):
     #authheader = "Basic %s" % base64string
     
     QWebPage.__init__(self)  
+    self.settings().setAttribute(QWebSettings.AutoLoadImages,False)
+    self.settings().setAttribute(QWebSettings.PluginsEnabled,False)
     self.loadFinished.connect(self._loadFinished)
 
     # doesnt work as expected

@@ -49,7 +49,8 @@ class DomObject:
     self.root = tree.getroot()
   
   def getViews(self):
-    if (not self.hfnok): return 0
+    if (not self.hfnok ): return 0
+    if (self.root==None): return 0
     # <span class="load-more-text"> View all 7 replies </span>
     ctrl=self.root.find_class("comment-thread-renderer")
     #comment-renderer-content
@@ -114,8 +115,10 @@ class DbItem:
       bgcolor='#AAFFAA'
     else:
       bgcolor='#FF0000'
-    
-    return('<li style="background-color:'+bgcolor+';"><a href="'+str(QUrl(self.url).toEncoded())+'"</a> ['+str(views)+' / '+str(self.views)+' ] '+self.url+'</li>\n')
+    if kuse_pyqt5:
+      return('<li style="background-color:'+bgcolor+';"><a href="'+self.url+'"</a> ['+str(views)+' / '+str(self.views)+' ] '+self.url+'</li>\n')
+    else:
+      return('<li style="background-color:'+bgcolor+';"><a href="'+str(QUrl(self.url).toEncoded())+'"</a> ['+str(views)+' / '+str(self.views)+' ] '+self.url+'</li>\n')
     
 
 class Database:

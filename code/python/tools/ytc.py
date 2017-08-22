@@ -38,15 +38,21 @@ class DomObject:
   def getViews(self):
     if (not self.hfnok): return 0
     # <span class="load-more-text"> View all 7 replies </span>
-    lmtc=self.root.find_class("load-more-text")
-    views=0
+    ctrl=self.root.find_class("comment-thread-renderer")
+    #comment-renderer-content
+    if (len(ctrl)==0):
+      print ("ctrl invalid (set as zero) "+str(self.url))
+      return 0
+    lmtc=ctrl[0].find_class("load-more-text")
+    if (len(lmtc)==0):
+      crcl=ctrl[0].find_class("comment-thread-renderer")
+      return len(crcl)-1
     try:
-      views=int(lmtc[0].text.strip().split(' ')[2])
+      return int(lmtc[0].text.strip().split(' ')[2])
     except IndexError:
       print ("View invalid (set as zero) "+str(self.url))
-
-    return views
-
+      return 0
+    
   def h2f(self):
     self.hfnok=True
     #if (os.path.exists(self.hfn)): return

@@ -46,7 +46,7 @@ class DomObject:
     lmtc=ctrl[0].find_class("load-more-text")
     if (len(lmtc)==0):
       crcl=ctrl[0].find_class("comment-thread-renderer")
-      return len(crcl)-1
+      return len(crcl)
     try:
       return int(lmtc[0].text.strip().split(' ')[2])
     except IndexError:

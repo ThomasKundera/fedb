@@ -51,6 +51,8 @@ class DomObject:
   def getViews(self):
     if (not self.hfnok ): return 0
     if (self.root==None): return 0
+    #print (title.text)
+    #sys.exit(0)
     # <span class="load-more-text"> View all 7 replies </span>
     ctrl=self.root.find_class("comment-thread-renderer")
     #comment-renderer-content
@@ -76,14 +78,22 @@ class DomObject:
       #print (np+1)
       return (np+1)
     return 0
-    
+  
+  def getTitle(self):
+    if (not self.hfnok ): return "None1"
+    if (self.root==None): return "None2"
+    head=self.root.find("head")
+    title=head.find("title")
+    if (title ==None): return "None3"
+    return title.text.encode('utf-8').strip()
+  
   def h2f(self):
     self.hfnok=True
-    if (os.path.exists(self.hfn)): return
+    #if (os.path.exists(self.hfn)): return
     # dirty
     self.hfnok=False
     from subprocess import call
-    call(["timeout","3","./render.py",'--url',self.url.toString(),'--file',self.hfn])
+    call(["timeout","4","./render.py",'--url',self.url.toString(),'--file',self.hfn])
     if (not os.path.exists(self.hfn)):
       print ("Failed to download: "+str(self.url))
       return
@@ -118,7 +128,7 @@ class DbItem:
     self.url=url.toString()
     self.views=None
 
-  def htmlWrite(self,views):
+  def htmlWrite(self,views,title):
     if (self.views==None):
       bgcolor='#999999'
     elif (self.views==views):
@@ -126,9 +136,9 @@ class DbItem:
     else:
       bgcolor='#FF0000'
     if kuse_pyqt5:
-      return('<li style="background-color:'+bgcolor+';"><a href="'+self.url+'"/a> ['+str(views)+' / '+str(self.views)+' ] '+self.url+'</li>\n')
+      return('<li style="background-color:'+bgcolor+';"><a href="'+self.url+'"/a> ['+str(views)+' / '+str(self.views)+' ] '+title+'</li>\n')
     else:
-      return('<li style="background-color:'+bgcolor+';"><a href="'+str(QUrl(self.url).toEncoded())+'"/a> ['+str(views)+' / '+str(self.views)+' ] '+self.url+'</li>\n')
+      return('<li style="background-color:'+bgcolor+';"><a href="'+str(QUrl(self.url).toEncoded())+'"/a> ['+str(views)+' / '+str(self.views)+' ] '+title+'</li>\n')
     
 
 class Database:
@@ -155,7 +165,7 @@ class Database:
     ofn=os.path.join(kDATA_PATH,"res.html")
     of=open(ofn,"wt")
     # maybe there's better option there
-    of.write("<html><head><title>YT comments</title></head><body>\n")
+    of.write('<html><head><title>YT comments</title><meta charset="UTF-8"></head><body>\n')
     of.write("<ul>\n")
     
     for item in self.data.values():
@@ -167,7 +177,8 @@ class Database:
         mdo=DomObject(url)
         mdo.buildRoot()
         views=mdo.getViews()
-        of.write(item.htmlWrite(views))
+        title=mdo.getTitle()
+        of.write(item.htmlWrite(views,title))
         of.flush()
         item.views=views
     of.write("</ul>\n")

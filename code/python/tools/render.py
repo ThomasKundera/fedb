@@ -1,4 +1,4 @@
-#!/usr/bin/env python3
+#!/usr/bin/env python
 # -*- coding: utf-8 -*-
 import sys,time
 from optparse import OptionParser
@@ -18,7 +18,7 @@ else:
   import PyQt4
   from PyQt4.QtCore import QUrl, QTimer
   from PyQt4.QtGui import QApplication
-  from PyQt4.QtWebKit import QWebPage
+  from PyQt4.QtWebKit import QWebPage, QWebSettings
 
 # From: https://impythonist.wordpress.com/2015/01/06/ultimate-guide-for-scraping-javascript-rendered-web-pages/
 class Render(QWebPage):  

@@ -1,4 +1,4 @@
-#!/usr/bin/env python3
+#!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
 import sys,os, time
@@ -39,7 +39,7 @@ class DomObject:
     if kuse_pyqt5:
       hfn=hfn[8:-1]
     else:
-      hfn=ufn.remove(0,8)
+      hfn=hfn.remove(0,8)
     hfn=u2f(hfn)
     # str() needed for python < 3
     self.hfn=os.path.join(kDATA_PATH,'html',str(hfn))
@@ -55,21 +55,31 @@ class DomObject:
     ctrl=self.root.find_class("comment-thread-renderer")
     #comment-renderer-content
     if (len(ctrl)==0):
-      print ("ctrl invalid (set as zero) "+str(self.url))
+      #print ("ctrl invalid (set as zero) "+str(self.url))
       return 0
     lmtc=ctrl[0].find_class("load-more-text")
+    crcl=ctrl[0].find_class("comment-renderer-content")
+    np=len(crcl)-1
     if (len(lmtc)==0):
-      crcl=ctrl[0].find_class("comment-thread-renderer")
-      return len(crcl)
-    try:
+      #print ("toto1")
+      #print (np)
+      return np
+    #print (np)
+    if (len(lmtc[0].text.strip().split(' '))>3):
+      #print("toto3")
+      #print (int(lmtc[0].text.strip().split(' ')[2]))
       return int(lmtc[0].text.strip().split(' ')[2])
-    except IndexError:
-      print ("View invalid (set as zero) "+str(self.url))
-      return 0
+      #+np
+    print lmtc[0].text.strip().split(' ')
+    if (len(lmtc[0].text.strip().split(' '))==2):
+      #print ("toto2")
+      #print (np+1)
+      return (np+1)
+    return 0
     
   def h2f(self):
     self.hfnok=True
-    #if (os.path.exists(self.hfn)): return
+    if (os.path.exists(self.hfn)): return
     # dirty
     self.hfnok=False
     from subprocess import call
@@ -116,9 +126,9 @@ class DbItem:
     else:
       bgcolor='#FF0000'
     if kuse_pyqt5:
-      return('<li style="background-color:'+bgcolor+';"><a href="'+self.url+'"</a> ['+str(views)+' / '+str(self.views)+' ] '+self.url+'</li>\n')
+      return('<li style="background-color:'+bgcolor+';"><a href="'+self.url+'"/a> ['+str(views)+' / '+str(self.views)+' ] '+self.url+'</li>\n')
     else:
-      return('<li style="background-color:'+bgcolor+';"><a href="'+str(QUrl(self.url).toEncoded())+'"</a> ['+str(views)+' / '+str(self.views)+' ] '+self.url+'</li>\n')
+      return('<li style="background-color:'+bgcolor+';"><a href="'+str(QUrl(self.url).toEncoded())+'"/a> ['+str(views)+' / '+str(self.views)+' ] '+self.url+'</li>\n')
     
 
 class Database:
@@ -138,7 +148,8 @@ class Database:
         print ("New URL to watch: "+str(urll.urlh[ufn]))
         self.data[ufn]=DbItem(urll.urlh[ufn])
       else:
-        print ("Known data: "+str(self.data[ufn]))
+        pass
+        #print ("Known data: "+str(self.data[ufn]))
         
   def refresh(self):
     ofn=os.path.join(kDATA_PATH,"res.html")
@@ -148,14 +159,17 @@ class Database:
     of.write("<ul>\n")
     
     for item in self.data.values():
-      url=QUrl(item.url) # All that because cant pickle Qurl
-      print (url)
-      mdo=DomObject(url)
-      mdo.buildRoot()
-      views=mdo.getViews()
-      of.write(item.htmlWrite(views))
-      of.flush()
-      item.views=views
+      if (False): #("z12bjzxh3z35t3bod04cjt0j3vf3x1srwkk0k" not in item.url) and ("z235j1f54qyzgvqqt04t1aokgvzcwaai1mhnoxqv1axsbk0h00410" not in item.url)):
+        pass
+      else:
+        url=QUrl(item.url) # All that because cant pickle Qurl
+        print (url)
+        mdo=DomObject(url)
+        mdo.buildRoot()
+        views=mdo.getViews()
+        of.write(item.htmlWrite(views))
+        of.flush()
+        item.views=views
     of.write("</ul>\n")
     of.write("<p>END of DATA\n")
     of.write("</body><html>\n")

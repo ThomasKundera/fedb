@@ -3,6 +3,7 @@
 
 import sys,os, time
 import pickle
+import argparse
 
 try:
     __import__('PyQt5')
@@ -26,12 +27,18 @@ from lxml import html
 
 kDATA_PATH="./tmpdata"
 
+def debug_print(l,t,s):
+  if(l>=t):
+    print (s)
+
+
 def u2f(u):
   return u.replace('/','_').replace('?','_').replace('=','_').replace(';','_').replace('&','_')
 
 
 class DomObject:
-  def __init__(self,url):
+  def __init__(self,args,url):
+    self.args=args # FIXME: shoud be some global singleton or something
     self.url=url
 
   def buildRoot(self):
@@ -57,25 +64,20 @@ class DomObject:
     ctrl=self.root.find_class("comment-thread-renderer")
     #comment-renderer-content
     if (len(ctrl)==0):
-      #print ("ctrl invalid (set as zero) "+str(self.url))
+      debug_print(self.args.debug_level,100,"ctrl invalid (set as zero) "+str(self.url))
       return 0
     lmtc=ctrl[0].find_class("load-more-text")
     crcl=ctrl[0].find_class("comment-renderer-content")
     np=len(crcl)-1
+    debug_print(self.args.debug_level,100,"np = "+str(np))
     if (len(lmtc)==0):
-      #print ("toto1")
-      #print (np)
-      return np
-    #print (np)
+      debug_print(self.args.debug_level,100,"lmtc len() is zero. Assuming failed download. Returning -1"+str(np))
+      return (-1)
     if (len(lmtc[0].text.strip().split(' '))>3):
-      #print("toto3")
-      #print (int(lmtc[0].text.strip().split(' ')[2]))
+      debug_print(self.args.debug_level,100,"lmtc len() > 3 . Returning "+str(int(lmtc[0].text.strip().split(' ')[2])))
       return int(lmtc[0].text.strip().split(' ')[2])
-      #+np
-    #print (lmtc[0].text.strip().split(' '))
     if (len(lmtc[0].text.strip().split(' '))==2):
-      #print ("toto2")
-      #print (np+1)
+      debug_print(self.args.debug_level,100,"lmtc len() == 2 . Returning "+str(np+1))
       return (np+1)
     return 0
   
@@ -87,16 +89,19 @@ class DomObject:
     if (title ==None): return "None3"
     return title.text.encode('utf-8').strip()
   
-  def h2f(self):
+  def h2f(self,retry=0):
+    if (retry>3):
+      print ("Wont retry again: download failed")
+      return
     self.hfnok=True
-    #if (os.path.exists(self.hfn)): return
+    if ((not self.args.dont_be_lazy) and (os.path.exists(self.hfn))): return
     # dirty
     self.hfnok=False
     from subprocess import call
     call(["timeout","4","./render.py",'--url',self.url.toString(),'--file',self.hfn])
     if (not os.path.exists(self.hfn)):
       print ("Failed to download: "+str(self.url))
-      return
+      return self.h2f(retry+1)
     self.hfnok=True
 
 
@@ -142,14 +147,18 @@ class DbItem:
     
 
 class Database:
-  def __init__(self):
+  def __init__(self,args):
+    self.args=args
     self.data={}
     self.dbfn=os.path.join(kDATA_PATH,"database.dat")
     if (os.path.exists(os.path.join(self.dbfn))):      
       self.data=pickle.load(open(self.dbfn,'rb'))
   
   def close(self):
-    pickle.dump(self.data,open(self.dbfn,'wb'))
+    if (self.args.update_database):
+      pickle.dump(self.data,open(self.dbfn,'wb'))
+    else:
+      print("Skipping database update")
                   
   def loadNew(self):
     urll=UrlList()
@@ -169,14 +178,17 @@ class Database:
     of.write("<ol>\n")
     nb=0
     for item in self.data.values():
-      if (False): #("z12bjzxh3z35t3bod04cjt0j3vf3x1srwkk0k" not in item.url) and ("z235j1f54qyzgvqqt04t1aokgvzcwaai1mhnoxqv1axsbk0h00410" not in item.url)):
+      if ((self.args.only_for_url != None) and ((self.args.only_for_url not in item.url))):
         pass
       else:
         url=QUrl(item.url) # All that because cant pickle Qurl
         print (url)
-        mdo=DomObject(url)
+        mdo=DomObject(self.args,url)
         mdo.buildRoot()
         views=mdo.getViews()
+        # Failure is flagged as -1
+        if (views == -1):
+          views=item.views # faking everything is OK 
         title=mdo.getTitle()
         of.write(item.htmlWrite(views,title))
         of.flush()
@@ -187,12 +199,26 @@ class Database:
     of.close()
     
 
+def get_cmd_options():
+    """
+        gets and validates the input from the command line
+    """
+    usage = "usage: %prog [options] args"
+    
+    parser = argparse.ArgumentParser()
+    parser.add_argument("--debug-level"    ,                      help="Update database")
+    parser.add_argument("--update-database", action='store_true', help="Update database")
+    parser.add_argument("--dont-be-lazy"   , action='store_true', help="Dont reuse already downloaded html files even if existing")
+    parser.add_argument("--only-for-url"   ,                      help="Dont reuse already downloaded html files even if existing")
+    args = parser.parse_args()
+
+    return args
 
 def main():
   if (not os.path.exists(os.path.join(kDATA_PATH,'html'  ))):
     os.makedirs(os.path.join(kDATA_PATH,'html'  ))
-  
-  db=Database()
+  args=get_cmd_options()
+  db=Database(args)
   db.loadNew()
   try:
     db.refresh()

@@ -162,13 +162,18 @@ class Database:
                   
   def loadNew(self):
     urll=UrlList()
+    nb=0
+    nbn=0
     for ufn in urll.urlh.keys():
+      nb+=1
       if (not (ufn in self.data)):
+        nbn+=1
         print ("New URL to watch: "+str(urll.urlh[ufn]))
         self.data[ufn]=DbItem(urll.urlh[ufn])
       else:
         pass
         #print ("Known data: "+str(self.data[ufn]))
+    print (str(nb)+" entries read, "+str(nbn)+" new.")
         
   def refresh(self):
     ofn=os.path.join(kDATA_PATH,"res.html")
@@ -177,12 +182,14 @@ class Database:
     of.write('<html><head><title>YT comments</title><meta charset="UTF-8"></head><body>\n')
     of.write("<ol>\n")
     nb=0
+    ntot=len(self.data.values())
     for item in self.data.values():
+      nb+=1
       if ((self.args.only_for_url != None) and ((self.args.only_for_url not in item.url))):
         pass
       else:
         url=QUrl(item.url) # All that because cant pickle Qurl
-        print (url)
+        print ("Item "+str(nb)+"/"+str(ntot)+" - "+url)
         mdo=DomObject(self.args,url)
         mdo.buildRoot()
         views=mdo.getViews()

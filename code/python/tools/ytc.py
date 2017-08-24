@@ -193,6 +193,7 @@ class Database:
         of.write(item.htmlWrite(views,title))
         of.flush()
         item.views=views
+        #sys.exit(0)
     of.write("</ol>\n")
     of.write("<p>END of DATA\n")
     of.write("</body><html>\n")

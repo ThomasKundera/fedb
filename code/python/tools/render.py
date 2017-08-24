@@ -1,4 +1,4 @@
-#!/usr/bin/env python3
+#!/usr/bin/env python
 # -*- coding: utf-8 -*-
 import sys,time
 from optparse import OptionParser
@@ -45,9 +45,14 @@ class Render(QWebPage):
     #print ('Init timer')
     self.mainFrame().load(self.url)  
     self.app.exec_()  
-    time.sleep(5)
+    time.sleep(2)
   
-  def _loadFinished(self, result):  
+  def _loadFinished(self, result):
+    #print ("_loadFinished") #comment-replies-renderer-expander-down
+    #button = self.mainFrame().findFirstElement('button[class~=comment-replies-renderer-expander-down]')#'button[class="yt-uix-expander-head"]')
+    #print (button.toPlainText().toUtf8()) # .encode('utf-8'))
+    #res=button.evaluateJavaScript("self.click()")
+    #print (res.typeName())
     f = open( self.fname, 'wt' )
     f.write( self.mainFrame().toHtml() )
     f.close()

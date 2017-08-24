@@ -1,4 +1,4 @@
-#!/usr/bin/env python3
+#!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
 import sys,os, time
@@ -166,8 +166,8 @@ class Database:
     of=open(ofn,"wt")
     # maybe there's better option there
     of.write('<html><head><title>YT comments</title><meta charset="UTF-8"></head><body>\n')
-    of.write("<ul>\n")
-    
+    of.write("<ol>\n")
+    nb=0
     for item in self.data.values():
       if (False): #("z12bjzxh3z35t3bod04cjt0j3vf3x1srwkk0k" not in item.url) and ("z235j1f54qyzgvqqt04t1aokgvzcwaai1mhnoxqv1axsbk0h00410" not in item.url)):
         pass
@@ -181,7 +181,7 @@ class Database:
         of.write(item.htmlWrite(views,title))
         of.flush()
         item.views=views
-    of.write("</ul>\n")
+    of.write("</ol>\n")
     of.write("<p>END of DATA\n")
     of.write("</body><html>\n")
     of.close()

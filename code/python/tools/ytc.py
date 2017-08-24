@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+#!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
 import sys,os, time
@@ -72,7 +72,7 @@ class DomObject:
       #print (int(lmtc[0].text.strip().split(' ')[2]))
       return int(lmtc[0].text.strip().split(' ')[2])
       #+np
-    print lmtc[0].text.strip().split(' ')
+    #print (lmtc[0].text.strip().split(' '))
     if (len(lmtc[0].text.strip().split(' '))==2):
       #print ("toto2")
       #print (np+1)
@@ -136,7 +136,7 @@ class DbItem:
     else:
       bgcolor='#FF0000'
     if kuse_pyqt5:
-      return('<li style="background-color:'+bgcolor+';"><a href="'+self.url+'"/a> ['+str(views)+' / '+str(self.views)+' ] '+title+'</li>\n')
+      return('<li style="background-color:'+bgcolor+';"><a href="'+self.url+'"/a> ['+str(views)+' / '+str(self.views)+' ] '+str(title)+'</li>\n')
     else:
       return('<li style="background-color:'+bgcolor+';"><a href="'+str(QUrl(self.url).toEncoded())+'"/a> ['+str(views)+' / '+str(self.views)+' ] '+title+'</li>\n')
     

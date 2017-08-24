@@ -1,9 +1,14 @@
 #!/bin/bash
 
-FRAG=z235j1f54qyzgvqqt04t1aokgvzcwaai1mhnoxqv1axsbk0h00410""
+FRAG=$1
 
 FN=`ls tmpdata/html/*${FRAG}* | cut -d '/' -f3`
 echo $FN
+echo tmpdata/html/$FN
+echo tmpdata/html-old2/$FN
+echo file://`pwd`/tmpdata/html/$FN
+echo file://`pwd`/tmpdata/html-old2/$FN
+
 exit 0
 
 cd tmpdata/html

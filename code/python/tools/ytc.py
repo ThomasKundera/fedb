@@ -189,7 +189,7 @@ class Database:
         pass
       else:
         url=QUrl(item.url) # All that because cant pickle Qurl
-        print ("Item "+str(nb)+"/"+str(ntot)+" - "+url)
+        print ("Item "+str(nb)+"/"+str(ntot)+" - "+str(url))
         mdo=DomObject(self.args,url)
         mdo.buildRoot()
         views=mdo.getViews()

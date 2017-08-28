@@ -214,10 +214,10 @@ def get_cmd_options():
     usage = "usage: %prog [options] args"
     
     parser = argparse.ArgumentParser()
-    parser.add_argument("--debug-level"    , default=0          , help="Update database")
+    parser.add_argument("--debug-level"    , default=0          , help="Debug level")
     parser.add_argument("--update-database", action='store_true', help="Update database")
     parser.add_argument("--dont-be-lazy"   , action='store_true', help="Dont reuse already downloaded html files even if existing")
-    parser.add_argument("--only-for-url"   ,                      help="Dont reuse already downloaded html files even if existing")
+    parser.add_argument("--only-for-url"   ,                      help="Only url's matching this substring will be proccessed")
     args = parser.parse_args()
 
     return args

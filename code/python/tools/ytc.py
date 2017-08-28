@@ -1,4 +1,4 @@
-#!/usr/bin/env python3
+#!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
 import sys,os, time
@@ -134,16 +134,23 @@ class DbItem:
     self.views=None
 
   def htmlWrite(self,views,title):
-    if (self.views==None):
+    if (self.views==None and views==None):
       bgcolor='#999999'
     elif (self.views==views):
       bgcolor='#AAFFAA'
     else:
       bgcolor='#FF0000'
+    s ='<li style="background-color:'+bgcolor+';">'
+    s+='<input type="checkbox">'
+    s+='<a href="'
     if kuse_pyqt5:
-      return('<li style="background-color:'+bgcolor+';"><a href="'+self.url+'"/a> ['+str(views)+' / '+str(self.views)+' ] '+str(title)+'</li>\n')
+      s+=self.url
     else:
-      return('<li style="background-color:'+bgcolor+';"><a href="'+str(QUrl(self.url).toEncoded())+'"/a> ['+str(views)+' / '+str(self.views)+' ] '+title+'</li>\n')
+      s+=str(QUrl(self.url).toEncoded())
+    s+='"/a> ['+str(views)+' / '+str(self.views)+' ] '
+    s+=str(title)+'</li>\n'
+    
+    return s
     
 
 class Database:
@@ -180,6 +187,7 @@ class Database:
     of=open(ofn,"wt")
     # maybe there's better option there
     of.write('<html><head><title>YT comments</title><meta charset="UTF-8"></head><body>\n')
+    of.write("<form>\n")
     of.write("<ol>\n")
     nb=0
     ntot=len(self.data.values())
@@ -202,7 +210,8 @@ class Database:
         item.views=views
         #sys.exit(0)
     of.write("</ol>\n")
-    of.write("<p>END of DATA\n")
+    of.write("</form>")
+    of.write("<p>END of DATA</p>\n")
     of.write("</body><html>\n")
     of.close()
     

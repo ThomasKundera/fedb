@@ -127,6 +127,16 @@ class UrlList:
         self.urlh[ufn]=url
       
 
+
+class View:
+  def __init__(self,n):
+    self.n=n
+    self.date=datetime.datetime.now()
+
+  def __str__(self):
+    return ('[ '+str(self.n)+' - '+str(self.date)+' ]')
+
+
 class DbItem:
   def __init__(self,url):
     # No way to pickle Qurl, sad.
@@ -151,49 +161,85 @@ class DbItem:
     s+=str(title)+'</li>\n'
     
     return s
-  
-  def __str__(self):
-    return str(self.url)
-    
-
-class View:
-  def __init__(self,n):
-    self.n=n
-    self.date=datetime.now()
-
-  def __str__(self):
-    return ('[ '+str(self.n)+' - '+str(self.date)+' ]')
 
 
-class DbItem2(DbItem):
+class DbItem2:
   def __init__(self,dbi):
     self.url=dbi.url
-    self.views=dbi.views
-    self.viewlist=[View(self.views)]
+    self.views=[View(dbi.views)]
+
+
+class DbItem3:
+  def __init__(self,url):
+    # Normal behavior
+    if (isinstance(url,QUrl)):
+      # No way to pickle Qurl, sad.
+      self.url=url.toString()
+      self.views=[]
+      return
+    # Database upgrade
+    #if (isinstance(url,DbItem)):
+    self.url=url.url
+    self.views=[View(url.views)]
+    #  return
+    #print ("Error: DbItem3: Unknown type: "+str(type(url)))
     
+  def addview(self,n):
+    v=View(n)
+    self.views.append(v)
+
+  def views2color(self):
+    if (len(self.views)<=1):
+      return '#999999'
+    if (self.views[-1].n in self.views[:-2].n):
+      return '#FF0000'
+    return '#AAFFAA'
+
+  def htmlWrite(self,title):
+    bgcolor=self.views2color()
+    if (len(self.views)>1):
+      previous=str(self.views[-2].n)
+    else:
+      previous=str(self.views[-1].n)
+    s ='<li style="background-color:'+bgcolor+';">'
+    s+='<input type="checkbox">'
+    s+='<a href="'
+    if kuse_pyqt5:
+      s+=self.url
+    else:
+      s+=str(QUrl(self.url).toEncoded())
+    s+='"/a> ['+str(self.views[-1].n)+' / '+previous+' ] '
+    s+=str(title)+'</li>\n'
+    
+    return s
+  
   def __str__(self):
     s=str(self.url)+" "
-    for v in self.viewlist:
+    for v in self.views:
       s+=str(v)+" "
-    return str(self.url)
+    return s
+    
+    
  
 
 class Database:
   def __init__(self,args):
     self.args=args
     self.data={}
-    self.dbfn=os.path.join(kDATA_PATH,"database.dat")
-    self.dbfn2=os.path.join(kDATA_PATH,"database2.dat")
+    dbi="database.dat"
+    self.dbfn=os.path.join(kDATA_PATH,dbi)
     if (os.path.exists(os.path.join(self.dbfn))):      
       self.data=pickle.load(open(self.dbfn,'rb'))
     
   
   def close(self):
     # Version update
-    self.data2={}
-    for (v,k) in self.data.items():
-      self.data2[k]=v
-    pickle.dump(self.data2,open(self.dbfn2,'wb'))
+    if (self.args.upgrade_database):
+      datanew={}
+      dbo=os.path.join(kDATA_PATH,"database-new.dat")
+      for (k,v) in self.data.items():
+        datanew[k]=DbItem3(v)
+      pickle.dump(datanew,open(dbo,'wb'))
     
     if (self.args.update_database):
       pickle.dump(self.data,open(self.dbfn,'wb'))
@@ -229,16 +275,20 @@ class Database:
       if ((self.args.only_for_url != None) and ((self.args.only_for_url not in item.url))):
         pass
       else:
+        print (item)
+        print (item.url)
         url=QUrl(item.url) # All that because cant pickle Qurl
         print ("Item "+str(nb)+"/"+str(ntot)+" - "+str(url))
         mdo=DomObject(self.args,url)
         mdo.buildRoot()
-        views=mdo.getViews()
-        # Failure is flagged as -1
+        views=mdo.getViews() # Failure is flagged as -1
         if (views == -1):
           views=item.views # faking everything is OK 
         title=mdo.getTitle()
         of.write(item.htmlWrite(views,title))
+        #item.addview(views)
+        #title=mdo.getTitle()
+        #of.write(item.htmlWrite(title))
         of.flush()
         item.views=views
         #sys.exit(0)
@@ -256,10 +306,11 @@ def get_cmd_options():
     usage = "usage: %prog [options] args"
     
     parser = argparse.ArgumentParser()
-    parser.add_argument("--debug-level"    , default=0          , help="Debug level")
-    parser.add_argument("--update-database", action='store_true', help="Update database")
-    parser.add_argument("--dont-be-lazy"   , action='store_true', help="Dont reuse already downloaded html files even if existing")
-    parser.add_argument("--only-for-url"   ,                      help="Only url's matching this substring will be proccessed")
+    parser.add_argument("--debug-level"     , default=0          , help="Debug level")
+    parser.add_argument("--update-database" , action='store_true', help="Update database")
+    parser.add_argument("--upgrade-database", action='store_true', help="Upgrade database")
+    parser.add_argument("--dont-be-lazy"    , action='store_true', help="Dont reuse already downloaded html files even if existing")
+    parser.add_argument("--only-for-url"    ,                      help="Only url's matching this substring will be proccessed")
     args = parser.parse_args()
 
     return args
@@ -269,6 +320,10 @@ def main():
     os.makedirs(os.path.join(kDATA_PATH,'html'  ))
   args=get_cmd_options()
   db=Database(args)
+  if (args.upgrade_database):
+    print ("Upgrading database!!!")
+    db.close()
+    return
   db.loadNew()
   try:
     db.refresh()

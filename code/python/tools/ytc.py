@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
-import sys,os, time
+import sys,os, datetime
 import pickle
 import argparse
 
@@ -151,17 +151,50 @@ class DbItem:
     s+=str(title)+'</li>\n'
     
     return s
+  
+  def __str__(self):
+    return str(self.url)
     
+
+class View:
+  def __init__(self,n):
+    self.n=n
+    self.date=datetime.now()
+
+  def __str__(self):
+    return ('[ '+str(self.n)+' - '+str(self.date)+' ]')
+
+
+class DbItem2(DbItem):
+  def __init__(self,dbi):
+    self.url=dbi.url
+    self.views=dbi.views
+    self.viewlist=[View(self.views)]
+    
+  def __str__(self):
+    s=str(self.url)+" "
+    for v in self.viewlist:
+      s+=str(v)+" "
+    return str(self.url)
+ 
 
 class Database:
   def __init__(self,args):
     self.args=args
     self.data={}
     self.dbfn=os.path.join(kDATA_PATH,"database.dat")
+    self.dbfn2=os.path.join(kDATA_PATH,"database2.dat")
     if (os.path.exists(os.path.join(self.dbfn))):      
       self.data=pickle.load(open(self.dbfn,'rb'))
+    
   
   def close(self):
+    # Version update
+    self.data2={}
+    for (v,k) in self.data.items():
+      self.data2[k]=v
+    pickle.dump(self.data2,open(self.dbfn2,'wb'))
+    
     if (self.args.update_database):
       pickle.dump(self.data,open(self.dbfn,'wb'))
     else:

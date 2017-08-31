@@ -136,6 +136,25 @@ class View:
   def __str__(self):
     return ('[ '+str(self.n)+' - '+str(self.date)+' ]')
 
+  def __lt__(self, other):
+      return (self.date < other.date)
+    
+  def __gt__(self, other):
+      return (self.date > other.date)
+
+  def __eq__(self, other):
+      return (self.date == other.date)
+
+  def __le__(self, other):
+      return (self.date <= other.date)
+
+  def __ge__(self, other):
+      return (self.date >= other.date)
+
+  def __ne__(self, other):
+      return (self.date != other.date)
+     
+
 class DbItem:
   def __init__(self,url):
     # No way to pickle Qurl, sad.
@@ -217,8 +236,8 @@ class DbItem3:
       s+=self.url
     else:
       s+=str(QUrl(self.url).toEncoded())
-    s+='"/a> ['+str(self.views[-1].n)+' / '+previous+' ] '
-    s+=str(title)+'</li>\n'
+    s+='"> ['+str(self.views[-1].n)+' / '+previous+' ] '
+    s+=str(title)+' </a></li>\n'
     
     return s
   
@@ -227,7 +246,70 @@ class DbItem3:
     for v in self.views:
       s+=str(v)+" "
     return s
+  
+  
+  def cmpempty(self,other):
+    if ((not len(self.views)) and  (not len(self.views))):
+      return (True,False)
+    if ((not len(self.views))):
+      return (True,True)
     
+        
+  
+  def __lt__(self, other):
+    if ((not len(self.views)) and (not len(self.views))):
+      return False
+    if ((not len(self.views))):
+      return True
+    if ((not len(other.views))):
+      return False
+    return (self.views[0] <  other.views[0])
+    
+  def __gt__(self, other):
+    if ((not len(self.views)) and (not len(self.views))):
+      return False
+    if ((not len(self.views))):
+      return False
+    if ((not len(other.views))):
+      return True
+    return (self.views[0] >  other.views[0])
+
+  def __eq__(self, other):
+    if ((not len(self.views)) and (not len(self.views))):
+      return True
+    if ((not len(self.views))):
+      return False
+    if ((not len(other.views))):
+      return False
+    return (self.views[0] == other.views[0])
+
+  def __le__(self, other):
+    if ((not len(self.views)) and (not len(self.views))):
+      return True
+    if ((not len(self.views))):
+      return True
+    if ((not len(other.views))):
+      return False
+    return (self.views[0] <= other.views[0])
+
+  def __ge__(self, other):
+    if ((not len(self.views)) and (not len(self.views))):
+      return True
+    if ((not len(self.views))):
+      return False
+    if ((not len(other.views))):
+      return True
+    return (self.views[0] >= other.views[0])
+
+  def __ne__(self, other):
+    if ((not len(self.views)) and (not len(self.views))):
+      return False
+    if ((not len(self.views))):
+      return True
+    if ((not len(other.views))):
+      return True
+    return (self.views[0] != other.views[0])
+
     
  
 
@@ -279,7 +361,9 @@ class Database:
     of.write("<ol>\n")
     nb=0
     ntot=len(self.data.values())
-    for item in self.data.values():
+    itlist=self.data.values()
+    itlist.sort()
+    for item in itlist:
       nb+=1
       if ((self.args.only_for_url != None) and ((self.args.only_for_url not in item.url))):
         pass

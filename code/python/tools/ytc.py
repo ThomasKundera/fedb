@@ -136,7 +136,6 @@ class View:
   def __str__(self):
     return ('[ '+str(self.n)+' - '+str(self.date)+' ]')
 
-
 class DbItem:
   def __init__(self,url):
     # No way to pickle Qurl, sad.
@@ -188,15 +187,25 @@ class DbItem3:
     v=View(n)
     self.views.append(v)
 
+  def isviewinview(self,v):
+    self.views[-1].n
+
   def views2color(self):
-    if (len(self.views)<=1):
+    vl=[] # dirty
+    for v in self.views:
+      vl.append(v.n)
+    
+    if (len(vl)<=1):
       return '#999999'
-    if (self.views[-1].n in self.views[:-2].n):
+    if (not (vl[-1] in vl[:-1])):
       return '#FF0000'
+    if (vl[-1] > vl[-2]):
+      return '#BBFFAA'
     return '#AAFFAA'
 
   def htmlWrite(self,title):
     bgcolor=self.views2color()
+    #print (bgcolor)
     if (len(self.views)>1):
       previous=str(self.views[-2].n)
     else:
@@ -255,7 +264,7 @@ class Database:
       if (not (ufn in self.data)):
         nbn+=1
         print ("New URL to watch: "+str(urll.urlh[ufn]))
-        self.data[ufn]=DbItem(urll.urlh[ufn])
+        self.data[ufn]=DbItem3(urll.urlh[ufn])
       else:
         pass
         #print ("Known data: "+str(self.data[ufn]))
@@ -275,25 +284,20 @@ class Database:
       if ((self.args.only_for_url != None) and ((self.args.only_for_url not in item.url))):
         pass
       else:
-        print (item)
-        print (item.url)
         url=QUrl(item.url) # All that because cant pickle Qurl
         print ("Item "+str(nb)+"/"+str(ntot)+" - "+str(url))
         mdo=DomObject(self.args,url)
         mdo.buildRoot()
         views=mdo.getViews() # Failure is flagged as -1
-        if (views == -1):
-          views=item.views # faking everything is OK 
         title=mdo.getTitle()
-        of.write(item.htmlWrite(views,title))
-        #item.addview(views)
-        #title=mdo.getTitle()
-        #of.write(item.htmlWrite(title))
+        item.addview(views)
+        of.write(item.htmlWrite(title))
         of.flush()
-        item.views=views
+        #item.views=views
         #sys.exit(0)
     of.write("</ol>\n")
     of.write("</form>")
+    of.write("<p>"+str(datetime.datetime.now())+"</p>\n")
     of.write("<p>END of DATA</p>\n")
     of.write("</body><html>\n")
     of.close()

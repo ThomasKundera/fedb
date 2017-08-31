@@ -41,7 +41,7 @@ class Render(QWebPage):
     # doesnt work as expected
     self.timeout_timer = QTimer()
     self.timeout_timer.timeout.connect(self._request_timed_out)
-    self.timeout_timer.start(3 * 1000)
+    self.timeout_timer.start(4 * 1000)
     #print ('Init timer')
     self.mainFrame().load(self.url)  
     self.app.exec_()  

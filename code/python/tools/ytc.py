@@ -107,11 +107,9 @@ class DomObject:
 
 
 class UrlList:
-  def __init__(self):
-    f=open('./tmpdata/urlist.txt','rt')
-    
+  def __init__(self,fn,black=False):
+    f=open(fn,'rt')
     self.urlh={}
-    
     for line in f.readlines():
       #print line
       url=QUrl(line.strip())
@@ -120,13 +118,24 @@ class UrlList:
         ufn=ufn[8:-1]
       else:
         ufn=ufn.remove(0,8)
-      
       ufn=u2f(ufn)
+      
       if (ufn in self.urlh):
-        print ("WARNING: duplicates: "+url)
+        print ("WARNING: duplicates: "+str(url))
       else:
         self.urlh[ufn]=url
-      
+      if (black):
+        ufn=url.toString()
+        if kuse_pyqt5:
+          ufn=ufn[8:-1]
+        else:
+          ufn=ufn.remove(0,8)
+        ufn=u2f(ufn.replace("&","&amp;"))
+        if (ufn in self.urlh):
+          print ("WARNING: (black)duplicates: "+str(url))
+        else:
+          self.urlh[ufn]=url
+                 
 
 
 class View:
@@ -248,15 +257,6 @@ class DbItem3:
       s+=str(v)+" "
     return s
   
-  
-  def cmpempty(self,other):
-    if ((not len(self.views)) and  (not len(self.views))):
-      return (True,False)
-    if ((not len(self.views))):
-      return (True,True)
-    
-        
-  
   def __lt__(self, other):
     if ((not len(self.views)) and (not len(self.views))):
       return False
@@ -339,7 +339,7 @@ class Database:
       print("Skipping database update")
                   
   def loadNew(self):
-    urll=UrlList()
+    urll=UrlList("./tmpdata/urlist.txt")
     nb=0
     nbn=0
     for ufn in urll.urlh.keys():
@@ -352,7 +352,24 @@ class Database:
         pass
         #print ("Known data: "+str(self.data[ufn]))
     print (str(nb)+" entries read, "+str(nbn)+" new.")
-        
+
+  def loadblacklist(self):
+    urll=UrlList("./tmpdata/blacklist.txt",True)
+    nb=0
+    nbn=0
+    for ufn in urll.urlh.keys():
+      nb+=1
+      if (ufn in self.data):
+        nbn+=1
+        print ("Blacklisted URL: "+str(urll.urlh[ufn]))
+        self.data.pop(ufn)
+      else:
+        pass
+        #print ("Known data: "+str(self.data[ufn]))
+    print (str(nb)+" entries read, "+str(nbn)+" blacklisted.")
+    
+
+
   def refresh(self):
     ofn=os.path.join(kDATA_PATH,"res.html")
     of=open(ofn,"wt")
@@ -364,6 +381,7 @@ class Database:
     ntot=len(self.data.values())
     itlist=list(six.itervalues(self.data))
     itlist.sort()
+    itlist.reverse()
     for item in itlist:
       nb+=1
       if ((self.args.only_for_url != None) and ((self.args.only_for_url not in item.url))):
@@ -414,6 +432,7 @@ def main():
     db.close()
     return
   db.loadNew()
+  db.loadblacklist()
   try:
     db.refresh()
   except KeyboardInterrupt:

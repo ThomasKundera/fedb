@@ -226,7 +226,9 @@ class DbItem3:
     if (len(vl)<=1):
       return '#999999'
     if (not (vl[-1] in vl[:-1])):
-      return '#FF0000'
+      if ((vl[-1] != -1) and (vl[-1] != 0) and (vl[-1] != 1)):
+        return '#FF0000'
+      return '#FFBBBB'
     if (vl[-1] > vl[-2]):
       return '#BBFFAA'
     return '#AAFFAA'
@@ -333,7 +335,9 @@ class Database:
       pickle.dump(datanew,open(dbo,'wb'))
     
     if (self.args.update_database):
+      print ("Saving database...")
       pickle.dump(self.data,open(self.dbfn,'wb'))
+      print("... Done.")
     else:
       print("Skipping database update")
                   

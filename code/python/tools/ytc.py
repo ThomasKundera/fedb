@@ -249,7 +249,7 @@ class DbItem3:
     else:
       s+=str(QUrl(self.url).toEncoded())
     s+='"> ['+str(self.views[-1].n)+' / '+previous+' ] '
-    s+=str(title)+' </a></li>\n'
+    s+=str(title)+' <span class="tkdate">'+str(self.getLastRealMoveDate())+'</span> </a></li>\n'
     
     return s
   
@@ -259,60 +259,47 @@ class DbItem3:
       s+=str(v)+" "
     return s
   
-  def __lt__(self, other):
+  
+  def getLastRealMoveDate(self):
+    d={}
+    if (not len(self.views)):
+      return datetime.datetime(year=1900)
+    for v in self.views:
+      if (v.n not in d):
+        d[v.n]=v
+        ld=v.date
+    return ld
+  
+  
+  def mycmp(self,other):
     if ((not len(self.views)) and (not len(self.views))):
-      return False
-    if ((not len(self.views))):
-      return True
-    if ((not len(other.views))):
-      return False
-    return (self.views[0] <  other.views[0])
+      return 0
+    if (not len(self.views)):
+      return -1
+    if (not len(other.views)):
+      return 1
+    # cmp() hack
+    return ((self.getLastRealMoveDate() > other.getLastRealMoveDate())
+          - (self.getLastRealMoveDate() < other.getLastRealMoveDate()))
+
+  
+  def __lt__(self, other):
+    return (self.mycmp(other)<0)
     
   def __gt__(self, other):
-    if ((not len(self.views)) and (not len(self.views))):
-      return False
-    if ((not len(self.views))):
-      return False
-    if ((not len(other.views))):
-      return True
-    return (self.views[0] >  other.views[0])
-
+    return (self.mycmp(other)>0)
+  
   def __eq__(self, other):
-    if ((not len(self.views)) and (not len(self.views))):
-      return True
-    if ((not len(self.views))):
-      return False
-    if ((not len(other.views))):
-      return False
-    return (self.views[0] == other.views[0])
+    return (self.mycmp(other)==0)
 
   def __le__(self, other):
-    if ((not len(self.views)) and (not len(self.views))):
-      return True
-    if ((not len(self.views))):
-      return True
-    if ((not len(other.views))):
-      return False
-    return (self.views[0] <= other.views[0])
-
+    return (self.mycmp(other)<=0)
+  
   def __ge__(self, other):
-    if ((not len(self.views)) and (not len(self.views))):
-      return True
-    if ((not len(self.views))):
-      return False
-    if ((not len(other.views))):
-      return True
-    return (self.views[0] >= other.views[0])
+    return (self.mycmp(other)>=0)
 
   def __ne__(self, other):
-    if ((not len(self.views)) and (not len(self.views))):
-      return False
-    if ((not len(self.views))):
-      return True
-    if ((not len(other.views))):
-      return True
-    return (self.views[0] != other.views[0])
-
+    return (self.mycmp(other)!=0)
     
  
 
@@ -378,7 +365,9 @@ class Database:
     ofn=os.path.join(kDATA_PATH,"res.html")
     of=open(ofn,"wt")
     # maybe there's better option there
-    of.write('<html><head><title>YT comments</title><meta charset="UTF-8"></head><body>\n')
+    of.write('<html><head><title>YT comments</title><meta charset="UTF-8">\n')
+    of.write('<link rel="stylesheet" type="text/css" href="../styles.css">\n')
+    of.write('</head><body>\n')
     of.write("<form>\n")
     of.write("<ol>\n")
     nb=0
@@ -388,6 +377,8 @@ class Database:
     itlist.reverse()
     for item in itlist:
       nb+=1
+      if ((nb>200) and not (self.args.full)):
+        break;
       if ((self.args.only_for_url != None) and ((self.args.only_for_url not in item.url))):
         pass
       else:
@@ -422,6 +413,7 @@ def get_cmd_options():
     parser.add_argument("--upgrade-database", action='store_true', help="Upgrade database")
     parser.add_argument("--dont-be-lazy"    , action='store_true', help="Dont reuse already downloaded html files even if existing")
     parser.add_argument("--only-for-url"    ,                      help="Only url's matching this substring will be proccessed")
+    parser.add_argument("--full"            , action='store_true', help="Process all URL (by default stop at 200)")
     args = parser.parse_args()
 
     return args

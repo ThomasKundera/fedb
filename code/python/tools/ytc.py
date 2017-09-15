@@ -145,7 +145,7 @@ class View:
 
   def __str__(self):
     return ('[ '+str(self.n)+' - '+str(self.date)+' ]')
-
+  
   def __lt__(self, other):
       return (self.date < other.date)
     
@@ -224,8 +224,11 @@ class DbItem3:
     for v in self.views:
       vl.append(v.n)
     
-    if (len(vl)<=1):
+    if (len(vl)==0):
       return '#999999'
+    if (len(vl)==1):
+      if (vl[0]<2): return '#999999'
+      return '#FF5555'
     if (not (vl[-1] in vl[:-1])):
       if ((vl[-1] != -1) and (vl[-1] != 0) and (vl[-1] != 1)):
         return '#FF0000'
@@ -234,7 +237,7 @@ class DbItem3:
       return '#BBFFAA'
     return '#AAFFAA'
 
-  def htmlWrite(self,title):
+  def htmlWrite(self,title,args):
     bgcolor=self.views2color()
     #print (bgcolor)
     if (len(self.views)>1):
@@ -249,14 +252,18 @@ class DbItem3:
     else:
       s+=str(QUrl(self.url).toEncoded())
     s+='"> ['+str(self.views[-1].n)+' / '+previous+' ] '
-    s+=str(title)+' <span class="tkdate">'+str(self.getLastRealMoveDate())+'</span> </a></li>\n'
+    s+=str(title)+' <span class="tkdate">'+str(self.getLastRealMoveDate())
+    if (args.debug_level>1000):
+      for v in self.views:
+        s+=str(v)+" "
+    s+='</span></a></li>\n'
     
     return s
   
   def __str__(self):
     s=str(self.url)+" "
     for v in self.views:
-      s+=str(v)+" "
+      s+=str(v)+" TITI "
     return s
   
   
@@ -389,7 +396,7 @@ class Database:
         views=mdo.getViews() # Failure is flagged as -1
         title=mdo.getTitle()
         item.addview(views)
-        of.write(item.htmlWrite(title))
+        of.write(item.htmlWrite(title,self.args))
         of.flush()
         #item.views=views
         #sys.exit(0)

@@ -270,7 +270,7 @@ class DbItem3:
   def getLastRealMoveDate(self):
     d={}
     if (not len(self.views)):
-      return datetime.datetime(year=1900)
+      return datetime.datetime(year=1900,month=1,day=1,hour=0,minute=0,second=0)
     for v in self.views:
       if (v.n not in d):
         d[v.n]=v
@@ -282,9 +282,9 @@ class DbItem3:
     if ((not len(self.views)) and (not len(self.views))):
       return 0
     if (not len(self.views)):
-      return -1
-    if (not len(other.views)):
       return 1
+    if (not len(other.views)):
+      return -1
     # cmp() hack
     return ((self.getLastRealMoveDate() > other.getLastRealMoveDate())
           - (self.getLastRealMoveDate() < other.getLastRealMoveDate()))
@@ -382,6 +382,11 @@ class Database:
     itlist=list(six.itervalues(self.data))
     itlist.sort()
     itlist.reverse()
+    
+    #for item in itlist:
+    #  print (item.getLastRealMoveDate())
+    #return 0
+    
     for item in itlist:
       nb+=1
       if ((nb>200) and not (self.args.full)):

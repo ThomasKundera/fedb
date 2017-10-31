@@ -276,6 +276,25 @@ class DbItem3:
         ld=v.date
     return ld
   
+  def compress(self):
+    if (len(self.views)<3):
+      return
+    newviewsh={}
+    for v in self.views:
+      if (v.n not in newviewsh):
+        newviewsh[v.n]=[v]
+      else:
+        if (len(newviewsh[v.n])==1):
+          newviewsh[v.n].append(v)
+        else:
+          newviewsh[v.n][1]=v
+    newviews=[]
+    for (k,v) in newviewsh.items():
+      for v0 in v:
+        newviews.append(v0)
+    newviews.sort()
+    self.views=newviews
+    
   
   def mycmp(self,other):
     if ((not len(self.views)) and (not len(self.views))):
@@ -390,6 +409,8 @@ class Database:
       nb+=1
       if ((nb>200) and not (self.args.full)):
         break;
+      if (self.args.compress_database):
+        item.compress()
       if ((self.args.only_for_url != None) and ((self.args.only_for_url not in item.url))):
         pass
       else:
@@ -419,12 +440,13 @@ def get_cmd_options():
     usage = "usage: %prog [options] args"
     
     parser = argparse.ArgumentParser()
-    parser.add_argument("--debug-level"     , default=0          , help="Debug level")
-    parser.add_argument("--update-database" , action='store_true', help="Update database")
-    parser.add_argument("--upgrade-database", action='store_true', help="Upgrade database")
-    parser.add_argument("--dont-be-lazy"    , action='store_true', help="Dont reuse already downloaded html files even if existing")
-    parser.add_argument("--only-for-url"    ,                      help="Only url's matching this substring will be proccessed")
-    parser.add_argument("--full"            , action='store_true', help="Process all URL (by default stop at 200)")
+    parser.add_argument("--debug-level"      , default=0          , help="Debug level")
+    parser.add_argument("--update-database"  , action='store_true', help="Update database")
+    parser.add_argument("--upgrade-database" , action='store_true', help="Upgrade database")
+    parser.add_argument("--compress-database", action='store_true', help="Compress database")
+    parser.add_argument("--dont-be-lazy"     , action='store_true', help="Dont reuse already downloaded html files even if existing")
+    parser.add_argument("--only-for-url"     ,                      help="Only url's matching this substring will be proccessed")
+    parser.add_argument("--full"             , action='store_true', help="Process all URL (by default stop at 200)")
     args = parser.parse_args()
 
     return args

@@ -1,5 +1,6 @@
-#!/usr/bin/env python
+#!/usr/bin/env python3
 # -*- coding: utf-8 -*-
+import six
 
 import sys,os, datetime
 import pickle
@@ -397,7 +398,7 @@ class Database:
     of.write("<ol>\n")
     nb=0
     ntot=len(self.data.values())
-    itlist=self.data.values()
+    itlist=list(six.itervalues(self.data))
     itlist.sort()
     itlist.reverse()
     

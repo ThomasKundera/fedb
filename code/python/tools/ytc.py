@@ -91,6 +91,9 @@ class DomObject:
     return title.text.encode('utf-8').strip()
   
   def h2f(self,retry=0):
+    if (self.args.very_very_lazy):
+      self.hfnok=False
+      return
     if (retry>3):
       print ("Wont retry again: download failed")
       return
@@ -98,6 +101,7 @@ class DomObject:
     if ((not self.args.dont_be_lazy) and (os.path.exists(self.hfn))): return
     # dirty
     self.hfnok=False
+    if (self.args.very_lazy): return
     from subprocess import call
     call(["timeout","4","./render.py",'--url',self.url.toString(),'--file',self.hfn])
     if (not os.path.exists(self.hfn)):
@@ -446,6 +450,8 @@ def get_cmd_options():
     parser.add_argument("--upgrade-database" , action='store_true', help="Upgrade database")
     parser.add_argument("--compress-database", action='store_true', help="Compress database")
     parser.add_argument("--dont-be-lazy"     , action='store_true', help="Dont reuse already downloaded html files even if existing")
+    parser.add_argument("--very-lazy"        , action='store_true', help="Dont try to download files even if non-existing")
+    parser.add_argument("--very-very-lazy"   , action='store_true', help="Do nothing but print urls (Bug FIXME: also destroy res.html)")
     parser.add_argument("--only-for-url"     ,                      help="Only url's matching this substring will be proccessed")
     parser.add_argument("--full"             , action='store_true', help="Process all URL (by default stop at 200)")
     args = parser.parse_args()

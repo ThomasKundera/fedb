@@ -45,7 +45,7 @@ class Render(QWebPage):
     #print ('Init timer')
     self.mainFrame().load(self.url)  
     self.app.exec_()  
-    time.sleep(2)
+    time.sleep(5)
   
   def _loadFinished(self, result):
     #print ("_loadFinished") #comment-replies-renderer-expander-down

@@ -24,3 +24,6 @@ for fdir in $FFBD; do
     cut -d '.' -f2- | rev | sort -u | grep 'lc=' >> $outfile
   done
 done
+
+echo "WARNING: output is in $OUTFILE"
+

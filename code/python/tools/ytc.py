@@ -6,6 +6,8 @@ import sys,os, datetime
 import pickle
 import argparse
 
+#CLIK IN NEW WINDOW BY DEFAULT!!!
+
 try:
     __import__('PyQt5')
     kuse_pyqt5 = True
@@ -189,7 +191,7 @@ class DbItem:
       s+=self.url
     else:
       s+=str(QUrl(self.url).toEncoded())
-    s+='"/a> ['+str(views)+' / '+str(self.views)+' ] '
+    s+='" target="_blank" /a> ['+str(views)+' / '+str(self.views)+' ] '
     s+=str(title)+'</li>\n'
     
     return s
@@ -255,7 +257,7 @@ class DbItem3:
       s+=self.url
     else:
       s+=str(QUrl(self.url).toEncoded())
-    s+='"> ['+str(self.views[-1].n)+' / '+previous+' ] '
+    s+='" target="_blank"> ['+str(self.views[-1].n)+' / '+previous+' ] '
     s+=str(title)+' <span class="tkdate">'+str(self.getLastRealMoveDate())
     if (args.debug_level>1000):
       for v in self.views:

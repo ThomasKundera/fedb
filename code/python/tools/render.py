@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+#!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 import sys,time
 from optparse import OptionParser
@@ -41,11 +41,11 @@ class Render(QWebPage):
     # doesnt work as expected
     self.timeout_timer = QTimer()
     self.timeout_timer.timeout.connect(self._request_timed_out)
-    self.timeout_timer.start(4 * 1000)
+    self.timeout_timer.start(6 * 1000)
     #print ('Init timer')
     self.mainFrame().load(self.url)  
     self.app.exec_()  
-    time.sleep(2)
+    time.sleep(5)
   
   def _loadFinished(self, result):
     #print ("_loadFinished") #comment-replies-renderer-expander-down

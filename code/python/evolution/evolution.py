@@ -1,6 +1,8 @@
 #!/usr/bin/env python3
 import random
 
+random.seed(1)
+
 gMutN=0
 
 
@@ -22,7 +24,7 @@ class Mutations(object):
 
   def label_check(self,n):
     try:
-      return((self.lbl+n)/2.)
+      return(max(self.lbl,n))
     except AttributeError:
       self.lbl=n
       return(self.mother.label_check(n+1))
@@ -38,8 +40,8 @@ class Mutations(object):
   def lca(self,o):
     self.label(0)
     v=o.label_check(0)
-    self.unlabel() #Should be done, but we want to measure lots of lcu
-    o.unlabel()
+    #self.unlabel() #Should be done, but we want to measure lots of lcu
+    #o.unlabel()
     return (v)
     
 
@@ -70,13 +72,13 @@ class Idv(object):
 
 class Pop(object):
   def __init__(self):
-    self.maxpop=100000.;
+    self.maxpop=1000.;
     
   def doit(self):
     self.idvl=set()
     self.idvl.add(Idv(None))
     
-    for i in range(100):
+    for i in range(2000):
       self.year()
       self.Print()
 
@@ -108,13 +110,13 @@ class Pop(object):
     n=0
     sm=0
     for i in range(1,len(s)):
-      sm+=s[0].lca(s[i])
+      sm=max(sm,s[0].lca(s[i]))
       n+=1
     
     for idv in s:
       idv.unlabel()
     
-    print(sm/(n+1)) # just to avoid 0
+    print(sm) # just to avoid 0
       
     
   

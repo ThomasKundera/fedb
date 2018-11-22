@@ -1,10 +1,12 @@
-#!/usr/bin/env python3
+#!/usr/bin/env python
 # -*- coding: utf-8 -*-
 import six
 
 import sys,os, datetime
 import pickle
 import argparse
+
+#CLIK IN NEW WINDOW BY DEFAULT!!!
 
 try:
     __import__('PyQt5')
@@ -91,6 +93,9 @@ class DomObject:
     return title.text.encode('utf-8').strip()
   
   def h2f(self,retry=0):
+    if (self.args.very_very_lazy):
+      self.hfnok=False
+      return
     if (retry>3):
       print ("Wont retry again: download failed")
       return
@@ -98,6 +103,7 @@ class DomObject:
     if ((not self.args.dont_be_lazy) and (os.path.exists(self.hfn))): return
     # dirty
     self.hfnok=False
+    if (self.args.very_lazy): return
     from subprocess import call
     call(["timeout","4","./render.py",'--url',self.url.toString(),'--file',self.hfn])
     if (not os.path.exists(self.hfn)):
@@ -185,7 +191,7 @@ class DbItem:
       s+=self.url
     else:
       s+=str(QUrl(self.url).toEncoded())
-    s+='"/a> ['+str(views)+' / '+str(self.views)+' ] '
+    s+='" target="_blank" /a> ['+str(views)+' / '+str(self.views)+' ] '
     s+=str(title)+'</li>\n'
     
     return s
@@ -251,7 +257,7 @@ class DbItem3:
       s+=self.url
     else:
       s+=str(QUrl(self.url).toEncoded())
-    s+='"> ['+str(self.views[-1].n)+' / '+previous+' ] '
+    s+='" target="_blank"> ['+str(self.views[-1].n)+' / '+previous+' ] '
     s+=str(title)+' <span class="tkdate">'+str(self.getLastRealMoveDate())
     if (args.debug_level>1000):
       for v in self.views:
@@ -277,6 +283,25 @@ class DbItem3:
         ld=v.date
     return ld
   
+  def compress(self):
+    if (len(self.views)<3):
+      return
+    newviewsh={}
+    for v in self.views:
+      if (v.n not in newviewsh):
+        newviewsh[v.n]=[v]
+      else:
+        if (len(newviewsh[v.n])==1):
+          newviewsh[v.n].append(v)
+        else:
+          newviewsh[v.n][1]=v
+    newviews=[]
+    for (k,v) in newviewsh.items():
+      for v0 in v:
+        newviews.append(v0)
+    newviews.sort()
+    self.views=newviews
+    
   
   def mycmp(self,other):
     if ((not len(self.views)) and (not len(self.views))):
@@ -391,6 +416,8 @@ class Database:
       nb+=1
       if ((nb>200) and not (self.args.full)):
         break;
+      if (self.args.compress_database):
+        item.compress()
       if ((self.args.only_for_url != None) and ((self.args.only_for_url not in item.url))):
         pass
       else:
@@ -420,12 +447,15 @@ def get_cmd_options():
     usage = "usage: %prog [options] args"
     
     parser = argparse.ArgumentParser()
-    parser.add_argument("--debug-level"     , default=0          , help="Debug level")
-    parser.add_argument("--update-database" , action='store_true', help="Update database")
-    parser.add_argument("--upgrade-database", action='store_true', help="Upgrade database")
-    parser.add_argument("--dont-be-lazy"    , action='store_true', help="Dont reuse already downloaded html files even if existing")
-    parser.add_argument("--only-for-url"    ,                      help="Only url's matching this substring will be proccessed")
-    parser.add_argument("--full"            , action='store_true', help="Process all URL (by default stop at 200)")
+    parser.add_argument("--debug-level"      , default=0          , help="Debug level")
+    parser.add_argument("--update-database"  , action='store_true', help="Update database")
+    parser.add_argument("--upgrade-database" , action='store_true', help="Upgrade database")
+    parser.add_argument("--compress-database", action='store_true', help="Compress database")
+    parser.add_argument("--dont-be-lazy"     , action='store_true', help="Dont reuse already downloaded html files even if existing")
+    parser.add_argument("--very-lazy"        , action='store_true', help="Dont try to download files even if non-existing")
+    parser.add_argument("--very-very-lazy"   , action='store_true', help="Do nothing but print urls (Bug FIXME: also destroy res.html)")
+    parser.add_argument("--only-for-url"     ,                      help="Only url's matching this substring will be proccessed")
+    parser.add_argument("--full"             , action='store_true', help="Process all URL (by default stop at 200)")
     args = parser.parse_args()
 
     return args

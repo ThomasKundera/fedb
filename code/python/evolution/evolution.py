@@ -24,7 +24,8 @@ class Mutations(object):
     try:
       return((self.lbl+n)/2.)
     except AttributeError:
-      return(self.label_check(n+1))
+      self.lbl=n
+      return(self.mother.label_check(n+1))
 
   def unlabel(self):
     try:
@@ -37,8 +38,8 @@ class Mutations(object):
   def lca(self,o):
     self.label(0)
     v=o.label_check(0)
-    #self.unlabel() #Should be done, but we want to measure lots of lcu
-    #o.unlabel()
+    self.unlabel() #Should be done, but we want to measure lots of lcu
+    o.unlabel()
     return (v)
     
 
@@ -63,16 +64,19 @@ class Idv(object):
   def lca(self,o):
     return(self.mut.lca(o.mut))
 
+  def unlabel(self):
+    self.mut.unlabel()
+
 
 class Pop(object):
   def __init__(self):
-    self.maxpop=10000.;
+    self.maxpop=100000.;
     
   def doit(self):
     self.idvl=set()
     self.idvl.add(Idv(None))
     
-    for i in range(10):
+    for i in range(100):
       self.year()
       self.Print()
 
@@ -90,21 +94,33 @@ class Pop(object):
       self.idvl.remove(idv)
   
   def extract_some(self,n):
-    s=set()
+    s=[]
     for idv in self.idvl:
-      s.add(idv)
+      s.append(idv)
       n-=1
       if (n<=0):
         return s
+    return s # when not enouth elements
   
   def lca(self,s):
     # testing all agains each other is large.
     # testing just first against others
+    n=0
+    sm=0
+    for i in range(1,len(s)):
+      sm+=s[0].lca(s[i])
+      n+=1
+    
+    for idv in s:
+      idv.unlabel()
+    
+    print(sm/(n+1)) # just to avoid 0
+      
     
   
   def Print(self):
     print("Pop is now: "+str(len(self.idvl)))
-    s=extract_some(100)
+    s=self.extract_some(100)
     lca=self.lca(s)
     
     

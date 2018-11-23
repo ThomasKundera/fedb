@@ -1,10 +1,9 @@
 #!/usr/bin/env python3
-import random
+import io,random
 
 random.seed(1)
 
 gMutN=0
-
 
 
 class Mutations(object):
@@ -14,14 +13,32 @@ class Mutations(object):
     self.m=gMutN
     self.mother=m
   
-  def label(self,n):
+  def label_rec(self,n):
     try: # do not relabel
-      return(self.lbl)
+      return(max(self.lbl,n))
     except AttributeError:
       self.lbl=n
     if (self.mother):
       self.mother.label(n+1)
+    return(n+1)
 
+  def label(self,n):
+    # Rewrote as non recursive (recursion depth in python is limited)
+    # it's anyway most of the time faster and less memory consuming
+    try: # do not relabel
+      return(max(self.lbl,n))
+    except AttributeError:
+      self.lbl=n
+    p=self.mother
+    while(p):
+      n+=1
+      try: # do not relabel
+        return(max(p.lb,n))
+      except AttributeError:
+        p.lbl=n
+        p=p.mother
+    return(n)
+    
   def label_check(self,n):
     try:
       return(max(self.lbl,n))
@@ -29,10 +46,19 @@ class Mutations(object):
       self.lbl=n
       return(self.mother.label_check(n+1))
 
-  def unlabel(self):
+  def unlabel_rec(self):
     try:
       del self.lbl
       self.mother.unlabel()
+    except AttributeError:
+      return
+    
+  def unlabel(self):
+    p=self
+    try:
+      while (p):
+        del p.lbl
+        p=p.mother
     except AttributeError:
       return
     
@@ -40,8 +66,8 @@ class Mutations(object):
   def lca(self,o):
     self.label(0)
     v=o.label_check(0)
-    #self.unlabel() #Should be done, but we want to measure lots of lcu
-    #o.unlabel()
+    self.unlabel() # has to be done in general
+    o.unlabel()
     return (v)
     
 
@@ -72,17 +98,25 @@ class Idv(object):
 
 class Pop(object):
   def __init__(self):
-    self.maxpop=1000.;
+    self.y=0
+    self.maxpop=1000.
+    self.nby=200
     
   def doit(self):
+    self.f=io.open("datafile.dat","wt")
     self.idvl=set()
     self.idvl.add(Idv(None))
     
-    for i in range(2000):
+    for i in range(self.nby):
+      if (not (i % (self.nby/10))):
+        print ("Year: "+str(i))
       self.year()
-      self.Print()
+      self.tofile()
+    self.f.close()
+
 
   def year(self):
+    self.y=self.y+1
     newdv=set()
     kdv=set()
     for idv in self.idvl:
@@ -115,16 +149,15 @@ class Pop(object):
     
     for idv in s:
       idv.unlabel()
-    
-    print(sm) # just to avoid 0
+    return(sm)
       
     
   
-  def Print(self):
-    print("Pop is now: "+str(len(self.idvl)))
+  def tofile(self):
     s=self.extract_some(100)
     lca=self.lca(s)
-    
+    self.f.write(str(self.y)+" "+str(len(self.idvl))+" "+str(lca))
+
     
     
 def main():

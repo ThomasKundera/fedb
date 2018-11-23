@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 import io,random
+import time
 
 random.seed(1)
 
@@ -99,9 +100,10 @@ class Idv(object):
 class Pop(object):
   def __init__(self):
     self.y=0
-    self.maxpop=1000.
-    self.nby=200
-    
+    self.maxpop=10000.
+    self.nby=2000
+    self.start = time.time()
+
   def doit(self):
     self.f=io.open("datafile.dat","wt")
     self.idvl=set()
@@ -109,7 +111,8 @@ class Pop(object):
     
     for i in range(self.nby):
       if (not (i % (self.nby/10))):
-        print ("Year: "+str(i))
+        delta=time.time()-self.start
+        print ("Year: "+str(i)+" timelaps: "+str(delta))
       self.year()
       self.tofile()
     self.f.close()
@@ -156,7 +159,7 @@ class Pop(object):
   def tofile(self):
     s=self.extract_some(100)
     lca=self.lca(s)
-    self.f.write(str(self.y)+" "+str(len(self.idvl))+" "+str(lca))
+    self.f.write(str(self.y)+" "+str(len(self.idvl))+" "+str(lca)+'\n')
 
     
     

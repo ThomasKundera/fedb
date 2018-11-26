@@ -6,7 +6,6 @@ random.seed(1)
 gMutN=0
 
 
-
 class Mutations(object):
   def __init__(self,m):
     global gMutN
@@ -40,7 +39,7 @@ class Mutations(object):
   def lca(self,o):
     self.label(0)
     v=o.label_check(0)
-    #self.unlabel() #Should be done, but we want to measure lots of lcu
+    #self.unlabel() #Should be done, but we want to measure lots of lca
     #o.unlabel()
     return (v)
     

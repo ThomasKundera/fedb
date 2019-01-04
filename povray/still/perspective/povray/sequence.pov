@@ -13,49 +13,79 @@
 #declare Earth_Radius      = 6371*km;
 #declare Moon_Radius       = 1737*km;
 
-#declare Moon_Distance     = 384400*km;
+#declare Moon_Distance     = 38440*km;
  
 #include "common.inc"
 #include "frame.inc"
 
-global_settings { ambient_light 1 }
+global_settings { ambient_light .1 }
+
 
 light_source {
-    <10000*km, 1000*km, 3000*km>
+    <Moon_Distance/2,Moon_Distance/3,Moon_Distance*2>
     color <1,1,1>
+    parallel
+    point_at <Moon_Distance/2,0,0>
 }
 
 
 #declare MyView=0;
+#declare LookAt=0;
 
 #switch (MyView)
  #case (0)
-  camera {
-    location   <Moon_Distance+1*km,Moon_Radius+1*km,Moon_Radius+1*km>
-    look_at    <0,0,0>
-    sky        <0,1,0>
-    right <1.5,0,0>
-    angle 40
-  }
+  #declare camloc=<Moon_Distance-10*km,Moon_Radius+100*m,100*m>;
+  #declare camlookat=<0,0,0>;
+  #declare camangle=60;
+
  #break
  #case (1)
-  camera {
-    location   <-1*m,-5*m,30*m>
-    look_at    <0,-.5*m,5*m>
-    sky        <0,1,0>
-    right <1.5,0,0>
-    angle 16
-  }
+  #declare camloc=<Moon_Distance*2,Moon_Radius+100*m,100*m>;
+  #declare camlookat=<0,0,0>;
+  #declare camangle=60;
  #break
  #case (2)
-  camera {
-    location   < 1*m,-1*m,10*m>
-    look_at    <0,-.25*m,5*m>
-    sky        <0,1,0>
-    right <1.5,0,0>
-    angle 60
+  #declare camloc=<Moon_Distance*2,Moon_Radius+100*m,100*m>;
+  #declare camlookat=<0,0,0>;
+  #declare camangle=30;
+#end
+
+#if (LookAt)
+  #declare camlocdraw=camloc;
+  #declare camlookatdraw=camlookat;
+  #declare camangledraw=camangle;
+  
+  #declare camloc=<Moon_Distance*2,0,Moon_Distance*1.5>;
+  #declare camlookat=<Moon_Distance,0,0>;
+  #declare camangle=90;
+  
+  cone {
+    camlocdraw,0
+    camlookatdraw,Moon_Distance*tan((pi/180.)*camangledraw/2)
+    pigment{ rgbft <1,0,0,0,.9> }
+      finish {
+      ambient .5
+    }
   }
 #end
+
+
+
+camera {
+  location   camloc
+  look_at    camlookat
+  sky        <0,1,0>
+  right <1.5,0,0>
+  angle camangle
+}
+
+
+light_source {
+    camloc
+    color <1,1,1>
+}
+
+
 
 sphere {<0,0,0>,Earth_Radius texture {
   pigment{ rgb <.2,.3,.6> }

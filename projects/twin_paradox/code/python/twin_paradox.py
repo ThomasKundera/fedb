@@ -100,7 +100,8 @@ def main():
   ev2=FourVect(L,L/v)
   A.SeingEvent(ev2)
   #print("1/g L/v="+str(( 1./g)*L/v))
-  
+  #print("2gL="+str(2*g*L))
+  #print("gL/v(1+v²/c²)="+str(g*(L/v)*(1+v*v/(c*c))))
   
   # II From A, C arriving at 0
   print("=============== [III]: B and C crossing at L")
@@ -110,7 +111,9 @@ def main():
   #print("-2g L  ="+str(-2*g*L  ))
   #print(" 2g L/v="+str( 2*g*L/v))
   
-  
+  #print("2gL  ="+str(2*g*L))
+  #print("2gL/v="+str(2*g*L/v))
+ 
   
  
   

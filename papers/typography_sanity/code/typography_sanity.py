@@ -14,10 +14,11 @@ def debug_print(l,t,s):
     print (s)
 
 class Comment:
-  def __init__(self,cm):
+  def __init__(self,cm,profanity):
     #self.comment=c
     self.setTypoScore(cm)
-    #self.setSanityScore(cm)
+    self.setSanityScore(cm,profanity)
+    # Load dictionnary
     
   def setTypoScore(self,cm):
     s=len(cm)
@@ -53,27 +54,53 @@ class Comment:
     self.typoscore=(1.0*(nc+nt+np))/s
     #if (self.typoscore>.5): print(cm)
     
-  def setSanityScore(self,cm):
-    
+  def setSanityScore(self,cm,profanity):
+    s=len(cm.split()) # FIXME can be buggy
+    # convert to lower
+    cml=cm.lower()
+    np=0
+    for w in profanity:
+      np+=cml.count(w)
+    self.saniscore=(1.0*np/s)
+    if (self.saniscore>1): self.saniscore=1
     
     
 
 class CommentBase:
   def __init__(self):
     self.cb=[]
+    self.profanity=[]
+    f=open("base-list-of-bad-words_text-file_2018_07_30.txt","rt")
+    for line in f.readlines():
+      w=line.strip()
+      self.profanity.append(w)
   
   def append(self,c):
-    co=Comment(c)
+    co=Comment(c,self.profanity)
     self.cb.append(co)
   
   def plot(self):
+    tt=[]
     ts=[]
     for c in self.cb:
-      ts.append(c.typoscore)
+      tt.append(c.typoscore)
+      ts.append(c.saniscore)
     print ("Number of comments analysed: "+str(len(ts)))
-    plt.hist(ts,log=True)
-    plt.show()
-  
+    #plt.hist(ts,log=True)
+    #plt.show()
+    counts,xbins,ybins, img=plt.hist2d(tt,ts)
+    #plt.show()
+    tm=[]
+    for ix in range(len(counts)):
+      n=0.
+      m=0.
+      for iy in range(len(counts[ix])):
+        n+=counts[ix][iy]
+        m+=counts[ix][iy]*( ybins[iy+1]-ybins[iy] )/2.
+      if (n!=0): tm.append(m/n)
+      else: tm.append(0)
+      print (m)
+ 
   def dump(self):
     for c in self.cb:
       print (c.typoscore)
@@ -111,8 +138,8 @@ def main():
   cb=CommentBase()
   for f in files:
     n+=1
-    if (not (n%1000)): print (str(n))
-    #if (n>100): break
+    if (not (n%100)): print (str(n))
+    if (n>20): break
     analyse_file(f,cb)
   cb.plot()
 

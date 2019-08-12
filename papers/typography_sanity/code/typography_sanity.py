@@ -89,18 +89,28 @@ class CommentBase:
     #plt.hist(ts,log=True)
     #plt.show()
     counts,xbins,ybins, img=plt.hist2d(tt,ts)
-    #plt.show()
-    tm=[]
+    print (ybins)
+    tmx=[]
+    tmy=[]
     for ix in range(len(counts)):
       n=0.
       m=0.
+      tmx.append(( xbins[ix+1]+xbins[ix] )/2.)
       for iy in range(len(counts[ix])):
+        #print (counts[ix][iy])
         n+=counts[ix][iy]
-        m+=counts[ix][iy]*( ybins[iy+1]-ybins[iy] )/2.
-      if (n!=0): tm.append(m/n)
-      else: tm.append(0)
-      print (m)
- 
+        m+=counts[ix][iy]*( ybins[iy+1]+ybins[iy] )/2.
+        #print(counts[ix][iy]*( ybins[iy+1]-ybins[iy] )/2.)
+      #print ("n="+str(n)+" m="+str(m))
+      if (n!=0): m=1.*m/n
+      else: m=0.
+      tmy.append(m)
+      #print (m)
+      
+    print (tmy)
+    plt.plot(tmx,tmy)
+    plt.show()
+
   def dump(self):
     for c in self.cb:
       print (c.typoscore)
@@ -139,7 +149,7 @@ def main():
   for f in files:
     n+=1
     if (not (n%100)): print (str(n))
-    if (n>20): break
+    #if (n>100): break
     analyse_file(f,cb)
   cb.plot()
 

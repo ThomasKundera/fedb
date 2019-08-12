@@ -1,3 +1,12 @@
+Starting from: ?
+https://www.youtube.com/watch?v=dzfL0QmnkuM
+0:0:0 -> 0:2:0 nothing
+AE-8 VAB model
+Out of context quotations and the like
+Ridiculous voice for contradictors
+0:6:33 : link to site Link to paper by VA
+
+
 VAB
 
 https://creme.isde.vanderbilt.edu/CREME-MC/help/ap8min-and-ap8max-trapped-proton-models
@@ -5,3 +14,6 @@ https://creme.isde.vanderbilt.edu/CREME-MC/help/ap8min-and-ap8max-trapped-proton
 Code:
 https://ccmc.gsfc.nasa.gov/pub/modelweb/radiation_belt/
 
+https://www.hq.nasa.gov/alsj/tnD7080RadProtect.pdf
+
+https://www.radioprotection.org/articles/radiopro/pdf/1968/02/radiopro19680302p115.pdf

@@ -32,3 +32,14 @@ LEM overall dimensions:
 https://www.hq.nasa.gov/alsj/a14/a14-43939523-LM10-LM14-Fam-Manual.pdf (p 2-3)
 
 
+We found a 3DS model of a LEM:
+https://nasa3d.arc.nasa.gov/detail/lunarlandernofoil-c
+Hopefully meshlab can convert.
+Meshlab can open and convert to STL.
+Trying stltool:
+git clone https://github.com/rsmith-nl/stltools.git
+Worked, but reated a *huge* file.
+Better with -2 option.
+
+
+

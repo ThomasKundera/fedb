@@ -2,9 +2,10 @@
 # -*- coding: utf-8 -*-
 import six
 
-import sys,os, datetime
+import sys,os,re,datetime
 import pickle
 import argparse
+import inspect
 
 #CLIK IN NEW WINDOW BY DEFAULT!!!
 
@@ -30,10 +31,13 @@ from lxml import html
 
 kDATA_PATH="./tmpdata"
 
-def debug_print(l,t,s):
+def debug_print(l,t,ln,s):
   if(l>=t):
-    print (s)
+    print ("DEBUG: ["+str(ln)+"] "+str(s))
 
+def line_numb():
+   '''Returns the current line number in our program'''
+   return inspect.currentframe().f_back.f_lineno
 
 def u2f(u):
   return u.replace('/','_').replace('?','_').replace('=','_').replace(';','_').replace('&','_')
@@ -67,21 +71,27 @@ class DomObject:
     ctrl=self.root.find_class("comment-thread-renderer")
     #comment-renderer-content
     if (len(ctrl)==0):
-      debug_print(self.args.debug_level,100,"ctrl invalid (set as zero) "+str(self.url))
+      debug_print(self.args.debug_level,100,line_numb(),"ctrl invalid (set as zero) "+str(self.url))
       return 0
     lmtc=ctrl[0].find_class("load-more-text")
     crcl=ctrl[0].find_class("comment-renderer-content")
     np=len(crcl)-1
-    debug_print(self.args.debug_level,100,"np = "+str(np))
+    debug_print(self.args.debug_level,100,line_numb(),"np = "+str(np))
     if (len(lmtc)==0):
-      debug_print(self.args.debug_level,100,"lmtc len() is zero. Assuming failed download. Returning -1"+str(np))
+      debug_print(self.args.debug_level,100,line_numb(),"lmtc len() is zero. Assuming failed download. Returning -1"+str(np))
       return (-1)
-    if (len(lmtc[0].text.strip().split(' '))>3):
-      debug_print(self.args.debug_level,100,"lmtc len() > 3 . Returning "+str(int(lmtc[0].text.strip().split(' ')[2])))
-      return int(lmtc[0].text.strip().split(' ')[2])
-    if (len(lmtc[0].text.strip().split(' '))==2):
-      debug_print(self.args.debug_level,100,"lmtc len() == 2 . Returning "+str(np+1))
+    debug_print2(self.args.debug_level,100,line_numb(),lmtc[0].text.strip().encode('utf-8'))
+    fulltext=lmtc[0].text.strip().encode('utf-8')    
+    if (re.search("^View reply",fulltext)):
+      # View reply
+      # View reply from Mr. Sam - Point d'interrogation
       return (np+1)
+    if (len(lmtc[0].text.strip().split(' '))==4):
+      # View all 24 replies
+      return int(lmtc[0].text.strip().split(' ')[2])
+    if (len(lmtc[0].text.strip().split(' '))>4):
+      # View 9 replies from Thomas Kundera and others
+      return int(lmtc[0].text.strip().split(' ')[1])
     return 0
   
   def getTitle(self):
@@ -105,6 +115,7 @@ class DomObject:
     self.hfnok=False
     if (self.args.very_lazy): return
     from subprocess import call
+    debug_print(self.args.debug_level,100,line_numb(),"./render.py --url "+self.url.toString()+" --file "+self.hfn)
     call(["timeout","4","./render.py",'--url',self.url.toString(),'--file',self.hfn])
     if (not os.path.exists(self.hfn)):
       print ("Failed to download: "+str(self.url))
@@ -480,9 +491,6 @@ def main():
     raise
   db.close()
   
-  
-
-    
 # --------------------------------------------------------------------------
 if __name__ == '__main__':
         main()

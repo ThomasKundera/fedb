@@ -1,0 +1,6 @@
+Running urlextrac.sh will get fresh urls from firefox history.
+./urlextrac.sh
+
+Not lazy: download again all html files, and full retrive (not only the 200 lasts)
+However database is not updated with new entry: only read.
+./ytc.py --dont-be-lazy --full

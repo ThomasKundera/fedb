@@ -11,6 +11,8 @@ grep 'ytd-notification-renderer' Historique*.html | grep href |\
 tr ' ' '\n' | grep href | cut -d'"' -f2 | grep 'lc=' | rev |\
 cut -d '.' -f2- | rev | grep 'lc=' >> $outfile
 
+cat importedurlist.txt >> $outfile
+
 FFBD=~/.mozilla/firefox
 
 for fdir in $FFBD; do
@@ -25,5 +27,5 @@ for fdir in $FFBD; do
   done
 done
 
-echo "WARNING: output is in $OUTFILE"
+echo "WARNING: output is in $outfile"
 

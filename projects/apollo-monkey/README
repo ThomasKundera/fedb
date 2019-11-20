@@ -1,0 +1,45 @@
+Claim is that an object is falling an inconstant way at end of Apollo 14 stay.
+Video:
+https://history.nasa.gov/alsj/a14/a14v.1353552.rm
+at 2:05 to 2:07
+
+Data we need:
+- focale of the camera used
+- frame rate
+- location of camera
+- model of lem
+- Antenna: "10 foot diameter"
+
+Maybe for orientation:
+21699248575_5bdc329413_o.jpg
+AS14-64-9189AS14-64-9189
+Apollo 14 Hasselblad image from film magazine 64/LL - EVA-2
+"Zoom in, Venus is the tiny dot to the right of the dish antenna." <- confidence 50%
+
+The parabolic antena is in the video:
+21672179902_10af709a63_o.jpg
+AS1AS14-66-9236
+
+Apollo 14 Hasselblad image from film magazine 66/II - EVA-1
+
+General location:
+21036886914_d9290b35e7_o.jpg
+AS14-67-9388
+Apollo 14 Hasselblad image from film magazine 67/JJ - EVA-1
+
+
+LEM overall dimensions:
+https://www.hq.nasa.gov/alsj/a14/a14-43939523-LM10-LM14-Fam-Manual.pdf (p 2-3)
+
+
+We found a 3DS model of a LEM:
+https://nasa3d.arc.nasa.gov/detail/lunarlandernofoil-c
+Hopefully meshlab can convert.
+Meshlab can open and convert to STL.
+Trying stltool:
+git clone https://github.com/rsmith-nl/stltools.git
+Worked, but reated a *huge* file.
+Better with -2 option.
+
+
+

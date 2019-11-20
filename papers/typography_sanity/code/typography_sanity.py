@@ -51,7 +51,8 @@ class Comment:
         fpp=0
         fp=0
       
-    self.typoscore=(1.0*(nc+nt+np))/s
+    #self.typoscore=(1.0*(nc+nt+np))/s
+    self.typoscore=(1.0*(nc))/s # Only caps
     #if (self.typoscore>.5): print(cm)
     
   def setSanityScore(self,cm,profanity):

@@ -23,6 +23,13 @@ class Mutations(object):
       self.mother.label(n+1)
     return(n+1)
 
+  def unlabel_rec(self):
+    try:
+      del self.lbl
+      self.mother.unlabel()
+    except AttributeError:
+      return
+  
   def label(self,n):
     # Rewrote as non recursive (recursion depth in python is limited)
     # it's anyway most of the time faster and less memory consuming
@@ -40,19 +47,25 @@ class Mutations(object):
         p=p.mother
     return(n)
     
-  def label_check(self,n):
+  def label_check_rec(self,n):
     try:
       return(max(self.lbl,n))
     except AttributeError:
       self.lbl=n
       return(self.mother.label_check(n+1))
 
-  def unlabel_rec(self):
-    try:
-      del self.lbl
-      self.mother.unlabel()
-    except AttributeError:
-      return
+  def label_check(self):
+    p=self
+    n=0
+    while (p):
+      try:
+        return(max(p.lbl,n))
+      except AttributeError:
+        p=p.mother
+        n+=1
+    
+    print("ERROR: Mutations.label_check(): unreachable statement")
+    raise
     
   def unlabel(self):
     p=self
@@ -66,7 +79,7 @@ class Mutations(object):
 
   def lca(self,o):
     self.label(0)
-    v=o.label_check(0)
+    v=o.label_check()
     self.unlabel() # has to be done in general
     o.unlabel()
     return (v)
@@ -109,10 +122,11 @@ class Pop(object):
     self.idvl=set()
     self.idvl.add(Idv(None))
     
-    for i in range(self.nby):
+    for i in range(1,self.nby):
       if (not (i % (self.nby/10))):
-        delta=time.time()-self.start
-        print ("Year: "+str(i)+" timelaps: "+str(delta))
+        delta=int(max(1,time.time()-self.start))
+        left=(delta/i)*(self.nby-i)
+        print ("Year: "+str(i)+" time elaps: "+str(delta)+" time left: "+str(left))
       self.year()
       self.tofile()
     self.f.close()
@@ -153,16 +167,12 @@ class Pop(object):
     for idv in s:
       idv.unlabel()
     return(sm)
-      
     
-  
   def tofile(self):
     s=self.extract_some(100)
     lca=self.lca(s)
     self.f.write(str(self.y)+" "+str(len(self.idvl))+" "+str(lca)+'\n')
 
-    
-    
 def main():
   p=Pop()
   p.doit()

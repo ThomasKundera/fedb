@@ -80,7 +80,7 @@ class DomObject:
     if (len(lmtc)==0):
       debug_print(self.args.debug_level,100,line_numb(),"lmtc len() is zero. Assuming failed download. Returning -1"+str(np))
       return (-1)
-    debug_print2(self.args.debug_level,100,line_numb(),lmtc[0].text.strip().encode('utf-8'))
+    debug_print(self.args.debug_level,100,line_numb(),lmtc[0].text.strip().encode('utf-8'))
     fulltext=lmtc[0].text.strip().encode('utf-8')    
     if (re.search("^View reply",fulltext)):
       # View reply
@@ -405,14 +405,15 @@ class Database:
 
 
   def refresh(self):
-    ofn=os.path.join(kDATA_PATH,"res.html")
-    of=open(ofn,"wt")
-    # maybe there's better option there
-    of.write('<html><head><title>YT comments</title><meta charset="UTF-8">\n')
-    of.write('<link rel="stylesheet" type="text/css" href="../styles.css">\n')
-    of.write('</head><body>\n')
-    of.write("<form>\n")
-    of.write("<ol>\n")
+    if (self.args.write_res):
+      ofn=os.path.join(kDATA_PATH,"res.html")
+      of=open(ofn,"wt")
+      # maybe there's better option there
+      of.write('<html><head><title>YT comments</title><meta charset="UTF-8">\n')
+      of.write('<link rel="stylesheet" type="text/css" href="../styles.css">\n')
+      of.write('</head><body>\n')
+      of.write("<form>\n")
+      of.write("<ol>\n")
     nb=0
     ntot=len(self.data.values())
     itlist=list(six.itervalues(self.data))
@@ -439,17 +440,19 @@ class Database:
         views=mdo.getViews() # Failure is flagged as -1
         title=mdo.getTitle()
         item.addview(views)
-        of.write(item.htmlWrite(title,self.args))
-        of.flush()
+        if (self.args.write_res):
+          of.write(item.htmlWrite(title,self.args))
+          of.flush()
         #item.views=views
         #sys.exit(0)
-    of.write("</ol>\n")
-    of.write("</form>")
-    of.write("<p>"+str(datetime.datetime.now())+"</p>\n")
-    of.write("<p>END of DATA</p>\n")
-    of.write("</body><html>\n")
-    of.close()
-    
+    if (self.args.write_res):
+      of.write("</ol>\n")
+      of.write("</form>")
+      of.write("<p>"+str(datetime.datetime.now())+"</p>\n")
+      of.write("<p>END of DATA</p>\n")
+      of.write("</body><html>\n")
+      of.close()
+
 
 def get_cmd_options():
     """
@@ -464,9 +467,10 @@ def get_cmd_options():
     parser.add_argument("--compress-database", action='store_true', help="Compress database")
     parser.add_argument("--dont-be-lazy"     , action='store_true', help="Dont reuse already downloaded html files even if existing")
     parser.add_argument("--very-lazy"        , action='store_true', help="Dont try to download files even if non-existing")
-    parser.add_argument("--very-very-lazy"   , action='store_true', help="Do nothing but print urls (Bug FIXME: also destroy res.html)")
+    parser.add_argument("--very-very-lazy"   , action='store_true', help="Do nothing but print urls")
     parser.add_argument("--only-for-url"     ,                      help="Only url's matching this substring will be proccessed")
     parser.add_argument("--full"             , action='store_true', help="Process all URL (by default stop at 200)")
+    parser.add_argument("--write-res"        , action='store_true', help="Rewrite res file")
     args = parser.parse_args()
 
     return args

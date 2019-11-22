@@ -26,8 +26,7 @@ else:
 
 
 from lxml import html
-
-#import render
+from lxml.etree import tostring
 
 kDATA_PATH="./tmpdata"
 
@@ -69,13 +68,22 @@ class DomObject:
     #sys.exit(0)
     # <span class="load-more-text"> View all 7 replies </span>
     ctrl=self.root.find_class("comment-thread-renderer")
-    #comment-renderer-content
+    #debug_print(self.args.debug_level,10000,line_numb(),tostring(ctrl[0]).encode('utf8'))
     if (len(ctrl)==0):
       debug_print(self.args.debug_level,100,line_numb(),"ctrl invalid (set as zero) "+str(self.url))
       return 0
-    lmtc=ctrl[0].find_class("load-more-text")
-    crcl=ctrl[0].find_class("comment-renderer-content")
-    np=len(crcl)-1
+    for ctrlok in ctrl:
+      check=ctrlok.find_class("comment-renderer-linked-comment")
+      if (len(check)): break
+    if (not len(check)):
+      debug_print(self.args.debug_level,100,line_numb(),"WARNING: no highlighted comment found"+str(self.url))
+      return 0
+    #comment-renderer-content
+    debug_print(self.args.debug_level,10000,line_numb(),tostring(ctrlok).encode('utf8'))
+    lmtc=ctrlok.find_class("load-more-text")
+    crcl=ctrlok.find_class("comment-renderer-content")
+    #class="comment-renderer-linked-comment"
+    np=len(ctrlok.find_class("comment-thread-renderer"))-1
     debug_print(self.args.debug_level,100,line_numb(),"np = "+str(np))
     if (len(lmtc)==0):
       debug_print(self.args.debug_level,100,line_numb(),"lmtc len() is zero. Assuming failed download. Returning -1"+str(np))
@@ -85,13 +93,21 @@ class DomObject:
     if (re.search("^View reply",fulltext)):
       # View reply
       # View reply from Mr. Sam - Point d'interrogation
+      debug_print(self.args.debug_level,100,line_numb(),"return "+str(np+1))
       return (np+1)
+    if (len(lmtc[0].text.strip().split(' '))==3):
+      # View 49 replies
+      debug_print(self.args.debug_level,100,line_numb(),"return "+str(int(lmtc[0].text.strip().split(' ')[1])))
+      return int(lmtc[0].text.strip().split(' ')[1])
     if (len(lmtc[0].text.strip().split(' '))==4):
       # View all 24 replies
+      debug_print(self.args.debug_level,100,line_numb(),"return "+str(int(lmtc[0].text.strip().split(' ')[2])))
       return int(lmtc[0].text.strip().split(' ')[2])
     if (len(lmtc[0].text.strip().split(' '))>4):
       # View 9 replies from Thomas Kundera and others
+      debug_print(self.args.debug_level,100,line_numb(),"return "+str(int(lmtc[0].text.strip().split(' ')[1])))
       return int(lmtc[0].text.strip().split(' ')[1])
+    debug_print(self.args.debug_level,100,line_numb(),"WARNING: return 0")
     return 0
   
   def getTitle(self):
@@ -438,6 +454,7 @@ class Database:
         mdo=DomObject(self.args,url)
         mdo.buildRoot()
         views=mdo.getViews() # Failure is flagged as -1
+        debug_print(self.args.debug_level,100,line_numb(),"views: "+str(views))
         title=mdo.getTitle()
         item.addview(views)
         if (self.args.write_res):
@@ -461,16 +478,16 @@ def get_cmd_options():
     usage = "usage: %prog [options] args"
     
     parser = argparse.ArgumentParser()
-    parser.add_argument("--debug-level"      , default=0          , help="Debug level")
-    parser.add_argument("--update-database"  , action='store_true', help="Update database")
-    parser.add_argument("--upgrade-database" , action='store_true', help="Upgrade database")
-    parser.add_argument("--compress-database", action='store_true', help="Compress database")
-    parser.add_argument("--dont-be-lazy"     , action='store_true', help="Dont reuse already downloaded html files even if existing")
-    parser.add_argument("--very-lazy"        , action='store_true', help="Dont try to download files even if non-existing")
-    parser.add_argument("--very-very-lazy"   , action='store_true', help="Do nothing but print urls")
-    parser.add_argument("--only-for-url"     ,                      help="Only url's matching this substring will be proccessed")
-    parser.add_argument("--full"             , action='store_true', help="Process all URL (by default stop at 200)")
-    parser.add_argument("--write-res"        , action='store_true', help="Rewrite res file")
+    parser.add_argument("--debug-level"      , default=0          , type=int, help="Debug level")
+    parser.add_argument("--update-database"  , action='store_true',           help="Update database")
+    parser.add_argument("--upgrade-database" , action='store_true',           help="Upgrade database")
+    parser.add_argument("--compress-database", action='store_true',           help="Compress database")
+    parser.add_argument("--dont-be-lazy"     , action='store_true',           help="Dont reuse already downloaded html files even if existing")
+    parser.add_argument("--very-lazy"        , action='store_true',           help="Dont try to download files even if non-existing")
+    parser.add_argument("--very-very-lazy"   , action='store_true',           help="Do nothing but print urls")
+    parser.add_argument("--only-for-url"     ,                                help="Only url's matching this substring will be proccessed")
+    parser.add_argument("--full"             , action='store_true',           help="Process all URL (by default stop at 200)")
+    parser.add_argument("--write-res"        , action='store_true',           help="Rewrite res file")
     args = parser.parse_args()
 
     return args

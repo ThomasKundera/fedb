@@ -294,9 +294,14 @@ class DbItem3:
     return s
   
   def __str__(self):
-    s=str(self.url)+" "
+    s=str(self.url)+" ("+str(len(self.views))+" ) "
+    #if (len(self.views)):
+    #  n=self.views[0].n
     for v in self.views:
-      s+=str(v)+" TITI "
+      #if ( (v.n != n) and (n>2) ):
+      #  print("YEP!!!")
+      #  n=v.n
+      s+=str(v)+" "
     return s
   
   
@@ -441,6 +446,7 @@ class Database:
     #return 0
     
     for item in itlist:
+      #print ("item: "+str(item))
       nb+=1
       if ((nb>200) and not (self.args.full)):
         break;

@@ -36,7 +36,7 @@ global_settings { ambient_light 1 }
 
   camera {
     //fisheye    
-    location   <0,0,-10000*km>
+    location   <0,0,-30000*km>
     look_at    <0,0,0>
     sky        <-1,-.15,0>
     //right      <1.77419,0,0>

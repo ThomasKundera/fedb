@@ -15,24 +15,34 @@
 
 global_settings { ambient_light 1 }
 
-#declare camLookat=<Earth_Radius/6,0,0>;
+#declare camLookat=<Earth_Radius/10,0,0>;
 
 // Animation stuff
 #declare duration=30*s_t;
 #declare timeOffset=0;
 #declare seconde=clock*duration+timeOffset;
 
+/*
   camera {
     fisheye    
-    location   <0,0,-Earth_Radius-400*km>
+    location   <0,0,-Earth_Radius-330*km>
     look_at    camLookat
-    sky        <-1,0,0>
+    sky        <-1,-.15,0>
     right      <1.77419,0,0>
     //right      <1.5,0,0>
-    angle 160
+    angle 170
   }
+*/
 
-
+  camera {
+    //fisheye    
+    location   <0,0,-10000*km>
+    look_at    <0,0,0>
+    sky        <-1,-.15,0>
+    //right      <1.77419,0,0>
+    right      <1.5,0,0>
+    angle 40
+}
 
 object {Earth rotate <-47,-46,0>}
 

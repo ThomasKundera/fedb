@@ -36,12 +36,12 @@ global_settings { ambient_light 1 }
 
   camera {
     //fisheye    
-    location   <0,0,-30000*km>
-    look_at    <0,0,0>
+    location   <-1000*km,0,-11000*km>
+    look_at    <-1000*km,0,0>
     sky        <-1,-.15,0>
-    //right      <1.77419,0,0>
-    right      <1.5,0,0>
-    angle 40
+    right      <1.77419,0,0>
+    //right      <1.5,0,0>
+    angle 90
 }
 
 object {Earth rotate <-47,-46,0>}

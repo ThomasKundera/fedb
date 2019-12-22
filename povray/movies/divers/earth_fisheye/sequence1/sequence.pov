@@ -13,10 +13,10 @@
 #declare earthType=1;
 #include "earth-simple.inc"
 
-global_settings { ambient_light 2 }
+global_settings { ambient_light 3 }
 
 // 0: from ISS, 1: from way up, 2: movie
-#declare geneType=1;
+#declare geneType=0;
 
 // Animation stuff
 #declare duration=10*s_t;

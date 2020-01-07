@@ -11,7 +11,8 @@ j=1. # Joule
 
 W=1*j/s           # Watt
 
-cd=(1./683.)*W/sr # Candela
+cd=(1./683.)*W/sr # Candela: in practice divide by 6 for human eye efficiency
+eye_eff=100./683. # About the energy efficiency ratio for Sun to human eye
 lm=cd*sr          # Lumen
 lx=lm/(m**2)      # Lux
 
@@ -23,7 +24,6 @@ ligh_year=9.4607e15*m
 
 eV=1.602e-19*j    # Electron-volt
 Eph=2*eV # Visible photon energy: about 2eV
-
 
 # Midde-age units
 mile=1.60934*km
@@ -65,10 +65,6 @@ def magnitude_factor(m1,m2):
   # => f2/f1 = 10^(.4*(m2-m1))
   return (math.pow(10,.4*(m2-m1)))
   
-  
-  
-  
-  
 """
 https://fr.wikipedia.org/wiki/Magnitude_limite_visuelle
 L'œil humain permet de détecter un flux de 50 à 150 photons par seconde
@@ -86,8 +82,13 @@ def human_eye_max_sensitivity():
   return magnitude_factor(6,8.5)*min_illumin
   
 
+def apparent_magnitude_to_irradiance(m):
+  return (human_eye_max_sensitivity()*magnitude_factor(m,6.))
 
-def main():
+def irradiance_to_isotropic_power(ir,d):
+  return (ir*S_sphere(d))
+
+def oldmain():
   # Computing the power of a source at 125 miles that would be
   # a magnitude 6 visibility (realistic treshold)
   P=human_eye_max_sensitivity()*S_sphere(125*mile)
@@ -97,6 +98,14 @@ def main():
   P=human_eye_max_sensitivity()*S_sphere(125*mile)
   print("P = "+str(P)+"W")
 
+def main():
+  # Computing absolute light power of a satellite at 300 "miles"
+  # that has an apparent magnitude of 4:
+  m=3
+  d=300*mile
+  ir=apparent_magnitude_to_irradiance(m)/eye_eff
+  P=irradiance_to_isotropic_power(ir,d)
+  print ("Total isotropic power of a source at 300 miles that has a magnitude of 4: "+str(P)+" W")
 
 # --------------------------------------------------------------------------
 if __name__ == '__main__':

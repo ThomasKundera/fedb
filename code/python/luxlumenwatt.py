@@ -11,8 +11,7 @@ j=1. # Joule
 
 W=1*j/s           # Watt
 
-cd=(1./683.)*W/sr # Candela: in practice divide by 6 for human eye efficiency
-eye_eff=100./683. # About the energy efficiency ratio for Sun to human eye
+cd=(1./683.)*W/sr # Candela
 lm=cd*sr          # Lumen
 lx=lm/(m**2)      # Lux
 
@@ -28,9 +27,12 @@ Eph=2*eV # Visible photon energy: about 2eV
 # Midde-age units
 mile=1.60934*km
 
+# Sun irradiance powerat Earth distance
+Ir_sun=1300*W/m**2
 
 # Human eye
 corneaRadius=7.8*mm
+eye_eff=100./683. # About the energy efficiency ratio for Sun to human eye
 
 
 def V_sphere(r):
@@ -83,7 +85,8 @@ def human_eye_max_sensitivity():
   
 
 def apparent_magnitude_to_irradiance(m):
-  return (human_eye_max_sensitivity()*magnitude_factor(m,6.))
+  # Here, we assume that astronomical 6 is 8.5 threshold.
+  return (human_eye_max_sensitivity()*magnitude_factor(m,8.5))
 
 def irradiance_to_isotropic_power(ir,d):
   return (ir*S_sphere(d))
@@ -100,12 +103,16 @@ def oldmain():
 
 def main():
   # Computing absolute light power of a satellite at 300 "miles"
-  # that has an apparent magnitude of 4:
+  # that has an apparent magnitude of 3:
   m=3
   d=300*mile
   ir=apparent_magnitude_to_irradiance(m)/eye_eff
   P=irradiance_to_isotropic_power(ir,d)
-  print ("Total isotropic power of a source at 300 miles that has a magnitude of 4: "+str(P)+" W")
+  # Suppose a 50% reflexive surface, moreover, surface won't be perfectly normal to both Sun and observator, asuming a 30° angle we add (√3/2)²=3/4 factor:
+  P=(3./4.)*2*P
+  # Total surface needed:
+  S=P/Ir_sun
+  print ("Total isotropic power of a source at 300 miles that has a magnitude of 4: "+str(P)+" W, so a surface of "+str(S)+" m²")
 
 # --------------------------------------------------------------------------
 if __name__ == '__main__':

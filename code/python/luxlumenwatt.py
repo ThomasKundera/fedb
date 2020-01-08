@@ -31,14 +31,10 @@ mile=1.60934*km
 
 # Sun standard bolometric power
 L0_sun=3.828e26*W
-
-# This should be computed
-#Ir_sun=1300*W/m**2
-
-# Human eye
-corneaRadius=7.8*mm
-eye_eff=100./683. # About the energy efficiency ratio for Sun to human eye
-
+# Sun standard absolute magnitude
+M_sun=4.74
+# Sun irradiance at 1 au
+Ir_au_sun=1361*W/m**2
 
 def V_sphere(r):
   return (4./3.)*pi*r**3
@@ -65,14 +61,18 @@ def luminosity_to_bolometric_absolute_magnitude(P):
 def bolometric_absolute_magnitude_to_luminosity(M):
   # https://en.wikipedia.org/wiki/Absolute_magnitude#Bolometric_magnitude
   L0=3.0128e28*W
-  return (L0*math.pow(10,.4*M)
+  return (L0*math.pow(10,.4*M))
 
 def bolometric_absolute_magnitude_to_irradiance(M,d):
   L=bolometric_absolute_magnitude_to_luminosity(M)
-  return (-2.5*math.log10(P/L0))
+  return (L/S_sphere(d))
 
 def self_coherency():
-  return
+  print("M_sun=4.74="
+    +str(luminosity_to_bolometric_absolute_magnitude(L0_sun)))
+  print(bolometric_absolute_magnitude_to_luminosity(M_sun))
+  print(bolometric_absolute_magnitude_to_irradiance(M_sun,au))
+  
   
 def main():
   # Computing absolute light power of a satellite at 300 "miles"
@@ -143,3 +143,7 @@ def human_eye_max_sensitivity():
 def apparent_magnitude_to_irradiance(m):
   # Here, we assume that astronomical 6 is 8.5 threshold.
   return (human_eye_max_sensitivity()*magnitude_factor(m,8.5))
+
+# Human eye
+corneaRadius=7.8*mm
+eye_eff=100./683. # About the energy efficiency ratio for Sun to human eye

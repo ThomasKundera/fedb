@@ -22,7 +22,6 @@ ligh_year=9.4607e15*m
 au=149597870700*m
 parsec=au*648000/pi # By definition
 
-
 eV=1.602e-19*j    # Electron-volt
 Eph=2*eV # Visible photon energy: about 2eV
 
@@ -61,26 +60,54 @@ def luminosity_to_bolometric_absolute_magnitude(P):
 def bolometric_absolute_magnitude_to_luminosity(M):
   # https://en.wikipedia.org/wiki/Absolute_magnitude#Bolometric_magnitude
   L0=3.0128e28*W
-  return (L0*math.pow(10,.4*M))
+  return (L0*math.pow(10,-.4*M))
 
 def bolometric_absolute_magnitude_to_irradiance(M,d):
   L=bolometric_absolute_magnitude_to_luminosity(M)
   return (L/S_sphere(d))
 
+def bolometric_relative_magnitude_to_irradiance(m):
+  f0=bolometric_absolute_magnitude_to_irradiance(0,10*parsec)
+  return (f0*math.pow(10,-0.4*m))
+  
+
 def self_coherency():
-  print("M_sun=4.74="
+  print("M_sun  =\t\t4.74\t=\t"
     +str(luminosity_to_bolometric_absolute_magnitude(L0_sun)))
-  print(bolometric_absolute_magnitude_to_luminosity(M_sun))
-  print(bolometric_absolute_magnitude_to_irradiance(M_sun,au))
+  print("L0_sun =\t3.828×10²⁶W\t=\t"
+    +str(bolometric_absolute_magnitude_to_luminosity(M_sun)))
+  print("Ir_au_sun =\t1361W/m²\t=\t"+
+        str(bolometric_absolute_magnitude_to_irradiance(M_sun,au)))
+  print("ϕ0 =\t??W/m²\t=\t"+
+        str(bolometric_absolute_magnitude_to_irradiance(0,10*parsec)))
+  print("Ir_au_sun =\t??\t=\t"+
+        str(bolometric_relative_magnitude_to_irradiance(-26.832)))
   
   
 def main():
   # Computing absolute light power of a satellite at 300 "miles"
   # that has an apparent magnitude of 3:
-  self_coherency()
+  #self_coherency()
+  m=3
+  d=300*mile
+  f=bolometric_relative_magnitude_to_irradiance(m)
+  print("Irradiance of a mag "+str(m)+" object: "+str(f)+" W/m²")
+  P=irradiance_to_isotropic_power(f,300*mile)
+  print("Isotropic power of a "+str(d)+" m away object: "+str(P)+" W")
+  s=P/(0.8*Ir_au_sun)
+  print("Equivalent Sun surface of such object with a 80% reflectivity: "+str(s)+" m²")
+  
 # --------------------------------------------------------------------------
 if __name__ == '__main__':
   main()
+
+
+
+
+
+
+
+
 
 
 def old():

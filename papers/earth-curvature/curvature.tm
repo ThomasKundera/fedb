@@ -117,12 +117,13 @@
 
   <big-figure|<image|code/eukleides/distance-of-sigh.eps|6cm|||>|<label|figmathorizon>>
 
-  The general idea of the situation is given on Figure <label|figmathorizon>:
-  an observer, at location <math|A<rprime|'>>, standing above sea level at an
-  height <math|h<rsub|a>> is looking at a distant object located at
-  <math|B<rprime|'>> and a height <math|h<rsub|b>>. We want to compute the
-  distance <math|d=d<rsub|a>+d<rsub|b>>, being the maximum distance at which
-  those objects can be seen despite of the curvature of the Earth.
+  The general idea of the situation is given on Figure
+  <reference|figmathorizon>: an observer, at location <math|A<rprime|'>>,
+  standing above sea level at an height <math|h<rsub|a>> is looking at a
+  distant object located at <math|B<rprime|'>> and a height <math|h<rsub|b>>.
+  We want to compute the distance <math|d=d<rsub|a>+d<rsub|b>>, being the
+  maximum distance at which those objects can be seen despite of the
+  curvature of the Earth.
 
   The problem is mathematically trivial once noted that <math|A<rprime|'>OC>
   and <math|B<rprime|'>OC> are right triangles in C. So that we can just
@@ -147,7 +148,7 @@
   And so:
 
   <\equation*>
-    d<rsub|a>=<sqrt|h<rsup|2><rsub|a>+2rh<rsub|a>><label|eqda>
+    d<rsub|a>=<sqrt|h<rsup|2><rsub|a>+2rh<rsub|a>><eq-number><label|eqda>
   </equation*>
 
   and the same for <math|d<rsub|b>>:
@@ -197,7 +198,7 @@
   For sake of simplicity lets name <math|K=d-<sqrt|h<rsup|2><rsub|a>+2rh<rsub|a>>>
 
   <\eqnarray*>
-    <tformat|<table|<row|<cell|h<rsup|2><rsub|b>+2rh<rsub|b>>|<cell|=>|<cell|K<rsup|2>>>|<row|<cell|h<rsup|2><rsub|b>+2rh<rsub|b>-K<rsup|2>>|<cell|=>|<cell|0<label|eq2><eq-number>>>>>
+    <tformat|<table|<row|<cell|h<rsup|2><rsub|b>+2rh<rsub|b>>|<cell|=>|<cell|K<rsup|2>>>|<row|<cell|h<rsup|2><rsub|b>+2rh<rsub|b>-K<rsup|2>>|<cell|=>|<cell|0<eq-number><label|eq2>>>>>
   </eqnarray*>
 
   Equation (<reference|eq2>) is just a second degree equation with
@@ -285,7 +286,7 @@
   What we are interested in is the angle <math|\<alpha\>=<wide|BA<rprime|'>B<rprime|'>|^>>.
 
   <\eqnarray*>
-    <tformat|<table|<row|<cell|<math-up|tan><around*|(|\<alpha\>|)>>|<cell|=>|<cell|d<rsub|b>/d<rsub|a>>>|<row|<cell|<math-up|tan><around*|(|\<alpha\>|)>>|<cell|=>|<cell|<frac|h<rsup|2>+2rh|r<sqrt|h<rsup|2>+2rh>>>>|<row|<cell|\<alpha\>>|<cell|=>|<cell|<math-up|atan><around*|(|<frac|<sqrt|h<rsup|2>+2rh>|r>|)><eq-number><label|eqata>>>>>
+    <tformat|<table|<row|<cell|<math-up|tan><around*|(|\<alpha\>|)>>|<cell|=>|<cell|d<rsub|b>/d<rsub|a>>>|<row|<cell|<math-up|tan><around*|(|\<alpha\>|)>>|<cell|=>|<cell|<frac|h<rsup|2>+2rh|r<sqrt|h<rsup|2>+2rh>>>>|<row|<cell|\<alpha\>>|<cell|=>|<cell|<math-up|atan><around*|(|<frac|<sqrt|h<rsup|2>+2rh>|r>|)><label|eqata>>>>>
   </eqnarray*>
 
   <subsection|Numerical values>
@@ -308,7 +309,9 @@
   dimensionaly coherent), but it may give an numerical approximation of the
   correct value in some conditions.
 
-  <big-figure|<image|code/eukleides/eight-inches.eps|8cm|||>|<label|FigEigthInches>>
+  <\big-figure|<image|code/eukleides/eight-inches.eps|8cm|||>>
+    <label|FigEightInches>
+  </big-figure>
 
   It is first important to recall that if one wants to know from how long an
   object will be visible, the correct method is described in Section
@@ -316,12 +319,12 @@
   to measure some ``drop''.
 
   There are at least two ways to consider a ``drop''. As seen in Figure
-  <inactive|<reference|FigEightInches>>, the ``drop'' can either be
-  <math|h<rprime|'>> (the distance to ground on a local verical) or
-  <math|h<rprime|''>> (distance to ground according to a line normal to the
-  horizontal at <math|A>). The distance can also be computed two ways: either
-  <math|d> being the distance in straight line betwen <math|A> and <math|B>,
-  or, by the arc <math|<wide|AB<rprime|'>|\<invbreve\>>> or
+  <reference|FigEightInches>, the ``drop'' can either be <math|h<rprime|'>>
+  (the distance to ground on a local verical) or <math|h<rprime|''>>
+  (distance to ground according to a line normal to the horizontal at
+  <math|A>). The distance can also be computed two ways: either <math|d>
+  being the distance in straight line betwen <math|A> and <math|B>, or, by
+  the arc <math|<wide|AB<rprime|'>|\<invbreve\>>> or
   <math|<wide|AB<rprime|''>|\<invbreve\>>>, which would be the value given by
   any measure on a map.
 
@@ -339,7 +342,7 @@
   We consider the positive solution of the above equation:
 
   <\equation*>
-    h<rprime|'>=<sqrt|r<rsup|2>+d<rsup|2>>-r
+    h<rprime|'>=<sqrt|r<rsup|2>+d<rsup|2>>-r<eq-number><label|eqhprime>
   </equation*>
 
   <subsubsection|Computing length of arc \ <math|<wide|AB<rprime|'>|\<invbreve\>>>>
@@ -393,6 +396,23 @@
   Zoom up to <math|1000 km>:
 
   <big-figure|<image|code/gnuplot/eight_inches_small.eps|12cm|||>|>
+
+  <subsubsection|Why does it works so well?>
+
+  If we look again at the way that equation <reference|eqhprime> was found,
+  and assume <math|h<rprime|'>\<ll\>r>, then we get, by discarting second
+  order terms:
+
+  \;
+
+  <\eqnarray*>
+    <tformat|<table|<row|<cell|OA<rsup|2>+AB<rsup|2>>|<cell|=>|<cell|OB<rsup|2>>>|<row|<cell|r<rsup|2>+d<rsup|2>>|<cell|=>|<cell|<around*|(|r+h<rprime|'>|)><rsup|2>>>|<row|<cell|r<rsup|2>+d<rsup|2>>|<cell|=>|<cell|r<rsup|2>+h<rprime|'><rsup|2>+2rh<rprime|'>>>|<row|<cell|r<rsup|2>+d<rsup|2>>|<cell|\<simeq\>>|<cell|r<rsup|2>+2rh<rprime|'>>>|<row|<cell|2rh<rprime|'>>|<cell|\<simeq\>>|<cell|d<rsup|2>>>|<row|<cell|h<rprime|'>>|<cell|\<simeq\>>|<cell|<frac|d<rsup|2>|2r>>>>>
+  </eqnarray*>
+
+  And numerically, with <math|r=3959 miles>, <math|>knowing that there are
+  63360 inches in a mile, we can note that
+  <math|63360/<around*|(|2\<times\>3959|)>\<simeq\>8>. Thus this
+  approximation.
 
   <section|Shape of the horizon>
 
@@ -621,6 +641,7 @@
 
 <\references>
   <\collection>
+    <associate|FigEightInches|<tuple|8|?>>
     <associate|FigEigthInches|<tuple|8|?>>
     <associate|FigPinHole|<tuple|12|?>>
     <associate|FigShape1|<tuple|13|?>>
@@ -663,37 +684,38 @@
     <associate|auto-4|<tuple|1.2|1>>
     <associate|auto-40|<tuple|9|?>>
     <associate|auto-41|<tuple|10|?>>
-    <associate|auto-42|<tuple|5|?>>
-    <associate|auto-43|<tuple|5.1|?>>
-    <associate|auto-44|<tuple|5.2|?>>
-    <associate|auto-45|<tuple|11|?>>
-    <associate|auto-46|<tuple|5.3|?>>
-    <associate|auto-47|<tuple|5.4|?>>
-    <associate|auto-48|<tuple|5.4.1|?>>
-    <associate|auto-49|<tuple|5.4.2|?>>
+    <associate|auto-42|<tuple|4.4.7|?>>
+    <associate|auto-43|<tuple|5|?>>
+    <associate|auto-44|<tuple|5.1|?>>
+    <associate|auto-45|<tuple|5.2|?>>
+    <associate|auto-46|<tuple|11|?>>
+    <associate|auto-47|<tuple|5.3|?>>
+    <associate|auto-48|<tuple|5.4|?>>
+    <associate|auto-49|<tuple|5.4.1|?>>
     <associate|auto-5|<tuple|2|1>>
-    <associate|auto-50|<tuple|12|?>>
-    <associate|auto-51|<tuple|5.5|?>>
-    <associate|auto-52|<tuple|5.5.1|?>>
-    <associate|auto-53|<tuple|13|?>>
-    <associate|auto-54|<tuple|5.6|?>>
-    <associate|auto-55|<tuple|5.6.1|?>>
+    <associate|auto-50|<tuple|5.4.2|?>>
+    <associate|auto-51|<tuple|12|?>>
+    <associate|auto-52|<tuple|5.5|?>>
+    <associate|auto-53|<tuple|5.5.1|?>>
+    <associate|auto-54|<tuple|13|?>>
+    <associate|auto-55|<tuple|5.6|?>>
     <associate|auto-6|<tuple|1.3|2>>
     <associate|auto-7|<tuple|2|2>>
     <associate|auto-8|<tuple|2.1|2>>
     <associate|auto-9|<tuple|2.2|2>>
     <associate|eq2|<tuple|3.3.2|4>>
-    <associate|eqata|<tuple|4|?>>
+    <associate|eqata|<tuple|3|?>>
     <associate|eqd|<tuple|1|?>>
     <associate|eqda|<tuple|3|?>>
     <associate|eqdb|<tuple|3|?>>
-    <associate|eqhcircle|<tuple|9|?>>
-    <associate|eqhda|<tuple|5|?>>
-    <associate|eqhl|<tuple|8|?>>
-    <associate|eqhp|<tuple|7|?>>
-    <associate|eqhr|<tuple|6|?>>
+    <associate|eqhcircle|<tuple|8|?>>
+    <associate|eqhda|<tuple|4|?>>
+    <associate|eqhl|<tuple|7|?>>
+    <associate|eqhp|<tuple|6|?>>
+    <associate|eqhprime|<tuple|4.4.1|?>>
+    <associate|eqhr|<tuple|5|?>>
     <associate|eqmmp|<tuple|12|?>>
-    <associate|eqmpr|<tuple|10|?>>
+    <associate|eqmpr|<tuple|9|?>>
     <associate|figatana|<tuple|7|?>>
     <associate|figflatflat|<tuple|1|?>>
     <associate|fighorizonplot|<tuple|4|?>>
@@ -724,17 +746,19 @@
 
       <tuple|normal||<pageref|auto-31>>
 
-      <tuple|normal||<pageref|auto-33>>
+      <\tuple|normal>
+        \;
+      </tuple|<pageref|auto-33>>
 
       <tuple|normal||<pageref|auto-40>>
 
       <tuple|normal||<pageref|auto-41>>
 
-      <tuple|normal||<pageref|auto-45>>
+      <tuple|normal||<pageref|auto-46>>
 
-      <tuple|normal||<pageref|auto-50>>
+      <tuple|normal||<pageref|auto-51>>
 
-      <tuple|normal||<pageref|auto-53>>
+      <tuple|normal||<pageref|auto-54>>
     </associate>
     <\associate|toc>
       <vspace*|1fn><with|font-series|<quote|bold>|math-font-series|<quote|bold>|1<space|2spc>Presentation
@@ -866,41 +890,49 @@
       <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
       <no-break><pageref|auto-39>>
 
+      <with|par-left|<quote|2tab>|4.4.7<space|2spc>Why does it works so well?
+      <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
+      <no-break><pageref|auto-42>>
+
       <vspace*|1fn><with|font-series|<quote|bold>|math-font-series|<quote|bold>|5<space|2spc>Shape
       of the horizon> <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
-      <no-break><pageref|auto-42><vspace|0.5fn>
+      <no-break><pageref|auto-43><vspace|0.5fn>
 
       <with|par-left|<quote|1tab>|5.1<space|2spc>The question is not simple
       <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
-      <no-break><pageref|auto-43>>
+      <no-break><pageref|auto-44>>
 
       <with|par-left|<quote|1tab>|5.2<space|2spc>Shape of the horizon line
       <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
-      <no-break><pageref|auto-44>>
+      <no-break><pageref|auto-45>>
 
       <with|par-left|<quote|1tab>|5.3<space|2spc>Properties of the horizon
       circle <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
-      <no-break><pageref|auto-46>>
+      <no-break><pageref|auto-47>>
 
       <with|par-left|<quote|1tab>|5.4<space|2spc>Some words about camera
       projection <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
-      <no-break><pageref|auto-47>>
+      <no-break><pageref|auto-48>>
 
       <with|par-left|<quote|2tab>|5.4.1<space|2spc>The camera
       <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
-      <no-break><pageref|auto-48>>
+      <no-break><pageref|auto-49>>
 
       <with|par-left|<quote|2tab>|5.4.2<space|2spc>Horizontal camera
       <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
-      <no-break><pageref|auto-49>>
+      <no-break><pageref|auto-50>>
 
       <with|par-left|<quote|1tab>|5.5<space|2spc>Shape of the horizon viewed
       from an horizontal pinhole camera <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
-      <no-break><pageref|auto-51>>
+      <no-break><pageref|auto-52>>
 
       <with|par-left|<quote|2tab>|5.5.1<space|2spc>Plots
       <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
-      <no-break><pageref|auto-52>>
+      <no-break><pageref|auto-53>>
+
+      <with|par-left|<quote|1tab>|5.6<space|2spc>Angular representation
+      <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
+      <no-break><pageref|auto-55>>
     </associate>
   </collection>
 </auxiliary>

@@ -43,16 +43,21 @@ class spaceobject:
     s+="["+str(self.azelecd[0]/dg)+","+str(self.azelecd[1]/dg)+"]"
     return s
   
-  
 
-def main():
+def self_test():
   sod={}
   for line in kobjects:
     so=spaceobject(line)
     sod[so.name]=so
-  
   for nso,so in sod.items():
     print (so)
+  
+
+def main():
+  Earth=spaceobject(kobjects[0])
+  Moon =spaceobject(kobjects[1])
+  Venus=spaceobject(kobjects[2])
+  Sun  =spaceobject(kobjects[3])
   
   
 # --------------------------------------------------------------------------

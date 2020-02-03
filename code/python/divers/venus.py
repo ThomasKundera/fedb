@@ -98,8 +98,8 @@ def self_test():
 
 
 def main():
-  self_test()
-  
+  #self_test()
+  #return
   Earth=spaceobject(kobjects[0])
   Moon =spaceobject(kobjects[1])
   Venus=spaceobject(kobjects[2])

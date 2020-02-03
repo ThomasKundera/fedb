@@ -5,7 +5,12 @@ sys.path.insert(0, '../common')
 
 import math
 from tkunits import km, dg, pi, au, earth_radius
+import geom3
 
+import matplotlib.pyplot
+import matplotlib.lines
+
+kScaleFactor=1./500.
 # Objects 2020/01/30 19:30
 #           distance   d/earth     d/sun     Az/hau                       ecl j2000                           ecl d
 kobjects= [["Earth"  , 0         , 0.985*au, [[0  ,0 ,0   ],[  0, 0, 0  ]],[[  0, 0, 0  ],[ 0,  0,  0  ]],[[  0, 0, 0  ],[ 0,  0,  0  ]]],
@@ -19,30 +24,67 @@ def hms2d(hms):
 def hms2r(hms):
   return dg*(hms[0]+hms[1]/60.+hms[2]/3600.)
 
-class sp32: # spherical coordinates, no earth_radius
+class sp32: # spherical coordinates, no radius
   def __init__(self,a,e):
     self.a=a
     self.e=e
-    
+  
+  def __str__(self):
+    return "["+str(self.a/dg)+","+str(self.e/dg)+"]"
+  
+class sp32r: 
+  def __init__(self,r,a,e):
+    self.r=r
+    self.a=a
+    self.e=e
+  
+  def __str__(self):
+    return str(self.r/km)+" ["+str(self.a/dg)+","+str(self.e/dg)+"]"
+
+
+def sp32rtoxy(c):
+  # Here we purposely ignore the z coordinate
+  return geom3.Vector3(c.r*math.cos(c.a),c.r*math.sin(c.a),0)
+  
+  
+
 class spaceobject:
+  __scale=au/10000.
   def __init__(self,line):
     self.name=line[0]
     self.d2earth=line[1]
     self.d2sun=line[2]
-    self.azel   =[hms2r(line[3][0]),hms2r(line[3][1])]
-    self.azelec2=[hms2r(line[4][0]),hms2r(line[4][1])]
-    self.azelecd=[hms2r(line[5][0]),hms2r(line[5][1])]
-
+    self.azcd=sp32(hms2r(line[5][0]),hms2r(line[5][1]))
+    self.recompute()
     
+  def recompute(self):
+    #self.azel   =sp32r(self.d2earth,hms2r(line[3][0]),hms2r(line[3][1]))
+    #self.azelec2=sp32r(self.d2earth,hms2r(line[4][0]),hms2r(line[4][1]))
+    self.razcd=sp32r(self.d2earth,self.azcd.a,self.azcd.e)
+    
+    self.xy=sp32rtoxy(self.razcd)
+    
+
+  def rescale(self,s):
+    self.d2earth*=s
+    self.recompute()
+
   def __str__(self):
     s =self.name+" \t: "
-    s+=str(self.d2earth/km)+" "
-    s+=str(self.d2sun  /km)+" "
-    s+="["+str(self.azel   [0]/dg)+","+str(self.azel   [1]/dg)+"]"
-    s+="["+str(self.azelec2[0]/dg)+","+str(self.azelec2[1]/dg)+"]"
-    s+="["+str(self.azelecd[0]/dg)+","+str(self.azelecd[1]/dg)+"]"
+    #s+=str(self.d2earth/km)+" "
+    #s+=str(self.d2sun  /km)+" "
+    #s+=str(self.azel)+ " "
+    #s+=str(self.azelec2)+" "
+    s+=str(self.razcd)
+    s+=str(self.xy)
     return s
   
+  def display(self):
+    matplotlib.pyplot.annotate(self.name, xy = (self.xy.x/self.__scale,self.xy.y/self.__scale))
+    matplotlib.pyplot.scatter(self.xy.x/self.__scale, self.xy.y/self.__scale  , color='black')
+  
+  def circle(self,r):
+    return(matplotlib.pyplot.Circle(self.xy/self.__scale, r, color='b', fill=False))
 
 def self_test():
   sod={}
@@ -51,13 +93,38 @@ def self_test():
     sod[so.name]=so
   for nso,so in sod.items():
     print (so)
-  
+    so.display()
+  matplotlib.pyplot.show()
+
 
 def main():
+  #self_test()
+  #return
   Earth=spaceobject(kobjects[0])
   Moon =spaceobject(kobjects[1])
   Venus=spaceobject(kobjects[2])
   Sun  =spaceobject(kobjects[3])
+  Venus.rescale(kScaleFactor)
+  Sun.rescale(kScaleFactor)
+  sod={Earth.name: Earth,
+       Moon.name : Moon,
+       Venus.name: Venus,
+       Sun.name  : Sun}
+  matplotlib.pyplot.axis('equal')
+  c=Earth.circle(3)
+  ax = matplotlib.pyplot.gca()
+  ax.cla() # clear things for fresh plot
+  #ax.set_xlim((-.1, .1))
+  #ax.set_ylim((-.1, .1))
+
+  for nso,so in sod.items():
+    print (so)
+    so.display()
+  ax.add_artist(c)
+
+  matplotlib.pyplot.show()
+  
+  
   
   
 # --------------------------------------------------------------------------

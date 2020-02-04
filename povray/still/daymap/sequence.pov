@@ -8,7 +8,7 @@ global_settings { ambient_light 0.10 }
 #declare MappedEarthTexture=texture {
   pigment{
     image_map {
-      png "sunmap.php.png"
+      png "sunmap.php-night.png"
       map_type 1
       interpolate 2
     }

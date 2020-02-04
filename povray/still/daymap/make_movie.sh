@@ -1,5 +1,7 @@
 #!/bin/bash
 
+mkdir -p out
+
 for i in `seq 1 6`; do
   echo $i
   montage -mode concatenate -tile 2x mapped/sequence${i}.png lighted/sequence${i}.png out/out${i}.png

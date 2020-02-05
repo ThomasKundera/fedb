@@ -14,22 +14,6 @@ class Mutations(object):
     self.m=gMutN
     self.mother=m
   
-  def label_rec(self,n):
-    try: # do not relabel
-      return(max(self.lbl,n))
-    except AttributeError:
-      self.lbl=n
-    if (self.mother):
-      self.mother.label(n+1)
-    return(n+1)
-
-  def unlabel_rec(self):
-    try:
-      del self.lbl
-      self.mother.unlabel()
-    except AttributeError:
-      return
-  
   def label(self,n):
     # Rewrote as non recursive (recursion depth in python is limited)
     # it's anyway most of the time faster and less memory consuming
@@ -47,13 +31,15 @@ class Mutations(object):
         p=p.mother
     return(n)
     
-  def label_check_rec(self,n):
+  def unlabel(self):
+    p=self
     try:
-      return(max(self.lbl,n))
+      while (p):
+        del p.lbl
+        p=p.mother
     except AttributeError:
-      self.lbl=n
-      return(self.mother.label_check(n+1))
-
+      return
+    
   def label_check(self):
     p=self
     n=0
@@ -67,16 +53,8 @@ class Mutations(object):
     print("ERROR: Mutations.label_check(): unreachable statement")
     raise
     
-  def unlabel(self):
-    p=self
-    try:
-      while (p):
-        del p.lbl
-        p=p.mother
-    except AttributeError:
-      return
-    
 
+  # Last common ancestor
   def lca(self,o):
     self.label(0)
     v=o.label_check()

@@ -40,14 +40,14 @@ class Point3(object):
         if isinstance(other, Point3):
             return Vector3(self.x - other.x, self.y - other.y, self.z - other.z)
         elif isinstance(other, Vector3):
-            return Point3(self.x - other.dx, self.y - other.dy, self.z - other.dz)
+            return Point3(self.x - other.x, self.y - other.y, self.z - other.z)
         else:
             return NotImplemented
         
     def __add__(self, other):
         """P + v is P translated by v"""
         if isinstance(other, Vector3):
-            return Point3(self.x + other.dx, self.y + other.dy, self.z + other.dz)
+            return Point3(self.x + other.x, self.y + other.y, self.z + other.z)
         else:
             return NotImplemented
 
@@ -85,28 +85,28 @@ class Point3(object):
 #================================================================
 
 class Vector3(object):
-    """Represents a vector in 3-space with coordinates dx, dy, dz."""
+    """Represents a vector in 3-space with coordinates x, y, z."""
     
-    def __init__(self, dx, dy=None, dz=None):
+    def __init__(self, x, y=None, z=None):
         """Constructor takes a Point3, a Vector3, a 3-tuple or
         a 3-list or any other 3-sequence as a sole argument, or
-        values dx, dy and dz."""
-        if dy is None and dz is None:
-            self.dx, self.dy, self.dz = dx  # Constructor taking pt, vec, list or tuple as arg
+        values x, y and z."""
+        if y is None and z is None:
+            self.x, self.y, self.z = x  # Constructor taking pt, vec, list or tuple as arg
         else:
-            self.dx, self.dy, self.dz = dx, dy, dz  # Constructor taking x, y, z
+            self.x, self.y, self.z = x, y, z  # Constructor taking x, y, z
                                     
     def __sub__(self, other):
         """Vector difference"""
-        return Vector3(self.dx-other.dx, self.dy-other.dy, self.dz-other.dz)
+        return Vector3(self.x-other.x, self.y-other.y, self.z-other.z)
 
     def __add__(self, other):
         """Vector sum"""
-        return Vector3(self.dx+other.dx, self.dy+other.dy, self.dz+other.dz)
+        return Vector3(self.x+other.x, self.y+other.y, self.z+other.z)
 
     def __mul__(self, scale):
         """v * r for r a float is scaling of vector v by r"""
-        return Vector3(scale*self.dx, scale*self.dy, scale*self.dz)
+        return Vector3(scale*self.x, scale*self.y, scale*self.z)
 
     def __rmul__(self, scale):
         """r * v for r a float is scaling of vector v by r"""
@@ -122,22 +122,22 @@ class Vector3(object):
 
     def __neg__(self):
         """Negation of a vector is negation of all its coordinates"""
-        return Vector3(-self.dx, -self.dy, -self.dz)
+        return Vector3(-self.x, -self.y, -self.z)
 
     def __iter__(self):
-        """Iterator over coordinates dx, dy, dz in turn"""
-        return [self.dx, self.dy, self.dz].__iter__()
+        """Iterator over coordinates x, y, z in turn"""
+        return [self.x, self.y, self.z].__iter__()
 
     def __getitem__(self, i):
-        """v[i] is dx, dy, dz for i in 0,1,2 resp"""
-        return [self.dx, self.dy, self.dz][i]
+        """v[i] is x, y, z for i in 0,1,2 resp"""
+        return [self.x, self.y, self.z][i]
 
     def __eq__(self, other):
         """Equality of vectors is equality of all coordinates to within 
        epsilon (defaults to 1.e-10)."""
-        return (abs(self.dx - other.dx) < epsilon and
-                abs(self.dy - other.dy) < epsilon and
-                abs(self.dz - other.dz) < epsilon)
+        return (abs(self.x - other.x) < epsilon and
+                abs(self.y - other.y) < epsilon and
+                abs(self.z - other.z) < epsilon)
 
     def __ne__(self, other):
         """Inequality of vectors is inequality of any coordinates"""
@@ -146,20 +146,20 @@ class Vector3(object):
     
     def dot(self, other):
         """The usual dot product"""
-        return self.dx*other.dx + self.dy*other.dy + self.dz*other.dz
+        return self.x*other.x + self.y*other.y + self.z*other.z
 
     def cross(self, other):
         """The usual cross product"""
-        return Vector3(self.dy * other.dz - self.dz * other.dy,
-                      self.dz * other.dx - self.dx * other.dz,
-                      self.dx * other.dy - self.dy * other.dx) 
+        return Vector3(self.y * other.z - self.z * other.y,
+                      self.z * other.x - self.x * other.z,
+                      self.x * other.y - self.y * other.x) 
 
     def norm(self):
         """A normalised version of self"""
         return self/length(self)
     def __str__(self):
         """Minimal string representation in parentheses"""
-        return ("(%.3f,%.3f,%.3f)") % (self.dx, self.dy, self.dz)
+        return ("(%.3f,%.3f,%.3f)") % (self.x, self.y, self.z)
 
     def __repr__(self):
         """String representation with class included"""

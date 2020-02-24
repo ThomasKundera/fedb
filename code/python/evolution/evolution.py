@@ -70,13 +70,15 @@ class Pop(object):
   def __init__(self):
     self.year  =  0
     self.maxpop=100  # Max number of individuals in the pop
-    self.nby   =100  # run for that many years
+    self.nby   = 20  # run for that many years
     self.start = time.time()
 
   def doit(self):
     global gPop
     self.f=io.open("datafile.dat","wt")
     self.idvtree=IdvNode()
+    
+    self.dotGraph()
     
     for i in range(1,self.nby):
       if (not (i % (self.nby/10))):
@@ -87,6 +89,13 @@ class Pop(object):
       #self.tofile()
     #print(anytree.RenderTree(self.idvtree))
     #DotExporter(self.idvtree).to_picture("idvtree.png")
+    self.f.close()
+
+  def doyear(self):
+    self.year=self.year+1
+    for n in anytree.iterators.preorderiter.PreOrderIter(self.idvtree):
+      n.onemoreyear(self.maxpop)
+
     for n in self.idvtree.leaves:
       if (not n.dead):
         n.matters=True
@@ -99,27 +108,15 @@ class Pop(object):
         #n.name='@'+n.name # debug
         #if (not n.parent.matters):
         #  n.parent=None
-          
-    DotExporter(self.idvtree).to_picture("idvtree.png")
-    self.f.close()
-
-  def doyear(self):
-    self.year=self.year+1
-    for n in anytree.iterators.preorderiter.PreOrderIter(self.idvtree):
-      n.onemoreyear(self.maxpop)
+    self.dotGraph()
+    #DotExporter(self.idvtree).to_picture("out/idvtree%5d.png" % self.year)  
     
-  def lca(self,s):
-    # testing all agains each other is large.
-    # testing just first against others
-    n=0
-    sm=0
-    for i in range(1,len(s)):
-      sm=max(sm,s[0].lca(s[i]))
-      n+=1
-    
-    for idv in s:
-      idv.unlabel()
-    return(sm)
+  def lca(self):
+    return #anytree.util.commonancestors(
+  
+  
+  def dotGraph(self):
+    DotExporter(self.idvtree).to_dotfile(f'out/idvtree_{self.year:05}.dot')
     
   def tofile(self):
     s=self.extract_some(100)

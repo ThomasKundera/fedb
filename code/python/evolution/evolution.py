@@ -4,6 +4,7 @@ import time
 
 random.seed(1)
 
+gId=0
 gMutN=0
 
 # This code is to observe distance to last common ancestor of a population
@@ -65,12 +66,26 @@ class Mutations(object):
     o.unlabel()
     return (v)
     
+class AncestorList(object):
+  def __init__(self,al,i):
+    # FIXME: common part of the list should be shared.
+    self.al=al
+    al.append(i)
+    
+  def lca(self,al):
+    for i in (min(len(self.al,al))):
+      if (self.al[i] != al[i]): return (len(self.al)-i)
+    return (0)
+
 
 # --------------------------------------------------------------------------
 class Idv(object):
   """Individuals of the population"""
   def __init__(self,m):
-    self.mut=Mutations(m)
+    global gId
+    #self.mut=Mutations(m)
+    self.anclist=AncestorList(m.anclist,gId)
+    gId+=1
     self.age=0
     self.sex=random.getrandbits(1) # not used yet
     self.deathcurve=[.5,.2,.3,.4,.5,.6,.8,1] # Likelihood of dying for each age
@@ -87,18 +102,15 @@ class Idv(object):
     return (str(self.age))
   
   def lca(self,o):
-    return(self.mut.lca(o.mut))
-
-  def unlabel(self):
-    self.mut.unlabel()
+    return(self.anclist.lca(o.anclist))
 
 
 # --------------------------------------------------------------------------
 class Pop(object):
   def __init__(self):
-    self.y=0
+    self.year  =  0
     self.maxpop=100. # Max number of individuals in the pop
-    self.nby=20
+    self.nby   = 20  # run for that many years
     self.start = time.time()
 
   def doit(self):
@@ -156,6 +168,10 @@ class Pop(object):
     s=self.extract_some(100)
     lca=self.lca(s)
     self.f.write(str(self.y)+" "+str(len(self.idvl))+" "+str(lca)+'\n')
+
+
+
+
 
 # --------------------------------------------------------------------------
 def main():

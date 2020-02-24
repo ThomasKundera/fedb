@@ -6,10 +6,20 @@ from anytree.exporter import DotExporter
 
 random.seed(1)
 
-gId=0  # global ID
-gPop=0 # To avoid counting pop
+gId=0   # global ID
+gPop=0  # To avoid counting pop
+gStep=0 # Graphic steps
+gYear=0
 
 # This code is to observe distance to last common ancestor of a population
+
+def dotGraph(n,l=0):
+  global gStep
+  global gYear
+  if (l>1): return
+  DotExporter(n).to_dotfile(f'out/idvtree_{gYear:05}_{gStep:05}.dot')
+  gStep+=1
+
 
 # --------------------------------------------------------------------------
 class Idv(object):
@@ -29,22 +39,25 @@ class Idv(object):
   
   def onemoreyear(self,maxpop):
     self.age+=1
-    self.die(maxpop)
-    self.reproduce()
+    a=self.die(maxpop)
+    b=self.reproduce()
+    return a or b # python will optimize, but both have to be done
   
   def die(self,maxpop):
     global gPop
-    if (self.dead): return
+    if (self.dead): return False
     if (random.random()<self.deathcurve[self.age]*(1+gPop/maxpop)):
       self.dead=True
       self.name='*'+self.name
       gPop-=1
+      return True
 
   def reproduce(self):
-    if (self.dead): return
-    if (self.age<=1): return # Also cut recursivity
+    if (self.dead): return False
+    if (self.age<=1): return False # Also cut recursivity
     for i in range(self.mult):
       c=IdvNode(parent=self)
+    return True
   
   def __str__(self):
     if (self.dead): return '*'+str(self.id)
@@ -68,17 +81,19 @@ class IdvNode(Idv, anytree.NodeMixin):  # Add Node feature
 # --------------------------------------------------------------------------
 class Pop(object):
   def __init__(self):
-    self.year  =  0
+    global gYear
+    gYear  =  0
     self.maxpop=100  # Max number of individuals in the pop
     self.nby   =200  # run for that many years
     self.start = time.time()
 
   def doit(self):
     global gPop
+    global gYear
     self.f=io.open("datafile.dat","wt")
     self.idvtree=IdvNode()
     
-    self.dotGraph()
+    dotGraph(self.idvtree)
     
     for i in range(1,self.nby):
       if (not (i % (self.nby/10))):
@@ -92,9 +107,13 @@ class Pop(object):
     self.f.close()
 
   def doyear(self):
-    self.year=self.year+1
+    global gYear
+    global gStep
+    gYear+=1
+    gStep=0
     for n in anytree.iterators.preorderiter.PreOrderIter(self.idvtree):
-      n.onemoreyear(self.maxpop)
+      if (n.onemoreyear(self.maxpop)):
+        dotGraph(self.idvtree,2) # only draw if there is a change. FIXME: idvtree global?
       n.matters=False # reset interest.
 
     for n in self.idvtree.leaves:
@@ -106,24 +125,24 @@ class Pop(object):
     for n in anytree.iterators.preorderiter.PreOrderIter(self.idvtree):
       if (not n.matters):
         n.parent=None
+        dotGraph(self.idvtree,2)
         #n.name='@'+n.name # debug
         #if (not n.parent.matters):
         #  n.parent=None
     
     lucas=(anytree.util.commonancestors(*self.idvtree.leaves))
     if (len(lucas)):
-      self.idvtree=lucas[-1]
+      for n in lucas:
+        self.idvtree=n
+        dotGraph(self.idvtree,2)
     
-    self.dotGraph()
+    dotGraph(self.idvtree)
     #DotExporter(self.idvtree).to_picture("out/idvtree%5d.png" % self.year)  
     
   def lca(self):
     return #anytree.util.commonancestors(
   
   
-  def dotGraph(self):
-    DotExporter(self.idvtree).to_dotfile(f'out/idvtree_{self.year:05}.dot')
-    
   def tofile(self):
     s=self.extract_some(100)
     lca=self.lca(s)

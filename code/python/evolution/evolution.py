@@ -9,6 +9,7 @@ gMutN=0
 # This code is to observe distance to last common ancestor of a population
 # Likely not well wrote, however.
 
+# --------------------------------------------------------------------------
 class Mutations(object):
   def __init__(self,m):
     global gMutN
@@ -65,6 +66,7 @@ class Mutations(object):
     return (v)
     
 
+# --------------------------------------------------------------------------
 class Idv(object):
   """Individuals of the population"""
   def __init__(self,m):
@@ -91,6 +93,7 @@ class Idv(object):
     self.mut.unlabel()
 
 
+# --------------------------------------------------------------------------
 class Pop(object):
   def __init__(self):
     self.y=0
@@ -154,6 +157,7 @@ class Pop(object):
     lca=self.lca(s)
     self.f.write(str(self.y)+" "+str(len(self.idvl))+" "+str(lca)+'\n')
 
+# --------------------------------------------------------------------------
 def main():
   p=Pop()
   p.doit()

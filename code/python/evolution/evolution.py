@@ -7,7 +7,7 @@ from anytree.exporter import DotExporter
 random.seed(1)
 
 gId=0   # global ID
-gPop=0  # To avoid counting pop
+gPop=0  # To avoid counting those who are alive
 gStep=0 # Graphic steps
 gYear=0
 
@@ -51,6 +51,7 @@ class Idv(object):
       self.name='*'+self.name
       gPop-=1
       return True
+    return False
 
   def reproduce(self):
     if (self.dead): return False
@@ -84,7 +85,7 @@ class Pop(object):
     global gYear
     gYear  =  0
     self.maxpop=100  # Max number of individuals in the pop
-    self.nby   =200  # run for that many years
+    self.nby   =300  # run for that many years
     self.start = time.time()
 
   def doit(self):
@@ -96,7 +97,7 @@ class Pop(object):
     dotGraph(self.idvtree)
     
     for i in range(1,self.nby):
-      if (not (i % (self.nby/10))):
+      if (not (i % (self.nby/300))):
         delta=int(max(1,time.time()-self.start))
         left=(delta/i)*(self.nby-i)
         print ("Year: "+str(i)+" total pop: "+str(gPop)+" time elaps: "+str(delta)+" time left: "+str(left))
@@ -123,7 +124,7 @@ class Pop(object):
           n2.matters=True # FIXME: lots of redundencies here
           
     for n in anytree.iterators.preorderiter.PreOrderIter(self.idvtree):
-      if (not n.matters):
+      if ((n.dead) and (not n.matters)):
         n.parent=None
         dotGraph(self.idvtree,2)
         #n.name='@'+n.name # debug

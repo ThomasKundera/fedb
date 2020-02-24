@@ -97,7 +97,7 @@ class Pop(object):
     dotGraph(self.idvtree)
     
     for i in range(1,self.nby):
-      if (not (i % (self.nby/300))):
+      if (not (i % (self.nby/10))):
         delta=int(max(1,time.time()-self.start))
         left=(delta/i)*(self.nby-i)
         print ("Year: "+str(i)+" total pop: "+str(gPop)+" time elaps: "+str(delta)+" time left: "+str(left))
@@ -112,16 +112,18 @@ class Pop(object):
     global gStep
     gYear+=1
     gStep=0
+    alivelist=[]
     for n in anytree.iterators.preorderiter.PreOrderIter(self.idvtree):
       if (n.onemoreyear(self.maxpop)):
         dotGraph(self.idvtree,2) # only draw if there is a change. FIXME: idvtree global?
       n.matters=False # reset interest.
-
-    for n in self.idvtree.leaves:
-      if (not n.dead):
-        n.matters=True
-        for n2 in n.ancestors:
-          n2.matters=True # FIXME: lots of redundencies here
+      if (not n.dead): alivelist.append(n)
+      
+    for n in alivelist:
+      #if (not n.dead): this is a give now
+      n.matters=True
+      for n2 in n.ancestors:
+        n2.matters=True # FIXME: lots of redundencies here
           
     for n in anytree.iterators.preorderiter.PreOrderIter(self.idvtree):
       if ((n.dead) and (not n.matters)):
@@ -131,7 +133,7 @@ class Pop(object):
         #if (not n.parent.matters):
         #  n.parent=None
     
-    lucas=(anytree.util.commonancestors(*self.idvtree.leaves))
+    lucas=(anytree.util.commonancestors(*alivelist))
     if (len(lucas)):
       for n in lucas:
         self.idvtree=n

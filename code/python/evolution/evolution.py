@@ -6,6 +6,8 @@ random.seed(1)
 
 gMutN=0
 
+# This code is to observe distance to last common ancestor of a population
+# Likely not well wrote, however.
 
 class Mutations(object):
   def __init__(self,m):
@@ -64,14 +66,15 @@ class Mutations(object):
     
 
 class Idv(object):
+  """Individuals of the population"""
   def __init__(self,m):
     self.mut=Mutations(m)
     self.age=0
     self.sex=random.getrandbits(1) # not used yet
-    self.deathcurve=[.5,.2,.3,.4,.5,.6,.8,1]
-    self.mult=5
+    self.deathcurve=[.5,.2,.3,.4,.5,.6,.8,1] # Likelihood of dying for each age
+    self.mult=5 # How many children
    
-  def kill(self,surpop):
+  def die(self,surpop):
    return (random.random()<self.deathcurve[self.age]*(1+surpop))
 
   def reproduce(self,idvl):
@@ -91,8 +94,8 @@ class Idv(object):
 class Pop(object):
   def __init__(self):
     self.y=0
-    self.maxpop=10000.
-    self.nby=2000
+    self.maxpop=100. # Max number of individuals in the pop
+    self.nby=20
     self.start = time.time()
 
   def doit(self):
@@ -115,7 +118,7 @@ class Pop(object):
     newdv=set()
     kdv=set()
     for idv in self.idvl:
-      if (idv.kill(len(self.idvl)/self.maxpop)):
+      if (idv.die(len(self.idvl)/self.maxpop)):
         kdv.add(idv)
       else:
         idv.reproduce(newdv)

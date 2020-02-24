@@ -47,7 +47,7 @@ class Idv(object):
       c=IdvNode(parent=self)
   
   def __str__(self):
-    if (self.dead): return '*'
+    if (self.dead): return '*'+str(self.id)
     return (str(self.id))
 
 class IdvNode(Idv, anytree.NodeMixin):  # Add Node feature
@@ -70,7 +70,7 @@ class Pop(object):
   def __init__(self):
     self.year  =  0
     self.maxpop=100  # Max number of individuals in the pop
-    self.nby   = 20  # run for that many years
+    self.nby   =200  # run for that many years
     self.start = time.time()
 
   def doit(self):
@@ -95,6 +95,7 @@ class Pop(object):
     self.year=self.year+1
     for n in anytree.iterators.preorderiter.PreOrderIter(self.idvtree):
       n.onemoreyear(self.maxpop)
+      n.matters=False # reset interest.
 
     for n in self.idvtree.leaves:
       if (not n.dead):
@@ -108,6 +109,11 @@ class Pop(object):
         #n.name='@'+n.name # debug
         #if (not n.parent.matters):
         #  n.parent=None
+    
+    lucas=(anytree.util.commonancestors(*self.idvtree.leaves))
+    if (len(lucas)):
+      self.idvtree=lucas[-1]
+    
     self.dotGraph()
     #DotExporter(self.idvtree).to_picture("out/idvtree%5d.png" % self.year)  
     

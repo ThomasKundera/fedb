@@ -91,7 +91,7 @@ class Pop(object):
   def doit(self):
     global gPop
     global gYear
-    self.f=io.open("datafile.dat","wt")
+    #self.f=io.open("datafile.dat","wt")
     self.idvtree=IdvNode()
     
     dotGraph(self.idvtree)
@@ -102,10 +102,7 @@ class Pop(object):
         left=(delta/i)*(self.nby-i)
         print ("Year: "+str(i)+" total pop: "+str(gPop)+" time elaps: "+str(delta)+" time left: "+str(left))
       self.doyear()
-      #self.tofile()
-    #print(anytree.RenderTree(self.idvtree))
-    #DotExporter(self.idvtree).to_picture("idvtree.png")
-    self.f.close()
+    #self.f.close()
 
   def doyear(self):
     global gYear
@@ -129,9 +126,6 @@ class Pop(object):
       if ((n.dead) and (not n.matters)):
         n.parent=None
         dotGraph(self.idvtree,2)
-        #n.name='@'+n.name # debug
-        #if (not n.parent.matters):
-        #  n.parent=None
     
     lucas=(anytree.util.commonancestors(*alivelist))
     if (len(lucas)):
@@ -140,7 +134,6 @@ class Pop(object):
         dotGraph(self.idvtree,2)
     
     dotGraph(self.idvtree)
-    #DotExporter(self.idvtree).to_picture("out/idvtree%5d.png" % self.year)  
     
   def lca(self):
     return #anytree.util.commonancestors(

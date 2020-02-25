@@ -84,14 +84,14 @@ class Pop(object):
   def __init__(self):
     global gYear
     gYear  =  0
-    self.maxpop=100  # Max number of individuals in the pop
-    self.nby   =300  # run for that many years
+    self.maxpop=200  # Max number of individuals in the pop
+    self.nby   =500  # run for that many years
     self.start = time.time()
 
   def doit(self):
     global gPop
     global gYear
-    #self.f=io.open("datafile.dat","wt")
+    self.f=io.open("datafile.dat","wt")
     self.idvtree=IdvNode()
     
     dotGraph(self.idvtree)
@@ -100,9 +100,10 @@ class Pop(object):
       if (not (i % (self.nby/10))):
         delta=int(max(1,time.time()-self.start))
         left=(delta/i)*(self.nby-i)
-        print ("Year: "+str(i)+" total pop: "+str(gPop)+" time elaps: "+str(delta)+" time left: "+str(left))
+        print ("Year: "+str(i)+" total pop: "+str(gPop)+" LUCA depth:"+str(self.idvtree.height)+" time elaps: "+str(delta)+" time left: "+str(left))
       self.doyear()
-    #self.f.close()
+      self.f.write(str(gYear)+" "+str(gPop)+" "+str(self.idvtree.height)+'\n')
+    self.f.close()
 
   def doyear(self):
     global gYear
@@ -129,9 +130,10 @@ class Pop(object):
     
     lucas=(anytree.util.commonancestors(*alivelist))
     if (len(lucas)):
-      for n in lucas:
-        self.idvtree=n
-        dotGraph(self.idvtree,2)
+      self.idvtree=lucas[-1] 
+      #for n in lucas: # This is only for movies
+      #  self.idvtree=n
+      #  dotGraph(self.idvtree,2)
     
     dotGraph(self.idvtree)
     

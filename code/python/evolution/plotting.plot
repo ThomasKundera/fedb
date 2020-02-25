@@ -8,5 +8,5 @@ set style line 1 \
     linetype 1 linewidth 2 \
     pointtype 7 pointsize 1.5
 
-plot "datafile1.dat" using 1:2 with linespoints linestyle 1 , \
-     "datafile1.dat" using 1:3 
+plot "datafile.dat" using 1:2 with linespoints linestyle 1 , \
+     "datafile.dat" using 1:3 

@@ -4,31 +4,30 @@
 // --------------------------------------------------------------------------------
 
 #include "colors.inc"
-
-#include "spline.mcr"
-
 #include "common.inc"
 #include "frame.inc"
 #include "night_sky.inc"
-#declare earthType=6;
+#declare earthType=1;
 #include "earth-simple.inc"
 #include "sun_simple.inc"
 
 // Animation stuff
-#declare duration=1*d_t;
+#declare duration=3*d_t;
 #declare timeOffset=0;
 #declare seconde=clock*duration+timeOffset;
 
 
 #declare Sun_Loc=<-Earth_Distance,0,0>;
 
-global_settings { ambient_light .1 }
+global_settings { ambient_light .05 }
+
 
 camera {
   location <0,0,5*Earth_Radius>
   look_at <0,0,0>
   angle 40
   right -x*image_width/image_height
+  rotate <360*seconde/(3*d_t),0,0>
 }
 
 union {
@@ -53,13 +52,16 @@ union {
     }
     #if (((i/2)-floor(i/2))<.001)
       torus {
-        Earth_Radius*abs(sin(180*i/s)),25*km
+        Earth_Radius*abs(sin(180*i/s)),1*km
+        scale <1,25,1>
         translate<0,Earth_Radius*cos(180*i/s),0>
         texture {
           pigment{rgb <i/s,1-i/s,abs(i/s-.5)>}
-          finish {ambient .8}
+          finish {ambient .5}
         }
+        no_shadow
       }
+      //#warning str(i,3,1)
     #end
     #local i = i + 1;
   #end

@@ -1,0 +1,46 @@
+frame -1,-4,12,4
+scale 2
+
+O = point(0,0)
+lx=line(O, 0:)
+ly=line(O,90:)
+
+P = point(8,0)
+r=1
+c=circle (P,r)
+
+lpy=line(P,90:)
+
+B.A=intersection(lpy,c)
+
+
+draw
+  c
+  O
+  P
+  A
+  B
+  A.B
+end
+
+draw dashed
+  lx
+  ly
+end
+
+draw dotted
+  O.A
+  O.B
+end
+
+label
+  O  -45:
+  P   45:
+  A   90:
+  B  -90:
+  "d" O.P
+end
+
+
+
+

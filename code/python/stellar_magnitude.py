@@ -97,6 +97,9 @@ def main():
   s=P/(0.8*Ir_au_sun)
   print("Equivalent Sun surface of such object with a 80% reflectivity: "+str(s)+" m²")
   
+  print (130e6*ligh_year/mile)
+  print (130e6*365.4*24)
+  
 # --------------------------------------------------------------------------
 if __name__ == '__main__':
   main()

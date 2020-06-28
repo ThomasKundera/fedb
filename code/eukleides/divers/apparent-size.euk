@@ -21,6 +21,7 @@ draw
   A
   B
   A.B
+  "h"  A.B  45:
 end
 
 draw dashed
@@ -34,11 +35,12 @@ draw dotted
 end
 
 label
+  A,O,B  simple
+  O,A,B  simple
   O  -45:
-  P   45:
+  P  -45:
   A   90:
   B  -90:
-  "d" O.P
 end
 
 

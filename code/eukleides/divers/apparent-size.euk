@@ -1,4 +1,4 @@
-frame -1,-4,12,4
+frame -1,-3.5,12,3.5
 scale 2
 
 O = point(0,0)
@@ -6,7 +6,7 @@ lx=line(O, 0:)
 ly=line(O,90:)
 
 P = point(8,0)
-r=1
+r=2
 c=circle (P,r)
 
 lpy=line(P,90:)
@@ -21,7 +21,9 @@ draw
   A
   B
   A.B
-  "h"  A.B  45:
+  "h/2"  A.P  45:
+  "h/2"  P.B  45:
+  "d"    O.P  45:
 end
 
 draw dashed
@@ -35,8 +37,7 @@ draw dotted
 end
 
 label
-  A,O,B  simple
-  O,A,B  simple
+  B,O,A  simple
   O  -45:
   P  -45:
   A   90:

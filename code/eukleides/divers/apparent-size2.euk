@@ -1,0 +1,123 @@
+frame -1,-4,38,4
+scale 2
+
+O = point(0,0)
+lx=line(O, 0:)
+ly=line(O,90:)
+
+% First
+
+P = point(8,0)
+r=2
+c=circle (P,r)
+
+lpy=line(P,90:)
+
+B.A=intersection(lpy,c)
+
+
+draw
+  c
+  O
+  P
+  A
+  B
+  A.B
+end
+
+draw dashed
+  lx
+  ly
+end
+
+draw dotted
+  O.A
+  O.B
+end
+
+label
+  B,O,A  simple
+  O  -45:
+  P  -45:
+  A   90:
+  B  -90:
+end
+
+% Second
+
+
+P2 = point(16,0)
+r2=2
+c2=circle (P2,r2)
+
+lpy2=line(P2,90:)
+
+B2.A2=intersection(lpy2,c2)
+
+
+draw
+  c2
+  P2
+  A2
+  B2
+  A2.B2
+  "h/2"  A2.P2  45:
+  "h/2"  P2.B2  45:
+  "d"    O.P2  45:
+end
+
+draw dotted
+  O.A2
+  O.B2
+end
+
+label
+  B2,O,A2  simple
+  P2  -45:
+  A2   90:
+  B2  -90:
+end
+
+
+% Third
+
+
+P3 = point(32,0)
+r3=2
+c3=circle (P3,r3)
+
+lpy3=line(P3,90:)
+
+B3.A3=intersection(lpy3,c3)
+
+
+draw
+  c3
+  P3
+  A3
+  B3
+  A3.B3
+  "h/2"  A3.P3  45:
+  "h/2"  P3.B3  45:
+  "d"    O.P3  45:
+end
+
+draw dotted
+  O.A3
+  O.B3
+end
+
+label
+  B2,O,A2  simple
+  P2  -45:
+  A2   90:
+  B2  -90:
+end
+
+
+
+
+
+
+
+

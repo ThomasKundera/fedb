@@ -1,0 +1,44 @@
+frame -1,-1,4,5
+scale 3
+
+O=point(0,0)
+sol=line(O,0:)
+
+P1=O
+P2=point(3,0)
+
+ISS1=point(0,4)
+ISS2=point(3,4)
+
+P11=line(P1,ISS1)
+P12=line(P1,ISS2)
+P21=line(P2,ISS1)
+P22=line(P2,ISS2)
+
+draw
+  sol
+  P1
+  P2
+  ISS1
+  ISS2
+end
+
+draw dashed
+  P1.ISS1
+  P1.ISS2
+end
+
+draw dashed
+  P2.ISS1
+  P2.ISS2
+end
+
+label
+  P1   -90:
+  P2   -90:
+  ISS1  90:
+  ISS2  90:
+end
+
+
+

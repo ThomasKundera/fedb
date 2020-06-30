@@ -32,8 +32,8 @@ draw dashed
 end
 
 draw dotted
-  O.A
-  O.B
+  O.A 4
+  O.B 4
 end
 
 label

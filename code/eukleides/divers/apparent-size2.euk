@@ -31,8 +31,8 @@ draw dashed
 end
 
 draw dotted
-  O.A
-  O.B
+  O.A 4
+  O.B 4
 end
 
 label
@@ -67,8 +67,8 @@ draw
 end
 
 draw dotted
-  O.A2
-  O.B2
+  O.A2 3
+  O.B2 3
 end
 
 label
@@ -103,8 +103,8 @@ draw
 end
 
 draw dotted
-  O.A3
-  O.B3
+  O.A3 2
+  O.B3 2
 end
 
 label

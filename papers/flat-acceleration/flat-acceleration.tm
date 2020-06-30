@@ -126,7 +126,18 @@
   rocket trajectory looks like from <math|R<rsub|0>>, now that we know what
   it is in <math|R<rsub|1>>.
 
-  \;
+  We would like to apply reverse Lorentz transfor equations like this:
+
+  <\eqnarray*>
+    <tformat|<table|<row|<cell|x>|<cell|=>|<cell|\<gamma\><around*|(|x<rprime|'>+vt|)>>>|<row|<cell|t>|<cell|=>|<cell|\<gamma\><around*|(|t<rprime|'>+<frac|v|c<rsup|2>>x<rprime|'>|)>>>>>
+  </eqnarray*>
+
+  With standard notations <math|\<gamma\>=<frac|1|<sqrt|1-<frac|v<rsup|2>|c<rsup|2>>>>>.
+
+  However, that equation only works when both referential have same origin.
+  But it's not the case here: to ease recursion, <math|R<rsub|1>> have
+  <math|t<rsub|1<rsup|1>>=0> when <math|t<rsub|0<rsup|0>>=t<rsub|0>> and
+  <math|x<rsub|1<rsup|1>>=0> when <math|x<rsub|0>>
 
   \;
 

@@ -5,7 +5,7 @@ URLACLIST="${URLBASE}/resultats-bac/"
 DATADIR="data"
 BASEFILE="$DATADIR/base.html"
 
-#wget --user-agent="$USER_AGENT" --no-check-certificate -O $BASEFILE $URLACLIST
+wget --user-agent="$USER_AGENT" --no-check-certificate -O $BASEFILE $URLACLIST
 
 ACALIST="data/accalisty.txt"
 

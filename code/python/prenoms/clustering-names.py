@@ -3,6 +3,9 @@ import sys
 import os
 import re
 
+
+
+
 DATADIR="data"
 
 class NameSurname:
@@ -31,13 +34,8 @@ def CollectData(n):
         if (not line.isspace()):
           n.append(NameSurname(line))
  
-def main():
-  names=[]
-  CollectData(names)
-  print(len(names))
-  namedict={}
-  surnamedict={}
-  
+ 
+def Filling(names,namedict,surnamedict):
   for n in names:
     if (not (n.name in namedict)):
       d={}
@@ -60,6 +58,19 @@ def main():
           surnamedict[ns][n.name]=surnamedict[ns][n.name]+1
         else:
           surnamedict[ns][n.name]=1
+
+ 
+def main():
+  names=[]
+  CollectData(names)
+  print(len(names))
+  namedict={}
+  surnamedict={}
+  Filling(names,namedict,surnamedict)
+  print (surnamedict["Marie"])
+  print (surnamedict["Kevin"])
+  print (surnamedict["Mohamed"])
+  print(namedict["BOUZELMAT"])
   
   
 # --------------------------------------------------------------------------

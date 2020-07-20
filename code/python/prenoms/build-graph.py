@@ -64,30 +64,28 @@ def main():
           
   G = nx.Graph()
   ntest=0
-  eatsn=dict(surnamedict)
-  eatn =dict(   namedict)
+  
   for sn in surnamedict:
     ntest+=1
     if (ntest>10): break
     print("\n"+sn)
-    nlist=eatsn[sn]
-    del eatsn[sn] # This should ensure we don't count twice or more.
     if (not G.has_node(sn)): G.add_node(sn)
-    for n in nlist:
+    for n in surnamedict[sn]:
       print(n)
-      if (n in eatn):
-        for nsn in namedict[n]:
-          if ((nsn != sn) and (nsn in eatsn)): # same surname avoided, don't count twice
-            if (not G.has_node(nsn)): G.add_node(nsn)
-            if (not G.has_edge(sn,nsn)): G.add_edge(sn,nsn,weight=eatn[n][sn])
-            else:
-              G.add_edge(sn,nsn,weight=eatn[n][sn]+get_edge_data(sn,nsn)["weight"])
-            #print(eatn[n][sn])
-          
-      else:
-        print("Name "+n+" already eaten")
-        
-
+      for nsn in namedict[n]:
+        print(nsn)
+        if ((nsn != sn)): # same surname avoided
+          if (not G.has_node(nsn)): G.add_node(nsn)
+          if (not G.has_edge(sn,nsn)):
+            G.add_edge(sn,nsn,weight=namedict[n][sn]+namedict[n][nsn]+0.0)
+            #G.add_edge(sn,nsn,weight=1)
+          else:
+            #print("hop: "+sn+" "+nsn)
+            #print(G[sn][nsn])
+            G.add_edge(sn,nsn,weight=namedict[n][sn]+G[sn][nsn]["weight"])
+          #print(eatn[n][sn])
+ 
+  
   
   
 # --------------------------------------------------------------------------

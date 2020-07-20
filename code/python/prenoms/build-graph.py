@@ -2,6 +2,7 @@
 import sys
 import os
 import re
+import matplotlib.pyplot as plt
 import networkx as nx
 
 DATADIR="data"
@@ -32,13 +33,9 @@ def CollectData(n):
         if (not line.isspace()):
           n.append(NameSurname(line))
  
-def main():
-  names=[]
-  CollectData(names)
-  print("Number of items: "+str(len(names)))
-  namedict={}
-  surnamedict={}
-  
+ 
+
+def FillDicts(names,namedict,surnamedict):
   for n in names:
     if (not (n.name in namedict)):
       d={}
@@ -61,6 +58,16 @@ def main():
           surnamedict[ns][n.name]=surnamedict[ns][n.name]+1
         else:
           surnamedict[ns][n.name]=1
+
+
+def main():
+  names=[]
+  CollectData(names)
+  print("Number of items: "+str(len(names)))
+  namedict={}
+  surnamedict={}
+  
+  FillDicts(names,namedict,surnamedict)
           
   G = nx.Graph()
   ntest=0
@@ -85,8 +92,8 @@ def main():
             G.add_edge(sn,nsn,weight=namedict[n][sn]+G[sn][nsn]["weight"])
           #print(eatn[n][sn])
  
-  
-  
+  nx.draw(G)
+  plt.draw()
   
 # --------------------------------------------------------------------------
 if __name__ == '__main__':

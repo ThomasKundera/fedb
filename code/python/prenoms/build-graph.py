@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+#!/usr/bin/env python3
 import sys
 import os
 import re
@@ -74,13 +74,13 @@ def main():
   
   for sn in surnamedict:
     ntest+=1
-    if (ntest>10): break
-    print("\n"+sn)
+    if (ntest>2): break
+    #print("\n"+sn)
     if (not G.has_node(sn)): G.add_node(sn)
     for n in surnamedict[sn]:
-      print(n)
+      #print(n)
       for nsn in namedict[n]:
-        print(nsn)
+        #print(nsn)
         if ((nsn != sn)): # same surname avoided
           if (not G.has_node(nsn)): G.add_node(nsn)
           if (not G.has_edge(sn,nsn)):
@@ -91,9 +91,10 @@ def main():
             #print(G[sn][nsn])
             G.add_edge(sn,nsn,weight=namedict[n][sn]+G[sn][nsn]["weight"])
           #print(eatn[n][sn])
- 
+  print(" LOADED ")
+  print(len(G))
   nx.draw(G)
-  plt.draw()
+  plt.show()
   
 # --------------------------------------------------------------------------
 if __name__ == '__main__':

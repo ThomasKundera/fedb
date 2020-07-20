@@ -1,6 +1,7 @@
-#!/usr/bin/env python
-
+#!/usr/bin/env python3
 import networkx as nx
+import matplotlib.pyplot as plt
+
 
 # Create a networkx graph object
 my_graph = nx.Graph() 
@@ -19,4 +20,5 @@ my_graph.add_edges_from([
 
 # Draw the resulting graph
 nx.draw(my_graph, with_labels=True, font_weight='bold')
+plt.show()
 

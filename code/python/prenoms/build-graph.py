@@ -37,7 +37,7 @@ def CollectData(n):
 
 def FillDicts(names):
   itest=0
-  ntest=1000
+  ntest=800
   nd={}
   sd={}
   for n in names:
@@ -77,7 +77,7 @@ def FillDicts(names):
     for n in sd[ns]:
       l+=sd[ns][n]
     if (l>1):
-      print(ns+" "+str(l))
+      #print(ns+" "+str(l))
       surnamedict[ns]=dict(sd[ns])
   #return(nd,surnamedict)
   namedict={}
@@ -116,7 +116,7 @@ def main():
   
   G = nx.Graph()
   ntest=0
-  tmax=4000
+  tmax=10000
   
   #print(namedict["GAUDENZI"])
   
@@ -150,8 +150,8 @@ def main():
   G.remove_nodes_from(list(nx.isolates(G)))
   
   # Reverse weights
-  for u,v,d in G.edges(data=True):
-    d['weight']=1./d['weight']
+  #for u,v,d in G.edges(data=True):
+  #  d['weight']=1./d['weight']
   
   print("===== LOADED ======")
   print("Graph size: "+str(len(G)))

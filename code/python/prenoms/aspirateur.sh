@@ -5,6 +5,8 @@ URLACLIST="${URLBASE}/resultats-bac/"
 DATADIR="data"
 BASEFILE="$DATADIR/base.html"
 
+mkdir -p $DATADIR
+
 wget --user-agent="$USER_AGENT" --no-check-certificate -O $BASEFILE $URLACLIST
 
 ACALIST="data/accalisty.txt"
@@ -53,7 +55,7 @@ for urlpart in `cat $ACALIST`; do
         sleep 5
       fi
       
-      grep "Voir les" $DATADIR/$acpartdsk | grep -v 'Perles du' | cut -d'>' -f3 | cut -d'<' -f1 > $DATADIR/res-${acpartdsk}.txt
+      grep "Voir les" $DATADIR/$acpartdsk | grep -v 'Perles du' | cut -d'>' -f3 | cut -d'<' -f1  | tr '-' ' ' > $DATADIR/res-${acpartdsk}.txt
     done
   done
 done

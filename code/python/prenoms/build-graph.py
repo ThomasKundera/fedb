@@ -35,12 +35,13 @@ def CollectData(n):
  
  
 
-def FillDictsFilter(names,namedict,surnamedict):
+def FillDicts(names):
   itest=0
-  ntest=200
+  ntest=1000
   nd={}
   sd={}
   for n in names:
+    #print (n)
     itest+=1
     if (itest>ntest): break
     if (not (n.name in nd)):
@@ -64,34 +65,108 @@ def FillDictsFilter(names,namedict,surnamedict):
           sd[ns][n.name]=sd[ns][n.name]+1
         else:
           sd[ns][n.name]=1
-  surnamedict=sd #dict(sd)
-  namedict=nd # dict(nd)
-  return
+          
+  #return (nd,sd)
+  # Better to work at graph level
+  # otherwise removes a lot of leaves.
+  # 
   # Cleaning up seldom used surnames
+  surnamedict={}
   for ns in sd:
     l=0
     for n in sd[ns]:
       l+=sd[ns][n]
-    #print(l)
-    if (l>=0):
-      print(ns)
+    if (l>1):
+      print(ns+" "+str(l))
       surnamedict[ns]=dict(sd[ns])
-  
+  #return(nd,surnamedict)
+  namedict={}
   for n in nd:
     l=0
-    for ns in n:
-      d={}
+    d={}
+    for ns in nd[n]:
+      #print (ns)
       if (ns in surnamedict):
         l+=nd[n][ns]
         d[ns]=nd[n][ns]
+    #print (d)
     namedict[n]=d
+  #print(namedict)
   print(len(nd))
   print(len(sd))
   print(len(namedict))
   print(len(surnamedict))
   
+  #print(surnamedict["Ilona"])
+  #print (nd["GALAND"])
+  #print (namedict["GALAND"])
+  
+  return(namedict,surnamedict)
+    
+  
 
-def FillDicts(names):
+
+def main():
+  names=[]
+  CollectData(names)
+  print("Number of items: "+str(len(names)))
+  
+  (namedict,surnamedict)=FillDicts(names)
+  #return
+  
+  G = nx.Graph()
+  ntest=0
+  tmax=4000
+  
+  #print(namedict["GAUDENZI"])
+  
+  #surnamedict["Manon"]=[] # Too many for tests
+  
+  for sn in surnamedict:
+    if (ntest>tmax): break
+    #print("\n--\n"+sn)
+    if (not G.has_node(sn)): G.add_node(sn)
+    for n in surnamedict[sn]:
+      if (ntest>tmax): break
+      #print('\n'+n)
+      for nsn in namedict[n]:
+        #print(nsn)
+        if ((nsn != sn)): # same surname avoided
+          ntest+=1
+          if (not G.has_node(nsn)): G.add_node(nsn)
+          if (not G.has_edge(sn,nsn)):
+            #print(n)
+            #print(sn)
+            #print(nsn)
+            G.add_edge(sn,nsn,weight=namedict[n][sn]+namedict[n][nsn]+0.0)
+            #G.add_edge(sn,nsn,weight=1)
+          else:
+            #print("hop: "+sn+" "+nsn)
+            #print(G[sn][nsn])
+            G.add_edge(sn,nsn,weight=namedict[n][sn]+G[sn][nsn]["weight"])
+          #print(eatn[n][sn]) with_labels = True)
+  print("ntest: "+str(ntest))
+  # Remove isolated nodes
+  G.remove_nodes_from(list(nx.isolates(G)))
+  
+  # Reverse weights
+  for u,v,d in G.edges(data=True):
+    d['weight']=1./d['weight']
+  
+  print("===== LOADED ======")
+  print("Graph size: "+str(len(G)))
+  nx.draw(G, with_labels = True)
+  plt.show()
+  
+# --------------------------------------------------------------------------
+if __name__ == '__main__':
+  main()
+
+
+
+
+
+def FillDictsOrg(names):
   namedict={}
   surnamedict={}
 
@@ -124,56 +199,4 @@ def FillDicts(names):
           surnamedict[ns][n.name]=1
 
   return (namedict,surnamedict)
-
-
-def main():
-  names=[]
-  CollectData(names)
-  print("Number of items: "+str(len(names)))
-  
-  (namedict,surnamedict)=FillDicts(names)
-  #return
-  
-  G = nx.Graph()
-  ntest=0
-  tmax=40
-  
-  #print(namedict["GAUDENZI"])
-  
-  #surnamedict["Manon"]=[] # Too many for tests
-  
-  for sn in surnamedict:
-    ntest+=1
-    if (ntest>tmax): break
-    print("\n--\n"+sn)
-    if (not G.has_node(sn)): G.add_node(sn)
-    for n in surnamedict[sn]:
-      if (ntest>tmax): break
-      print('\n'+n)
-      for nsn in namedict[n]:
-        ntest+=1
-        print(nsn)
-        if ((nsn != sn)): # same surname avoided
-          if (not G.has_node(nsn)): G.add_node(nsn)
-          if (not G.has_edge(sn,nsn)):
-            G.add_edge(sn,nsn,weight=namedict[n][sn]+namedict[n][nsn]+0.0)
-            #G.add_edge(sn,nsn,weight=1)
-          else:
-            #print("hop: "+sn+" "+nsn)
-            #print(G[sn][nsn])
-            G.add_edge(sn,nsn,weight=namedict[n][sn]+G[sn][nsn]["weight"])
-          #print(eatn[n][sn]) with_labels = True)
-  # Reverse weights
-  for u,v,d in G.edges(data=True):
-    d['weight']=1./d['weight']
-  
-  print("===== LOADED ======")
-  print("Graph size: "+str(len(G)))
-  nx.draw(G, with_labels = True)
-  plt.show()
-  
-# --------------------------------------------------------------------------
-if __name__ == '__main__':
-  main()
-
 

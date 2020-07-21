@@ -37,7 +37,7 @@ def CollectData(n):
 
 def FillDicts(names):
   itest=0
-  ntest=800
+  ntest=4000
   nd={}
   sd={}
   for n in names:
@@ -116,7 +116,7 @@ def main():
   
   G = nx.Graph()
   ntest=0
-  tmax=10000
+  tmax=20000
   
   #print(namedict["GAUDENZI"])
   

@@ -37,7 +37,7 @@ def CollectData(n):
 
 def FillDicts(names):
   itest=0
-  ntest=4000
+  ntest=1000
   nd={}
   sd={}
   for n in names:

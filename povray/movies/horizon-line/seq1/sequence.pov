@@ -40,28 +40,31 @@ light_source{<1500*m,2500*m,-2500*m> color White}
 sphere {<0,-sphere_radius,0>,sphere_radius texture {SeaWaterTexture}}
 
 
-#declare theta=acos(50*m/sphere_radius);
+#for (i,1,5)
+  #declare theta=acos(300*i*m/sphere_radius);
 
-torus {
-  sphere_radius*cos(theta),10*cm
-  translate <0,(1-sin(theta))*sphere_radius,0>
-  pigment {color <1,0,0>}
-}
-
+  torus {
+    sphere_radius*cos(theta),10*cm*i
+    translate <0,(sin(theta)-1)*sphere_radius,0>
+    pigment {color <i/10,(1-i/10),i/5,.6>}
+  }
+#end
 
 
 //sphere {<0,sphere_radius +Altitude,0>,100*m pigment {color <1,0,0> }}
 
+#declare camloc=<590,Altitude,0>;
 camera {
-  location <0,Altitude,0>
-  look_at  < 10*m,Altitude, 10*m>
+  location camloc
+  look_at  camloc+<10*m,0,10*m>
   sky <0,1,0>
-  angle 62 // 30mm
+  //angle 62 // 30mm
   //angle 40 // 50mm
+  angle 50
   right -x*image_width/image_height
 }
 
-object  {frame scale .4*m translate <2*m,0, 2*m>}
+object  {frame scale .4*m translate <1*m,0, 2*m>}
 
 
 

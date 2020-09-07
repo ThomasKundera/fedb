@@ -39,6 +39,17 @@ light_source{<1500*m,2500*m,-2500*m> color White}
 
 sphere {<0,-sphere_radius,0>,sphere_radius texture {SeaWaterTexture}}
 
+
+#declare theta=acos(50*m/sphere_radius);
+
+torus {
+  sphere_radius*cos(theta),10*cm
+  translate <0,(1-sin(theta))*sphere_radius,0>
+  pigment {color <1,0,0>}
+}
+
+
+
 //sphere {<0,sphere_radius +Altitude,0>,100*m pigment {color <1,0,0> }}
 
 camera {
@@ -51,6 +62,10 @@ camera {
 }
 
 object  {frame scale .4*m translate <2*m,0, 2*m>}
+
+
+
+
 
 sky_sphere{
        pigment{ bozo turbulence 0.76

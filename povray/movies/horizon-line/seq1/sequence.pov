@@ -37,13 +37,13 @@ light_source{<1500*m,2500*m,-2500*m> color White}
 
 #declare sphere_radius=Earth_Radius/100;
 
-sphere {<0,-sphere_radius,0>,sphere_radius pigment {rgb <0,0,1>}} //texture {SeaWaterTexture}}
+//sphere {<0,-sphere_radius,0>,sphere_radius pigment {rgb <0,0,1>}} //texture {SeaWaterTexture}}
 
 
 #for (i,1,5)
   #declare theta=acos(200*i*m/sphere_radius);
   torus {
-    sphere_radius*cos(theta),10*i*cm
+    sphere_radius*cos(theta),5*sqrt(i)*cm
     translate <0,(sin(theta)-1)*sphere_radius-0*cm,0>
     pigment {color <i/5,(1-i/5),i/5,.3>}
   }
@@ -56,7 +56,7 @@ camera {
   sky <0,1,0>
   //angle 62 // 30mm
   //angle 40 // 50mm
-  angle 5
+  angle 2
   right -x*image_width/image_height
 }
 
@@ -73,5 +73,4 @@ sky_sphere{
       scale .2*m
 }
 
-//object {Earth}
 

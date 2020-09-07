@@ -37,30 +37,62 @@ light_source{<1500*m,2500*m,-2500*m> color White}
 
 #declare sphere_radius=Earth_Radius/100;
 
-//sphere {<0,-sphere_radius,0>,sphere_radius pigment {rgb <0,0,1>}} //texture {SeaWaterTexture}}
+sphere {<0,-sphere_radius,0>,sphere_radius pigment {rgb <0,0,1>}} //texture {SeaWaterTexture}}
 
 
 #for (i,1,5)
   #declare theta=acos(200*i*m/sphere_radius);
   torus {
-    sphere_radius*cos(theta),5*sqrt(i)*cm
+    sphere_radius*cos(theta),10*sqrt(i)*cm
     translate <0,(sin(theta)-1)*sphere_radius-0*cm,0>
     pigment {color <i/5,(1-i/5),i/5,.3>}
   }
 #end
 
+#declare hd=350*m;
+#declare theta=acos(hd/sphere_radius);
+text {
+    ttf "timrom.ttf" "A" 1, 0
+    pigment { Red }
+    scale 30*m
+    rotate <0,-90,0>
+    translate <350*m,(sin(theta)-1)*sphere_radius,0*m>
+}
+
+text {
+    ttf "timrom.ttf" "B" 1, 0
+    pigment { Red }
+    scale 30*m
+    rotate <0,-90,0>
+    translate <350*m,(sin(theta)-1)*sphere_radius,0*m>
+    rotate <0,-25,0>
+}
+
+text {
+    ttf "timrom.ttf" "C" 1, 0
+    pigment { Red }
+    scale 30*m
+    rotate <0,-90,0>
+    translate <350*m,(sin(theta)-1)*sphere_radius,0*m>
+    rotate <0,25,0>
+}
+
+
+
+
 #declare camloc=<0,Altitude,0>;
 camera {
   location camloc
-  look_at  camloc+<10*m,0,10*m>
+  look_at  camloc+<10*m,0,0*m>
   sky <0,1,0>
   //angle 62 // 30mm
   //angle 40 // 50mm
-  angle 2
+  angle 60
   right -x*image_width/image_height
 }
 
 object  {frame scale .4*m translate <1*m,0, 2*m>}
+
 
 
 sky_sphere{

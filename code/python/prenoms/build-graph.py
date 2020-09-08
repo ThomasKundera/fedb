@@ -70,6 +70,7 @@ def main():
   FillDicts(names,namedict,surnamedict)
           
   G = nx.Graph()
+  #nx.draw(G, with_labels=True)
   ntest=0
   
   for sn in surnamedict:
@@ -91,8 +92,9 @@ def main():
             #print(G[sn][nsn])
             G.add_edge(sn,nsn,weight=namedict[n][sn]+G[sn][nsn]["weight"])
           #print(eatn[n][sn])
- 
-  nx.draw(G)
+  
+  nx.draw_networkx_nodes(G)
+  #nx.draw(G, with_labels=True)
   plt.draw()
   
 # --------------------------------------------------------------------------

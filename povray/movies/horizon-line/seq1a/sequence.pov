@@ -14,6 +14,8 @@
 
 #declare earthType=2;
 #include "earth-simple.inc"
+#declare sphere_radius=Earth_Radius/100;
+#include "horizon-scene.inc"
 
 // Animation stuff
 #declare duration=30*s_t;
@@ -42,8 +44,6 @@ light_source{<1500*m,2500*m,-2500*m> color White}
 
 //-------------------------------------
 
-#declare sphere_radius=Earth_Radius/100;
-
 sphere {<0,-sphere_radius,0>,sphere_radius
 	//pigment {rgb <0,0,1>}
 	texture {SeaWaterTexture} interior{I_Glass}
@@ -59,79 +59,6 @@ sphere {<0,-sphere_radius,0>,sphere_radius
   }
 #end
 
-// FIXME: with more recent version of Povray, we can create arrays of strings
-// So no need for this painfull copy/paste
-#declare hd=350*m;
-#declare theta=acos(hd/sphere_radius);
-text {
-    ttf "timrom.ttf" "A" 1, 0
-    pigment { Red }
-    scale 30*m
-    rotate <0,-90,0>
-    translate <350*m,(sin(theta)-1)*sphere_radius,0*m>
-}
-
-text {
-    ttf "timrom.ttf" "B" 1, 0
-    pigment { Red }
-    scale 30*m
-    rotate <0,-90,0>
-    translate <350*m,(sin(theta)-1)*sphere_radius,0*m>
-    rotate <0,45,0>
-}
-
-text {
-    ttf "timrom.ttf" "C" 1, 0
-    pigment { Red }
-    scale 30*m
-    rotate <0,-90,0>
-    translate <350*m,(sin(theta)-1)*sphere_radius,0*m>
-    rotate <0,2*45,0>
-}
-
-text {
-    ttf "timrom.ttf" "D" 1, 0
-    pigment { Red }
-    scale 30*m
-    rotate <0,-90,0>
-    translate <350*m,(sin(theta)-1)*sphere_radius,0*m>
-    rotate <0,3*45,0>
-}
-
-text {
-    ttf "timrom.ttf" "E" 1, 0
-    pigment { Red }
-    scale 30*m
-    rotate <0,-90,0>
-    translate <350*m,(sin(theta)-1)*sphere_radius,0*m>
-    rotate <0,4*45,0>
-}
-text {
-    ttf "timrom.ttf" "F" 1, 0
-    pigment { Red }
-    scale 30*m
-    rotate <0,-90,0>
-    translate <350*m,(sin(theta)-1)*sphere_radius,0*m>
-    rotate <0,5*45,0>
-}
-
-text {
-    ttf "timrom.ttf" "G" 1, 0
-    pigment { Red }
-    scale 30*m
-    rotate <0,-90,0>
-    translate <350*m,(sin(theta)-1)*sphere_radius,0*m>
-    rotate <0,6*45,0>
-}
-
-text {
-    ttf "timrom.ttf" "H" 1, 0
-    pigment { Red }
-    scale 30*m
-    rotate <0,-90,0>
-    translate <350*m,(sin(theta)-1)*sphere_radius,0*m>
-    rotate <0,7*45,0>
-}
 
 
 #declare camloc=<0,Altitude,0>;

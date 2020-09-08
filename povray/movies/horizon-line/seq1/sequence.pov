@@ -26,15 +26,17 @@
 // sun ---------------------------------------------------------------
 light_source{<1500*m,2500*m,-2500*m> color White}
 // sea water --------------------------
-#declare SeaWaterTexture=texture{ Green_Glass
-              normal{ripples 1
-                     scale 1
-                     turbulence 0.75
-                     translate< 1*m,10*cm,2*m>*seconde/10}
-              finish{ambient 0.45
-                     diffuse 0.55
-                     reflection 0.3}
-              scale 2*m
+#declare SeaWaterTexture=texture{pigment { rgb <0.2, 0.2, 0.2> } 
+               normal {pigment_pattern{ crackle  
+                                        colour_map { [0, rgb 0]
+                                                     [1, rgb 1] } 
+                                          
+                       turbulence 1.7 translate<0,0,1>} 0.5}
+              finish { ambient 0.15 diffuse 0.65 
+                       brilliance 6.0 phong 0.8 phong_size 120
+                       reflection 0.6}
+	      scale <1.2,0.7,.6>*2*m  rotate<0,10,0>
+	      translate< 1.2*m,100*cm,0.6*m>*seconde/20
 }// end of texture
 //interior{I_Glass}
 

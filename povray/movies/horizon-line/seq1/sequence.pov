@@ -16,7 +16,7 @@
 #include "earth-simple.inc"
 
 // Animation stuff
-#declare duration=10*s_t;
+#declare duration=30*s_t;
 #declare timeOffset=0;
 #declare seconde=clock*duration+timeOffset;
 
@@ -59,6 +59,8 @@ sphere {<0,-sphere_radius,0>,sphere_radius
   }
 #end
 
+// FIXME: with more recent version of Povray, we can create arrays of strings
+// So no need for this painfull copy/paste
 #declare hd=350*m;
 #declare theta=acos(hd/sphere_radius);
 text {
@@ -75,7 +77,7 @@ text {
     scale 30*m
     rotate <0,-90,0>
     translate <350*m,(sin(theta)-1)*sphere_radius,0*m>
-    rotate <0,-25,0>
+    rotate <0,45,0>
 }
 
 text {
@@ -84,14 +86,56 @@ text {
     scale 30*m
     rotate <0,-90,0>
     translate <350*m,(sin(theta)-1)*sphere_radius,0*m>
-    rotate <0,25,0>
+    rotate <0,2*45,0>
+}
+
+text {
+    ttf "timrom.ttf" "D" 1, 0
+    pigment { Red }
+    scale 30*m
+    rotate <0,-90,0>
+    translate <350*m,(sin(theta)-1)*sphere_radius,0*m>
+    rotate <0,3*45,0>
+}
+
+text {
+    ttf "timrom.ttf" "E" 1, 0
+    pigment { Red }
+    scale 30*m
+    rotate <0,-90,0>
+    translate <350*m,(sin(theta)-1)*sphere_radius,0*m>
+    rotate <0,4*45,0>
+}
+text {
+    ttf "timrom.ttf" "F" 1, 0
+    pigment { Red }
+    scale 30*m
+    rotate <0,-90,0>
+    translate <350*m,(sin(theta)-1)*sphere_radius,0*m>
+    rotate <0,5*45,0>
+}
+
+text {
+    ttf "timrom.ttf" "G" 1, 0
+    pigment { Red }
+    scale 30*m
+    rotate <0,-90,0>
+    translate <350*m,(sin(theta)-1)*sphere_radius,0*m>
+    rotate <0,6*45,0>
+}
+
+text {
+    ttf "timrom.ttf" "H" 1, 0
+    pigment { Red }
+    scale 30*m
+    rotate <0,-90,0>
+    translate <350*m,(sin(theta)-1)*sphere_radius,0*m>
+    rotate <0,7*45,0>
 }
 
 
-
-
 #declare camloc=<0,Altitude,0>;
-#declare camlookat=vrotate(<10*m,Altitude,0>,<0,0,0>);
+#declare camlookat=vrotate(<10*m,Altitude,0>,<0,360*(seconde/duration),0>);
 
 camera {
   location camloc
@@ -99,7 +143,7 @@ camera {
   sky <0,1,0>
   //angle 62 // 30mm
   //angle 40 // 50mm
-  angle 60
+  angle 92
   right -x*image_width/image_height
 }
 

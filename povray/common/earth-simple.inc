@@ -49,6 +49,6 @@
       object {Earth_Clouds}
     }    
    #else
-    object {MappedEarth}
+    object {fastEarth}
    #end
 }

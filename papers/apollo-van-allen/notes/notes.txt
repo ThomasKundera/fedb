@@ -17,3 +17,10 @@ https://ccmc.gsfc.nasa.gov/pub/modelweb/radiation_belt/
 https://www.hq.nasa.gov/alsj/tnD7080RadProtect.pdf
 
 https://www.radioprotection.org/articles/radiopro/pdf/1968/02/radiopro19680302p115.pdf
+
+
+Fast computation:
+https://www.nasa.gov/sites/default/files/files/SMIII_Problem7.pdf
+
+Flight steps:
+https://www.mpoweruk.com/Apollo_Moon_Shot.htm

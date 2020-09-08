@@ -36,7 +36,7 @@ light_source {
  #case (0)
   #declare camloc=<Moon_Distance-10*km,Moon_Radius+100*m,100*m>;
   #declare camlookat=<0,0,0>;
-  #declare camangle=60;
+  #declare camangle=120;
 
  #break
  #case (1)

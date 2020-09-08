@@ -10,7 +10,7 @@
 
 #declare earthType=2;
 
-#declare Earth_Radius       = 100*km;
+#declare Earth_Radius       = 100000*km;
 
 #include "earth-simple.inc"
 

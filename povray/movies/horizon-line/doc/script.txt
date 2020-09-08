@@ -1,0 +1,15 @@
+With circles
+seq1a:
+0-30: turn around
+
+seq1b:
+0-30: from above
+
+With "squares"
+seq2a:
+30-60: turn around
+
+seq2b:
+30-60: from above
+
+

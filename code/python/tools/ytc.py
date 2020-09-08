@@ -213,13 +213,13 @@ class DbItem:
       bgcolor='#FF0000'
     s ='<li style="background-color:'+bgcolor+';">'
     s+='<input type="checkbox">'
-    s+='<a href="'
     if kuse_pyqt5:
-      s+=self.url
+      url=self.url
     else:
-      s+=str(QUrl(self.url).toEncoded())
+      url=str(QUrl(self.url).toEncoded())
+    s+='<a href="'+url
     s+='" target="_blank" /a> ['+str(views)+' / '+str(self.views)+' ] '
-    s+=str(title)+'</li>\n'
+    s+=str(title)+' <pre>' +str(url)+'</pre></li>\n'
     
     return s
 
@@ -279,17 +279,20 @@ class DbItem3:
       previous=str(self.views[-1].n)
     s ='<li style="background-color:'+bgcolor+';">'
     s+='<input type="checkbox">'
-    s+='<a href="'
     if kuse_pyqt5:
-      s+=self.url
+      url=self.url
     else:
-      s+=str(QUrl(self.url).toEncoded())
+      url=str(QUrl(self.url).toEncoded())
+    s+='<a href="'+str(url)
     s+='" target="_blank"> ['+str(self.views[-1].n)+' / '+previous+' ] '
     s+=str(title)+' <span class="tkdate">'+str(self.getLastRealMoveDate())
     if (args.debug_level>1000):
       for v in self.views:
         s+=str(v)+" "
-    s+='</span></a></li>\n'
+    s+='</span>'
+    s+='<code>'+str(url)+'</code>'
+    s+='</a>'
+    s+='</li>\n'
     
     return s
   

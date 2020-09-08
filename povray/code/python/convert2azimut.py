@@ -1,6 +1,7 @@
 #!/bin/env python
 
 import os
+import argparse
 from PIL import Image
 import math
 
@@ -37,9 +38,9 @@ def smothimo(imoray):
   return out
 
 
-def do_convert(basedir,iname,oname):
+def do_convert(iname,oname):
   print ("For: "+str(iname))
-  imi = Image.open(os.path.join(basedir,iname))
+  imi = Image.open(iname)
   (iminx,iminy)=imi.size
 
   print ("iminx="+str(iminx)+"  iminy="+str(iminy)) 
@@ -56,7 +57,7 @@ def do_convert(basedir,iname,oname):
     cpt+=1
     ix=cpt%iminx
     iy=cpt/iminx
-    theta=ix*2.*3.141592653/iminx
+    theta=ix*2.*math.pi/iminx
     r=iy*1.0/iminy
     
     ox=min(int(math.cos(theta)*r*mimonx+mimonx),imonx-1)
@@ -92,17 +93,26 @@ def do_convert(basedir,iname,oname):
   imo=Image.new("RGB",(imonx,imony))
   imo.putdata(imoral)
 
-  imo.save(os.path.join(basedir,oname))
-
+  imo.save(oname)
 
 
 def main():
-  basedir="/home/anyone/system/mnt/data/anyone/flat/sunlightmovie/data"
+  parser = argparse.ArgumentParser()
+  parser.add_argument("iname")
+  #parser.add_argument("ofile")
+  args = parser.parse_args()
   
-  for i in range(0,360):
-    iname=str(i)+".jpg"
-    oname=str(i)+"-flat.jpg"
-    do_convert(basedir,iname,oname)
+  oname=os.path.splitext(args.iname)[0]+"-azimuth"+os.path.splitext(args.iname)[1]
+  
+  do_convert(args.iname,oname)
+  
+  
+  #basedir="/home/anyone/system/mnt/data/anyone/flat/sunlightmovie/data"
+  
+  #for i in range(0,360):
+  #  iname=str(i)+".jpg"
+  #  oname=str(i)+"-flat.jpg"
+  #  do_convert(basedir,iname,oname)
 
 # --------------------------------------------------------------------------
 if __name__ == '__main__':

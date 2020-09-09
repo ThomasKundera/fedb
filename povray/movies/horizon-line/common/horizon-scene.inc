@@ -20,15 +20,13 @@ light_source{<1500*m,2500*m,-2500*m> color White}
 
 //-------------------------------------
 
-#declare sphere_radius=Earth_Radius/100;
-
 sphere {<0,-sphere_radius,0>,sphere_radius
 	//pigment {rgb <0,0,1>}
 	texture {SeaWaterTexture} interior{I_Glass}
 }
 
 
-#declare hd=350*m;
+#declare hd=sqrt(Altitude*Altitude+2*Altitude*sphere_radius);
 
 /*#for (i,1,5)
   #declare theta=acos(200*i*m/sphere_radius);
@@ -38,7 +36,7 @@ sphere {<0,-sphere_radius,0>,sphere_radius
     pigment {color <i/5,(1-i/5),i/5,.3>}
   }
 #end*/
-#declare theta=acos(350*m/sphere_radius);
+#declare theta=acos(hd/sphere_radius);
 torus {
   sphere_radius*cos(theta),10*cm*torusMag
   translate <0,(sin(theta)-1)*sphere_radius-0*cm,0>
@@ -54,7 +52,7 @@ text {
     pigment { Red }
     scale 30*m
     rotate <0,-90,0>
-    translate <350*m,(sin(theta)-1)*sphere_radius,0*m>
+    translate <hd,(sin(theta)-1)*sphere_radius,0*m>
 }
 
 text {
@@ -62,7 +60,7 @@ text {
     pigment { Red }
     scale 30*m
     rotate <0,-90,0>
-    translate <350*m,(sin(theta)-1)*sphere_radius,0*m>
+    translate <hd,(sin(theta)-1)*sphere_radius,0*m>
     rotate <0,45,0>
 }
 
@@ -80,7 +78,7 @@ text {
     pigment { Red }
     scale 30*m
     rotate <0,-90,0>
-    translate <350*m,(sin(theta)-1)*sphere_radius,0*m>
+    translate <hd,(sin(theta)-1)*sphere_radius,0*m>
     rotate <0,3*45,0>
 }
 
@@ -89,7 +87,7 @@ text {
     pigment { Red }
     scale 30*m
     rotate <0,-90,0>
-    translate <350*m,(sin(theta)-1)*sphere_radius,0*m>
+    translate <hd,(sin(theta)-1)*sphere_radius,0*m>
     rotate <0,4*45,0>
 }
 text {
@@ -97,7 +95,7 @@ text {
     pigment { Red }
     scale 30*m
     rotate <0,-90,0>
-    translate <350*m,(sin(theta)-1)*sphere_radius,0*m>
+    translate <hd,(sin(theta)-1)*sphere_radius,0*m>
     rotate <0,5*45,0>
 }
 
@@ -106,7 +104,7 @@ text {
     pigment { Red }
     scale 30*m
     rotate <0,-90,0>
-    translate <350*m,(sin(theta)-1)*sphere_radius,0*m>
+    translate <hd,(sin(theta)-1)*sphere_radius,0*m>
     rotate <0,6*45,0>
 }
 
@@ -115,7 +113,7 @@ text {
     pigment { Red }
     scale 30*m
     rotate <0,-90,0>
-    translate <350*m,(sin(theta)-1)*sphere_radius,0*m>
+    translate <hd,(sin(theta)-1)*sphere_radius,0*m>
     rotate <0,7*45,0>
 }
 

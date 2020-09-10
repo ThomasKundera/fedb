@@ -34,10 +34,10 @@ light_source{<1500*m,2500*m,-2500*m> color White}
 }// end of texture
 
 // Earth -------------------------------------
-/*sphere {<0,-sphere_radius,0>,sphere_radius
+sphere {<0,-sphere_radius,0>,sphere_radius
 	//pigment {rgb <0,0,1>}
 	texture {SeaWaterTexture} interior{I_Glass}
-}*/
+}
 
 
 #declare hd=sqrt(Altitude*Altitude+2*Altitude*sphere_radius);
@@ -65,7 +65,7 @@ torus {
       pigment { Red }
       scale 30*m
       rotate <0,-90,0>
-      //translate <hd,(sin(theta)-1)*sphere_radius,0*m>
+      translate <hd,(sin(theta)-1)*sphere_radius,0*m>
       rotate <0,45*i,0>
   }
 #end

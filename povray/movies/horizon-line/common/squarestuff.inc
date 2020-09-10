@@ -35,40 +35,21 @@ torus {
 }
 
 
-
-text {
-    ttf "timrom.ttf" "A" thick, 0
-    pigment { Green }
-    scale 30*m
-    rotate <0,-90,0>
-    translate <dv,(sin(thetav)-1)*sphere_radius,0*m>
-}
-
-text {
-    ttf "timrom.ttf" "C" thick, 0
-    pigment { Green }
-    scale 30*m
-    rotate <0,-90,0>
-    translate <dv,(sin(thetav)-1)*sphere_radius,0*m>
-    rotate <0,2*45,0>
-}
-
-text {
-    ttf "timrom.ttf" "E" thick, 0
-    pigment { Green }
-    scale 30*m
-    rotate <0,-90,0>
-    translate <dv,(sin(thetav)-1)*sphere_radius,0*m>
-    rotate <0,4*45,0>
-}
-
-text {
-    ttf "timrom.ttf" "G" thick, 0
-    pigment { Green }
-    scale 30*m
-    rotate <0,-90,0>
-    translate <dv,(sin(thetav)-1)*sphere_radius,0*m>
-    rotate <0,6*45,0>
-}
-
+#for (i,0,3)
+  #declare i2=2*i;
+  #declare L=Letters[i2];
+  #declare myL=text {
+      ttf "timrom.ttf" L thick, 0
+  };
+  #declare Lc=yCenter(myL);
+  #declare Lc=<Lc.x,0,Lc.z>;
+  object {myL
+      translate -Lc/2
+      pigment { Green }
+      scale 30*m
+      rotate <0,-90,0>
+      translate <dv,(sin(thetav)-1)*sphere_radius,0*m>
+      rotate <0,45*i2,0>
+  }
+#end
 

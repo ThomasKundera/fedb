@@ -65,9 +65,8 @@ torus {
       pigment { Red }
       scale 30*m
       rotate <0,-90,0>
-      translate <hd,(sin(theta)-1)*sphere_radius,0*m>
+      //translate <hd,(sin(theta)-1)*sphere_radius,0*m>
       rotate <0,45*i,0>
   }
-
 #end
 

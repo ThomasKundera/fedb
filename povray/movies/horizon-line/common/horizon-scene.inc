@@ -1,8 +1,24 @@
-// FIXME: with more recent version of Povray, we can create arrays of strings
-// So no need for this painfull copy/paste
+// Persistence Of Vision Ray Tracer Scene Description File
+// --------------------------------------------------------------------------------
+// horizon-scene.inc
+
+
+// Sky -------------------------------------
+sky_sphere{
+       pigment{ bozo turbulence 0.76
+                         color_map { [0.5 rgb <0.20, 0.20, 0.9>]
+                                     [0.6 rgb <1,1,1>]
+                                     [1.0 rgb <0.1,0.1,0.1>]}
+                         scale 1*m translate<8,0,11>
+              }
+      scale .2*m
+}
+
+
 
 // sun ---------------------------------------------------------------
 light_source{<1500*m,2500*m,-2500*m> color White}
+
 // sea water --------------------------
 #declare SeaWaterTexture=texture{pigment { rgb <0.2, 0.2, 0.2> } 
                normal {pigment_pattern{ crackle  
@@ -16,104 +32,42 @@ light_source{<1500*m,2500*m,-2500*m> color White}
 	      scale <1.2,0.7,.6>*2*m  rotate<0,10,0>
 	      translate< 1.2*m,100*cm,0.6*m>*seconde/20
 }// end of texture
-//interior{I_Glass}
 
-//-------------------------------------
-
-sphere {<0,-sphere_radius,0>,sphere_radius
+// Earth -------------------------------------
+/*sphere {<0,-sphere_radius,0>,sphere_radius
 	//pigment {rgb <0,0,1>}
 	texture {SeaWaterTexture} interior{I_Glass}
-}
+}*/
 
 
 #declare hd=sqrt(Altitude*Altitude+2*Altitude*sphere_radius);
 
-/*#for (i,1,5)
-  #declare theta=acos(200*i*m/sphere_radius);
-  torus {
-    sphere_radius*cos(theta),10*sqrt(i)*cm*torusMag
-    translate <0,(sin(theta)-1)*sphere_radius-0*cm,0>
-    pigment {color <i/5,(1-i/5),i/5,.3>}
-  }
-#end*/
 #declare theta=acos(hd/sphere_radius);
 torus {
   sphere_radius*cos(theta),10*cm*torusMag
   translate <0,(sin(theta)-1)*sphere_radius-0*cm,0>
-  pigment {color <1/5,(1),1/5,.3>}
+  pigment {color Red}
 }
-
 
 #declare thick=.2;
 
-#declare theta=acos(hd/sphere_radius);
-text {
-    ttf "timrom.ttf" "A" thick, 0
-    pigment { Red }
-    scale 30*m
-    rotate <0,-90,0>
-    translate <hd,(sin(theta)-1)*sphere_radius,0*m>
-}
+#declare Letters=array[8]{"A","B","C","D","E","F","G","H"};
 
-text {
-    ttf "timrom.ttf" "B" thick, 0
-    pigment { Red }
-    scale 30*m
-    rotate <0,-90,0>
-    translate <hd,(sin(theta)-1)*sphere_radius,0*m>
-    rotate <0,45,0>
-}
+#for (i,0,7)
+  #declare L=Letters[i];
+  #declare myL=text {
+      ttf "timrom.ttf" L thick, 0
+  };
+  #declare Lc=yCenter(myL);
+  #declare Lc=<Lc.x,0,Lc.z>;
+  object {myL
+      translate -Lc/2
+      pigment { Red }
+      scale 30*m
+      rotate <0,-90,0>
+      translate <hd,(sin(theta)-1)*sphere_radius,0*m>
+      rotate <0,45*i,0>
+  }
 
-text {
-    ttf "timrom.ttf" "C" thick, 0
-    pigment { Red }
-    scale 30*m
-    rotate <0,-90,0>
-    translate <350*m,(sin(theta)-1)*sphere_radius,0*m>
-    rotate <0,2*45,0>
-}
-
-text {
-    ttf "timrom.ttf" "D" thick, 0
-    pigment { Red }
-    scale 30*m
-    rotate <0,-90,0>
-    translate <hd,(sin(theta)-1)*sphere_radius,0*m>
-    rotate <0,3*45,0>
-}
-
-text {
-    ttf "timrom.ttf" "E" thick, 0
-    pigment { Red }
-    scale 30*m
-    rotate <0,-90,0>
-    translate <hd,(sin(theta)-1)*sphere_radius,0*m>
-    rotate <0,4*45,0>
-}
-text {
-    ttf "timrom.ttf" "F" thick, 0
-    pigment { Red }
-    scale 30*m
-    rotate <0,-90,0>
-    translate <hd,(sin(theta)-1)*sphere_radius,0*m>
-    rotate <0,5*45,0>
-}
-
-text {
-    ttf "timrom.ttf" "G" thick, 0
-    pigment { Red }
-    scale 30*m
-    rotate <0,-90,0>
-    translate <hd,(sin(theta)-1)*sphere_radius,0*m>
-    rotate <0,6*45,0>
-}
-
-text {
-    ttf "timrom.ttf" "H" thick, 0
-    pigment { Red }
-    scale 30*m
-    rotate <0,-90,0>
-    translate <hd,(sin(theta)-1)*sphere_radius,0*m>
-    rotate <0,7*45,0>
-}
+#end
 

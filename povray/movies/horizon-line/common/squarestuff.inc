@@ -5,7 +5,7 @@
 
 #include "horizon-scene.inc"
 
-#declare dv=sin(45)*sin(45)*hd;
+#declare dv=hd/sqrt(2);
 #declare thetav=acos(dv/sphere_radius);
 
 

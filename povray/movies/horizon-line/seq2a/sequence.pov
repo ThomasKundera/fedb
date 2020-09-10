@@ -21,12 +21,12 @@
 #declare seconde=clock*duration+timeOffset;
 
 #declare Altitude=1*m;
-#declare torusMag=10;
-#declare sphere_radius=Earth_Radius/1000;
+#declare torusMag=2;
+#declare sphere_radius=Earth_Radius/100;
 #include "squarestuff.inc"
 
-#declare camloc=<0*m,Altitude+200*m,0>;
-#declare camlookat=<0,0,0>; //vrotate(<10*m,Altitude,0>,<0,360*(seconde/duration),0>);
+#declare camloc=<0*m,Altitude,0>;
+#declare camlookat=vrotate(<10*m,Altitude,0>,<0,360*(seconde/duration),0>);
 
 camera {
   location camloc
@@ -34,11 +34,9 @@ camera {
   sky <0,1,0>
   //angle 62 // 30mm
   //angle 40 // 50mm
-  angle 80
+  angle 3
   right -x*image_width/image_height
 }
 
 object  {frame scale .4*m translate <1*m,0, 2*m>}
-
-
 

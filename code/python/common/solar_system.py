@@ -44,7 +44,7 @@ planetsArray=[
   ["Éris"    , 68.1461 *ua , 0.432439 , 43.7408  , 562.55   *Y ,   1.66E22*kg ,-1          , 0,                     0]
 ]
 sunMass=1.9891E30*kg
-
+sunRadius=696340*km
 earthRadius=6371.0*km
 
 # Moons
@@ -53,6 +53,7 @@ earthRadius=6371.0*km
 # Wikipedia
 #             Name  sma      Excentr  inclinaison (° ecliptic) Orbital period, mass, tilt, self period,offset
 Earth_Moons=["Moon",384399*km, 0.0549,  0, 27.321661*d_t, 0,0,0,-math.pi]
+moonRadius=1737.1*km
 
 
 # https://stackoverflow.com/questions/20659456/python-implementing-a-numerical-equation-solver-newton-raphson

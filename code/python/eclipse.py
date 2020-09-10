@@ -11,7 +11,7 @@ import solar_system
 
 # Real 2017 ones last 193mn, so 11580s
 
-def main():
+def USA2017():
   ss=solar_system.SolarSystem()
   ppe=None
   step=100
@@ -43,6 +43,15 @@ def main():
         vkmh=v*3.6
         print (str(t)+" - "+str(p)+" "+str(v)+" "+str(vkmh))
       ppe=p-el
+
+
+def main():
+  # Refers to slide 15 of "eclispe explanation"
+  rs=sunRadius
+  rm=moonRadius
+  ds=ua
+  x=(ds*rm)/(rs-rm)
+  print(x)
 
 # --------------------------------------------------------------------------
 if __name__ == '__main__':

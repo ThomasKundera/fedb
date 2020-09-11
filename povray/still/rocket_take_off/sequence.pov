@@ -18,8 +18,11 @@
 
 #declare sphere_radius=Earth_Radius;
 
+// sun ---------------------------------------------------------------
+light_source{<1500*m,2500*m,-2500*m> color White}
+
 // sea water --------------------------
-#declare SeaWaterTexture=texture{pigment { rgb <0.2, 0.2, 0.2> } 
+#declare SeaWaterTexture=texture{pigment { rgb <0.2, 0.2, 0.4> } 
                normal {pigment_pattern{ crackle  
                                         colour_map { [0, rgb 0]
                                                      [1, rgb 1] } 
@@ -28,7 +31,7 @@
               finish { ambient 0.15 diffuse 0.65 
                        brilliance 6.0 phong 0.8 phong_size 120
                        reflection 0.6}
-	      scale <1.2,0.7,.6>*2*m  rotate<0,10,0>
+	      scale <1.2,0.7,.6>*200*m  rotate<0,10,0>
 	      translate< 1.2*m,100*cm,0.6*m>*seconde/20
 }// end of texture
 
@@ -40,15 +43,17 @@ sphere {<0,-sphere_radius,0>,sphere_radius
 
 
 
-#declare sr=300*m;
+#declare sr=20*m;
 // https://www.elonx.net/wp-content/uploads/profile_Starlink-v1-11_Infographic_EN.png
 
 #declare P0=<  -1*km, -1*km,0>;
 #declare P1=<   0*km,  0*km,0>;
-#declare P2=< 220*km, 74*km,0>;
-#declare P3=< 350*km,100*km,0>;
-#declare P4=<3000*km,220*km,0>;
-#declare P5=<3100*km,220*km,0>;
+#declare P2=<  10*km, 10*km,0>;
+#declare P3=<  15*km, 12*km,0>;
+#declare P4=< 220*km, 74*km,0>;
+#declare P5=< 350*km,100*km,0>;
+#declare P6=<3000*km,220*km,0>;
+#declare P7=<3100*km,220*km,0>;
 
 #declare th=P1.x/sphere_radius;
 #declare px=sin(th)*(sphere_radius+P1.y);
@@ -75,23 +80,37 @@ sphere {<0,-sphere_radius,0>,sphere_radius
 #declare py=cos(th)*(sphere_radius+P5.y);
 #declare P5c=<px,py,0>;
 
+#declare th=P6.x/sphere_radius;
+#declare px=sin(th)*(sphere_radius+P6.y);
+#declare py=cos(th)*(sphere_radius+P6.y);
+#declare P6c=<px,py,0>;
+
+#declare th=P7.x/sphere_radius;
+#declare px=sin(th)*(sphere_radius+P7.y);
+#declare py=cos(th)*(sphere_radius+P7.y);
+#declare P7c=<px,py,0>;
+
 sphere_sweep {
-   cubic_spline
-   6  // nombre de points de la spline
+   b_spline //natural_spline //cubic_spline
+   //sturm
+   8
    P0  ,sr,
-   P1c ,sr,
-   P2c ,sr,
-   P3c ,sr,
-   P4c ,sr,
-   P5c ,sr
+   P1c ,sr*2,
+   P2c ,sr*3,
+   P3c ,sr*4,
+   P4c ,sr*7,
+   P5c ,sr*8
+   P6c ,sr*9
+   P7c ,sr*10
+   tolerance 1*m
    translate <0,-sphere_radius,0>
    pigment{Red}
- }
+}
 
 
  
-#declare camloc   =<10*km,50*km,-100*km>;
-#declare camlookat=<10*km,50*km,   0*km>;
+#declare camloc   =<-5*km,20*m,-10*km>;
+#declare camlookat=<50*km,20*km, 0*km>;
 
 
 camera {

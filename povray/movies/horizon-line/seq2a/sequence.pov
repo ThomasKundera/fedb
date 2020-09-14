@@ -34,9 +34,8 @@ camera {
   sky <0,1,0>
   //angle 62 // 30mm
   //angle 40 // 50mm
-  angle 3
+  angle 92
   right -x*image_width/image_height
 }
 
 object  {frame scale .4*m translate <1*m,0, 2*m>}
-

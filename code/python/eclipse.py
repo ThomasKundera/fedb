@@ -47,13 +47,25 @@ def USA2017():
 
 def main():
   # Refers to slide 15 of "eclispe explanation"
-  mdist=370835.084*solar_system.km # From http://xjubier.free.fr/en/site_pages/astronomy/ephemerides.html
   rs=solar_system.sunRadius
   rm=solar_system.moonRadius
-  ds=solar_system.ua
-  x=((ds-mdist)*rm)/(rs-rm)
+  dm=372104.709*solar_system.km # From http://xjubier.free.fr/en/site_pages/astronomy/ephemerides.html
+  ds=1.0115432*solar_system.ua
+  x=(rm*ds-rs*dm)/(rs-rm)
   print(x/solar_system.km)
+  re=solar_system.earthRadius
+  l=x+re
+  print(l/solar_system.km)
+  rl=l*rm/(x+dm)
+  print(rl/solar_system.km)
   
+  x=(re*ds)/(rs-re)
+  l=x-solar_system.Earth_Moons[1]
+  print(l/solar_system.km)
+  rl=l*re/x
+  print(rl/solar_system.km)
+  
+  return
   y=x-(mdist-solar_system.earthRadius)
   print(y/solar_system.km)
   w=y*rm/x

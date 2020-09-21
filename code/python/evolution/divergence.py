@@ -28,11 +28,14 @@ class RGB:
     
   def setrandom(self):
     self.rgb=[np.random.random() for _ in range(3)]
-    
+  
+  def rgbsum(self):
+    return self.rgb[0]+self.rgb[1]+self.rgb[2]
  
  
 class Idv:
-  deathcurve=[.1,.1,.2,.3,.4,.5,.6,1] # Likelihood of dying for each age
+  #deathcurve=[.1,.1,.2,.3,.4,.5,.6,1] # Likelihood of dying for each age
+  deathcurve=[.1,.2,.4,.8,1,1,1,1] # Likelihood of dying for each age
   def __init__(self,rgb=[0,0,0]):
     self.rgb=RGB(rgb)
     self.age=0
@@ -47,8 +50,16 @@ class Idv:
       return True
     return False
   
-  def mate(self,other):
+  # This is by mean
+  def matemean(self,other):
     idv=Idv([(self.rgb.rgb[i]+other.rgb.rgb[i])/2 for i in range(3)])
+    return idv
+  
+  # This is closer to how DNA works
+  def mate(self,other):
+    idv=Idv([random.choice([self.rgb.rgb[i],other.rgb.rgb[i]]) for i in range(3)])
+    if (idv.rgb.rgbsum()==0): # genetic defect: death
+      idv.age=7 # Trick
     return idv
   
   
@@ -71,7 +82,8 @@ class WorldMap:
       self.addidv([        i,        i],Idv([1.,0.,0.]))
       self.addidv([kSize-1-i,        i],Idv([0.,1.,0.]))
       self.addidv([        i,kSize-1-i],Idv([0.,0.,1.]))
-  
+      self.addidv([kSize-1-i,kSize-1-i],Idv([1.,1.,1.]))
+ 
   def addidv(self,xy,idv):
     self.array[xy[0]][xy[1]]=idv
     self.xyl.append(xy)

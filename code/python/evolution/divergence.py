@@ -36,9 +36,10 @@ class Idv:
     self.rgb=RGB(rgb)
     self.age=0
     
-  def tick(self,wm,idvl):
+  def tick(self):
     if (self.die()): return False
     self.age+=1
+    return True
     
   def die(self):
     if (random.random()<Idv.deathcurve[self.age]):
@@ -54,7 +55,7 @@ class Idv:
 class WorldMap:
   def __init__(self):
     self.array=[]
-    self.idvl=[]
+    self.xyl=[]
     # Zeroing
     for ix in range(kSize):
       ay=[]
@@ -72,13 +73,13 @@ class WorldMap:
   
   def addidv(self,xy,idv):
     self.array[xy[0]][xy[1]]=idv
-    self.idvl.append(xy)
+    self.xyl.append(xy)
   
   def removeidv(self,xy):
     self.array[xy[0]][xy[1]]=idv
-    self.idvl.append(xy)
+    self.xyl.append(xy)
   
-  def safeexist(ix,iy):
+  def safeexists(self,ix,iy):
     if (ix<0 or iy<0 or ix > kSize or iy > kSize): return False
     return (self.array[ix][iy])
 
@@ -88,25 +89,25 @@ class WorldMap:
       for iy in range(-int(r)+xy[1],int(r)+xy[1]):
         if (self.safeexists(ix,iy)):
           xym=[(xy[0]+ix)/2,(xy[1]+iy)/2]
-          if (not (self.safeexists(xym[0],iym[1]))):
+          if (not (self.safeexists(xym[0],xym[1]))):
             return [ix,iy]
     return None
 
   
   def tick(self):
     nl=[]
-    for xy in self.idvl:
+    for xy in self.xyl:
       # Death
-      if (not self.array[xy[0]][xy[1]].tick(self.array,self.idvl)):
+      if (not self.array[xy[0]][xy[1]].tick()):
         self.array[xy[0]][xy[1]]=None
       else:
-        nl.append(idv)
+        nl.append(xy)
         xy2=self.lookformate(xy)
         if (xy2):
           xym=[(xy[0]+xy2[0])/2,(xy[1]+xy2[1])/2]
           self.array[xym[0]][xym[1]]=self.array[xy[0]][xy[1]].mate(self.array[xy2[0]][xy2[1]])
           nl.append(xym)
-    self.idvl=nl
+    self.xyl=nl
  
 
     

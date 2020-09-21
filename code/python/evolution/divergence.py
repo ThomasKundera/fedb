@@ -2,6 +2,7 @@
 # FIXME: no matplotlib in python 3 for now
 
 import random
+import time
 import matplotlib.pyplot as plt
 import numpy as np
 from matplotlib.colors import LogNorm
@@ -10,7 +11,7 @@ from matplotlib.colors import LogNorm
 
 # size of the world
 kSize  =100
-kRadius=1
+kRadius=3
 
 # Fixing random state for reproducibility
 np.random.seed(19680801)
@@ -31,7 +32,7 @@ class RGB:
  
  
 class Idv:
-  deathcurve=[.5,.2,.3,.4,.5,.6,.8,1] # Likelihood of dying for each age
+  deathcurve=[.1,.1,.2,.3,.4,.5,.6,1] # Likelihood of dying for each age
   def __init__(self,rgb=[0,0,0]):
     self.rgb=RGB(rgb)
     self.age=0
@@ -48,7 +49,8 @@ class Idv:
   
   def mate(self,other):
     self.age=0
-    self.rgb=[(self.rgb[i]+other+rgb[i])/2 for i in range(3)]
+    self.rgb=RGB([(self.rgb.rgb[i]+other.rgb.rgb[i])/2 for i in range(3)])
+    return self
   
   
 
@@ -80,17 +82,27 @@ class WorldMap:
     self.xyl.append(xy)
   
   def safeexists(self,ix,iy):
-    if (ix<0 or iy<0 or ix > kSize or iy > kSize): return False
+    if (ix<0 or iy<0 or (ix > kSize) or (iy > kSize)): return False
     return (self.array[ix][iy])
+
+  def isempty(self,ix,iy):
+    if (ix<0 or iy<0 or (ix > kSize) or (iy > kSize)): return False
+    return (not self.array[ix][iy])
 
   def lookformate(self,xy):
     r=abs(random.gauss(0,kRadius))
     for ix in range(-int(r)+xy[0],int(r)+xy[0]):
       for iy in range(-int(r)+xy[1],int(r)+xy[1]):
         if (self.safeexists(ix,iy)):
-          xym=[(xy[0]+ix)/2,(xy[1]+iy)/2]
-          if (not (self.safeexists(xym[0],xym[1]))):
-            return [ix,iy]
+          return [ix,iy]
+    return None
+
+  def lookforroom(self,xy):
+    r=abs(random.gauss(0,kRadius))
+    for ix in range(-int(r)+xy[0],int(r)+xy[0]):
+      for iy in range(-int(r)+xy[1],int(r)+xy[1]):
+        if (self.isempty(ix,iy)):
+          return [ix,iy]
     return None
 
   
@@ -98,15 +110,19 @@ class WorldMap:
     nl=[]
     for xy in self.xyl:
       # Death
-      if (not self.array[xy[0]][xy[1]].tick()):
-        self.array[xy[0]][xy[1]]=None
-      else:
-        nl.append(xy)
-        xy2=self.lookformate(xy)
-        if (xy2):
-          xym=[(xy[0]+xy2[0])/2,(xy[1]+xy2[1])/2]
-          self.array[xym[0]][xym[1]]=self.array[xy[0]][xy[1]].mate(self.array[xy2[0]][xy2[1]])
-          nl.append(xym)
+      if (self.array[xy[0]][xy[1]]):
+        if (not self.array[xy[0]][xy[1]].tick()):
+          self.array[xy[0]][xy[1]]=None
+          print("death "+str(xy))
+        else:
+          nl.append(xy)
+          xy2=self.lookformate(xy)
+          if (xy2):
+            xy3=self.lookforroom(xy)
+            if (xy3):
+              print("heureux evenement "+str(xy3))
+              self.array[xy3[0]][xy3[1]]=self.array[xy[0]][xy[1]].mate(self.array[xy2[0]][xy2[1]])
+              nl.append(xy3)
     self.xyl=nl
  
 
@@ -130,14 +146,17 @@ class World():
           x.append([0,0,0])
       darray.append(x)
     plt.imshow(darray)
-    plt.show()
-        
+    plt.draw()
         
 # --------------------------------------------------------------------------
 def main():
   w=World()
-  w.tick()
-  w.draw()
+  for i in range(100):
+    print "-----------"
+    w.tick()
+    w.draw()
+    plt.pause(1)
+
   
 
 

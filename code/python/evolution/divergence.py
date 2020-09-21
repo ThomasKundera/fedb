@@ -7,7 +7,8 @@ from matplotlib.colors import LogNorm
 # This code is to observe diverging genetic of a population
 
 # size of the world
-kSize=100
+kSize  =100
+kRadius=1
 
 # Fixing random state for reproducibility
 np.random.seed(19680801)
@@ -28,14 +29,26 @@ class RGB:
  
  
 class Idv:
+  deathcurve=[.5,.2,.3,.4,.5,.6,.8,1] # Likelihood of dying for each age
   def __init__(self,rgb=[0,0,0]):
     self.rgb=RGB(rgb)
     self.age=0
-
+    
+  def tick(self,wm,idvl):
+    if (self.die()): return False
+    self.age+=1
+    r=abs(random.gauss(0,kRadius))
+    
+    
+  def die(self):
+    if (random.random()<Idv.deathcurve[self.age]):
+      return True
+    return False
 
 class WorldMap:
   def __init__(self):
     self.array=[]
+    self.idvl=[]
     # Zeroing
     for ix in range(kSize):
       ay=[]
@@ -46,9 +59,29 @@ class WorldMap:
         ay.append(None)
       self.array.append(ay)
     # Adding individuals
-    self.array[0      ][0      ]=Idv([1,0,0])
-    self.array[kSize-1][0      ]=Idv([0,1,0])
-    self.array[0      ][kSize-1]=Idv([0,0,1])
+    for i in range(10):
+      self.addidv([i        ][i        ],Idv([1,0,0]))
+      self.addidv([kSize-1-i][i        ]=Idv([0,1,0]))
+      self.addidv([i        ][kSize-1-i]=Idv([0,0,1]))
+  
+  def addidv(self,xy,idv):
+    self.array[xy[0]][xy[1]]=idv
+    self.idvl.append(xy)
+  
+  def removeidv(self,xy):
+    self.array[xy[0]][xy[1]]=idv
+    self.idvl.append(xy)
+  
+  
+  def tick(self):
+    nl=[]
+    for idv in self.idvl:
+      if (not self.array[idv[0]][idv[1]].tick(self.array,self.idvl)):
+        self.array[idv[0]][idv[1]]=None
+      else:
+        nl.append(idv)
+        
+              
     
 
 class World():

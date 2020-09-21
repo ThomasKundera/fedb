@@ -124,8 +124,29 @@ class WorldMap:
               nl.append(xy3)
     self.xyl=nl
  
-
-    
+  def stats(self):
+    r=0.
+    g=0.
+    b=0.
+    rs=0.
+    gs=0.
+    bs=0.
+    s=0.
+    for xy in self.xyl:
+      if (self.safeexists(xy[0],xy[1])):
+        s+=1                          
+        rgb=self.array[xy[0]][xy[1]].rgb.rgb
+        rs+=rgb[0]
+        gs+=rgb[1]
+        bs+=rgb[2]
+        if ( (rgb[0]==1) and (rgb[1]==0) and (rgb[2]==0)):
+          r+=1
+        if ( (rgb[0]==0) and (rgb[1]==1) and (rgb[2]==0)):
+          g+=1
+        if ( (rgb[0]==0) and (rgb[1]==0) and (rgb[2]==1)):
+          b+=1
+    print ("r: "+str(r/s)+" g: "+str(g/s)+" b: "+str(b/s)+" rs: "+str(rs/s) +" rg: "+str(gs/s)+" rb: "+str(bs/s))
+     
 
 class World():
   def __init__(self):
@@ -133,6 +154,9 @@ class World():
 
   def tick(self):
     self.wm.tick()
+
+  def stats(self):
+    self.wm.stats()
 
   def draw(self):
     darray=[]
@@ -150,10 +174,11 @@ class World():
 # --------------------------------------------------------------------------
 def main():
   w=World()
-  for i in range(100):
+  for i in range(1000):
     #print "-----------"
     w.tick()
     w.draw()
+    w.stats()
     plt.pause(.003)
 
   

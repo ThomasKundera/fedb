@@ -11,7 +11,7 @@ from matplotlib.colors import LogNorm
 
 # size of the world
 kSize  =100
-kRadius=3
+kRadius=4
 
 # Fixing random state for reproducibility
 np.random.seed(19680801)
@@ -19,11 +19,11 @@ np.random.seed(19680801)
 class RGB:
   def __init__(self,rgb=None):
     if (not rgb):
-      self.rgb=[0,0,0]
+      self.rgb=[0.,0.,0.]
       return
     self.rgb=rgb
  
-  def set(self,rgb=[0,0,0]):
+  def set(self,rgb=[0.,0.,0.]):
     self.rgb=rgb
     
   def setrandom(self):
@@ -48,9 +48,8 @@ class Idv:
     return False
   
   def mate(self,other):
-    self.age=0
-    self.rgb=RGB([(self.rgb.rgb[i]+other.rgb.rgb[i])/2 for i in range(3)])
-    return self
+    idv=Idv([(self.rgb.rgb[i]+other.rgb.rgb[i])/2 for i in range(3)])
+    return idv
   
   
 
@@ -69,9 +68,9 @@ class WorldMap:
       self.array.append(ay)
     # Adding individuals
     for i in range(10):
-      self.addidv([        i,        i],Idv([1,0,0]))
-      self.addidv([kSize-1-i,        i],Idv([0,1,0]))
-      self.addidv([        i,kSize-1-i],Idv([0,0,1]))
+      self.addidv([        i,        i],Idv([1.,0.,0.]))
+      self.addidv([kSize-1-i,        i],Idv([0.,1.,0.]))
+      self.addidv([        i,kSize-1-i],Idv([0.,0.,1.]))
   
   def addidv(self,xy,idv):
     self.array[xy[0]][xy[1]]=idv
@@ -82,11 +81,11 @@ class WorldMap:
     self.xyl.append(xy)
   
   def safeexists(self,ix,iy):
-    if (ix<0 or iy<0 or (ix > kSize) or (iy > kSize)): return False
+    if (ix<0 or iy<0 or (ix >= kSize) or (iy >= kSize)): return False
     return (self.array[ix][iy])
 
   def isempty(self,ix,iy):
-    if (ix<0 or iy<0 or (ix > kSize) or (iy > kSize)): return False
+    if (ix<0 or iy<0 or (ix >= kSize) or (iy >= kSize)): return False
     return (not self.array[ix][iy])
 
   def lookformate(self,xy):
@@ -113,14 +112,14 @@ class WorldMap:
       if (self.array[xy[0]][xy[1]]):
         if (not self.array[xy[0]][xy[1]].tick()):
           self.array[xy[0]][xy[1]]=None
-          print("death "+str(xy))
+          #print("death "+str(xy))
         else:
           nl.append(xy)
           xy2=self.lookformate(xy)
           if (xy2):
             xy3=self.lookforroom(xy)
             if (xy3):
-              print("heureux evenement "+str(xy3))
+              #print("heureux evenement "+str(xy3))
               self.array[xy3[0]][xy3[1]]=self.array[xy[0]][xy[1]].mate(self.array[xy2[0]][xy2[1]])
               nl.append(xy3)
     self.xyl=nl
@@ -152,10 +151,10 @@ class World():
 def main():
   w=World()
   for i in range(100):
-    print "-----------"
+    #print "-----------"
     w.tick()
     w.draw()
-    plt.pause(1)
+    plt.pause(.003)
 
   
 

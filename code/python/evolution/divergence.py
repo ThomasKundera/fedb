@@ -35,7 +35,7 @@ class RGB:
  
 class Idv:
   #deathcurve=[.1,.1,.2,.3,.4,.5,.6,1] # Likelihood of dying for each age
-  deathcurve=[.1,.2,.4,.8,1,1,1,1] # Likelihood of dying for each age
+  deathcurve=[.1,.4,.6,.9,1,1,1,1] # Likelihood of dying for each age
   def __init__(self,rgb=[0,0,0]):
     self.rgb=RGB(rgb)
     self.age=0
@@ -80,9 +80,9 @@ class WorldMap:
     # Adding individuals
     for i in range(10):
       self.addidv([        i,        i],Idv([1.,0.,0.]))
-      self.addidv([kSize-1-i,        i],Idv([0.,1.,0.]))
-      self.addidv([        i,kSize-1-i],Idv([0.,0.,1.]))
-      self.addidv([kSize-1-i,kSize-1-i],Idv([1.,1.,1.]))
+      self.addidv([kSize/2-i,        i],Idv([0.,1.,0.]))
+      self.addidv([        i,kSize/2-i],Idv([0.,0.,1.]))
+      self.addidv([kSize/2-i,kSize/2-i],Idv([1.,1.,1.]))
  
   def addidv(self,xy,idv):
     self.array[xy[0]][xy[1]]=idv
@@ -92,6 +92,11 @@ class WorldMap:
     self.array[xy[0]][xy[1]]=idv
     self.xyl.append(xy)
   
+  
+  def loopmap(self,xy):
+    return [xy[0] % kSize,xy[1] % kSize]
+  
+  
   def safeexists(self,ix,iy):
     if (ix<0 or iy<0 or (ix >= kSize) or (iy >= kSize)): return False
     return (self.array[ix][iy])
@@ -100,7 +105,7 @@ class WorldMap:
     if (ix<0 or iy<0 or (ix >= kSize) or (iy >= kSize)): return False
     return (not self.array[ix][iy])
 
-  def lookformate(self,xy):
+  def lookformatesafe(self,xy):
     r=abs(random.gauss(0,kRadius))
     for ix in range(-int(r)+xy[0],int(r)+xy[0]):
       for iy in range(-int(r)+xy[1],int(r)+xy[1]):
@@ -108,7 +113,16 @@ class WorldMap:
           return [ix,iy]
     return None
 
-  def lookforroom(self,xy):
+  def lookformate(self,xy):
+    r=abs(random.gauss(0,kRadius))
+    for ix in range(-int(r)+xy[0],int(r)+xy[0]):
+      for iy in range(-int(r)+xy[1],int(r)+xy[1]):
+        [ixs,iys]=self.loopmap([ix,iy])
+        if (self.array[ixs][iys]):
+          return [ixs,iys]
+    return None
+
+  def lookforroomsafe(self,xy):
     r=abs(random.gauss(0,kRadius))
     for ix in range(-int(r)+xy[0],int(r)+xy[0]):
       for iy in range(-int(r)+xy[1],int(r)+xy[1]):
@@ -116,6 +130,14 @@ class WorldMap:
           return [ix,iy]
     return None
 
+  def lookforroom(self,xy):
+    r=abs(random.gauss(0,kRadius))
+    for ix in range(-int(r)+xy[0],int(r)+xy[0]):
+      for iy in range(-int(r)+xy[1],int(r)+xy[1]):
+        [ixs,iys]=self.loopmap([ix,iy])
+        if (not self.array[ixs][iys]):
+          return [ixs,iys]
+    return None
   
   def tick(self):
     nl=[]
@@ -157,12 +179,13 @@ class WorldMap:
           g+=1
         if ( (rgb[0]==0) and (rgb[1]==0) and (rgb[2]==1)):
           b+=1
-    print ("r: "+str(r/s)+" g: "+str(g/s)+" b: "+str(b/s)+" rs: "+str(rs/s) +" rg: "+str(gs/s)+" rb: "+str(bs/s))
+    print ("s: "+str(s)+" r: "+str(r/s)+" g: "+str(g/s)+" b: "+str(b/s)+" rs: "+str(rs/s) +" rg: "+str(gs/s)+" rb: "+str(bs/s))
      
 
 class World():
   def __init__(self):
     self.wm=WorldMap()
+    self.draw0()
 
   def tick(self):
     self.wm.tick()
@@ -170,6 +193,19 @@ class World():
   def stats(self):
     self.wm.stats()
 
+  def draw0(self):
+    darray=[]
+    for ix in range(kSize):
+      x=[]
+      for iy in range(kSize):
+        if (self.wm.array[ix][iy]):
+          x.append(self.wm.array[ix][iy].rgb.rgb)
+        else:
+          x.append([0,0,0])
+      darray.append(x)
+    self.h=plt.imshow(darray)
+    plt.draw()
+        
   def draw(self):
     darray=[]
     for ix in range(kSize):
@@ -180,7 +216,7 @@ class World():
         else:
           x.append([0,0,0])
       darray.append(x)
-    plt.imshow(darray)
+    self.h.set_data(darray)
     plt.draw()
         
 # --------------------------------------------------------------------------
@@ -191,7 +227,7 @@ def main():
     w.tick()
     w.draw()
     w.stats()
-    plt.pause(.003)
+    plt.pause(0.003)
 
   
 

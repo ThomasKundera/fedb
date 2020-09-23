@@ -21,6 +21,7 @@
 global_settings { ambient_light 1.2 }
 
 #declare FLAT=false;
+#declare VERTICAL=true;
 
 #declare mydist=100000*km;
 
@@ -32,7 +33,11 @@ global_settings { ambient_light 1.2 }
   #declare al=1.5*(180./pi)*atan2(Earth_Radius+500*km,mydist);
 #end
 
+#if (VERTICAL)
+#declare camLoc=<0*km,mydist,0>;
+#else
 #declare camLoc=<0*km,0,mydist>;
+#end
 
 camera {
   location camLoc

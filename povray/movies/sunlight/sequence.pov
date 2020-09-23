@@ -20,7 +20,7 @@
 
 global_settings { ambient_light 1.2 }
 
-#declare FLAT=true;
+#declare FLAT=false;
 
 #declare mydist=100000*km;
 

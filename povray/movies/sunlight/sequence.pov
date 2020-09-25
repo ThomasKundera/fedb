@@ -13,14 +13,15 @@
 #include "earth-simple.inc"
 
 // Animation stuff
-#declare duration=a_t;
+#declare duration=y_t;
 #declare timeOffset=0;
 #declare seconde=clock*duration+timeOffset;
 
 
 global_settings { ambient_light 1.2 }
 
-#declare FLAT=true;
+#declare FLAT=false;
+#declare VERTICAL=true;
 
 #declare mydist=100000*km;
 
@@ -32,7 +33,11 @@ global_settings { ambient_light 1.2 }
   #declare al=1.5*(180./pi)*atan2(Earth_Radius+500*km,mydist);
 #end
 
+#if (VERTICAL)
+#declare camLoc=<0*km,mydist,0>;
+#else
 #declare camLoc=<0*km,0,mydist>;
+#end
 
 camera {
   location camLoc
@@ -42,8 +47,8 @@ camera {
 }
 
 #declare Year ="2017";
-#declare Month=1+floor(seconde/(j_t*30));
-#declare Day  =1+floor((seconde-(Month-1)*30)/j_t);
+#declare Month=1+floor(seconde/(d_t*30));
+#declare Day  =1+floor((seconde-(Month-1)*30)/d_t);
 
 #declare M=str(Month,0,0);
 #if (Month<10)
@@ -55,7 +60,7 @@ camera {
   #declare D=concat("0",D);
 #end
 
-#declare mD=str(floor(seconde/j_t),0,0);
+#declare mD=str(floor(seconde/d_t),0,0);
 
 #declare jpgname=concat("data/",mD,".jpg");
 #declare jpgnameflat=concat("data/",mD,"-flat.jpg");

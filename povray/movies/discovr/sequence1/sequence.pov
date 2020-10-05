@@ -33,7 +33,7 @@ camera {
 }
 
 object {Earth
-// Rotations were trian and errors, may be simplified.
+// Rotations were trial and errors, may be simplified.
  rotate < 0,-21,  0>
  rotate <18,  0,  0>
  rotate < 0,  0,-33>

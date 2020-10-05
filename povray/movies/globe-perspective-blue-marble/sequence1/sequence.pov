@@ -18,9 +18,9 @@
 #declare duration=60*s_t;
 #declare seconde=clock*duration;
 
+#declare Altitude=1000*km+55000*km*(seconde*seconde)/(duration*duration);
 #declare Altitude=29000*km;
 
-//#declare Altitude=150*km*(seconde*seconde)/(60*60);
 
 #declare camtext= text  {
   ttf "timrom.ttf" concat("Altitude: ", str(Altitude/km,0,1), " km") 0.01, <0,0>
@@ -51,8 +51,9 @@ Set_Camera_Angle(a)
 
 
 
-Screen_Object(camtext,<0.1,0.05>,0,true,.01)
+//Screen_Object(camtext,<0.1,0.05>,0,true,.01)
 
+// Those are 1972 Blue Marble coordinates (at about +/- 1° only)
 object {Earth
 rotate < 0,-141.5,  0>
 rotate < 0,     0, 29>

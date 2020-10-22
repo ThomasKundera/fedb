@@ -16,5 +16,4 @@ for i in `seq 365`; do
   imgOUT=out4/sequence${it}.png
 
   montage -mode concatenate  -tile 2x2 $img0 -resize 200x300 $img2 $img1 $img3 $imgOUT
-  exit 0
 done

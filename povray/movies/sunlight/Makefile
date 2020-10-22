@@ -51,7 +51,7 @@ preplqanim:
 	$(POVRAY)$<  povray.ini
 
 movie:
-	$(MENCODER) mf://out3/sequence*.png $(ENCODEROPTIONS) -o output.avi
+	$(MENCODER) mf://out4/sequence*.png $(ENCODEROPTIONS) -o output.avi
 clean:  
 	@/bin/rm *.png
 	

@@ -44,10 +44,10 @@
   <section|Défrichage>
 
   Dans cette partie nous allons simplifier le problème à donf. Négliger tout
-  ce qui peut l'être et linéariser au roulau-compresseur. Avec un peu de
+  ce qui peut l'être et linéariser au rouleau-compresseur. Avec un peu de
   chance, ça suffira.
 
-  On travaille avec une corde de section constante, de masse linéraire
+  On travaille avec une corde de section constante, de masse linéaire
   <math|m<rsub|l>>.
 
   <subsection|Approximations grossières>
@@ -57,11 +57,11 @@
     <math|100 km> d'altitude, elle devient totalement fausse assez vite en se
     rapprochant du sol.
 
-    <item>Pas d'effets autres qu'inertiels ou gravitationels: il y a en
+    <item>Pas d'effets autres qu'inertiels ou gravitationnels: il y a en
     particulier des effets électriques dû au potentiel de la Terre, aux
     rayonnements ionisants, etc. Aucune idée de sa limite.
 
-    <item>Linéarisation du potentiel terrestre: la relatinon réelle est en
+    <item>Linéarisation du potentiel terrestre: la relation réelle est en
     <math|1/r<rsup|2>>, mais comme je suis une grosse faignasse (et que
     l'intégration de bidule un tant soit peu compliqué, je veux pas), on va
     linéariser. Vu que <math|400\<ll\>6300>, c'est pas déraisonnable.
@@ -79,13 +79,13 @@
 
   <subsection|Calculs>
 
-  En <math|x=0>, on a un champs gravitationel
+  En <math|x=0>, on a un champs gravitationnel
   <math|g<rsub|0>=GM/<around*|(|r+h|)>>, et un \S<nbsp>champs
   centrifuge<nbsp>\T <math|f<rsub|0>=-v<rsub|0><rsup|2>/<around*|(|r+h|)>=-g<rsub|0>>
   (vu qu'on est en équilibre à l'orbite, c'est une conséquence de
   l'approximation 5).
 
-  En <math|x=h>, on a un champs gravitationel <math|g<rsub|h>=GM/r>, et un
+  En <math|x=h>, on a un champs gravitationnel <math|g<rsub|h>=GM/r>, et un
   champs centrifuge <math|f<rsub|h>=-v<rsub|h><rsup|2>/r>.
 
   <subsubsection|Vitesse linéaire>
@@ -100,7 +100,7 @@
 
   \;
 
-  <subsubsection|Linéarisation du champs gravitationel>
+  <subsubsection|Linéarisation du champs gravitationnel>
 
   Trivialement, <math|g<around*|(|x|)>=g<rsub|0>+<frac|g<rsub|h>-g<rsub|0>|h>x=g<rsub|0>+\<Delta\><rsub|g>x>
 
@@ -120,6 +120,32 @@
     <tformat|<table|<row|<cell|P<around*|(|x|)>>|<cell|=>|<cell|<big|int><rsub|<rsup|>0><rsup|x>p<around*|(|x|)>dx>>|<row|<cell|>|<cell|=>|<cell|<big|int><rsub|<rsup|>0><rsup|x><around*|(|g<around*|(|x|)>+f<around*|(|x|)>|)>m<rsub|l>dx>>|<row|<cell|>|<cell|=>|<cell|<big|int><rsub|<rsup|>0><rsup|x><around*|(|g<rsub|0>+f<rsub|0>+<around*|(|\<Delta\><rsub|g>+\<Delta\><rsub|f>|)>x|)>m<rsub|l>dx>>|<row|<cell|>|<cell|=>|<cell|m<rsub|l><around*|(|<around*|(|g<rsub|0>+f<rsub|0>|)>x+<frac|\<Delta\><rsub|g>+\<Delta\><rsub|f>|2>x<rsup|2>|)>>>>>
   </eqnarray*>
 
+  <subsection|Application numérique>
+
+  D'après Corentin G.<\footnote>
+    https://www.facebook.com/groups/709019235826352/permalink/3580498048678442/?comment_id=3580984385296475
+  </footnote>, une \S<nbsp>Paracorde 550<nbsp>\T a une masse linéaire de
+  <math|m<rsub|l>=7.4g/m> et résiste à 2500N de traction.
+
+  En résolvant <math|P<around*|(|400km|)>=2426N>.
+
+  La masse totale de corde serait de moins de 3 tonnes, à comparer aux 400T
+  de l'ISS.
+
+  Non seulement ça passe, mais en plus on dirait qu'elle a été conçue pour
+  cela :-)
+
+  <section|Conclusion (provisoire)>
+
+  Sans atmosphère, la pêche à la mouche depuis l'ISS est envisageable. Y'a
+  plus qu'à.
+
+  (sous réserve d'énormités de calculs toujours possible, document non
+  contractuel, suggestion de présentation, à utiliser sous la responsabilité
+  d'un adulte qualifié, ne pas reproduire à la maison).
+
+  \;
+
   \;
 </body>
 
@@ -138,7 +164,8 @@
     <associate|auto-12|<tuple|3.2.4|?>>
     <associate|auto-13|<tuple|3.2.5|?>>
     <associate|auto-14|<tuple|3.2.6|?>>
-    <associate|auto-15|<tuple|3.3.4|?>>
+    <associate|auto-15|<tuple|3.3|?>>
+    <associate|auto-16|<tuple|4|?>>
     <associate|auto-2|<tuple|2|1>>
     <associate|auto-3|<tuple|2.1|1>>
     <associate|auto-4|<tuple|2.2|1>>

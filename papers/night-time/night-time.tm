@@ -19,21 +19,34 @@
   Here a simplified computation of day and night length along lattitude and
   period of the year.
 
-  <section|Presentation of the problem>
+  <section|Presentation>
 
-  At any time, the Sun lights about half of the globe. As the axis of
-  rotation is not normal to the eciptic plane, different areas get different
-  day and night time.
+  We'll derivate an estimation of day/night length for any location and date
+  on Earth, from the following simplified explanation: ``as Earth globe
+  self-rotates on itself in about 24h on an axis that is about 23\<degree\>
+  from normal to ecliptic plane where it rotates in one year around Sun, day
+  is when Sun can be seen in the sky, as on the lighted side, and night when
+  Sun goes under the horizon and is hidden by Earth's mass.''
 
-  Our goal is to compute the duration of day and night depending on location.
+  However simple this explanation is, it is already very powerfull in its
+  predictions.
 
-  We'll make the following assumptions: Earth is a perfect sphere, rotating
-  on itself in exactly 24h on a fixed axis, stepping<\footnote>
-    To avoid having to consider sidereal/solar day consequences, we'll
-    suppose the Earth self-rotates a day without moving, and then steps to
-    next location on the orbit.
-  </footnote> a constant amount of distance each day on a perfect circular
-  orbit around a very distant Sun.
+  <section|Computation>
+
+  We'll start by a very simple approximation, and stuff more at each step.
+
+  <subsection|Lighted sphere>
+
+  Lets suppose a sphere (<inactive|<reference|fig1>>), that will model our
+  globe Earth.
+
+  <\big-figure>
+    <image|code/asymptote/simple-sphere.eps|6cm|||>
+
+    \;
+  </big-figure|<inactive|<label|fig1>>>
+
+  If it's lighted by a distant Sun, then half of it is under light
 </body>
 
 <\initial>
@@ -54,7 +67,7 @@
     <associate|auto-15|<tuple|4.3|?>>
     <associate|auto-2|<tuple|2|1>>
     <associate|auto-3|<tuple|3|1>>
-    <associate|auto-4|<tuple|4|1>>
+    <associate|auto-4|<tuple|3.1|1>>
     <associate|auto-5|<tuple|1|2>>
     <associate|auto-6|<tuple|5|?>>
     <associate|auto-7|<tuple|2|?>>
@@ -76,39 +89,14 @@
 
 <\auxiliary>
   <\collection>
-    <\associate|figure>
-      <\tuple|normal>
-        AS11-40-5923 (reduced for print)
-
-        <mark|<arg|body>|<inline-tag|label|<with|mode|<quote|src>|color|<quote|#228>|font-family|<quote|tt>|figas11>>>
-      </tuple|<pageref|auto-5>>
-
-      <tuple|normal||<pageref|auto-7>>
-    </associate>
     <\associate|toc>
       <vspace*|1fn><with|font-series|<quote|bold>|math-font-series|<quote|bold>|1<space|2spc>Introduction>
       <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
       <no-break><pageref|auto-1><vspace|0.5fn>
 
-      <vspace*|1fn><with|font-series|<quote|bold>|math-font-series|<quote|bold>|2<space|2spc>Gears>
-      <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
+      <vspace*|1fn><with|font-series|<quote|bold>|math-font-series|<quote|bold>|2<space|2spc>Presentation
+      of the problem> <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
       <no-break><pageref|auto-2><vspace|0.5fn>
-
-      <vspace*|1fn><with|font-series|<quote|bold>|math-font-series|<quote|bold>|3<space|2spc>Simple
-      maths> <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
-      <no-break><pageref|auto-3><vspace|0.5fn>
-
-      <vspace*|1fn><with|font-series|<quote|bold>|math-font-series|<quote|bold>|4<space|2spc>A
-      picture> <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
-      <no-break><pageref|auto-4><vspace|0.5fn>
-
-      <vspace*|1fn><with|font-series|<quote|bold>|math-font-series|<quote|bold>|5<space|2spc>Measure>
-      <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
-      <no-break><pageref|auto-6><vspace|0.5fn>
-
-      <vspace*|1fn><with|font-series|<quote|bold>|math-font-series|<quote|bold>|6<space|2spc>Conclusion>
-      <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
-      <no-break><pageref|auto-8><vspace|0.5fn>
     </associate>
   </collection>
 </auxiliary>

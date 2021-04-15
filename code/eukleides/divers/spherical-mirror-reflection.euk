@@ -1,0 +1,42 @@
+frame -12,-1,12,8
+scale 2
+
+O = point(0,0)
+r = 5
+c = circle(O,r)
+
+P1= point ( 10,7)
+P2= point ( 10,6)
+E = point (-10,7)
+
+ep1=line(E,P1)
+
+ep1p=perpendicular(ep1, O)
+j1.i1 = intersection(ep1p,c)
+
+draw
+  c
+  O
+  P1
+  P2
+  i1
+  E
+end
+
+
+draw  dotted
+  ep1
+  ep1p
+end
+
+label
+  O   -45:
+  P1  -45:
+  P2  -45:
+  i1  -45:
+  E   -45:
+end
+
+
+
+

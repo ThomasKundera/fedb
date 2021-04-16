@@ -5,35 +5,67 @@ O = point(0,0)
 r = 5
 c = circle(O,r)
 
-P1= point ( 10,7)
-P2= point ( 10,6)
+P1= point ( 10,7.5)
+P2= point ( 10,5.5)
 E = point (-10,7)
 
 ep1=line(E,P1)
 
 ep1p=perpendicular(ep1, O)
 j1.i1 = intersection(ep1p,c)
+ep1pp=perpendicular(ep1p, i1)
+
+ep1p2=perpendicular(ep1, P1)
+S1=intersection(ep1p2,ep1pp)
+P1'=symmetric(P1,S1)
+
+ep2=line(E,P2)
+
+ep2p=perpendicular(ep2, O)
+j2.i2 = intersection(ep2p,c)
+ep2pp=perpendicular(ep2p, i2)
+
+ep2p2=perpendicular(ep2, P2)
+S2=intersection(ep2p2,ep2pp)
+P2'=symmetric(P2,S2)
 
 draw
   c
   O
   P1
+  P1'
   P2
+  P2'
   i1
+  i2
   E
+  E.P1'
+  E.P2'
 end
 
 
 draw  dotted
   ep1
   ep1p
+  ep2
+  ep2p
 end
+
+draw  dashed
+  ep1pp
+  ep2pp
+end
+
+
 
 label
   O   -45:
   P1  -45:
+  P1' -45:
   P2  -45:
+  P2' -45:
   i1  -45:
+  i2  -45:
   E   -45:
 end
 

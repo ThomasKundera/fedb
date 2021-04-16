@@ -1,0 +1,82 @@
+frame -12,-1,12,8
+scale 2
+
+O = point(0,0)
+r = 5
+c = circle(O,r)
+
+v = vector(-1,-0.25)
+
+P1 = point ( 10,7   )
+P2 = point ( 10,6.75)
+
+l1= line(P1,v)
+i1.j1 = intersection(l1,c)
+l1o = line(O,i1)
+l1op = perpendicular(l1o,i1)
+v1 = vector(reflection(l1,l1op))
+l1r = line(i1,v1)
+P1' = point(l1r,3)
+
+l2= line(P2,v)
+i2.j2 = intersection(l2,c)
+l2o = line(O,i2)
+l2op = perpendicular(l2o,i2)
+v2 = vector(reflection(l2,l2op))
+l2r = line(i2,v2)
+P2' = point(l2r,3)
+
+draw
+  P1
+  P1.i1
+  P1'
+  i1.P1'
+  v P1
+  i1
+  v  i1
+  v1 i1
+
+  P2
+  P2.i2
+  P2'
+  i2.P2'
+  v P2
+  i2
+  v  i2
+  v2 i2
+ 
+  c
+  O
+end
+
+draw  dotted
+  l1
+  l1o
+  l1op
+  l1r
+  
+  l2
+  l2o
+  l2op
+  l2r
+end
+
+draw  dashed
+  l1op
+  l2op
+end
+
+label
+  O   -45:
+  i1  -45:
+  P1  -45:
+  P1' -45:
+  
+  i2  -45:
+  P2  -45:
+  P2' -45:
+end
+
+
+
+

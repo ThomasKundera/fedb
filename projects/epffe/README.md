@@ -1,4 +1,4 @@
-# Elementary Physics For Flat Earth - EPFFE
+# Elementary Physics For Flat Earth - EP2FE
 
 ## Generalities
 
@@ -57,6 +57,12 @@ Short (less than 5 mn?) videos to explain basic concepts in physics and math tha
 - Geometrical optics and it's limits
 - closing sequence
 
+### Mechanics
+
+#### Mech0.0 : What is mechanics?
+
+#### Mech1.0 : What is mechanics?
+
 
 ### Actual Questions
 
@@ -73,7 +79,14 @@ Short (less than 5 mn?) videos to explain basic concepts in physics and math tha
 
 
 
-## Stuff
+## Meta
 - Opening title sequence includes improved version hooks?
 - Rely on playlists to link versions.
 - Each piece should be independant enough.
+- Use the re-enabled YT link feature.
+
+## To do first
+- Intro and outro
+  - Music
+  - graphics
+ 

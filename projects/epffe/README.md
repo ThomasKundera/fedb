@@ -73,6 +73,7 @@ Short (less than 5 mn?) videos to explain basic concepts in physics and math tha
 #### Mech6.0 : 
 
 
+### Thermdynamics
 
 
 ### Astronomy
@@ -112,3 +113,4 @@ Short (less than 5 mn?) videos to explain basic concepts in physics and math tha
 ## Various topics
 - why sky is blue and sunset is red
 - approximations
+- atmospheric pressure

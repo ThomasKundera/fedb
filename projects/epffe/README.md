@@ -61,7 +61,14 @@ Short (less than 5 mn?) videos to explain basic concepts in physics and math tha
 
 #### Mech0.0 : What is mechanics?
 
-#### Mech1.0 : What is mechanics?
+#### Mech1.0 : Position, speed and acceleration
+
+#### Mech2.0 : Forces
+
+#### Mech2.0 : Masse and weight
+
+
+
 
 
 ### Actual Questions
@@ -76,7 +83,6 @@ Short (less than 5 mn?) videos to explain basic concepts in physics and math tha
 - opening title sequence
 - 
 - closing sequence
-
 
 
 ## Meta

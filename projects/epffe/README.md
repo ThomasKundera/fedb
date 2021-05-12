@@ -57,15 +57,23 @@ Short (less than 5 mn?) videos to explain basic concepts in physics and math tha
 - Geometrical optics and it's limits
 - closing sequence
 
+
+
 ### Mechanics
 
 #### Mech0.0 : What is mechanics?
 
-#### Mech1.0 : Position, speed and acceleration
+#### Mech1.0 : Distance and duraction: space and time
 
-#### Mech2.0 : Forces
+#### Mech2.0 : Position, speed and acceleration
 
-#### Mech3.0 : Masse and weight
+#### Mech3.0 : Forces
+
+#### Mech4.0 : Masse and weight
+
+#### Mech5.0 : 
+
+
 
 ### Astronomy
 
@@ -101,3 +109,5 @@ Short (less than 5 mn?) videos to explain basic concepts in physics and math tha
   - Music
   - graphics
  
+## Various topics
+- why sky is blue and sunset is red

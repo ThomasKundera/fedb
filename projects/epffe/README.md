@@ -65,7 +65,7 @@ Short (less than 5 mn?) videos to explain basic concepts in physics and math tha
 
 #### Mech2.0 : Forces
 
-#### Mech2.0 : Masse and weight
+#### Mech3.0 : Masse and weight
 
 
 

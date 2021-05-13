@@ -80,7 +80,7 @@ def test():
     assert v1 != v2
     assert v2.size == 3, "v2 should be a 3d point"
 
-    print "pass"
+    print ("pass")
 
 
 if __name__ == "__main__":

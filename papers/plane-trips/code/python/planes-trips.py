@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+#!/usr/bin/env python3
 
 import sys
 
@@ -10,27 +10,34 @@ import matplotlib.pyplot as plt
 import point
 #import geodesic
 
-kPi=3.141592653
+# London Paris Moscow Berlin Edinburg Buccharest Minsk
+# Madrid Amsterdam Istambul Praha Rome
+# New-York San-Francisco
 
-# Distance data: maps.google.fr and distance.to
-# Time of flight data: maps.google.fr
-#                                             ->       <-   Comp  Actual
-#            FROM          TO               H: MN    H: MN   DIST  DIST
-kDISTDATA=[["Paris"       ,"London"      , ( 1,10), ( 1,10), 200,  200],
-           ["Paris"       ,"Buccuresti"  , ( 2,50), ( 3, 5),1868, 1868],
-           ["Paris"       ,"Warsaw"      , ( 2,10), ( 2,20),1368, 1368],
-           ["Paris"       ,"Berlin"      , ( 1,35), ( 1,45), 800,  800],
-           ["Paris"       ,"Moscow"      , ( 3,25), ( 3,50),2485, 2485],
-          #["Paris"       ,"Beijin"      , ( 9,55), (10,55),8217, 8217],
-           ["Paris"       ,"HongKong"    , (11,35), (12,50),None, 9615],
-           ["Paris"       ,"LosAngeles"  , (11,30), (10,35),None, 9085],
-           ["Paris"       ,"Johanesbourg", (10,30), (10,50),None, 8228],
-           ["HongKong"    ,"Sydney"      , ( 9,15), ( 8,55),None, 7385],
-           ["HongKong"    ,"Johanesbourg", (12,40), (12,50),None,10718],
-           ["HongKong"    ,"LosAngeles"  , (13,05), (14,50),None,11647],
-           ["Sydney"      ,"LosAngeles"  , (13,40), (14,45),None,12073],
-           ["Sydney"      ,"Johanesbourg", (14,20), (11,50),None,11040],
-          ]
+# Minsk replaced by Budapest: more filghts there.
+
+# Distance data: distancefromto.net
+# Time of flight data: http://www.trvlink.com/download/oneworld/oneworld.pdf
+#            FROM          TO                 H: MN    H: MN   DIST  DIST
+kDISTDATA=[
+           ["London"      ,"Moscow"        , ( 3,45), (4,15),2501, 2501],
+           ["London"      ,"Prague"        , ( 2,00), (2,10),1033, 1033],
+           ["London"      ,"Madrid"        , ( 2,20), (2,20),1263, 1263],
+           ["London"      ,"Buccharest"    , ( 3,15), (3,35),2091, 2091],
+           ["London"      ,"Rome"          , ( 2,25), (2,40),1434, 1434],
+           ["London"      ,"Budapest"      , ( 2,20), (2,30),1449, 1449],
+
+           ["Paris"       ,"Madrid"        , ( 1,55), (1,55),1053, 1053],
+           ["Paris"       ,"Budapest"      , ( 2,15), (2,20),1244, 1244],
+
+           ["Berlin"      ,"Madrid"        , ( 3, 5), (2,55),1870, 1870],
+
+           ["Madrid"      ,"Amsterdam"     , ( 2,30), (2,35),1481, 1481],
+           ["Madrid"      ,"Budapest"      , ( 3,10), (3,10),1974, 1974],
+           ["Istambul"    ,"Madrid"        , ( 3,55), (4,25),2739, 2739],
+           
+           ["Amsterdam"   ,"Budapest"      , ( 2,00), (2, 5),1146, 1146],
+         ]
 
 kDISTDATAtest=[["A"       ,"B"          , ( 1,10), 200],
            ["A"       ,"C"          , ( 1,10), 300],
@@ -57,6 +64,7 @@ class OneFlight:
     s+=" ("+str(self._dur_to).rjust(8)+" - "+ str(self._dur_from).rjust(8)+" ) "
     s+=" ) : "
     s+=str(int(self._distance)).rjust(5)
+    s+=str(int(self._realdist)).rjust(5)
     if (self._compdist):
       s+="* - "
       s+=str(self._realdist).rjust(5)+" ( "+str(int(100.*(self._distance-self._realdist)/self._realdist))+"% )"
@@ -74,7 +82,10 @@ class AllFlights:
   def __init__(self,farray):
     self._flights=[]
     for item in farray:
+      #print (item)
       of=OneFlight(item[0],item[1],item[2],item[3],item[4],item[5])
+      #print(of)
+      #sys.exit(0)
       self._flights.append(of)
       
   def __str__(self):

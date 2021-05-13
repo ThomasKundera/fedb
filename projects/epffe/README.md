@@ -1,4 +1,4 @@
-# Elementary Physics For Flat Earth - EPFFE
+# Elementary Physics For Flat Earth - EP2FE
 
 ## Generalities
 
@@ -27,11 +27,7 @@ Short (less than 5 mn?) videos to explain basic concepts in physics and math tha
 - 
 - closing sequence
 
-
-#### Epis2.0: What are mathematics?
-- opening title sequence
-- What are maths
-- closing sequence
+#### Epis2.0: What is an observation?
 
 #### Epis3.0: Relevance of mathematics for reality
 - opening title sequence
@@ -40,6 +36,8 @@ Short (less than 5 mn?) videos to explain basic concepts in physics and math tha
 
 
 ### Mathematics
+#### Math0.0: What are mathematics?
+
 #### Math1.0: 
 - opening title sequence
 - 
@@ -58,6 +56,35 @@ Short (less than 5 mn?) videos to explain basic concepts in physics and math tha
 - closing sequence
 
 
+### Mechanics
+
+#### Mech0.0 : What is mechanics?
+
+#### Mech1.0 : Distance and duration: space and time
+
+#### Mech2.0 : Position, speed and acceleration
+
+#### Mech3.0 : Relativity of motion
+
+#### Mech4.0 : Forces
+
+#### Mech5.0 : Masse and weight
+
+#### Mech6.0 : 
+
+
+### Thermdynamics
+
+
+### Astronomy
+
+#### Mech0.0 : What is astronomy?
+
+#### Mech1.0 : The Sun
+
+
+
+
 ### Actual Questions
 
 #### Qust0.0: Questions will get answered
@@ -72,8 +99,18 @@ Short (less than 5 mn?) videos to explain basic concepts in physics and math tha
 - closing sequence
 
 
-
-## Stuff
+## Meta
 - Opening title sequence includes improved version hooks?
 - Rely on playlists to link versions.
 - Each piece should be independant enough.
+- Use the re-enabled YT link feature.
+
+## To do first
+- Intro and outro
+  - Music
+  - graphics
+ 
+## Various topics
+- why sky is blue and sunset is red
+- approximations
+- atmospheric pressure

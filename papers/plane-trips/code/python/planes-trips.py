@@ -60,6 +60,7 @@ class OneFlight:
       self._compdist=False
     
   def __str__(self):
+    return self.csvstr()
     s=self._from.ljust(12)+" -> "+self._to.ljust(12)+" : ( "+str(self._duration).rjust(8)
     s+=" ("+str(self._dur_to).rjust(8)+" - "+ str(self._dur_from).rjust(8)+" ) "
     s+=" ) : "
@@ -68,6 +69,12 @@ class OneFlight:
     if (self._compdist):
       s+="* - "
       s+=str(self._realdist).rjust(5)+" ( "+str(int(100.*(self._distance-self._realdist)/self._realdist))+"% )"
+    return s
+  
+  def csvstr(self):
+    s=self._from.ljust(12)+" , "+self._to.ljust(12)
+    s+=" , "+str(self._dur_to).rjust(8)+" , "+ str(self._dur_from).rjust(8)+" , "
+    s+=str(int(self._distance)).rjust(5)
     return s
   
   def texmacs_string(self,opt=None):

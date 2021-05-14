@@ -8,6 +8,23 @@ class kOWR_states(Enum):
   indata=auto()
  
  
+ def AirCode(s):
+   r=s.split'('
+   if (len(r)<=1):
+     return None
+   ac=r[1].split(')')
+   print(ac)
+   
+   
+class Airport:
+  def __init__(name):
+    self.name=name
+    self.code=AirCode(name)
+  def __eq__(self, another):
+    return hasattr(another, 'name') and self.name == another.name
+  def __hash__(self):
+    return hash(self.name)
+    
 class OneFlight:
   def __init__(self,fromc,to,val1,val2,day,dep,arr,nb,plane,duration):
     self.fromc=fromc
@@ -21,25 +38,18 @@ class OneFlight:
     self.plane=plane
     self.duration=duration
     
-
-
-class OneCity:
-  def __init__(self,name):
-    self.name=name
-    print("New city named "+name)
-    self.flights={}
+  def __str__(self):
+    s="Flight"
+    s+=" from "+self.fromc
+    s+=" to "+self.to
     
-  def AddFlight(self,dest,val1,val2,day,dep,arr,nb,plane,duration):
-    if (dest not in self.flights):
-      self.flights[dest]=[]
-    self.flights[dest].append(OneFlight(self.name,dest,val1,val2,day,dep,arr,nb,plane,duration))
-    
+  def 
     
 
 class OneWorldReader(HTMLParser):
   def __init__(self):
     super().__init__()
-    self.cities={}
+    self.airport={}
     self.state=kOWR_states.start
     self.cnt=0
   
@@ -66,7 +76,7 @@ class OneWorldReader(HTMLParser):
     if (self.state == kOWR_states.indiv):
       self.cnt+=1
       if (self.cnt == 3):
-        self.fromcity=data.strip()
+        self.fromcity=Airdata.strip()
         print("From city: "+self.fromcity)
       elif (self.cnt == 8):
         self.destcity=data. split(':')[1].strip()

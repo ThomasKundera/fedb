@@ -8,22 +8,28 @@ class kOWR_states(Enum):
   indata=auto()
  
  
- def AirCode(s):
-   r=s.split'('
-   if (len(r)<=1):
-     return None
-   ac=r[1].split(')')
-   print(ac)
+def AirCode(s):
+  r=s.split('(')
+  if (len(r)<=1):
+    print("ERROR: invalid Airport Code")
+    return None
+  ac=r[1].split(')')
+  return(ac[0])
    
    
 class Airport:
-  def __init__(name):
+  def __init__(self,name):
     self.name=name
     self.code=AirCode(name)
+    
   def __eq__(self, another):
     return hasattr(another, 'name') and self.name == another.name
+  
   def __hash__(self):
     return hash(self.name)
+  
+  def __str__(self):
+    return(self.name+" - "+self.code)
     
 class OneFlight:
   def __init__(self,fromc,to,val1,val2,day,dep,arr,nb,plane,duration):
@@ -43,13 +49,12 @@ class OneFlight:
     s+=" from "+self.fromc
     s+=" to "+self.to
     
-  def 
     
 
 class OneWorldReader(HTMLParser):
   def __init__(self):
     super().__init__()
-    self.airport={}
+    self.flights=[]
     self.state=kOWR_states.start
     self.cnt=0
   
@@ -76,11 +81,11 @@ class OneWorldReader(HTMLParser):
     if (self.state == kOWR_states.indiv):
       self.cnt+=1
       if (self.cnt == 3):
-        self.fromcity=Airdata.strip()
-        print("From city: "+self.fromcity)
+        self.fromairport=Airport(data.strip())
+        print("From airport: "+str(self.fromairport))
       elif (self.cnt == 8):
-        self.destcity=data. split(':')[1].strip()
-        print("Destination: "+self.destcity)
+        self.destairport=Airport(data. split(':')[1].strip())
+        print("Destination: "+str(self.destairport))
       elif (self.cnt == 41):
         self.state = kOWR_states.indata
         self.cnt=0
@@ -111,10 +116,10 @@ class OneWorldReader(HTMLParser):
       elif (self.cnt==8):
         self.duration=data.strip()
         print("Trip duration: "+self.duration)
-        # FIXME : If city exists, escape
-        if (self.fromcity not in self.cities):
-          self.cities[self.fromcity]=OneCity(self.fromcity)
-        self.cities[self.fromcity].AddFlight(self.destcity,self.val1,self.val2,self.day,self.dep,self.arr,self.nb,self.plane,self.duration)
+        self.flights.append(OneFlight(self.fromairport,self.destairport,
+                                      self.val1,self.val2,self.day,
+                                      self.dep,self.arr,
+                                      self.nb,self.plane,self.duration))
         
 
 

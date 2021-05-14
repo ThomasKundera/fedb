@@ -14,7 +14,7 @@ import point
 # Madrid Amsterdam Istambul Praha Rome
 # New-York San-Francisco
 
-# Minsk replaced by Budapest: more filghts there.
+# Minsk replaced by Budapest: more flights there.
 
 # Distance data: distancefromto.net
 # Time of flight data: http://www.trvlink.com/download/oneworld/oneworld.pdf
@@ -171,7 +171,9 @@ class AllFlights:
     self._a=a
     self._b=b
     
-    print ("Distance (km) = "+"{:.2f}".format(a)+" x Time (secondes) "+"{:.0f}".format(b)) 
+    print ( "Distance (km) = "   +"{:.2f}".format(a)
+           +" x Time (secondes) "+"{:.0f}".format(b)
+           +" ( {:.6f}".format(p_value)+"- {:.6f}".format(std_err)+" )")
     self.write_texmacs_fit()
     
     yp=[]

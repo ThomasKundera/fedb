@@ -72,8 +72,8 @@ class OneWorldReader(HTMLParser):
     self.cnt=0
   
   def handle_starttag(self, tag, attrs):
-    if (self.state == kOWR_states.indata):
-      print("Encountered a start tag:", tag)
+    #if (self.state == kOWR_states.indata):
+    #  print("Encountered a start tag:", tag)
     if (tag == 'div'):
       if (self.state == kOWR_states.start):
         self.cnt+=1
@@ -84,8 +84,8 @@ class OneWorldReader(HTMLParser):
         self.state = kOWR_states.indiv
     
   def handle_endtag(self, tag):
-    if (self.state == kOWR_states.indata):
-      print("Encountered an end tag :", tag)
+    #if (self.state == kOWR_states.indata):
+    #  print("Encountered an end tag :", tag)
     if (tag == 'div'):
       if (self.state == kOWR_states.indata) or (self.state == kOWR_states.infillline):
         self.state = kOWR_states.outdiv
@@ -99,22 +99,22 @@ class OneWorldReader(HTMLParser):
       if (self.cnt == 3):
         self.cnt2=0
         self.fromairport=Airport(data.strip())
-        print("From airport: "+str(self.fromairport))
+        #print("From airport: "+str(self.fromairport))
       elif (self.cnt == 8):
         self.destairport=Airport(data. split(':')[1].strip())
-        print("Destination: "+str(self.destairport))
+        #print("Destination: "+str(self.destairport))
       elif (data.strip() == "Aircraft time"): #self.cnt == 41):
         self.cnt2+=1
         if (self.cnt2==2):
           self.state = kOWR_states.indata
           self.cnt=self.cnt2=0
           self.dataline=""
-          print("---------- data starts -------")
+          #print("---------- data starts -------")
     elif (self.state == kOWR_states.indata):
       self.dataline+=" "+data.strip()
         
-    if (self.state == kOWR_states.indata) or (self.state == kOWR_states.infillline):
-      print("Encountered some data  :", data)
+    #if (self.state == kOWR_states.indata) or (self.state == kOWR_states.infillline):
+    #  print("Encountered some data  :", data)
 
   
   def parse_dataline(self):
@@ -127,11 +127,14 @@ class OneWorldReader(HTMLParser):
     # 19Nov -           6 06:30 07:20   AA2734* ERD 00:50 
     # 17Nov -     1234567 12:15 13:05   AA2729* ER3 00:50
     # 17Nov -     12345 7 06:35 07:25   AA2940* ER4 00:50
-    #print(self.dataline)
+    #     - -     12345 7 12:55 15:45   BA8217* FRJ 01:50
+    print ("---------------------------------------------------------")
+    #self.dataline=" - - 12345 7 12:55 15:45 BA8217* FRJ 01:50"
+    print("DATA: "+self.dataline)
     retem = re.compile(
+      "\s*(-)"+
       "\s+(-)"+
-      "\s+(-)"+
-      "\s+([0-7 ]+)"+
+      "\s+([0-7\s]+)"+
       "\s+([0-9][0-9]:[0-9][0-9])"+
       "\s+([0-9][0-9]:[0-9][0-9])"+
       "\s+([\w\*]+)"+
@@ -143,7 +146,7 @@ class OneWorldReader(HTMLParser):
     joinitems=""
     direct=True
     for item in items:
-      joinitems+=s.join(item)
+      joinitems+=s.join(item)+" "
       if (direct):
         afrom=self.fromairport
         ato=self.destairport
@@ -159,70 +162,17 @@ class OneWorldReader(HTMLParser):
     # test
     splitdata=self.dataline.split()
     joindata=s.join(splitdata)
-    print(joindata)
+    #print(joindata)
+    #print(joinitems)
+    df=""
+    for i,s in enumerate(difflib.ndiff(joindata,joinitems)):
+        if s[0]==' ': continue
+        elif s[0]=='-':
+            df+=s[-1]
+    print ("ERROR: "+df)
+    if ("-" in df):
+      sys.exit(0)
     
-    sys.exit(0)
-    
-  def notused(self):
-      self.cnt+=1
-      print("Counter (indata): "+str(self.cnt))
-      if   ((self.cnt==1) or (self.cnt==1+7)):
-        if ("Operated" in data):
-          self.state = kOWR_states.infillline
-          print("Fill line:"+data.strip())
-          self.cnt=0
-          return
-        self.val1=data.strip()
-        print("val1: "+self.val1)
-        
-      elif (self.cnt==2) or (self.cnt==2+7):
-        self.val2=data.strip()
-        print("val2: "+self.val2)
-        
-      elif (self.cnt==3) or (self.cnt==3+7):
-        self.day=data.strip()
-        print("day: "+self.day)
-        
-      elif (self.cnt==5) or (self.cnt==5+7):
-        data=data.split()
-        self.dep=data[0].strip()
-        self.arr=data[1].strip()
-        print("dep: "+self.dep)
-        print("arr: "+self.arr)
-         
-      elif (self.cnt==6) or (self.cnt==6+7):
-        data=data.split()
-        self.nb=data[0].strip()
-        self.plane=data[1].strip()
-        print("nb: "+self.nb)
-        print("plane: "+self.plane)
-        
-      elif (self.cnt==7):
-        self.duration=data.strip()
-        print("Trip duration: "+self.duration)
-        self.flights.append(OneFlight(self.fromairport,self.destairport,
-                                      self.val1,self.val2,self.day,
-                                      self.dep,self.arr,
-                                      self.nb,self.plane,self.duration))
-        print(self.flights[-1])
-      elif (self.cnt==14): # Return trip
-        self.duration=data.strip()
-        print("Trip duration: "+self.duration)
-        self.flights.append(OneFlight(self.destairport,self.fromairport, # Inverted to/from
-                                      self.val1,self.val2,self.day,
-                                      self.dep,self.arr,
-                                      self.nb,self.plane,self.duration))
-        print(self.flights[-1])
-        self.cnt=0 # Going to next line
-      elif (self.state == kOWR_states.infillline):
-        self.cnt+=1
-      print("Counter(infillline): "+str(self.cnt))
-      if (self.cnt == 1):
-        self.state = kOWR_states.indata
-        self.cnt=0
-
-
-
 
 def main():
   parser = OneWorldReader()

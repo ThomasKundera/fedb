@@ -2,6 +2,7 @@
 import sys
 import re
 import difflib
+import datetime
 from html.parser import HTMLParser
 
 from enum import Enum, auto
@@ -47,7 +48,9 @@ class OneFlight:
     self.arr=arr
     self.nb=nb
     self.plane=plane
-    self.duration=duration
+    
+    (h,m)=duration.split(':')
+    self.duration=datetime.timedelta(hours=int(h),minutes=int(m))
     
   def __str__(self):
     s="Flight"
@@ -60,9 +63,21 @@ class OneFlight:
     s+=" arr "+self.arr
     s+=" nb "+self.nb
     s+=" plane "+self.plane
-    s+=" duration "+self.duration
+    s+=" duration "+str(self.duration)
     return s
     
+  def __lt__(self, other):
+      return self.duration < other.duration
+  def __gt__(self, other):
+      return self.duration > other.duration
+  def __eq__(self, other):
+      return self.duration == other.duration
+  def __le__(self, other):
+      return self.duration <= other.duration
+  def __ge__(self, other):
+      return self.duration >= other.duration
+  def __ne__(self, other):
+      return self.duration != other.duration
 
 class OneWorldReader(HTMLParser):
   def __init__(self):
@@ -104,23 +119,23 @@ class OneWorldReader(HTMLParser):
       if (data.strip() == "Aircraft time"):
         self.state = kOWR_states.indata
         # FIXME : we'll get junk data when 2 tables (that should be ignored hopefully)
-        print("TABLE: "+str(self.cnt))
-        print(self.tablefromto)
+        #print("TABLE: "+str(self.cnt))
+        #print(self.tablefromto)
         if (self.cnt>21): # Two tables
           self.fromairport=Airport(self.tablefromto[2])
           self.destairport=Airport(self.tablefromto[7].split(':')[1].strip())
         else:
           self.fromairport=Airport(self.tablefromto[2])
           self.destairport=Airport(self.tablefromto[3].split(':')[1].strip())
-        print(self.fromairport)
-        print(self.destairport)
+        #print(self.fromairport)
+        #print(self.destairport)
         self.cnt=0
         self.dataline=""
           #print("---------- data starts -------")
     elif (self.state == kOWR_states.indata):
       self.dataline+=" "+data.strip()
         
-    print("Encountered some data  :", data)
+    #print("Encountered some data  :", data)
 
   
   def parse_dataline(self):
@@ -194,6 +209,13 @@ def main():
   fi=open("../../data/oneworlds-div.html","rt")
   data=fi.read()
   parser.feed(data)
+  
+  allflights=parser.flights
+  
+  sortedflights=sorted(allflights)
+  
+  for flight in sortedflights:
+    print(flight)
 
   
 # --------------------------------------------------------------------------

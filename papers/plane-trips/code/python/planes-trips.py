@@ -34,10 +34,16 @@ kDISTDATA=[
            ["Istambul"    ,"Madrid"        , ( 3,55), ( 4,25),2739,  2739],
            ["Amsterdam"   ,"Budapest"      , ( 2,00), ( 2, 5),1146,  1146],
 
-           ["New-York"    ,"Hong-Kong"     , (16,00), (15,55),None, 12960],
+           ["Moscow"      ,"Hong-Kong"     , ( 8,55), (10,40),None,  7143],
 
-
-
+           ["New-York"    ,"Hong-Kong"     , (16,00), (15,35),None, 12960],
+           ["Hong-Kong"   ,"Milan"         , (13,30), (11,30),None,  9352],
+           ["Milan"       ,"New-York"      , ( 9,10), ( 8,00),None,  6464],
+           ["Helsinki"    ,"Milan"         , ( 3,00), ( 3,00),None,  1937],
+           ["Helsinki"    ,"New-York"      , ( 8,45), ( 8, 5),None,  6618],
+           ["Helsinki"    ,"Hong-Kong"     , ( 9,45), (11, 5),None,  7830],
+           
+           
          ]
 
 kDISTDATAtest=[["A"       ,"B"          , ( 1,10), 200],
@@ -61,15 +67,15 @@ class OneFlight:
       self._compdist=False
     
   def __str__(self):
-    return self.csvstr()
+    #return self.csvstr()
     s=self._from.ljust(12)+" -> "+self._to.ljust(12)+" : ( "+str(self._duration).rjust(8)
     s+=" ("+str(self._dur_to).rjust(8)+" - "+ str(self._dur_from).rjust(8)+" ) "
     s+=" ) : "
-    s+=str(int(self._distance)).rjust(5)
-    s+=str(int(self._realdist)).rjust(5)
+    s+=str(int(self._distance)).rjust(6)
+    s+=str(int(self._realdist)).rjust(6)
     if (self._compdist):
       s+="* - "
-      s+=str(self._realdist).rjust(5)+" ( "+str(int(100.*(self._distance-self._realdist)/self._realdist))+"% )"
+      s+=str(self._realdist).rjust(6)+" ( "+str(int(100.*(self._distance-self._realdist)/self._realdist))+"% )"
     return s
   
   def csvstr(self):
@@ -103,7 +109,7 @@ class AllFlights:
     s+="<cwith|3|3|6|6|cell-halign|r>|"
     s+="<cwith|4|4|6|6|cell-halign|r>|"
     s+="<cwith|5|5|6|6|cell-halign|r>|"
-    s+="<cwith|6|6|6|6|cell-halign|r>|"
+    s+="<cwith|6|6|6|6|cell-halign|r>|"+"\n"
 
     for of in self._flights:
       s+=str(of)+'\n'

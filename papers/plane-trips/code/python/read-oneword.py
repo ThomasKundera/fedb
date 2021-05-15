@@ -1,4 +1,7 @@
 #!/usr/bin/env python3
+import sys
+import re
+import difflib
 from html.parser import HTMLParser
 
 from enum import Enum, auto
@@ -87,7 +90,9 @@ class OneWorldReader(HTMLParser):
       if (self.state == kOWR_states.indata) or (self.state == kOWR_states.infillline):
         self.state = kOWR_states.outdiv
         self.cnt=0
-    
+        self.parse_dataline()
+        #sys.exit(0)
+        
   def handle_data(self, data):
     if (self.state == kOWR_states.indiv):
       self.cnt+=1
@@ -103,8 +108,62 @@ class OneWorldReader(HTMLParser):
         if (self.cnt2==2):
           self.state = kOWR_states.indata
           self.cnt=self.cnt2=0
+          self.dataline=""
           print("---------- data starts -------")
     elif (self.state == kOWR_states.indata):
+      self.dataline+=" "+data.strip()
+        
+    if (self.state == kOWR_states.indata) or (self.state == kOWR_states.infillline):
+      print("Encountered some data  :", data)
+
+  
+  def parse_dataline(self):
+    #     -     - 12 4 6 07:50 09:05    S7124   319 05:15
+    #     -     - 1 3 5 7 22:00 06:35+1 S7123   319 04:35 
+    #     - 18Nov 1234567 05:50 06:40   AA2734* ERD 00:50 
+    #     - 16Nov 123 567 09:35 10:25   AA2898* ER4 00:50 
+    # 20Nov -      1 45 7 05:50 06:40   AA2734* ERD 00:50 
+    # 17Nov -     1234567 09:45 10:35   AA2898* ERD 00:50
+    # 19Nov -           6 06:30 07:20   AA2734* ERD 00:50 
+    # 17Nov -     1234567 12:15 13:05   AA2729* ER3 00:50
+    # 17Nov -     12345 7 06:35 07:25   AA2940* ER4 00:50
+    #print(self.dataline)
+    retem = re.compile(
+      "\s+(-)"+
+      "\s+(-)"+
+      "\s+([0-7 ]+)"+
+      "\s+([0-9][0-9]:[0-9][0-9])"+
+      "\s+([0-9][0-9]:[0-9][0-9])"+
+      "\s+([\w\*]+)"+
+      "\s+(\w+)"+
+      "\s+([0-9][0-9]:[0-9][0-9])"
+      )
+    items=retem.findall(self.dataline)
+    s=" "
+    joinitems=""
+    direct=True
+    for item in items:
+      joinitems+=s.join(item)
+      if (direct):
+        afrom=self.fromairport
+        ato=self.destairport
+      else:
+        ato=self.fromairport
+        afrom=self.destairport
+      self.flights.append(OneFlight(afrom,ato,
+                                    item[0],item[1],item[2],
+                                    item[3],item[4],
+                                    item[5],item[6],item[7]))
+      direct=not direct
+      print(self.flights[-1])
+    # test
+    splitdata=self.dataline.split()
+    joindata=s.join(splitdata)
+    print(joindata)
+    
+    sys.exit(0)
+    
+  def notused(self):
       self.cnt+=1
       print("Counter (indata): "+str(self.cnt))
       if   ((self.cnt==1) or (self.cnt==1+7)):
@@ -155,17 +214,12 @@ class OneWorldReader(HTMLParser):
                                       self.nb,self.plane,self.duration))
         print(self.flights[-1])
         self.cnt=0 # Going to next line
-    elif (self.state == kOWR_states.infillline):
-      self.cnt+=1
+      elif (self.state == kOWR_states.infillline):
+        self.cnt+=1
       print("Counter(infillline): "+str(self.cnt))
       if (self.cnt == 1):
         self.state = kOWR_states.indata
         self.cnt=0
-        
-    if (self.state == kOWR_states.indata) or (self.state == kOWR_states.infillline):
-      print("Encountered some data  :", data)
-
-        
 
 
 

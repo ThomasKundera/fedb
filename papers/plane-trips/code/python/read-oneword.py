@@ -24,12 +24,11 @@ def AirCode(s):
    
    
 class Airport:
-  def __init__(self,iata,name,city,country,latdir):
+  def __init__(self,iata,name,lat,lng):
     self.iata=iata
     self.name=name
-    self.city=city
-    self.country=country
-    self.latdir=latdir
+    self.lat=lat
+    self.lng=lng
     
   def __eq__(self, another):
     return hasattr(another, 'iata') and self.iata == another.iata
@@ -38,7 +37,7 @@ class Airport:
     return hash(self.iata)
   
   def __str__(self):
-    return(self.name+" ( "+self.iata+" )")
+    return(self.name+" ( "+self.iata+" "+self.lat+" )")
 
 
 class OneFlight:
@@ -125,9 +124,10 @@ class OneWorldReader(HTMLParser):
         self.state = kOWR_states.indata
         # FIXME : we'll get junk data when 2 tables (that should be ignored hopefully)
         #print("TABLE: "+str(self.cnt))
-        #print(self.tablefromto)
+        print(self.tablefromto)
         if (self.cnt>21): # Two tables
           iata=AirCode(self.tablefromto[2])
+          print(iata)
           self.fromairport=self.airports[iata] #Airport(self.tablefromto[2])
           iata=AirCode(self.tablefromto[7].split(':')[1].strip())
           self.destairport=self.airports[iata] #Airport(self.tablefromto[7].split(':')[1].strip())
@@ -218,15 +218,26 @@ class AirPortDBReader:
     self.airports={}
     fi=open(fn,"rt")
     for line in fi:
-      res=line.split(':')
-      if (res[1] != 'N/A'): # Ignoring airports without IATA
-        # ICAO IATA Name City Country ... Latitude Direction
-        self.airports[res[1]]=Airport(res[1],res[2],res[3],res[4],res[8])
+      res=line.split(',')
+      # "id","ident","type","name","latitude_deg","longitude_deg","elevation_ft",
+      #  0    1       2      3      4              5               6
+      #"continent","iso_country","iso_region","municipality","scheduled_service",
+      # 7           8             9            10             11
+      #"gps_code","iata_code","local_code","home_link","wikipedia_link","keywords"
+      # 12         13          14           15          16               17
+      #print(res[4])
+      iata=res[13].strip('"')
+      if (len(iata)>2): # Ignoring airports without IATA FIXME: that's local code?
+        # IATA name lat long
+        self.airports[iata]=Airport(iata,res[3].strip('"'),res[4],res[5])
     fi.close()
+    for airp in self.airports:
+      print (airp)
+    #sys.exit(0)
     
 
 def main():
-  airDb = AirPortDBReader("../../data/GlobalAirportDatabase.txt")
+  airDb = AirPortDBReader("../../data/airports.csv")
   parser = OneWorldReader(airDb.airports)
   fi=open("../../data/oneworlds-div.html","rt")
   data=fi.read()

@@ -3,6 +3,7 @@ import sys
 import re
 import difflib
 import datetime
+import csv
 from html.parser import HTMLParser
 
 from enum import Enum, auto
@@ -15,12 +16,12 @@ class kOWR_states(Enum):
  
  
 def AirCode(s):
-  r=s.split('(')
+  r=s[::-1].split(')')
   if (len(r)<=1):
     print("ERROR: invalid Airport Code")
     return None
-  ac=r[1].split(')')
-  return(ac[0])
+  ac=r[1].split('(')
+  return(ac[0][::-1])
    
    
 class Airport:
@@ -216,9 +217,10 @@ class OneWorldReader(HTMLParser):
 class AirPortDBReader:
   def __init__(self,fn):
     self.airports={}
-    fi=open(fn,"rt")
-    for line in fi:
-      res=line.split(',')
+    fi=open(fn,"rt",newline='')
+    reader=csv.reader(fi)
+    for row in reader:
+      #res=line.split(',')
       # "id","ident","type","name","latitude_deg","longitude_deg","elevation_ft",
       #  0    1       2      3      4              5               6
       #"continent","iso_country","iso_region","municipality","scheduled_service",
@@ -226,10 +228,10 @@ class AirPortDBReader:
       #"gps_code","iata_code","local_code","home_link","wikipedia_link","keywords"
       # 12         13          14           15          16               17
       #print(res[4])
-      iata=res[13].strip('"')
+      iata=row[13]
       if (len(iata)>2): # Ignoring airports without IATA FIXME: that's local code?
         # IATA name lat long
-        self.airports[iata]=Airport(iata,res[3].strip('"'),res[4],res[5])
+        self.airports[iata]=Airport(iata,row[3],row[4],row[5])
     fi.close()
     for airp in self.airports:
       print (airp)

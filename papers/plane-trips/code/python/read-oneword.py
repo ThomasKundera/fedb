@@ -24,19 +24,23 @@ def AirCode(s):
    
    
 class Airport:
-  def __init__(self,name):
+  def __init__(self,iata,name,city,country,latdir):
+    self.iata=iata
     self.name=name
-    self.code=AirCode(name)
+    self.city=city
+    self.country=country
+    self.latdir=latdir
     
   def __eq__(self, another):
-    return hasattr(another, 'name') and self.name == another.name
+    return hasattr(another, 'iata') and self.iata == another.iata
   
   def __hash__(self):
-    return hash(self.name)
+    return hash(self.iata)
   
   def __str__(self):
-    return(self.name+" - "+self.code)
-    
+    return(self.name+" ( "+self.iata+" )")
+
+
 class OneFlight:
   def __init__(self,fromc,to,val1,val2,day,dep,arr,nb,plane,duration):
     self.fromc=fromc
@@ -80,8 +84,9 @@ class OneFlight:
       return self.duration != other.duration
 
 class OneWorldReader(HTMLParser):
-  def __init__(self):
+  def __init__(self,airports):
     super().__init__()
+    self.airports=airports
     self.flights=[]
     self.state=kOWR_states.start
     self.cnt=0
@@ -122,11 +127,16 @@ class OneWorldReader(HTMLParser):
         #print("TABLE: "+str(self.cnt))
         #print(self.tablefromto)
         if (self.cnt>21): # Two tables
-          self.fromairport=Airport(self.tablefromto[2])
-          self.destairport=Airport(self.tablefromto[7].split(':')[1].strip())
+          iata=AirCode(self.tablefromto[2])
+          self.fromairport=self.airports[iata] #Airport(self.tablefromto[2])
+          iata=AirCode(self.tablefromto[7].split(':')[1].strip())
+          self.destairport=self.airports[iata] #Airport(self.tablefromto[7].split(':')[1].strip())
         else:
-          self.fromairport=Airport(self.tablefromto[2])
-          self.destairport=Airport(self.tablefromto[3].split(':')[1].strip())
+          iata=AirCode(self.tablefromto[2])
+          self.fromairport=self.airports[iata] #Airport(self.tablefromto[2])
+          iata=AirCode(self.tablefromto[3].split(':')[1].strip())
+          self.destairport=self.airports[iata] #Airport(self.tablefromto[3].split(':')[1].strip())
+ 
         #print(self.fromairport)
         #print(self.destairport)
         self.cnt=0
@@ -201,14 +211,27 @@ class OneWorldReader(HTMLParser):
           print (item)
         #sys.exit(0) FIXME: errors shouldn't be ignored
       ptr=match.a + match.size
-    
+
+
+class AirPortDBReader:
+  def __init__(self,fn):
+    self.airports={}
+    fi=open(fn,"rt")
+    for line in fi:
+      res=line.split(':')
+      if (res[1] != 'N/A'): # Ignoring airports without IATA
+        # ICAO IATA Name City Country ... Latitude Direction
+        self.airports[res[1]]=Airport(res[1],res[2],res[3],res[4],res[8])
+    fi.close()
     
 
 def main():
-  parser = OneWorldReader()
+  airDb = AirPortDBReader("../../data/GlobalAirportDatabase.txt")
+  parser = OneWorldReader(airDb.airports)
   fi=open("../../data/oneworlds-div.html","rt")
   data=fi.read()
   parser.feed(data)
+  fi.close()
   
   allflights=parser.flights
   

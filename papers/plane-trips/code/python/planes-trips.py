@@ -20,23 +20,24 @@ import point
 # Time of flight data: http://www.trvlink.com/download/oneworld/oneworld.pdf
 #            FROM          TO                 H: MN    H: MN   DIST  DIST
 kDISTDATA=[
-           ["London"      ,"Moscow"        , ( 3,45), (4,15),2501, 2501],
-           ["London"      ,"Prague"        , ( 2,00), (2,10),1033, 1033],
-           ["London"      ,"Madrid"        , ( 2,20), (2,20),1263, 1263],
-           ["London"      ,"Buccharest"    , ( 3,15), (3,35),2091, 2091],
-           ["London"      ,"Rome"          , ( 2,25), (2,40),1434, 1434],
-           ["London"      ,"Budapest"      , ( 2,20), (2,30),1449, 1449],
+           ["London"      ,"Moscow"        , ( 3,45), ( 4,15),2501,  2501],
+           ["London"      ,"Prague"        , ( 2,00), ( 2,10),1033,  1033],
+           ["London"      ,"Madrid"        , ( 2,20), ( 2,20),1263,  1263],
+           ["London"      ,"Buccharest"    , ( 3,15), ( 3,35),2091,  2091],
+           ["London"      ,"Rome"          , ( 2,25), ( 2,40),1434,  1434],
+           ["London"      ,"Budapest"      , ( 2,20), ( 2,30),1449,  1449],
+           ["Paris"       ,"Madrid"        , ( 1,55), ( 1,55),1053,  1053],
+           ["Paris"       ,"Budapest"      , ( 2,15), ( 2,20),1244,  1244],
+           ["Berlin"      ,"Madrid"        , ( 3, 5), ( 2,55),1870,  1870],
+           ["Madrid"      ,"Amsterdam"     , ( 2,30), ( 2,35),1481,  1481],
+           ["Madrid"      ,"Budapest"      , ( 3,10), ( 3,10),1974,  1974],
+           ["Istambul"    ,"Madrid"        , ( 3,55), ( 4,25),2739,  2739],
+           ["Amsterdam"   ,"Budapest"      , ( 2,00), ( 2, 5),1146,  1146],
 
-           ["Paris"       ,"Madrid"        , ( 1,55), (1,55),1053, 1053],
-           ["Paris"       ,"Budapest"      , ( 2,15), (2,20),1244, 1244],
+           ["New-York"    ,"Hong-Kong"     , (16,00), (15,55),None, 12960],
 
-           ["Berlin"      ,"Madrid"        , ( 3, 5), (2,55),1870, 1870],
 
-           ["Madrid"      ,"Amsterdam"     , ( 2,30), (2,35),1481, 1481],
-           ["Madrid"      ,"Budapest"      , ( 3,10), (3,10),1974, 1974],
-           ["Istambul"    ,"Madrid"        , ( 3,55), (4,25),2739, 2739],
-           
-           ["Amsterdam"   ,"Budapest"      , ( 2,00), (2, 5),1146, 1146],
+
          ]
 
 kDISTDATAtest=[["A"       ,"B"          , ( 1,10), 200],
@@ -174,7 +175,7 @@ class AllFlights:
     print ( "Distance (km) = "   +"{:.2f}".format(a)
            +" x Time (secondes) "+"{:.0f}".format(b)
            +" ( {:.6f}".format(p_value)+"- {:.6f}".format(std_err)+" )")
-    self.write_texmacs_fit()
+    #self.write_texmacs_fit()
     
     yp=[]
     for xv in x:
@@ -196,7 +197,7 @@ class AllFlights:
       else:
         of._distance=self._a*of._duration.total_seconds()+self._b
         
-    self.write_texmacs_dists()
+    #self.write_texmacs_dists()
 
 # Looks useless to hide _p here
 # but when going sphere, may helps to keep the

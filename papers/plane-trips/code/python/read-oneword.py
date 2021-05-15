@@ -28,8 +28,8 @@ class Airport:
   def __init__(self,iata,name,lat,lng):
     self.iata=iata
     self.name=name
-    self.lat=lat
-    self.lng=lng
+    self.lat=float(lat)
+    self.lng=float(lng)
     
   def __eq__(self, another):
     return hasattr(another, 'iata') and self.iata == another.iata
@@ -38,7 +38,7 @@ class Airport:
     return hash(self.iata)
   
   def __str__(self):
-    return(self.name+" ( "+self.iata+" "+self.lat+" )")
+    return(self.name+" ( "+self.iata+" "+str(self.lat)+" )")
 
 
 class OneFlight:
@@ -229,7 +229,7 @@ class AirPortDBReader:
       # 12         13          14           15          16               17
       #print(res[4])
       iata=row[13]
-      if (len(iata)>2): # Ignoring airports without IATA FIXME: that's local code?
+      if (len(iata)>2 and len(iata)<5): # Ignoring airports without IATA FIXME: that's local code?
         # IATA name lat long
         self.airports[iata]=Airport(iata,row[3],row[4],row[5])
     fi.close()
@@ -251,7 +251,8 @@ def main():
   sortedflights=sorted(allflights)
   
   for flight in sortedflights:
-    print(flight)
+    if ((flight.fromc.lat>0) and (flight.to.lat>0)): # Only nothern hemisphere
+      print(flight)
 
   
 # --------------------------------------------------------------------------

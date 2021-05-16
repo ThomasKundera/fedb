@@ -9,8 +9,11 @@ class Airport:
     self.lat=float(lat)
     self.lng=float(lng)
     
-  def __eq__(self, another):
-    return hasattr(another, 'iata') and self.iata == another.iata
+  def __lt__(self, other):
+      return hasattr(other, 'iata') and self.iata < other.iata
+
+  def __eq__(self, other):
+    return hasattr(other, 'iata') and self.iata == other.iata
   
   def __hash__(self):
     return hash(self.iata)
@@ -19,47 +22,110 @@ class Airport:
     return(self.name+" ( "+self.iata+" "+str(self.lat)+" )")
 
 
+# Unique ID based on IATA codes.
+def CreateRouteId(a):
+    if (a._from<a._to):
+      f=a._from.iata
+      t=a._to.iata
+    else:
+      f=a._to.iata
+      t=a._from.iata
+    return (f+'_'+t)
+  
+
 class OneFlight:
   def __init__(self,fromc,to,val1,val2,day,dep,arr,nb,plane,duration):
-    self.fromc=fromc
-    self.to=to
-    self.val1=val1
-    self.val2=val2
-    self.day=day
-    self.dep=dep
-    self.arr=arr
-    self.nb=nb
-    self.plane=plane
+    self._from=fromc
+    self._to=to
+    self._id=CreateRouteId(self)
+    self._val1=val1
+    self._val2=val2
+    self._day=day
+    self._dep=dep
+    self._arr=arr
+    self._nb=nb
+    self._plane=plane
     
     (h,m)=duration.split(':')
-    self.duration=datetime.timedelta(hours=int(h),minutes=int(m))
+    self._duration=datetime.timedelta(hours=int(h),minutes=int(m))
     
   def __str__(self):
     s="Flight"
-    s+=" from "+str(self.fromc)
-    s+=" to "+str(self.to)
-    s+=" val1 "+self.val1
-    s+=" val1 "+self.val2
-    s+=" day "+self.day
-    s+=" dep "+self.dep
-    s+=" arr "+self.arr
-    s+=" nb "+self.nb
-    s+=" plane "+self.plane
-    s+=" duration "+str(self.duration)
+    s+=" from "+str(self._from)
+    s+=" to "+str(self._to)
+    s+=" id "+str(self._id)
+    s+=" val1 "+self._val1
+    s+=" val1 "+self._val2
+    s+=" day "+self._day
+    s+=" dep "+self._dep
+    s+=" arr "+self._arr
+    s+=" nb "+self._nb
+    s+=" plane "+self._plane
+    s+=" duration "+str(self._duration)
     return s
     
   def __lt__(self, other):
-      return self.duration < other.duration
+      return self._duration < other._duration
   def __gt__(self, other):
-      return self.duration > other.duration
+      return self._duration > other._duration
   def __eq__(self, other):
-      return self.duration == other.duration
+      return self._duration == other._duration
   def __le__(self, other):
-      return self.duration <= other.duration
+      return self._duration <= other._duration
   def __ge__(self, other):
-      return self.duration >= other.duration
+      return self._duration >= other._duration
   def __ne__(self, other):
-      return self.duration != other.duration
+      return self._duration != other._duration
+
+
+class OneRoute:
+  def __init__(self,flight):
+    if (flight._from<flight._to):
+      self._from=flight._from
+      self._to=flight._to
+    else:
+      self._from=flight._to
+      self._to=flight._from
+    self._id=CreateRouteId(flight)
+    
+    self._direct=[]
+    self._return=[]
+    
+    self.AddFlight(flight)
+
+  def AddFlight(self,flight):
+    if ((self._from ==flight._from) and (self._to ==flight._to)):
+      self._direct.append(flight)
+    elif ((self._from ==flight._to) and (self._to ==flight._from)):
+      self._return.append(flight)
+    else: # This should not happens, but...
+      print("ERROR in AddFlight")
+      sys.exit(-1)
+        
+  def __lt__(self, other):
+      return self._id < other._id
+  def __gt__(self, other):
+      return self._id > other._id
+  def __eq__(self, other):
+      return self._id == other._id
+  def __le__(self, other):
+      return self._id <= other._id
+  def __ge__(self, other):
+      return self._id >= other._id
+  def __ne__(self, other):
+      return self._id != other._id
+
+
+class AllRoutes:
+  def __init__(self,flights):
+    self.routes={}
+    
+    for flight in flights:
+      if flight._id in self.routes:
+        self.routes[flight._id].AddFlight(flight)
+      else:
+        self.routes[flight._id]=OneRoute(flight)
+    
 
 class AllFlights:
   def __init__(self):
@@ -82,5 +148,27 @@ class AllFlights:
     self.flights = pickle.load(picklefile)
     #close file
     picklefile.close()
+
+  def __str__(self):
+    s=""
+    for flight in self.flights:
+      s+='\n'+str(flight)
+    s+='\n'
+    return(s)
+
+  def GenerateGraph(self):
+    self.routes=AllRoutes(self.flights)
     
+
+def main():
+  flights=AllFlights()
+  flights.ReadData()
   
+  flights.GenerateGraph()
+  
+  
+  
+# --------------------------------------------------------------------------
+if __name__ == '__main__':
+  main()
+ 

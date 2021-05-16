@@ -42,8 +42,6 @@ kDISTDATA=[
            ["Helsinki"    ,"Milan"         , ( 3,00), ( 3,00),None,  1937],
            ["Helsinki"    ,"New-York"      , ( 8,45), ( 8, 5),None,  6618],
            ["Helsinki"    ,"Hong-Kong"     , ( 9,45), (11, 5),None,  7830],
-           
-           
          ]
 
 kDISTDATAtest=[["A"       ,"B"          , ( 1,10), 200],

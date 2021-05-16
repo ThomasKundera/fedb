@@ -6,6 +6,8 @@ import datetime
 import csv
 from html.parser import HTMLParser
 
+import flight_data
+
 from enum import Enum, auto
 class kOWR_states(Enum):
   start     =auto()
@@ -22,72 +24,13 @@ def AirCode(s):
     return None
   ac=r[1].split('(')
   return(ac[0][::-1])
-   
-   
-class Airport:
-  def __init__(self,iata,name,lat,lng):
-    self.iata=iata
-    self.name=name
-    self.lat=float(lat)
-    self.lng=float(lng)
-    
-  def __eq__(self, another):
-    return hasattr(another, 'iata') and self.iata == another.iata
-  
-  def __hash__(self):
-    return hash(self.iata)
-  
-  def __str__(self):
-    return(self.name+" ( "+self.iata+" "+str(self.lat)+" )")
 
-
-class OneFlight:
-  def __init__(self,fromc,to,val1,val2,day,dep,arr,nb,plane,duration):
-    self.fromc=fromc
-    self.to=to
-    self.val1=val1
-    self.val2=val2
-    self.day=day
-    self.dep=dep
-    self.arr=arr
-    self.nb=nb
-    self.plane=plane
-    
-    (h,m)=duration.split(':')
-    self.duration=datetime.timedelta(hours=int(h),minutes=int(m))
-    
-  def __str__(self):
-    s="Flight"
-    s+=" from "+str(self.fromc)
-    s+=" to "+str(self.to)
-    s+=" val1 "+self.val1
-    s+=" val1 "+self.val2
-    s+=" day "+self.day
-    s+=" dep "+self.dep
-    s+=" arr "+self.arr
-    s+=" nb "+self.nb
-    s+=" plane "+self.plane
-    s+=" duration "+str(self.duration)
-    return s
-    
-  def __lt__(self, other):
-      return self.duration < other.duration
-  def __gt__(self, other):
-      return self.duration > other.duration
-  def __eq__(self, other):
-      return self.duration == other.duration
-  def __le__(self, other):
-      return self.duration <= other.duration
-  def __ge__(self, other):
-      return self.duration >= other.duration
-  def __ne__(self, other):
-      return self.duration != other.duration
 
 class OneWorldReader(HTMLParser):
   def __init__(self,airports):
     super().__init__()
     self.airports=airports
-    self.flights=[]
+    self.flights=flight_data.AllFlights()
     self.state=kOWR_states.start
     self.cnt=0
   
@@ -125,14 +68,16 @@ class OneWorldReader(HTMLParser):
         self.state = kOWR_states.indata
         # FIXME : we'll get junk data when 2 tables (that should be ignored hopefully)
         #print("TABLE: "+str(self.cnt))
-        print(self.tablefromto)
+        #print(self.tablefromto)
         if (self.cnt>21): # Two tables
+          self.twotrips=True
           iata=AirCode(self.tablefromto[2])
           print(iata)
           self.fromairport=self.airports[iata] #Airport(self.tablefromto[2])
           iata=AirCode(self.tablefromto[7].split(':')[1].strip())
           self.destairport=self.airports[iata] #Airport(self.tablefromto[7].split(':')[1].strip())
         else:
+          self.twotrips=False
           iata=AirCode(self.tablefromto[2])
           self.fromairport=self.airports[iata] #Airport(self.tablefromto[2])
           iata=AirCode(self.tablefromto[3].split(':')[1].strip())
@@ -176,7 +121,7 @@ class OneWorldReader(HTMLParser):
     items=retem.findall(self.dataline)
     s=" "
     joinitems=""
-    direct=True # FIXME: this is invalid: if there are not as many from than to
+    direct=True
     for item in items:
       joinitems+=s.join(item)+" "
       if (direct):
@@ -185,17 +130,21 @@ class OneWorldReader(HTMLParser):
       else:
         ato=self.fromairport
         afrom=self.destairport
-      self.flights.append(OneFlight(afrom,ato,
-                                    item[0],item[1],item[2],
-                                    item[3],item[4],
-                                    item[5],item[6],item[7]))
-      direct=not direct
-      print(self.flights[-1])
+      self.flights.Add(flight_data.OneFlight(afrom,ato,
+                                            item[0],item[1],item[2],
+                                            item[3],item[4],
+                                            item[5],item[6],item[7]))
+      if self.twotrips:
+        direct=not direct
+      print(self.flights.flights[-1])
     # test
     splitdata=self.dataline.split()
     joindata=s.join(splitdata)
     #print(joindata)
     #print(joinitems)
+    return
+    # This is supposed to test regexpr efficiency, but for some reason
+    # doesn't work. FIXME
     matches = difflib.SequenceMatcher(None,joindata , joinitems).get_matching_blocks()
     ptr=0
     for match in matches:
@@ -229,12 +178,13 @@ class AirPortDBReader:
       # 12         13          14           15          16               17
       #print(res[4])
       iata=row[13]
-      if (len(iata)>2 and len(iata)<5): # Ignoring airports without IATA FIXME: that's local code?
+      if (len(iata)>2 and len(iata)<5): # Ignoring airports without IATA
+                                        #FIXME: that's local code?
         # IATA name lat long
-        self.airports[iata]=Airport(iata,row[3],row[4],row[5])
+        self.airports[iata]=flight_data.Airport(iata,row[3],row[4],row[5])
     fi.close()
-    for airp in self.airports:
-      print (airp)
+    #for airp in self.airports:
+    #  print (airp)
     #sys.exit(0)
     
 
@@ -246,13 +196,13 @@ def main():
   parser.feed(data)
   fi.close()
   
-  allflights=parser.flights
+  #allflights=parser.flights
   
-  sortedflights=sorted(allflights)
+  #sortedflights=sorted(allflights)
   
-  for flight in sortedflights:
-    if ((flight.fromc.lat>0) and (flight.to.lat>0)): # Only nothern hemisphere
-      print(flight)
+  #for flight in sortedflights:
+  #  if ((flight.fromc.lat>0) and (flight.to.lat>0)): # Only nothern hemisphere
+  #    print(flight)
 
   
 # --------------------------------------------------------------------------

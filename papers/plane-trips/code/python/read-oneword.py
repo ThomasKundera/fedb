@@ -163,6 +163,9 @@ class OneWorldReader(HTMLParser):
       ptr=match.a + match.size
 
 
+  def dump_flights(self):
+    self.flights.DumpData()
+
 class AirPortDBReader:
   def __init__(self,fn):
     self.airports={}
@@ -196,6 +199,7 @@ def main():
   parser.feed(data)
   fi.close()
   
+  parser.dump_flights()
   #allflights=parser.flights
   
   #sortedflights=sorted(allflights)

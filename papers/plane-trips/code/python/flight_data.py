@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 import datetime
+import pickle
 
 class Airport:
   def __init__(self,iata,name,lat,lng):
@@ -65,5 +66,21 @@ class AllFlights:
     self.flights=[]
   def Add(self,f):
     self.flights.append(f)
+    
+  def DumpData(self):
+    #create a pickle file
+    picklefile = open('allflights.dat', 'wb')
+    #pickle the dictionary and write it to file
+    pickle.dump(self.flights, picklefile)
+    #close the file
+    picklefile.close()
+    
+  def ReadData(self):
+    #read the pickle file
+    picklefile = open('allflights.dat', 'rb')
+    #unpickle the dataframe
+    self.flights = pickle.load(picklefile)
+    #close file
+    picklefile.close()
     
   

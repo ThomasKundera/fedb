@@ -116,6 +116,17 @@ class OneRoute:
       return self._id != other._id
 
 
+  def __str__(self):
+    s ="Route from :"+str(self._from)+'\n'
+    s+="      to   :"+str(self._to)+'\n'
+    for flight in self._direct:
+      s+=str(flight)+'\n'
+    s+="Route from :"+str(self._to)+'\n'
+    s+="      to   :"+str(self._from)+'\n'
+    for flight in self._return:
+      s+=str(flight)+'\n'
+    return s
+
 class AllRoutes:
   def __init__(self,flights):
     self.routes={}
@@ -125,7 +136,13 @@ class AllRoutes:
         self.routes[flight._id].AddFlight(flight)
       else:
         self.routes[flight._id]=OneRoute(flight)
-    
+  
+  def __str__(self):
+    s=""
+    for k in self.routes:
+      s+="\n------------  "+str(k)+"  ------------------\n"
+      s+=str(self.routes[k])+'\n'
+    return s
 
 class AllFlights:
   def __init__(self):
@@ -158,6 +175,7 @@ class AllFlights:
 
   def GenerateGraph(self):
     self.routes=AllRoutes(self.flights)
+    print(self.routes)
     
 
 def main():

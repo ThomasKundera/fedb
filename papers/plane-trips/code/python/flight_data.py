@@ -101,7 +101,16 @@ class OneRoute:
     
     self.AddFlight(flight)
 
+  def IsValid(self):
+    # A flight is not valid if it has not at least one direct and one return flight
+    if (len(self._direct)<1): return False
+    if (len(self._return)<1): return False
+    # A flight is not valid if distance is lower than 1000 km
+    if (self._dist < 1000): return False
+    return True
+  
   def AddFlight(self,flight):
+    #print(flight)
     if ((self._from ==flight._from) and (self._to ==flight._to)):
       self._direct.append(flight)
     elif ((self._from ==flight._to) and (self._to ==flight._from)):
@@ -142,6 +151,10 @@ class OneRoute:
   def ComputeTime(self):
     self.SortFlights()
     self._duration=(self._direct[0]._duration+self._return[0]._duration)/2.
+    d=0.2*self._duration.total_seconds()-560
+    if ((d-self._dist)/d > .1):
+      print (self)
+    
 
   def __str__(self):
     s ="Route from :"+str(self._from)+'\n'
@@ -186,9 +199,12 @@ class AllRoutes:
   def DumpData(self):
     routesdata=[]
     for route in self.routes:
-      self.routes[route].ComputeTime()
-      rs=SimpleRoute(self.routes[route])
-      routesdata.append(rs)
+      if (self.routes[route].IsValid()):
+        self.routes[route].ComputeTime()
+        #A flight is not valid if takes less than 100 mn
+        if (self.routes[route]._duration.total_seconds() > 6000):
+          rs=SimpleRoute(self.routes[route])
+          routesdata.append(rs)
       #print(self.routes[route])
       #print(rs)
     #create a pickle file
@@ -204,6 +220,7 @@ class AllRoutes:
       s+="\n------------  "+str(route)+"  ------------------\n"
       s+=str(self.routes[route])+'\n'
     return s
+
 
 class AllFlights:
   def __init__(self):
@@ -227,18 +244,49 @@ class AllFlights:
     #close file
     picklefile.close()
 
+  def IsSaneFlight(self,lf):
+    # Flight number is not sane if reused by more than two locations
+    lh={}
+    for f in lf:
+      if (f._from.iata not in lh):
+        if (len(lh)>=2):
+          return False
+        lh[f._from.iata]=f._from.iata
+      if (f._to.iata not in lh):
+        if (len(lh)>=2):
+          return False
+        lh[f._to.iata]=f._to.iata
+    return True
+              
+  def RemoveStops(self):
+    fnbhash={}
+    for flight in self.flights:
+      if (flight._nb in fnbhash):
+        fnbhash[flight._nb].append(flight)
+      else:
+        fnbhash[flight._nb]=[flight]
+    
+    nfl=[]
+    for flight in self.flights:
+      if (self.IsSaneFlight(fnbhash[flight._nb])):
+        nfl.append(flight)
+    self.flights=nfl
+
+  def GenerateRoutes(self):
+    # As one stop are include, we have to remove flights
+    # that makes stops
+    self.RemoveStops()
+    self.routes=AllRoutes(self.flights)
+    self.routes.DumpData()
+    #self.routes.Sorting()
+    #print(self.routes)
+
   def __str__(self):
     s=""
     for flight in self.flights:
       s+='\n'+str(flight)
     s+='\n'
     return(s)
-
-  def GenerateRoutes(self):
-    self.routes=AllRoutes(self.flights)
-    self.routes.DumpData()
-    #self.routes.Sorting()
-    #print(self.routes)
     
 
 def main():

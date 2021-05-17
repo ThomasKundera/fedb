@@ -2,7 +2,7 @@
 import datetime
 import pickle
 
-from math import sin, cos, asin, acos, pi
+from math import sin, cos, asin, acos, pi, sqrt
 
 def d2r(d):
   return (d*pi/180)
@@ -98,6 +98,7 @@ class OneRoute:
     self._return=[]
     
     self.GreatCircleDistance()
+    #self.FlaEarthDistance()
     
     self.AddFlight(flight)
 
@@ -106,7 +107,7 @@ class OneRoute:
     if (len(self._direct)<1): return False
     if (len(self._return)<1): return False
     # A flight is not valid if distance is lower than 1000 km
-    if (self._dist < 1000): return False
+    #if (self._dist < 1000): return False
     return True
   
   def AddFlight(self,flight):
@@ -147,6 +148,17 @@ class OneRoute:
         sin(d2r(lat1))*sin(d2r(lat2))
       + cos(d2r(lat1))*cos(d2r(lat2))*cos(d2r(lon2 - lon1))
       )*r_earth
+
+  def FlaEarthDistance(self):
+    r_earth = 20000
+    lat1=self._from.lat
+    lat2=self._to.lat
+    lon1=self._from.lng
+    lon2=self._to.lng
+    r1=r_earth*(90+lat1)/180
+    r2=r_earth*(90+lat2)/180
+    
+    self._dist = sqrt(r1*r1+r2*r2-2*r1*r2*cos(d2r(lon2-lon1)))
 
   def ComputeTime(self):
     self.SortFlights()
@@ -202,7 +214,7 @@ class AllRoutes:
       if (self.routes[route].IsValid()):
         self.routes[route].ComputeTime()
         #A flight is not valid if takes less than 100 mn
-        if (self.routes[route]._duration.total_seconds() > 6000):
+        if (self.routes[route]._duration.total_seconds() > 0):
           rs=SimpleRoute(self.routes[route])
           routesdata.append(rs)
       #print(self.routes[route])

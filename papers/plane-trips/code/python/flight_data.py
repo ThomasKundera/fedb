@@ -125,7 +125,7 @@ class OneRoute:
     
   def GreatCircleDistance(self):
     # Compute distance using great cicle
-    r_earth = 6371000
+    r_earth = 6371
     lat1=self._from.lat
     lat2=self._to.lat
     lon1=self._from.lng
@@ -154,7 +154,10 @@ class SimpleRoute:
     self._dist = route._dist
     self._duration=route._duration
     
-
+  def __str__(self):
+    s ="From "+self._from.iata+" To: "+self._to.iata
+    s+=" "+"{:.0f}".format(self._dist)+" "+str(self._duration)
+    return s
 
 class AllRoutes:
   def __init__(self,flights):
@@ -176,12 +179,14 @@ class AllRoutes:
       self.routes[route].ComputeTime()
       rs=SimpleRoute(self.routes[route])
       routesdata.append(rs)
+      print(rs)
     #create a pickle file
     picklefile = open('simpleroutes.dat', 'wb')
     #pickle the dictionary and write it to file
     pickle.dump(routesdata, picklefile)
     #close the file
     picklefile.close()
+    
     
   
   def __str__(self):

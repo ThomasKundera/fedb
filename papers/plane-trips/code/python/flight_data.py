@@ -2,7 +2,11 @@
 import datetime
 import pickle
 
-from math import sin, cos, asin, acos
+from math import sin, cos, asin, acos, pi
+
+def d2r(d):
+  return (d*pi/180)
+
 
 class Airport:
   def __init__(self,iata,name,lat,lng):
@@ -130,7 +134,10 @@ class OneRoute:
     lat2=self._to.lat
     lon1=self._from.lng
     lon2=self._to.lng
-    self._dist = acos(sin(lat1) * sin(lat2) + cos(lat1) * cos(lat2) * cos(lon2 - lon1)) * r_earth
+    self._dist = acos(
+        sin(d2r(lat1))*sin(d2r(lat2))
+      + cos(d2r(lat1))*cos(d2r(lat2))*cos(d2r(lon2 - lon1))
+      )*r_earth
 
   def ComputeTime(self):
     self.SortFlights()
@@ -145,6 +152,9 @@ class OneRoute:
     s+="      to   :"+str(self._from)+'\n'
     for flight in self._return:
       s+=str(flight)+'\n'
+    if (hasattr(self,'_duration')):
+      s+="Distance: "+str(self._dist)+'\n'
+      s+="Duration: "+str(self._duration)+'\n'
     return s
 
 class SimpleRoute:
@@ -179,15 +189,14 @@ class AllRoutes:
       self.routes[route].ComputeTime()
       rs=SimpleRoute(self.routes[route])
       routesdata.append(rs)
-      print(rs)
+      #print(self.routes[route])
+      #print(rs)
     #create a pickle file
     picklefile = open('simpleroutes.dat', 'wb')
     #pickle the dictionary and write it to file
     pickle.dump(routesdata, picklefile)
     #close the file
     picklefile.close()
-    
-    
   
   def __str__(self):
     s=""

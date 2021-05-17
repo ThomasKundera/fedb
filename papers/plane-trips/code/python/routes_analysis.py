@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 import pickle
 from flight_data import SimpleRoute
+import scipy.stats
 import matplotlib.pyplot as plt
 
 
@@ -15,8 +16,17 @@ class RoutesAnalysis:
     for route in self.routes:
       x.append(route._duration.total_seconds())
       y.append(route._dist)
-      
+  
+    a, b, r_value, p_value, std_err = scipy.stats.linregress(x,y)
+    print ( "Distance (km) = "   +"{:.2f}".format(a)
+           +" x Time (secondes) "+"{:.0f}".format(b)
+           +" ( {:.6f}".format(p_value)+"- {:.6f}".format(std_err)+" )")
+    yp=[]
+    for xv in x:
+      yp.append(a*xv+b)
+
     plt.scatter(x, y, c = 'red')
+    plt.plot   (x, yp , color='blue',linewidth=3)
     plt.xlabel('Time of flight (s)')
     plt.ylabel('Distance of flight (km)')
     plt.show()

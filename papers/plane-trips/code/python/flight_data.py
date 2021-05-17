@@ -2,6 +2,8 @@
 import datetime
 import pickle
 
+from math import sin, cos, asin, acos
+
 class Airport:
   def __init__(self,iata,name,lat,lng):
     self.iata=iata
@@ -19,7 +21,7 @@ class Airport:
     return hash(self.iata)
   
   def __str__(self):
-    return(self.name+" ( "+self.iata+" "+str(self.lat)+" )")
+    return(self.name+" ( "+self.iata+" )")
 
 
 # Unique ID based on IATA codes.
@@ -91,6 +93,8 @@ class OneRoute:
     self._direct=[]
     self._return=[]
     
+    self.GreatCircleDistance()
+    
     self.AddFlight(flight)
 
   def AddFlight(self,flight):
@@ -115,6 +119,22 @@ class OneRoute:
   def __ne__(self, other):
       return self._id != other._id
 
+  def SortFlights(self):
+    self._direct.sort()
+    self._return.sort()
+    
+  def GreatCircleDistance(self):
+    # Compute distance using great cicle
+    r_earth = 6371000
+    lat1=self._from.lat
+    lat2=self._to.lat
+    lon1=self._from.lng
+    lon2=self._to.lng
+    self._dist = acos(sin(lat1) * sin(lat2) + cos(lat1) * cos(lat2) * cos(lon2 - lon1)) * r_earth
+
+  def ComputeTime(self):
+    self.SortFlights()
+    self._duration=(self._direct[0]._duration+self._return[0]._duration)/2.
 
   def __str__(self):
     s ="Route from :"+str(self._from)+'\n'
@@ -127,6 +147,15 @@ class OneRoute:
       s+=str(flight)+'\n'
     return s
 
+class SimpleRoute:
+  def __init__(self,route):
+    self._from=route._from
+    self._to=route._to
+    self._dist = route._dist
+    self._duration=route._duration
+    
+
+
 class AllRoutes:
   def __init__(self,flights):
     self.routes={}
@@ -137,11 +166,29 @@ class AllRoutes:
       else:
         self.routes[flight._id]=OneRoute(flight)
   
+  #def Sorting(self):
+  #  for route in self.routes:
+  #    self.routes[route].SortFlights()
+  
+  def DumpData(self):
+    routesdata=[]
+    for route in self.routes:
+      self.routes[route].ComputeTime()
+      rs=SimpleRoute(self.routes[route])
+      routesdata.append(rs)
+    #create a pickle file
+    picklefile = open('simpleroutes.dat', 'wb')
+    #pickle the dictionary and write it to file
+    pickle.dump(routesdata, picklefile)
+    #close the file
+    picklefile.close()
+    
+  
   def __str__(self):
     s=""
-    for k in self.routes:
-      s+="\n------------  "+str(k)+"  ------------------\n"
-      s+=str(self.routes[k])+'\n'
+    for route in self.routes:
+      s+="\n------------  "+str(route)+"  ------------------\n"
+      s+=str(self.routes[route])+'\n'
     return s
 
 class AllFlights:
@@ -173,16 +220,18 @@ class AllFlights:
     s+='\n'
     return(s)
 
-  def GenerateGraph(self):
+  def GenerateRoutes(self):
     self.routes=AllRoutes(self.flights)
-    print(self.routes)
+    self.routes.DumpData()
+    #self.routes.Sorting()
+    #print(self.routes)
     
 
 def main():
   flights=AllFlights()
   flights.ReadData()
   
-  flights.GenerateGraph()
+  flights.GenerateRoutes()
   
   
   

@@ -164,8 +164,6 @@ class OneRoute:
     self.SortFlights()
     self._duration=(self._direct[0]._duration+self._return[0]._duration)/2.
     d=0.2*self._duration.total_seconds()-560
-    if ((d-self._dist)/d > .1):
-      print (self)
     
 
   def __str__(self):
@@ -210,11 +208,12 @@ class AllRoutes:
   
   def DumpData(self):
     routesdata=[]
+    print("Total number of routes: "+str(len(self.routes)))
     for route in self.routes:
       if (self.routes[route].IsValid()):
         self.routes[route].ComputeTime()
         #A flight is not valid if takes less than 100 mn
-        if (self.routes[route]._duration.total_seconds() > 0):
+        if (self.routes[route]._duration.total_seconds() >   0):
           rs=SimpleRoute(self.routes[route])
           routesdata.append(rs)
       #print(self.routes[route])
@@ -225,6 +224,7 @@ class AllRoutes:
     pickle.dump(routesdata, picklefile)
     #close the file
     picklefile.close()
+    print("Direct routes: "+str(len(routesdata)))
   
   def __str__(self):
     s=""
@@ -255,6 +255,7 @@ class AllFlights:
     self.flights = pickle.load(picklefile)
     #close file
     picklefile.close()
+    print("Total number of connections: "+str(len(self.flights)))
 
   def IsSaneFlight(self,lf):
     # Flight number is not sane if reused by more than two locations

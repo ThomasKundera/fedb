@@ -51,12 +51,13 @@ class Idv:
     return False
   
   # This is by mean
-  def matemean(self,other):
+  def mate(self,other):
+    # FIXME: add a bit of noise here
     idv=Idv([(self.rgb.rgb[i]+other.rgb.rgb[i])/2 for i in range(3)])
     return idv
   
   # This is closer to how DNA works
-  def mate(self,other):
+  def matehard(self,other):
     idv=Idv([random.choice([self.rgb.rgb[i],other.rgb.rgb[i]]) for i in range(3)])
     if (idv.rgb.rgbsum()==0): # genetic defect: death
       idv.age=7 # Trick

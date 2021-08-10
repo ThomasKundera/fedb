@@ -9,12 +9,14 @@ import numpy.random
 # Individual 
 class idv:
   def __init__(self):
-    self.c="1" # DNA of our species, starts with nothing
+    self.c="1" # DNA of our species, starts with 1
     #self.muttable= [1] * 128 # table of mutation probabiliy
   
   def __str__(self):
     i=1 # Hack for the eval
     c=1
+    pt=1
+    xr=1
     s="'"+str(self.c)+"' = "+str(float(eval(self.c)))
     return s
 
@@ -28,7 +30,7 @@ class idv:
     r_mut_flip   = .8
     r_mut_insert = .9
     r_mut_remove = 1.
-    if (len(self.c)>100):
+    if (len(self.c)>30):
       r_mut_insert = 2.
     i=0
     nc=self.c
@@ -61,6 +63,7 @@ class idv:
           pass
         else:
           self.c=nc
+          print(str(nc))
           return
     self.c="1"
         
@@ -70,6 +73,8 @@ class idv:
 def onemax(idv):
   i=1 # Hack for the eval
   c=1
+  pt=1
+  xr=1
   try:
     v= float(eval(idv.c))
   except:
@@ -77,7 +82,7 @@ def onemax(idv):
     raise
   # Fitness is being closest to 1000
   return (abs(123456789.12345678-v))
- 
+               
 # tournament selection
 def selection(pop, scores, k=3):
         # first random selection
@@ -142,7 +147,7 @@ n_iter = 500
 # bits
 n_bits = 20
 # define the population size
-n_pop = 200
+n_pop = 500
 # crossover rate
 r_cross = 0.9
 # mutation rate

@@ -41,3 +41,35 @@ triple Mp=point(M--Mu,t);
 
 dot("M'",Mp);
 draw(M--Mp,dashed);
+
+
+transform3 projxy=planeproject(Z);
+triple Mxy=projxy*M;
+triple Mpxy=projxy*Mp;
+
+dot("$M_{xy}$" ,Mxy);
+dot("$M'_{xy}$",Mpxy);
+
+draw(Mxy--Mpxy,dotted);
+draw(Mp--Mpxy,dotted);
+draw(M--Mxy,dotted);
+
+
+transform3 projyz=planeproject(X);
+triple Myz=projyz*M;
+triple Mpyz=projyz*Mp;
+
+dot("$M_{yz}$" ,Myz);
+dot("$M'_{yz}$",Mpyz);
+
+draw(Myz--Mpyz,dotted);
+draw(Mp--Mpyz,dotted);
+draw(M--Myz,dotted);
+
+triple My=(0,ypart(M),0);
+dot("$M_{y}$" ,My);
+draw(Myz--My,dotted);
+
+triple Mpy=(0,ypart(Mp),0);
+dot("$M'_{y}$" ,Mpy);
+draw(Mpyz--Mpy,dotted);

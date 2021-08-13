@@ -1,6 +1,6 @@
 # Asymptote Makefile
 
-all: simple-gnomon.png 
+all: simple-gnomon.eps
 #half-light-sphere.png
 
 %.eps: %.asy

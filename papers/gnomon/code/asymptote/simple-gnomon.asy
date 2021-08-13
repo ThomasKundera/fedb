@@ -12,26 +12,32 @@ zaxis3("$z$",Arrow3);
 currentprojection=perspective(10,10,10);
 currentlight=light(white,(2,2,2),(2,-2,-2));
 
-draw(surface(unitcircle3),green+opacity(.6));
+draw(shift(-Z)*surface(unitcircle3),green+opacity(.6));
 
 
 dot("O",O);
 //linewidth(2)
 triple O=(0,0,0);
-triple S=(0,0,1);
+triple P=(0,0,-1);
 
-dot("S",S);
-draw(O--S,linewidth(5));
+//dot("P",P);
+draw(O--P,linewidth(5));
 
-triple Vsun=(-.36,.48,-.8);
-triple Ssun=S+Vsun;
+triple M=(0.8,-0.7,2.6);
+draw("M",M);
 
-draw(S-Ssun);
+triple Um=unit(O-M);
 
-real t=intersect(S,Ssun,(0,0,1),(0,0,0));
-write(t);
-triple Sp=point(S--Vsun,t);
-write(Sp);
+triple Mu=M+10*Um; // (see below)
 
-dot("S'",Sp);
-draw(S--Sp);
+// real intersect(triple P, triple Q, triple n, triple Z);
+//    returns the intersection time of the extension of the line segment PQ
+//    with the plane perpendicular to n and passing through Z. 
+real t=intersect(M,Mu,(0,0,1),(0,0,-1));
+//write(t);
+// WARNING: this won't go beyond segment (see above)
+triple Mp=point(M--Mu,t);
+//write(Mp);
+
+dot("M'",Mp);
+draw(M--Mp,dashed);

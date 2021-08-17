@@ -24,13 +24,13 @@
   <section|Presentation>
 
   <\big-figure|<image|code/asymptote/simple-gnomon.eps|8cm|8cm||>>
-    <inactive|<label|FigGnomon>>
+    <label|FigGnomon>
   </big-figure>
 
-  As we can see on Figure <inactive|<reference|FigGnomon>>, a gnomon is a
-  simple vertical stick, on a plane surface, such as the shadow of the stick
-  summit by the the Sun <math|M<around*|(|x,y,z|)>> is projected on the
-  surface as an image <math|M<rprime|'><around*|(|x<rprime|'>,y<rprime|'>,z<rprime|'>|)>>.
+  As we can see on Figure <reference|FigGnomon>, a gnomon is a simple
+  vertical stick, on a plane surface, such as the shadow of the stick summit
+  by the the Sun <math|M<around*|(|x,y,z|)>> is projected on the surface as
+  an image <math|M<rprime|'><around*|(|x<rprime|'>,y<rprime|'>,z<rprime|'>|)>>.
 
   <section|Computation of the projection>
 
@@ -74,16 +74,48 @@
   Thus the projection is:
 
   <\equation*>
-    <choice|<tformat|<table|<row|<cell|x<rprime|'>=<frac|-x|z>>>|<row|<cell|y<rprime|'>=<frac|-y|z>>>|<row|<cell|z=-1>>>>>
+    <choice|<tformat|<table|<row|<cell|x<rprime|'>=<frac|-x|z>>>|<row|<cell|y<rprime|'>=<frac|-y|z>>>|<row|<cell|z=-1>>>>><around*|(|<label|EqProj>|)>
   </equation*>
+
+  Basically this is a central projection on a plane, nothing new here.
 
   <section|Computation of projected shapes>
 
   <subsection|Case of a straight horizontal line>
 
+  We'll take a line parallel to <math|x> axis, at <math|y<rsub|0>> location
+  and height <math|h>. So of parametric equation:
+
+  <math|L=<choice|<tformat|<table|<row|<cell|>>|<row|<cell|y=y<rsub|0>>>|<row|<cell|z=h>>>>>>
+
+  We can now use the equation <reference|EqProj> to find it's projection:
+
+  <math|L<rprime|'>=<choice|<tformat|<table|<row|<cell|>>|<row|<cell|y<rprime|'>=<frac|-y<rsub|0>|h>>>|<row|<cell|z=-1>>>>>>
+
+  So, we found that the projection is a straight line also.
+
   <subsection|Case of an horizontal circle above plane>
 
+  We'll take a circle of center <math|c<around*|(|0,y<rsub|0,h>|)>> and of
+  radius <math|r>. So of parametric equation:
+
+  <math|C=<choice|<tformat|<table|<row|<cell|x=r
+  cos<around*|(|\<theta\>|)>>>|<row|<cell|y=r
+  sin<around*|(|\<theta\>|)>+y<rsub|0>>>|<row|<cell|z=h>>>>>>
+
+  Image of it will be:
+
+  <math|C<rprime|'>=<choice|<tformat|<table|<row|<cell|x=-r
+  cos<around*|(|\<theta\>|)>/h>>|<row|<cell|y=-<frac|r
+  sin<around*|(|\<theta\>|)>+y<rsub|0>|h>>>|<row|<cell|z=-1>>>>>>
+
+  We also find a circle as image.
+
+  \;
+
   <subsection|Case of a circle centered on O>
+
+  \;
 </body>
 
 <\initial>
@@ -95,6 +127,8 @@
 
 <\references>
   <\collection>
+    <associate|EqProj|<tuple|3|?>>
+    <associate|FigGnomon|<tuple|1|?>>
     <associate|auto-1|<tuple|1|1>>
     <associate|auto-2|<tuple|2|1>>
     <associate|auto-3|<tuple|1|1>>
@@ -103,8 +137,6 @@
     <associate|auto-6|<tuple|4.1|?>>
     <associate|auto-7|<tuple|4.2|?>>
     <associate|auto-8|<tuple|4.3|?>>
-    <associate|eqmmp|<tuple|3|?>>
-    <associate|eqmpr|<tuple|1|?>>
   </collection>
 </references>
 
@@ -112,7 +144,7 @@
   <\collection>
     <\associate|figure>
       <tuple|normal|<\surround|<hidden-binding|<tuple>|1>|>
-        <mark|<arg|body>|<inline-tag|label|<with|mode|<quote|src>|color|<quote|#228>|font-family|<quote|tt>|figgnomon>>>
+        \;
       </surround>|<pageref|auto-3>>
     </associate>
     <\associate|toc>
@@ -124,9 +156,25 @@
       <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
       <no-break><pageref|auto-2><vspace|0.5fn>
 
-      <vspace*|1fn><with|font-series|<quote|bold>|math-font-series|<quote|bold>|3<space|2spc>Computation>
-      <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
+      <vspace*|1fn><with|font-series|<quote|bold>|math-font-series|<quote|bold>|3<space|2spc>Computation
+      of the projection> <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
       <no-break><pageref|auto-4><vspace|0.5fn>
+
+      <vspace*|1fn><with|font-series|<quote|bold>|math-font-series|<quote|bold>|4<space|2spc>Computation
+      of projected shapes> <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
+      <no-break><pageref|auto-5><vspace|0.5fn>
+
+      <with|par-left|<quote|1tab>|4.1<space|2spc>Case of a straight
+      horizontal line <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
+      <no-break><pageref|auto-6>>
+
+      <with|par-left|<quote|1tab>|4.2<space|2spc>Case of an horizontal circle
+      above plane <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
+      <no-break><pageref|auto-7>>
+
+      <with|par-left|<quote|1tab>|4.3<space|2spc>Case of a circle centered on
+      O <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
+      <no-break><pageref|auto-8>>
     </associate>
   </collection>
 </auxiliary>

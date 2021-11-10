@@ -95,4 +95,17 @@ pigment {
 }
 
 
+// Oold
+#declare EarthSimpleSky=sky_sphere {
+    pigment {
+      gradient y
+      color_map {
+        [ 0.5  color CornflowerBlue ]
+        [ 1.0  color MidnightBlue ]
+      }
+      scale 2
+      translate -1
+    }
+}
+
 

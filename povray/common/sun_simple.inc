@@ -5,6 +5,7 @@
 // Only for a Sun as seen from Earth for now.
 
 #declare Sun_Radius       =    696000*km;
+#declare Sun_Distance      =    150*Gm;
 
 
 #declare SunTextureSlow=texture {
@@ -48,5 +49,21 @@
   }
 #end
 
+// Old definition.
+#declare SunGlobe=sphere {
+  <0,0,0>,1
+  pigment {rgb <.4,.4,.4>}
+}
+
+#macro SunFromEarth(myV)
+  union {
+    object {SunGlobe scale vlength(v)*Sun_Radius/Sun_Distance translate myV}
+    light_source {
+      myV,color 5
+      parallel
+      point_at -myV
+    }
+  }
+#end
 
 

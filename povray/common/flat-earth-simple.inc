@@ -49,6 +49,9 @@
       object {Earth_Clouds}
     }
    #break
+   #case (3)
+    object {Earth_Water}
+   #break
    #else
     object {MappedEarth}
    #end

@@ -8,7 +8,10 @@
 #include "frame.inc"
 #include "earth-common.inc"
 
-#declare m=1;
+#declare m=.2;
+
+#declare CloudAltitude=400*m;
+
 
 global_settings { ambient_light rgb<0,0,0> }
   global_settings {
@@ -35,15 +38,19 @@ light_source{ <0,100,0> color rgb <1,1,1>
             } 
 */
 
-light_source{ <0,100,0> color rgb <1,1,1>
+#declare Angle=-20;
+
+light_source{ <1000*tan(Angle),1000,1000*tan(Angle)> color rgb <1,1,1>
+//light_source{ <0,1000,0> color rgb <1,1,1>
               parallel
               point_at<0, 0, 0> 
             } 
 //light_source{<10,2,20> color White} 
 
+#declare CamLocXY=3*CloudAltitude;
 camera {
-  location <0,3*m,0>
-  look_at  <10*m,3*m,10*m>
+  location <CamLocXY,3*m,CamLocXY>
+  look_at  <10*m,25*m*m,10*m>
   sky <0,1,0>
   //angle 62 // 30mm
   angle 40 // 50mm
@@ -103,14 +110,15 @@ object{
       }
      
       #local ix=0;
-      #while (ix<20)
-        sphere {<0,0,0>,1*m translate <10*m,0,0> rotate <0,ix*360/20,0>}
+      #while (ix<10)
+        sphere {<0,0,0>,10*m translate <200*m,0,0> rotate <0,ix*360/10,0>}
         #local ix=ix+1;
       #end
-      }
+      sphere {<0,0,0>,20*m}
+    }
   }
   pigment{color rgb<.3,.3,.9>}
-  translate <20*m,5*m,20*m>
+  translate <20*m,CloudAltitude,20*m>
 }
 
 object {frame scale 50*cm translate <10*m,1*m,10*m>}

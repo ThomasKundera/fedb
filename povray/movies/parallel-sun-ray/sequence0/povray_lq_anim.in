@@ -28,8 +28,8 @@ Library_Path=@POVRAYDIR@/include
 Library_Path=../../../common
 
 ;; Image size.
- Width =320			;; (+Wn)
- Height=240			;; (+Hn)
+ Width =160			;; (+Wn)
+ Height=120			;; (+Hn)
 ;;Width=320			;; (+Wn)
 ;;Height=180			;; (+Hn)
 ;;Width=640			;; (+Wn)
@@ -65,7 +65,7 @@ Test_Abort_Count=100		;; (+Xn)
 ;;     9      Compute media.
 ;;     10     Compute radiosity but no media.
 ;;     11     Compute radiosity and media.
-Quality=4			;; (+Qn)
+Quality=11			;; (+Qn)
 
 
 ;; Anti-aliasing controls.
@@ -85,7 +85,7 @@ Jitter=off
 ;; frame of the animation.  If cyclic animation is enabled it steps from
 ;; 0 to a fraction below 1 (actually 1 - 1/Final_Frame).
 Initial_Frame=1		;; (+KFIn)
-Final_Frame  =20			;; (+KFFn)
+Final_Frame  =10			;; (+KFFn)
 ;Cyclic_Animation=true		;; (+/-KC)
 
 

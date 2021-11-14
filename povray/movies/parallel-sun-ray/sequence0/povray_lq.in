@@ -29,8 +29,10 @@ Library_Path=@POVRAYDIR@/include
 Library_Path=../../../common
 
 ;; Image size.
- Width =600			;; (+Wn)
- Height=400			;; (+Hn)
+ Width =300			;; (+Wn)
+ Height=200			;; (+Hn)
+;; Width =600			;; (+Wn)
+;; Height=400			;; (+Hn)
 ;;Width=320			;; (+Wn)
 ;;Height=180			;; (+Hn)
 ;;Width=640			;; (+Wn)

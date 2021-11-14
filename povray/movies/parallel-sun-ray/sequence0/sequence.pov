@@ -13,7 +13,7 @@
 //#include "spline.inc"
 
 #declare dtime=10;
-#declare seconde=clock/dtime;
+#declare seconde=dtime*clock;
 
 #declare CloudAltitude=400*m;
 
@@ -74,7 +74,7 @@ light_source{ <0,100,0> color rgb <1,1,1>
             } 
 */
 
-#declare Angle=360*seconde/dtime;
+#declare Angle=-20;
 
 light_source{ <1000*tan(Angle),1000,1000*tan(Angle)> color rgb <7,6,4>
 //light_source{ <0,1000,0> color rgb <1,1,1>
@@ -95,13 +95,14 @@ camera {
 }
 */
 #declare cRadius=1700*m;
-#declare cAngle=90;
+#declare cAngle=360*seconde/dtime;
+//#declare cAngle=144;
 
 #declare camLA=<1*m,60*m,1*m>;
 #declare camLoc=<cRadius*cos(pi*cAngle/180),20*m,cRadius*sin(pi*cAngle/180)>;
 //#declare camLoc=<1200*m,3*m,1200*m>;
 camera {
-  location <CamLocXY,30*m,CamLocXY>
+  //location <CamLocXY,30*m,CamLocXY>
   //look_at  <10*m,25*m*m,10*m>
   location camLoc
   look_at  camLA
@@ -134,9 +135,13 @@ media{
 
 
 
-sphere{ <20*m,1*m,20*m>,1*m
+sphere{ <0*m,10*m,0*m>,20*m
   pigment{color rgb<1,.3,.1>}
+  finish {
+    ambient 2
+    diffuse .6
   }
+}
 
 /*
 sky_sphere{
@@ -189,7 +194,7 @@ object{
     scale 100*m
   } // end of pigment
   // pigment{color rgbt<.3,.3,.9,.02>}
-  translate <-800*m,CloudAltitude,0*m>
+  translate <-800*m,CloudAltitude,-800*m>
 }
 
 // Fog in a cylinder
@@ -218,6 +223,7 @@ cylinder {
 }
 */
 
-//object {frame scale 100*m translate <-3*m,1*m,2*m>}
+//object {frame scale 10*cm translate camLoc+<1*cm,-1*cm,-2*cm>}
+//object {frame scale 50*m translate <0*cm,10*m,0*cm>}
 
   

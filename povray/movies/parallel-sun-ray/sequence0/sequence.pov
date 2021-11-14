@@ -19,7 +19,7 @@
 
 
 global_settings { ambient_light rgb<.1,.1,.1> }
-
+/*
 global_settings {
     radiosity {
       pretrace_start 0.08
@@ -35,7 +35,9 @@ global_settings {
       brightness 1
       adc_bailout 0.005
    }
-  }
+}
+*/
+
 /*
 #declare camSpline = create_spline (
   array [8] {
@@ -74,7 +76,7 @@ light_source{ <0,100,0> color rgb <1,1,1>
 
 #declare Angle=-20;
 
-light_source{ <1000*tan(Angle),1000,1000*tan(Angle)> color rgb <4,4,4>
+light_source{ <1000*tan(Angle),1000,1000*tan(Angle)> color rgb <7,6,4>
 //light_source{ <0,1000,0> color rgb <1,1,1>
               parallel
               point_at<0, 0, 0> 
@@ -95,7 +97,7 @@ camera {
 #declare cRadius=1700*m;
 #declare cAngle=90;
 
-#declare camLA=<1*m,40*m,1*m>;
+#declare camLA=<1*m,60*m,1*m>;
 #declare camLoc=<cRadius*cos(pi*cAngle/180),20*m,cRadius*sin(pi*cAngle/180)>;
 //#declare camLoc=<1200*m,3*m,1200*m>;
 camera {
@@ -112,21 +114,24 @@ camera {
 
 
 // Fog
+/*
 media{
   scattering{
     1,  // scattering media type 1,2,3,4,5
     0.3 // color of the media (no comma!)
-    extinction 0.25 //optional 0~1
+    extinction 0.2 //optional 0~1
   }// end of scattering
   intervals 50 //
-    density {granite scale 100*m
-      color_map {
-        [0.0 rgb <1,1,1>*0.0]
-        [0.5 rgb <1,1,1>*0.2]
-        [1.0 rgb <1,1,1>*1  ]
-        } // end of color_map
-      } // end of density
+  density {
+    granite scale 100*m
+    color_map {
+      [0.0 rgb <.7,.8,1>*0.0]
+      [0.5 rgb <.9,1,1>*0.2]
+      [1.0 rgb <1,.9,1>*1  ]
+    } // end of color_map
+  } // end of density
 }
+*/
 
 
 sphere{ <20*m,1*m,20*m>,1*m
@@ -148,8 +153,8 @@ sky_sphere{
 plane {
   <0,1,0>, 0*m
   //texture { WaterTexture scale 50 }
-  //pigment{color rgb<.3,.3,.1>}
-  pigment {White_Marble scale 10*m}
+  pigment{color rgb<.8,.3,.1>}
+  //pigment {White_Marble scale 10*m}
 }
 
 
@@ -172,10 +177,46 @@ object{
       sphere {<0,0,0>,20*m}
     }
   }
-  pigment{color rgb<.3,.3,.9>}
+  
+  pigment{
+    bozo turbulence 0.56
+    color_map {
+      [0.0 color rgbt <0.5, 0.5, 1.0,0.07>] //LightBlue
+      [0.2 color rgbt <0.5, 0.5, 1.0,0.07>] //LightBlue
+      [0.3 color rgbt <0.2, 0.2, 0.2,0.03>] //Pretty dark grey
+      [1.0 color rgbt <0.1, 0.1, 0.1,0.01>] //Very dark Grey
+    } // end of color_map
+    scale 100*m
+  } // end of pigment
+  // pigment{color rgbt<.3,.3,.9,.02>}
   translate <-800*m,CloudAltitude,0*m>
 }
 
-//object {frame scale 100*m translate <2*m,1*m,2*m>}
+// Fog in a cylinder
+cylinder {
+  <-800*m,CloudAltitude,0>,<0,0,0>,300*m
+  pigment { rgbt 1 }
+  hollow
+  interior {
+    media{
+      scattering{
+        1,  // scattering media type 1,2,3,4,5
+        0.3 // color of the media (no comma!)
+        extinction 0.25 //optional 0~1
+      }// end of scattering
+      intervals 50 //
+        density {granite scale 100*m
+          color_map {
+            [0.0 rgb <1,1,1>*0.0]
+            [0.5 rgb <1,1,1>*0.2]
+            [1.0 rgb <1,1,1>*1  ]
+            } // end of color_map
+          } // end of density
+      }
+    } 
+}
+
+
+object {frame scale 100*m translate <-3*m,1*m,2*m>}
 
   

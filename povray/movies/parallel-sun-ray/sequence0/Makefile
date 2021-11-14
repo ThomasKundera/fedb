@@ -56,5 +56,5 @@ preplqanim: povray_lq_anim.ini
 movie:
 	$(MENCODER) mf://sequence*.png $(ENCODEROPTIONS) -o output.avi
 clean:  
-	@/bin/rm *.png *.ini
+	@/bin/rm -f *.png *.ini
 	

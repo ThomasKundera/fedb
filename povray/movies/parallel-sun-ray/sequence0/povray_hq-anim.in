@@ -24,6 +24,7 @@
 Library_Path=/usr/share/povray/include
 Library_Path=/usr/share/povray-3.7/include
 Library_Path=/usr/local/povray/3.7/share/povray-3.7/include
+Library_Path=@POVRAYDIR@/include
 Library_Path=../../../common
 
 ;; Image size.

@@ -50,7 +50,7 @@ preplqanim: povray_lq_anim.ini
 	$(POVRAY)$<  povray.ini
 
 %.ini : %.in
-	sed -- "s/@POVRAYDIR@/${POVRAYDIR}/g" $< > $@
+	sed -- "s#@POVRAYDIR@#${POVRAYDIR}#g" $< > $@
 movie:
 	$(MENCODER) mf://sequence*.png $(ENCODEROPTIONS) -o output.avi
 clean:  

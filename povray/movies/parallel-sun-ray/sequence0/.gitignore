@@ -4,3 +4,5 @@ data
 *.png
 output.avi
 .pov-state
+*-state
+*.ini

@@ -10,7 +10,7 @@
 #include "common.inc"
 #include "frame.inc"
 #include "earth-common.inc"
-#include "spline.inc"
+//#include "spline.inc"
 
 #declare dtime=30;
 #declare seconde=clock/dtime;

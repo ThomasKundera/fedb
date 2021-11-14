@@ -12,7 +12,7 @@
 #include "earth-common.inc"
 //#include "spline.inc"
 
-#declare dtime=30;
+#declare dtime=10;
 #declare seconde=clock/dtime;
 
 #declare CloudAltitude=400*m;
@@ -74,7 +74,7 @@ light_source{ <0,100,0> color rgb <1,1,1>
             } 
 */
 
-#declare Angle=-20;
+#declare Angle=360*seconde/dtime;
 
 light_source{ <1000*tan(Angle),1000,1000*tan(Angle)> color rgb <7,6,4>
 //light_source{ <0,1000,0> color rgb <1,1,1>

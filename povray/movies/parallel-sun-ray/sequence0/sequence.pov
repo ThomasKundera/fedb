@@ -114,7 +114,7 @@ camera {
 
 
 // Fog
-/*
+
 media{
   scattering{
     1,  // scattering media type 1,2,3,4,5
@@ -131,7 +131,7 @@ media{
     } // end of color_map
   } // end of density
 }
-*/
+
 
 
 sphere{ <20*m,1*m,20*m>,1*m
@@ -193,6 +193,7 @@ object{
 }
 
 // Fog in a cylinder
+/*
 cylinder {
   <-800*m,CloudAltitude,0>,<0,0,0>,300*m
   pigment { rgbt 1 }
@@ -215,8 +216,8 @@ cylinder {
       }
     } 
 }
+*/
 
-
-object {frame scale 100*m translate <-3*m,1*m,2*m>}
+//object {frame scale 100*m translate <-3*m,1*m,2*m>}
 
   

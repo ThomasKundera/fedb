@@ -104,7 +104,8 @@ camera {
   location camLoc
   look_at  camLA
   sky <0,1,0>
-  angle 40 // 50mm
+  angle 62 // 30mm
+  //angle 40 // 50mm
   right -x*image_width/image_height
 }
 

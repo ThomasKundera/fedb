@@ -33,24 +33,26 @@ hqanim:	prephqanim all
 
 lqanim:	preplqanim all
 
-prephq:
+prephq: povray_hq.ini
 	ln -fs povray_hq.ini povray.ini
 
-preplq:
+preplq: povray_lq.ini
 	ln -fs povray_lq.ini povray.ini
 
-prephqanim:
+prephqanim: povray_hq_anim.ini
 	ln -fs povray_hq_anim.ini povray.ini
 
-preplqanim:
+preplqanim: povray_lq_anim.ini
 	ln -fs povray_lq_anim.ini povray.ini
 
-.SUFFIXES : .eps .png .pov
+#.SUFFIXES : .eps .png .pov
 
-.pov.png: $(COMMONFILES) povray_hq.ini povray.ini
+%.png : %.pov $(COMMONFILES) povray_hq.ini povray.ini
 	@echo "povray create  $<"
 	$(POVRAY)$<  povray.ini
 
+%.ini : %.in
+	sed -- "s/@POVRAYDIR@/${POVRAYDIR}/g" $< > $@
 movie:
 	$(MENCODER) mf://sequence*.png $(ENCODEROPTIONS) -o output.avi
 clean:  

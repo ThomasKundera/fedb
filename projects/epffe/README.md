@@ -55,6 +55,8 @@ Short (less than 5 mn?) videos to explain basic concepts in physics and math tha
 - Geometrical optics and it's limits
 - closing sequence
 
+#### Opti1.0 : Perspective
+
 
 ### Mechanics
 

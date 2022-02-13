@@ -39,7 +39,6 @@ Short (less than 5 mn?) videos to explain basic concepts in physics and math tha
 - Human vision
 - Optical systems
 - Geometrical optics and it's limits
-- closing sequence
 
 #### Opti1.0 : Perspective
 

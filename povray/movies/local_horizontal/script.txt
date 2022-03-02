@@ -1,0 +1,60 @@
+scene 0: opening
+
+Here is a fantasy story,
+a long time ago,
+in a galaxy far far away...
+
+Scene 1: Alice
+There is Alice.
+Alice got a new shelf.
+She's very happy and mount it quickly.
+She uses a plumb and a bubble level.
+And everything is so well aligned in her house with those tools!
+
+Alice is a bit of a witch, and she's so much fond of all those horizontal and vertical planes, that with a spell, she made them visible, for all to see!
+(yes, that's possible in that far way galaxy).
+
+Scene 2: Bob
+Bob is a dear friend of Alice.
+He lives somewhat far from her, but they often meet.
+
+He also commanded a new shelf, and build it that same morning.
+
+Look how that's so level, he said to himself, while making them glow for all to see!
+
+Scene 3: Alice's journey
+Alice is so happy, that she wants to show Bob her new spell, and starts a trip to his house, extending the planes all the way for him to see...
+
+Scene 4:
+But when Alice arrived to Bob's house, Alice is very surprised: Bob's horizontal is not same as Alice's ones!
+Everything looked so simple and aligned when she was at her home!
+
+Bob is also surprised, as he felt the same for his home!
+
+Scene 5:
+But looking more closely, both realize that there was some deviation from the verticals, it was however way too small to be noticeable.
+Only very careful measures could reveal them.
+
+Scene 6:
+That's because they live on a small ball, with vertical pointing to center.
+But they couldn't notice it at first as the curvature is not so obvious.
+
+Scene 7:
+That's in no way a mathematical issue: both Alice and Bob were sure their own horizontal and verticals would extend nicely, as a geometrical evidence. Geometry is fine. That's not the point. The space they live in is perfectly Euclidean. However, what each of them called "vertical" wasn't the same, and they had no way to notice without actually doing a measurement.
+
+They both realized that their local assumptions would not extend very far in their reality.
+
+Scene 7:
+What about our world? Did you really ensured verticals were actually parallels everywhere, or you just assumed it?
+If you verified, how? On which extend? With which precision?
+
+
+
+
+
+
+
+
+
+
+

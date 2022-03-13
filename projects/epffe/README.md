@@ -68,9 +68,9 @@ Short (less than 5 mn?) videos to explain basic concepts in physics and math tha
 
 #### Mech4.0 : Forces
 
-#### Mech5.0 : Masse and weight
+#### Mech5.0 : Masse
 
-#### Mech6.0 : 
+#### Mech6.0 : Weight
 
 
 ### Thermdynamics

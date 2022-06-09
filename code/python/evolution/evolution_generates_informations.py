@@ -41,6 +41,8 @@ class idv:
     r_mut_remove = .3
     if (len(self.c)>50):
       r_mut_insert = .001
+      r_mut_remove = 1
+      
     i=0
     vp=[r_mut_flip,r_mut_insert,r_mut_remove]
     
@@ -50,15 +52,13 @@ class idv:
     #nv=math.sqrt(r_mut_flip*r_mut_flip+r_mut_insert*r_mut_insert+r_mut_remove*r_mut_remove)
     #vpn=[r_mut_flip/nv,r_mut_insert/nv,r_mut_remove/nv]
     #print ("BEGIN "+self.c)
-    # BUG that should not be needed
-    if (not isvalid(self.c)):
-      self.c='1'
     nc=self.c
     ncc=nc
     # To make things faster, we try several different mutations
     # as many will just not be valid syntax
     while(i<100):
-      nc=ncc
+      if (not (i%4)): # No more than 4 alterations in a row
+        nc=ncc
       r=numpy.random.choice(3, p=vpn)
       if (r==0):
         what=numpy.random.rand()
@@ -87,6 +87,8 @@ class idv:
           #print(str(i)+" "+nc)
     #print("ncc="+ncc+" nc="+nc+" self.c="+self.c)
     #print(str(self)+" - "+str(onemax(self)*100))
+    if (not isvalid(self.c)):
+      self.c='1'
 
 
 # objective function
@@ -97,7 +99,7 @@ def onemax(idv):
     #print("Error string: "+str(nc))
     raise
   # Fitness is being closest to that value
-  return ((abs(12789.12345678-v))/12789.12345678)
+  return ((abs(0.12345678-v))/0.12345678)
                
 # tournament selection
 def selection(pop, scores, k=3):
@@ -124,6 +126,9 @@ def crossover(p1, p2, r_cross):
                   # perform crossover
                   c1.c = p1.c[:pt] + p2.c[pt:]
                   c2.c = p2.c[:pt] + p1.c[pt:]
+                  #print("Mate!")
+                  #print(str(p1.c)+"   "+str(p2.c))
+                  #print(str(c1.c)+"   "+str(c2.c))
         return [c1, c2]
  
 # genetic algorithm
@@ -156,6 +161,9 @@ def genetic_algorithm(objective, n_bits, n_iter, n_pop, r_cross, r_mut):
                                 children.append(c)
                 # replace population
                 pop = children
+                #print ("-------------------------")
+                #for p in pop:
+                #  print(p)
         return [best, best_eval]
  
 # define the total iterations
@@ -165,7 +173,7 @@ n_bits = 20
 # define the population size
 n_pop = 500
 # crossover rate
-r_cross = 0.9
+r_cross = 0.01
 # mutation rate
 r_mut = 1.0 / float(n_bits)
 # perform the genetic algorithm search

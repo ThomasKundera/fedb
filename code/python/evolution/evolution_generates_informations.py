@@ -5,6 +5,19 @@
 # We'll make it more pedantic, so to be readable
 
 import numpy.random
+import math
+
+#numpy.random.seed(seed=0)
+
+def isvalid(c):
+  try:
+    v=float(eval(c))
+  except (SyntaxError, NameError, ValueError,TypeError,ZeroDivisionError,AttributeError,OverflowError) as e:
+    return False
+  else:
+    return True
+    
+
 
 # Individual 
 class idv:
@@ -13,10 +26,6 @@ class idv:
     #self.muttable= [1] * 128 # table of mutation probabiliy
   
   def __str__(self):
-    i=1 # Hack for the eval
-    c=1
-    pt=1
-    xr=1
     s="'"+str(self.c)+"' = "+str(float(eval(self.c)))
     return s
 
@@ -27,61 +36,68 @@ class idv:
   
   
   def mutation(self,r_mut):
-    r_mut_flip   = .8
-    r_mut_insert = .9
-    r_mut_remove = 1.
-    if (len(self.c)>30):
-      r_mut_insert = 2.
+    r_mut_flip   = .3
+    r_mut_insert = .3
+    r_mut_remove = .3
+    if (len(self.c)>50):
+      r_mut_insert = .001
     i=0
+    vp=[r_mut_flip,r_mut_insert,r_mut_remove]
+    
+    vpn = numpy.asarray(vp).astype('float64')
+    vpn = vpn / numpy.sum(vpn)
+    
+    #nv=math.sqrt(r_mut_flip*r_mut_flip+r_mut_insert*r_mut_insert+r_mut_remove*r_mut_remove)
+    #vpn=[r_mut_flip/nv,r_mut_insert/nv,r_mut_remove/nv]
+    #print ("BEGIN "+self.c)
+    # BUG that should not be needed
+    if (not isvalid(self.c)):
+      self.c='1'
     nc=self.c
+    ncc=nc
     # To make things faster, we try several different mutations
     # as many will just not be valid syntax
     while(i<100):
-      if numpy.random.rand() < r_mut:
+      nc=ncc
+      r=numpy.random.choice(3, p=vpn)
+      if (r==0):
         what=numpy.random.rand()
         if (what<r_mut_flip):
           pt = numpy.random.randint(len(nc))
           xr=numpy.random.randint(128)
           c=chr(ord(nc[pt])^(xr))
           nc=nc[:pt]+c+nc[pt:]
-        elif (what<r_mut_insert):
+        elif (r==1):
           pt = numpy.random.randint(len(nc))
           xr=numpy.random.bytes(1)
           try:
             nc=nc[:pt]+str(xr.decode("utf-8"))+nc[pt:]
           except UnicodeDecodeError:
             pass
-        elif (what<r_mut_remove):
+        elif (r==2):
           if (len(nc)>2):
             pt = numpy.random.randint(len(nc)-2)
             nc=nc[:pt]+nc[pt+2:]
-        try:
-          v=float(eval(nc))
-        except (SyntaxError, NameError, ValueError,TypeError,ZeroDivisionError,AttributeError,OverflowError) as e:
-          i+=1
-          #print("Error string: "+str(nc))
-          pass
-        else:
+        if (isvalid(nc)):
           self.c=nc
-          print(str(nc))
+          print(str(self)+" - "+str(onemax(self)*100))
           return
-    self.c="1"
-        
-    
+        else:
+          i+=1
+          #print(str(i)+" "+nc)
+    #print("ncc="+ncc+" nc="+nc+" self.c="+self.c)
+    #print(str(self)+" - "+str(onemax(self)*100))
+
 
 # objective function
 def onemax(idv):
-  i=1 # Hack for the eval
-  c=1
-  pt=1
-  xr=1
   try:
     v= float(eval(idv.c))
   except:
     #print("Error string: "+str(nc))
     raise
-  # Fitness is being closest to 1000
-  return (abs(123456789.12345678-v))
+  # Fitness is being closest to that value
+  return ((abs(12789.12345678-v))/12789.12345678)
                
 # tournament selection
 def selection(pop, scores, k=3):

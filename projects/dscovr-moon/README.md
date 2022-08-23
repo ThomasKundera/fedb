@@ -14,6 +14,9 @@ The main reasons I saw were:
 
 ## Analysis
 
+### Precise time and date of the event
+
+
 ### Apparent size and could motion
 
 To address this point we'll just simulate the actual view of the Moon using available parameters and if possible legit cloud maps from that date and time.
@@ -21,3 +24,23 @@ To address this point we'll just simulate the actual view of the Moon using avai
 
 
 ## Conclusion
+
+
+## Data sources, etc.
+
+### Dates
+"These images were taken between 3:50 p.m. and 8:45 p.m. EDT on July 16" from https://www.nasa.gov/feature/goddard/from-a-million-miles-away-nasa-camera-shows-moon-crossing-face-of-earth
+
+
+### Clouds
+Clouds maps for that day by various US sats:
+https://inventory.ssec.wisc.edu/inventory/?date=2013/06/10&time=&satellite=GOES-13&search=1#search&start_time:2015-07-16%2000:00;end_time:2015-07-16%2023:59;
+
+
+### EPIC RAW processing
+
+https://russss.github.io/epic-image-processing/index.html
+
+### EPIC RAW data
+Here?
+https://search.earthdata.nasa.gov/search?p=C1282024672-LARC_ASDC&q=DSCOVR&qt=2015-07-16T00%3A00%3A00.000Z%2C2015-07-17T23%3A59%3A59.999Z&fi=EPIC&long=-156.31940000000003&zoom=0

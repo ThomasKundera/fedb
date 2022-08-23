@@ -1,0 +1,24 @@
+Main source of data:
+"showing the moon moving over the Pacific Ocean near North America"
+https://www.nasa.gov/feature/goddard/from-a-million-miles-away-nasa-camera-shows-moon-crossing-face-of-earth
+https://epic.gsfc.nasa.gov/galleries/2015/lunar_transit
+https://epic.gsfc.nasa.gov/?date=2015-07-17
+(y'a pas le 16???)
+
+"These images were taken between 3:50 p.m. and 8:45 p.m. EDT on July 16 [2015]"
+http://www.worldtimebuddy.com/edt-to-utc-converter
+UTC: 2015/07/16-19:50 - 2015/07/17-00:45
+https://asd.gsfc.nasa.gov/Craig.Markwardt/doy2015.html
+16/07 : 197
+17/07 : 198
+(day of the year)
+
+Location of Earth in heliocentric:
+http://omniweb.gsfc.nasa.gov/coho/helios/planet.html
+
+Better:
+http://ssd.jpl.nasa.gov/horizons.cgi
+
+
+
+

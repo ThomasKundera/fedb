@@ -7,10 +7,10 @@ This short sequence was a subject of wonder by many, and of disbelief by some, w
 Our goal is to see if those reasons holds by an in-deep analysis of the available data.
 
 The main reasons I saw were:
-- Apparent size of the Earth or Moon to be incorect in regard to the location of the EPIC camera
-- Greenish band on the right of the Moon
-- Flattening of part of the Moon in one of the frame
-- Apparent motionless coulds on Eartth during the event.
+1. Apparent size of the Earth or Moon to be incorect in regard to the location of the EPIC camera
+2. Greenish band on the right of the Moon
+3. Flattening of part of the Moon in one of the frame
+4. Apparent motionless coulds on Eartth during the event.
 
 ## Analysis
 

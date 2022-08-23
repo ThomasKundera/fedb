@@ -14,5 +14,10 @@ The main reasons I saw were:
 
 ## Analysis
 
+### Apparent size and could motion
+
+To address this point we'll just simulate the actual view of the Moon using available parameters and if possible legit cloud maps from that date and time.
+
+
 
 ## Conclusion

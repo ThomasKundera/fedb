@@ -11,6 +11,9 @@ The main reasons I saw were:
 2. Greenish band on the right of the Moon
 3. Flattening of part of the Moon in one of the frame
 4. Apparent motionless coulds on Eartth during the event.
+[...] ???
+11. Earth axis is misrepresented.
+12. As it's summer, North Pole should be visible.
 
 ## Analysis
 

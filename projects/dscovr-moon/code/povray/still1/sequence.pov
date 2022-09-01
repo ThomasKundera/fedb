@@ -27,15 +27,15 @@ camera {
 union {
   object {Earth}
   object {frame scale 1000*km}
+  
+  // Matching EPIC_00000.png
   // Rotations were trial and errors, may be simplified.
-/*
-rotate < 0,-21,  0>
+  rotate < 0,-21,  0>
   rotate <18,  0,  0>
   rotate < 0,  0,-33>
   rotate < 0,  2,   0>
   rotate <-2,  0,   0>
   rotate < 0,  0,  -2>
-*/
 }
 
 //object {frame scale 1000*km}

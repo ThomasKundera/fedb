@@ -14,7 +14,8 @@ def main():
   
   # Date of the picture
   utcDateOfPicture=datetime.datetime.fromisoformat("2015-07-16 19:50:00.000+00:00")
-  
+  #utcDateOfPicture=datetime.datetime.fromisoformat("2015-09-23 19:50:00.000+00:00")
+    
   detaTime=utcDateOfPicture-utc2015WinterSolstice
   
   print(utc2015WinterSolstice)

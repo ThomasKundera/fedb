@@ -21,6 +21,7 @@ global_settings { ambient_light 1.2 }
 // Computing dates is too complex in Povray see auxiliary program "YearFraction.py"
 // that spits this answer.
 #declare YearFraction=-0.4336122195831841;
+//#declare YearFraction=-.5;
 
 #declare mydist=1475207*km; // That exact values comes from Wikipedia
 
@@ -59,7 +60,7 @@ union {
   // Put the tilt in, at Winter solstice reference
   rotate < -declinaison_angle,0, 0>
 
-  // Year fraction rotation of the tilt (the time of the day is fiexd above)
+  // Year fraction rotation of the tilt (the time of the day is fixed above)
   rotate < 0,+360*YearFraction, 0>
 }
 

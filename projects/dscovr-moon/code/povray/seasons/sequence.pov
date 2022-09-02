@@ -48,7 +48,7 @@ union {
   rotate < -declinaison_angle,0, 0>
 
   // Rotating along the year
-  
+  rotate < 0 ,tick*360/12, 0>
    
 }
 

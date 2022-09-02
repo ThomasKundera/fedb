@@ -55,3 +55,5 @@ movie:
 clean:  
 	@/bin/rm *.png
 	
+planche: lqanim
+	montage -geometry 300x300 sequence*.png -tile 4 -frame 4 planche.png

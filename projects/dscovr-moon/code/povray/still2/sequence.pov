@@ -11,12 +11,12 @@
 
 global_settings { ambient_light 1.2 }
 
-#declare dateH=0;
-#declare dateM=0;
+#declare dateH=19;
+#declare dateM=50;
 #declare dateS=0;
 
-
-#declare TimeOfTheDay=360*(dateH*3600+dateM*60+dateS)/86400;
+// Time is UTC, so noon at 12:00 over Greenwitch.
+#declare TimeOfTheDay=360*(-(dateH*3600+dateM*60+dateS)-6*3600)/86400;
 
 #declare mydist=1475207*km; // That exact values comes from Wikipedia
 
@@ -50,7 +50,7 @@ union {
   }
   */
   // Time of the day
-  rotate < 0,0, 0>
+  rotate < 0,TimeOfTheDay, 0>
   
   // Winter solstice reference
   //rotate < -declinaison_angle,0, 0>

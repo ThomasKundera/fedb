@@ -46,7 +46,7 @@ preplqanim:
 
 .SUFFIXES : .eps .png .pov
 
-.pov.png: $(COMMONFILES) povray_hq.ini povray.ini
+.pov.png: $(COMMONFILES) povray_hq.ini povray_lq.ini povray.ini
 	@echo "povray create  $<"
 	$(POVRAY)$<  povray.ini
 

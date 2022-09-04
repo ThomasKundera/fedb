@@ -35,6 +35,7 @@ camera {
   look_at  <0,0,0>
   angle 0.61   // Figure from Wikipedia
   right x*image_width/image_height
+  rotate <0,0,25> // DSCOVR is tilted relative to ecliptic plane 
 }
 
 

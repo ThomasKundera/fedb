@@ -16,6 +16,7 @@ def apparent_angular_size(name,radius,dist):
 def main():
   apparent_angular_size("Earth",solar_system.earthRadius,1500000*km)
   apparent_angular_size("Moon",solar_system.moonRadius  ,410000*km)
+  apparent_angular_size("Moon",solar_system.moonRadius  ,1500000*km-solar_system.Earth_Moons[1])
   
   
   

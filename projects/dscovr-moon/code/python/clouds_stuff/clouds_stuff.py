@@ -62,21 +62,41 @@ class Clouding:
     ym=cy-r0
     yM=cy+r0
     
+    print ("Circle : ( "+str(cx)+" , "+str(cy)+" ) "+str(r0))
+    
     for ix in range(xm,xM):
       for iy in range(ym,yM):
-        color=self._imgRGB[ix,iy]
+        print("( "+str(ix)+" , " +str(iy)+" )")
+        try:
+          color=self._imgRGB[ix,iy]
+          print(color)
+        except IndexError:
+          print("That should not happens: ( "+str(int(ix))+" , " +str(int(iy))+" )")
+          continue
+        
         r=math.sqrt((cx-ix)*(cx-ix)+(cy-iy)*(cy-iy))
         theta=math.atan2(iy,ix)
         
-        alpha=math.asin(r/r0)
+        print ("r0="+str(r0)+" r="+str(r))
+        
+        try:
+          alpha=math.asin(r/r0)
+        except ValueError:
+          alpha=0
+          print("out of the circle")
+          continue
         
         r1=r0*alpha
         
-        x=r1*cos(theta)+len(self._flatten_image)
-        y=r1*sin(theta)+len(self._flatten_image[0])
+        x=r1*math.cos(theta)+len(self._flatten_image)/2
+        y=r1*math.sin(theta)+len(self._flatten_image[0])/2
         
-        self._flatten_image[int(x),int(y)]=color
-        
+        try:
+          self._flatten_image[int(x),int(y)]=color
+          print("In range: ( "+str(int(x))+" , " +str(int(y))+" )")
+        except IndexError:
+          print("Out of range: ( "+str(int(x))+" , " +str(int(y))+" )")
+          
         
     
   def drawFlatten(self):

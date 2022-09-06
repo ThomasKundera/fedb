@@ -53,17 +53,38 @@ class Clouding:
 
   def processFlatten(self):
     self._flatten_image=0*self._imgRGB
+    #self._flatten_image=rescale(self._flatten_image,4, multichannel=True)
     cx=self._cx[0]
     cy=self._cy[0]
     r0=self._radii[0]
     
-    xm=cx-r0
-    xM=cx+r0
-    ym=cy-r0
-    yM=cy+r0
-    
+    ym=cx-r0
+    yM=cx+r0
+    xm=cy-r0
+    xM=cy+r0
+
     print ("Circle : ( "+str(cx)+" , "+str(cy)+" ) "+str(r0))
+    for ix in range(xm,xM):
+      for iy in range(ym,yM):
+        print("( "+str(ix)+" , " +str(iy)+" )")
+        try:
+          color=self._imgRGB[ix,iy]
+          print(color)
+        except IndexError:
+          print("That should not happens: ( "+str(int(ix))+" , " +str(int(iy))+" )")
+          continue
+        try:
+          self._flatten_image[int(ix),int(iy)]=color
+          print("In range: ( "+str(int(ix))+" , " +str(int(iy))+" )")
+        except IndexError:
+          print("Out of range: ( "+str(int(ix))+" , " +str(int(iy))+" )")
     
+    io.imsave("toto.png",self._imgRGB)
+    io.imsave("titi.png",self._flatten_image)
+   
+    
+    
+  def later(self):
     for ix in range(xm,xM):
       for iy in range(ym,yM):
         print("( "+str(ix)+" , " +str(iy)+" )")
@@ -75,7 +96,7 @@ class Clouding:
           continue
         
         r=math.sqrt((cx-ix)*(cx-ix)+(cy-iy)*(cy-iy))
-        theta=math.atan2(iy,ix)
+        theta=math.atan2(iy-cy,ix-cx)
         
         print ("r0="+str(r0)+" r="+str(r))
         

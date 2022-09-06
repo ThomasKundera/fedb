@@ -53,17 +53,56 @@ class Clouding:
 
   def processFlatten(self):
     self._flatten_image=0*self._imgRGB
-    #self._flatten_image=rescale(self._flatten_image,4, multichannel=True)
+    self._flatten_image=rescale(self._flatten_image,2, multichannel=True)
     cx=self._cx[0]
     cy=self._cy[0]
     r0=self._radii[0]
     
+    # FIXME: there is some weird swapping of x/y coordinates
+    # we'll deal with it for now.
     ym=cx-r0
     yM=cx+r0
     xm=cy-r0
     xM=cy+r0
 
     print ("Circle : ( "+str(cx)+" , "+str(cy)+" ) "+str(r0))
+    for ix in range(xm,xM):
+      for iy in range(ym,yM):
+        #print("( "+str(ix)+" , " +str(iy)+" )")
+        try:
+          color=self._imgRGB[ix,iy]
+          print(color)
+        except IndexError:
+          print("That should not happens: ( "+str(int(ix))+" , " +str(int(iy))+" )")
+          continue
+        
+        r=math.sqrt((cy-ix)*(cy-ix)+(cx-iy)*(cx-iy))
+        theta=math.atan2(iy-cx,ix-cy)
+        #print ("theta: "+str(theta*180/math.pi)+" x: "+str(ix-cx)+" y: "+str(iy-cy))
+        #print ("r0="+str(r0)+" r="+str(r))
+        
+        try:
+          alpha=math.asin(r/r0)
+        except ValueError:
+          #print("out of the circle: ( "+str(int(ix))+" , " +str(int(iy))+" )")
+          continue
+        
+        #print ("alpha: "+str(alpha*180/math.pi))
+        r1=r0*alpha
+        
+        x=r1*math.cos(theta)+len(self._flatten_image)/2
+        y=r1*math.sin(theta)+len(self._flatten_image[0])/2
+        
+        try:
+          self._flatten_image[int(x),int(y)]=color
+          #print("In range: ( "+str(int(x))+" , " +str(int(y))+" )")
+        except IndexError:
+          #print("Out of range: ( "+str(int(x))+" , " +str(int(y))+" )")
+    io.imsave("toto.png",self._imgRGB)
+    io.imsave("titi.png",self._flatten_image)
+
+
+  def tester(self):
     for ix in range(xm,xM):
       for iy in range(ym,yM):
         print("( "+str(ix)+" , " +str(iy)+" )")
@@ -81,44 +120,7 @@ class Clouding:
     
     io.imsave("toto.png",self._imgRGB)
     io.imsave("titi.png",self._flatten_image)
-   
-    
-    
-  def later(self):
-    for ix in range(xm,xM):
-      for iy in range(ym,yM):
-        print("( "+str(ix)+" , " +str(iy)+" )")
-        try:
-          color=self._imgRGB[ix,iy]
-          print(color)
-        except IndexError:
-          print("That should not happens: ( "+str(int(ix))+" , " +str(int(iy))+" )")
-          continue
-        
-        r=math.sqrt((cx-ix)*(cx-ix)+(cy-iy)*(cy-iy))
-        theta=math.atan2(iy-cy,ix-cx)
-        
-        print ("r0="+str(r0)+" r="+str(r))
-        
-        try:
-          alpha=math.asin(r/r0)
-        except ValueError:
-          alpha=0
-          print("out of the circle")
-          continue
-        
-        r1=r0*alpha
-        
-        x=r1*math.cos(theta)+len(self._flatten_image)/2
-        y=r1*math.sin(theta)+len(self._flatten_image[0])/2
-        
-        try:
-          self._flatten_image[int(x),int(y)]=color
-          print("In range: ( "+str(int(x))+" , " +str(int(y))+" )")
-        except IndexError:
-          print("Out of range: ( "+str(int(x))+" , " +str(int(y))+" )")
-          
-        
+         
     
   def drawFlatten(self):
     fig, ax = plt.subplots(ncols=1, nrows=1, figsize=(10, 4))

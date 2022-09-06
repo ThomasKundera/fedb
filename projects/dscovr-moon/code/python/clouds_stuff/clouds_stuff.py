@@ -33,7 +33,7 @@ class Clouding:
     # Select the most prominent 1 circles
     self._accums, self._cx, self._cy, self._radii = hough_circle_peaks(hough_res, hough_radii,total_num_peaks=1)
 
-  def draw(self):
+  def drawCircle(self):
     # Draw them
     fig, ax = plt.subplots(ncols=1, nrows=1, figsize=(10, 4))
     for center_y, center_x, radius in zip(self._cy, self._cx, self._radii):
@@ -45,19 +45,52 @@ class Clouding:
     plt.show()
   
     
-  
-    
-  def process(self):
+  def processCircle(self):
     self.findEdges()
     self.findCircle()
-    self.draw()
+
+
+  def processFlatten(self):
+    self._flatten_image=0*self._imgRGB
+    cx=self._cx[0]
+    cy=self._cy[0]
+    r0=self._radii[0]
     
+    xm=cx-r0
+    xM=cx+r0
+    ym=cy-r0
+    yM=cy+r0
+    
+    for ix in range(xm,xM):
+      for iy in range(ym,yM):
+        color=self._imgRGB[ix,iy]
+        r=math.sqrt((cx-ix)*(cx-ix)+(cy-iy)*(cy-iy))
+        theta=math.atan2(iy,ix)
+        
+        alpha=math.asin(r/r0)
+        
+        r1=r0*alpha
+        
+        x=r1*cos(theta)+len(self._flatten_image)
+        y=r1*sin(theta)+len(self._flatten_image[0])
+        
+        self._flatten_image[int(x),int(y)]=color
+        
+        
+    
+  def drawFlatten(self):
+    fig, ax = plt.subplots(ncols=1, nrows=1, figsize=(10, 4))
+    ax.imshow(self._flatten_image, cmap=plt.cm.gray)
+    plt.show()
 
 
 def main():
-  cl=Clouding("data/EPIC_00000.png",0.1)
-  cl.process()
-
+  cl=Clouding("data/EPIC_00000.png",0.05)
+  cl.processCircle()
+  #cl.drawCircle()
+  cl.processFlatten()
+  cl.drawFlatten()
+  
 
 
 # --------------------------------------------------------------------------

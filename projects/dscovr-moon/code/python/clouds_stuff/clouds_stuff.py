@@ -53,7 +53,7 @@ class Clouding:
 
   def processFlatten(self):
     self._flatten_image=0*self._imgRGB
-    self._flatten_image=rescale(self._flatten_image,2, multichannel=True)
+    self._flatten_image=rescale(self._flatten_image,1.5, multichannel=True)
     cx=self._cx[0]
     cy=self._cy[0]
     r0=self._radii[0]
@@ -71,7 +71,7 @@ class Clouding:
         #print("( "+str(ix)+" , " +str(iy)+" )")
         try:
           color=self._imgRGB[ix,iy]
-          print(color)
+          #print(color)
         except IndexError:
           print("That should not happens: ( "+str(int(ix))+" , " +str(int(iy))+" )")
           continue
@@ -97,7 +97,8 @@ class Clouding:
           self._flatten_image[int(x),int(y)]=color
           #print("In range: ( "+str(int(x))+" , " +str(int(y))+" )")
         except IndexError:
-          #print("Out of range: ( "+str(int(x))+" , " +str(int(y))+" )")
+         #print("Out of range: ( "+str(int(x))+" , " +str(int(y))+" )")
+         continue
     io.imsave("toto.png",self._imgRGB)
     io.imsave("titi.png",self._flatten_image)
 
@@ -129,7 +130,7 @@ class Clouding:
 
 
 def main():
-  cl=Clouding("data/EPIC_00000.png",0.05)
+  cl=Clouding("data/EPIC_00000.png",0.4)
   cl.processCircle()
   #cl.drawCircle()
   cl.processFlatten()

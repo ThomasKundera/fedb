@@ -96,6 +96,7 @@ class Clouding:
   # https://en.wikipedia.org/wiki/Equirectangular_projection
 
   def flat_backward_spherical_color(self,x0,y0):
+    # IMG 00290 is reference (as being center)
     R =self._radii[0]
     cx=self._cx[0]
     cy=self._cy[0]
@@ -119,11 +120,9 @@ class Clouding:
       phi=asin(cos(c)*sin(phi0)+(y*sin(c)*cos(phi0))/rho)
       lmd=lmd0+atan2(x*sin(c),rho*cos(c)*cos(phi0)-y*sin(c)*sin(phi0))
     else: # Equirectangular
-      #if (sqrt(x*x+y*y) > R):
-      #  return [0,0,0]
-     
       lmd=x/(R*cos(phi0))+lmd0
       phi=y/R+phi0
+      # If we don't break there, then we get overlaps by cycling trig functions
       if (( math.fabs(lmd)> math.pi/2) or ( math.fabs(phi)> math.pi/2)):
         return [0,0,0]
       
@@ -203,10 +202,11 @@ def main():
   for i in range(8):
     #t=multiprocessing.Process(target=worker, args=(q,i,), daemon=True).start()
     t=Thread(target=worker, args=(q,i,), daemon=True).start()
-    
-  for f in os.listdir("../../../data/large_processed/"):
+  # Images have been rotated 35.15° to put Poles axis in a vertical plane
+  # relative to the image. This will reduce math hairiness later
+  for f in os.listdir("../../../data/massaged_epic/"):
     if ("EPIC_" in f):
-      f=os.path.join("../../../data/large_processed/", f)
+      f=os.path.join("../../../data/massaged_epic/", f)
       if os.path.isfile(f):
         #t = Thread(target=worker, args=(f,))
         q.put(f)

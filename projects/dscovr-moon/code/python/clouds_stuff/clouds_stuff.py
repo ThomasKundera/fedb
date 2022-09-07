@@ -32,15 +32,16 @@ class Clouding:
     hough_radii = np.arange(int(self._rescale*800), int(self._rescale*1000), 2)
     hough_res = hough_circle(self._edges, hough_radii)
     # Select the most prominent 1 circles
-    self._accums, self._cx, self._cy, self._radii = hough_circle_peaks(hough_res, hough_radii,total_num_peaks=1)
+    # The x/y inversion here seems needed.
+    self._accums, self._cy, self._cx, self._radii = hough_circle_peaks(hough_res, hough_radii,total_num_peaks=1)
 
   def drawCircle(self):
     # Draw them
     fig, ax = plt.subplots(ncols=1, nrows=1, figsize=(10, 4))
     for center_y, center_x, radius in zip(self._cy, self._cx, self._radii):
       print ("( "+str(center_x)+" , "+str(center_y)+" , "+str(radius)+" ) ")
-      circy, circx = circle_perimeter(center_y, center_x, radius, shape=self._imgRGB.shape)
-      set_color(self._imgRGB, (circy, circx) , [250, 50, 50])
+      circx, circy = circle_perimeter(center_x, center_y, radius, shape=self._imgRGB.shape)
+      set_color(self._imgRGB, (circx, circy) , [250, 50, 50])
 
     ax.imshow(self._imgRGB, cmap=plt.cm.gray)
     plt.show()
@@ -54,6 +55,7 @@ class Clouding:
     self._cx   =[int(len(self._img   )/2)]
     self._cy   =[int(len(self._img[0])/2)]
     self._radii=[int(len(self._img   )/2.5)]
+    print ("( "+str(self._cx[0])+" , "+str(self._cy[0])+" , "+str(self._radii[0])+" ) ")
 
 
   def processFlattenForward(self):
@@ -179,8 +181,8 @@ class Clouding:
     cx=self._cx[0]
     cy=self._cy[0]
     
-    x=x0-cx #len(self._flatten_image   )/2
-    y=y0-cy #len(self._flatten_image[0])/2
+    x=x0-len(self._flatten_image   )/2
+    y=y0-len(self._flatten_image[0])/2
     
     
     # First backward compute which coordinates is image point
@@ -198,8 +200,8 @@ class Clouding:
     lmd=lmd0+atan2(x*sin(c),rho*cos(c)*cos(phi0)-y*sin(c)*sin(phi0))
     
     # Then forward compute which color is that point on image
-    x1=len(self._flatten_image   )/2+R*cos(phi)*sin(lmd-lmd0)
-    y1=len(self._flatten_image[0])/2+R*(cos(phi0)*sin(phi)-sin(phi0)*cos(phi)*cos(lmd-lmd0))
+    x1=cx+R*cos(phi)*sin(lmd-lmd0)
+    y1=cy+R*(cos(phi0)*sin(phi)-sin(phi0)*cos(phi)*cos(lmd-lmd0))
     
     try:
       color=self._imgRGB[int(x1),int(y1)]
@@ -213,7 +215,7 @@ class Clouding:
 
   def processFlattenBackwardSpherical(self):
     self._flatten_image=0*self._imgRGB
-    #self._flatten_image=rescale(self._flatten_image,1.5, multichannel=True)
+    self._flatten_image=rescale(self._flatten_image,1.5, multichannel=True)
     
     for ix in range(len(self._flatten_image)):
       for iy in range(len(self._flatten_image[0])):
@@ -233,10 +235,11 @@ class Clouding:
 
 
 def main():
-  #cl=Clouding("data/EPIC_00000.png",0.05)
-  cl=Clouding("Happy-Test-Screen-01-825x510s.jpg")
-  cl.fakeprocessCircle()
-  #cl.drawCircle()
+  cl=Clouding("../../../data/large_processed/EPIC_00000.png",0.05)
+  #cl=Clouding("Happy-Test-Screen-01-825x510s.jpg")
+  #cl.fakeprocessCircle()
+  cl.processCircle()
+  cl.drawCircle()
   cl.processFlattenBackwardSpherical()
   cl.drawFlatten()
   

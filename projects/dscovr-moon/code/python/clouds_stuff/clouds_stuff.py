@@ -106,6 +106,8 @@ class Clouding:
     totalt=4*60+55
     t =math.floor(n*totalt/618)
     t0=math.floor(290*totalt/618)
+    # Trying image zero as ref (as there is California for ref):
+    t0=0
     rot=2*math.pi*(t-t0)/(24*60)
     
     R =self._radii[0]
@@ -181,11 +183,13 @@ class Clouding:
 
 
   def writeImage(self,rep):
+    print("Clouding.writeImage(): START")
     fn=os.path.basename(self._fn)
     self.addCircle()
     #io.imsave(os.path.join(rep,"rgb-"+fn),self._imgRGB)
     io.imsave(os.path.join(rep,"circle-"+fn),self._imgRGBcircle)
     io.imsave(os.path.join(rep,"flat-"+fn)  ,self._flatten_image)
+    print("Clouding.writeImage(): END")
 
 
 def run_thread(fn):

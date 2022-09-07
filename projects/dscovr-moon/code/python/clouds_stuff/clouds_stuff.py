@@ -20,6 +20,7 @@ from skimage.util import img_as_ubyte, img_as_uint
 
 class Clouding:
   def __init__(self,fn,rscl=1):
+    print("Clouding __init__()")
     self._fn=fn
     self._rescale=rscl # Rescale factor. 1 means 100%
 
@@ -31,7 +32,9 @@ class Clouding:
     self._imgRGB = rescale(imgRGB0, self._rescale, anti_aliasing=True, multichannel=True)
     
   def findEdges(self):
+    print("Clouding.findEdges(): START")
     self._edges = canny(self._img)
+    print("Clouding.findEdges(): END")
     
   def findCircle(self):
     # Detect two radii

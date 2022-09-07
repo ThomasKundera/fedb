@@ -97,6 +97,17 @@ class Clouding:
 
   def flat_backward_spherical_color(self,x0,y0):
     # IMG 00290 is reference (as being center)
+    # Time computation: the file name contains data
+    # it ranges from 0 to 618
+    # during a real time of  3:50 p.m. to 8:45 p.m
+    # that is 4:55 h:m
+    fn=os.path.basename(self._fn)
+    n=int(fn.split('_')[1].split('.')[0])
+    totalt=4*60+55
+    t =math.floor(n*totalt/618)
+    t0=math.floor(290*totalt/618)
+    rot=2*math.pi*(t-t0)/(24*60)
+    
     R =self._radii[0]
     cx=self._cx[0]
     cy=self._cy[0]
@@ -107,7 +118,7 @@ class Clouding:
     
     # First backward compute which coordinates is image point
     lmd0=0
-    phi0=0
+    phi0=rot
       
     if (0): # Orthographic
       rho=sqrt(x*x+y*y)
@@ -128,6 +139,8 @@ class Clouding:
       
     
     # Then forward compute which color is that point on image
+    lmd0=0
+    phi0=0
     
     # First ensure the point is in the circle
     x1=R*cos(phi)*sin(lmd-lmd0)
@@ -178,9 +191,10 @@ class Clouding:
 def run_thread(fn):
   print("Processing "+fn)
   cl=Clouding(fn,0.5,0.5)
+  #cl=Clouding(fn,0.05,0.5)
   #cl=Clouding("Happy-Test-Screen-01-825x510s.jpg")
-  #cl.fakeprocessCircle()
-  cl.processCircle()
+  cl.fakeprocessCircle()
+  #cl.processCircle()
   #cl.drawCircle()
   cl.processFlattenBackwardSpherical()
   #cl.drawFlatten()
@@ -200,7 +214,7 @@ def worker(q,i):
 
 def main():
   for i in range(8):
-    #t=multiprocessing.Process(target=worker, args=(q,i,), daemon=True).start()
+    t=multiprocessing.Process(target=worker, args=(q,i,), daemon=True).start()
     t=Thread(target=worker, args=(q,i,), daemon=True).start()
   # Images have been rotated 35.15° to put Poles axis in a vertical plane
   # relative to the image. This will reduce math hairiness later
@@ -208,7 +222,7 @@ def main():
     if ("EPIC_" in f):
       f=os.path.join("../../../data/massaged_epic/", f)
       if os.path.isfile(f):
-        #t = Thread(target=worker, args=(f,))
+        #run_thread(f)
         q.put(f)
   
   q.join()

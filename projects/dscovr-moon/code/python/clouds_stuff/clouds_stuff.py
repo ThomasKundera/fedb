@@ -13,7 +13,7 @@ from skimage import data, color
 from skimage.transform import hough_circle, hough_circle_peaks, rescale
 from skimage.feature import canny
 from skimage.draw import circle_perimeter, set_color
-from skimage.util import img_as_ubyte
+from skimage.util import img_as_ubyte, img_as_uint
 
 
 class Clouding:
@@ -40,16 +40,21 @@ class Clouding:
     self._accums, self._cy, self._cx, self._radii = hough_circle_peaks(hough_res, hough_radii,total_num_peaks=1)
 
   def addCircle(self):
-    # Gots lots of problem with this, it seesm to blacken the whole image
-    # very often. That's why I put copy() everywhere (without success for now),
-    # the problem is somewhere else.
-    self._imgRGBcircle=self._imgRGB.copy() # Got lots of problems. Still don't
+    # Gots lots of problem with this, it seems to blacken the whole image
+    # very often. That's why I put copy() everywhere
+    # Problem, solved FIXME: remove all that
+    self._imgRGBcircle=self._imgRGB.copy()
     for center_y, center_x, radius in zip(self._cy, self._cx, self._radii):
       print ("( "+str(center_x)+" , "+str(center_y)+" , "+str(radius)+" ) ")
       circx, circy = circle_perimeter(center_x, center_y, radius, shape=self._imgRGB.shape)
       #set_color(self._imgRGBcircle, (circx, circy) , [250, 50, 50])
-      #self._imgRGBcircle[circx,circy]=(250, 50, 50)
-      self._imgRGBcircle[center_x,center_y]=(250, 50, 50)
+      self._imgRGBcircle[circx,circy]=(.8, .2, .2)
+      #print (self._imgRGBcircle[center_x,center_y])
+      #print (self._imgRGBcircle[center_x+1,center_y+1])
+      #self._imgRGBcircle[center_x,center_y]=(.8, .2, .2)
+      #print (self._imgRGBcircle[center_x+1,center_y+1])
+      #print (self._imgRGBcircle[center_x,center_y])
+    #self._imgRGBcircle=self._imgRGBcircle.copy()
       
     
   def drawCircle(self):
@@ -270,7 +275,7 @@ class Clouding:
   def writeImage(self,rep):
     fn=os.path.basename(self._fn)
     self.addCircle()
-    io.imsave(os.path.join(rep,"rgb-"+fn),self._imgRGB)
+    #io.imsave(os.path.join(rep,"rgb-"+fn),self._imgRGB)
     io.imsave(os.path.join(rep,"circle-"+fn),self._imgRGBcircle)
     io.imsave(os.path.join(rep,"flat-"+fn)  ,self._flatten_image)
 
@@ -280,10 +285,10 @@ def main():
       f=os.path.join("../../../data/large_processed/", f)
       if os.path.isfile(f):
         print("Processing "+f)
-        cl=Clouding(f,0.02)
+        cl=Clouding(f,0.5)
         #cl=Clouding("Happy-Test-Screen-01-825x510s.jpg")
-        cl.fakeprocessCircle()
-        #cl.processCircle()
+        #cl.fakeprocessCircle()
+        cl.processCircle()
         #cl.drawCircle()
         cl.processFlattenBackwardSpherical()
         #cl.drawFlatten()

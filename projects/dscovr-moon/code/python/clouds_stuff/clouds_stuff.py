@@ -145,25 +145,27 @@ class Clouding:
     io.imsave("toto.png",self._imgRGB)
     io.imsave("titi.png",self._flatten_image)
 
+  
+  def flat_forward_spherical_color(self,x,y):
+    try:
+      color=self._imgRGB[int(x),int(y)]
+      return color
+    except IndexError:
+      return [0,0,0]
+   
 
-  def tester(self):
-    for ix in range(xm,xM):
-      for iy in range(ym,yM):
-        print("( "+str(ix)+" , " +str(iy)+" )")
-        try:
-          color=self._imgRGB[ix,iy]
-          print(color)
-        except IndexError:
-          print("That should not happens: ( "+str(int(ix))+" , " +str(int(iy))+" )")
-          continue
-        try:
-          self._flatten_image[int(ix),int(iy)]=color
-          print("In range: ( "+str(int(ix))+" , " +str(int(iy))+" )")
-        except IndexError:
-          print("Out of range: ( "+str(int(ix))+" , " +str(int(iy))+" )")
+  def processFlattenForwardSpherical(self):
+    self._flatten_image=0*self._imgRGB
+    self._flatten_image=rescale(self._flatten_image,1.5, multichannel=True)
+    
+    for ix in range(len(self._imgRGB)):
+      for iy in range(len(self._imgRGB[0])):
+        self._flatten_image[ix,iy]=self.flat_forward_spherical_color(ix,iy)
+        
     
     io.imsave("toto.png",self._imgRGB)
     io.imsave("titi.png",self._flatten_image)
+    
          
     
   def drawFlatten(self):
@@ -177,7 +179,7 @@ def main():
   cl=Clouding("Happy-Test-Screen-01-825x510s.jpg")
   cl.fakeprocessCircle()
   #cl.drawCircle()
-  cl.processFlattenBackward()
+  cl.processFlattenForwardSpherical()
   cl.drawFlatten()
   
 

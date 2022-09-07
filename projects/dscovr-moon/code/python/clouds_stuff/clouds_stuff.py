@@ -1,6 +1,10 @@
 #!/usr/bin/env python3
+
 import math
 from math import sqrt, sin, cos, tan, atan2, asin
+
+import os
+
 import numpy as np
 import matplotlib.pyplot as plt
 
@@ -35,8 +39,20 @@ class Clouding:
     # The x/y inversion here seems needed.
     self._accums, self._cy, self._cx, self._radii = hough_circle_peaks(hough_res, hough_radii,total_num_peaks=1)
 
+  def addCircle(self):
+    # Gots lots of problem with this, it seesm to blacken the whole image
+    # very often. That's why I put copy() everywhere (without success for now),
+    # the problem is somewhere else.
+    self._imgRGBcircle=self._imgRGB.copy() # Got lots of problems. Still don't
+    for center_y, center_x, radius in zip(self._cy, self._cx, self._radii):
+      print ("( "+str(center_x)+" , "+str(center_y)+" , "+str(radius)+" ) ")
+      circx, circy = circle_perimeter(center_x, center_y, radius, shape=self._imgRGB.shape)
+      #set_color(self._imgRGBcircle, (circx, circy) , [250, 50, 50])
+      #self._imgRGBcircle[circx,circy]=(250, 50, 50)
+      self._imgRGBcircle[center_x,center_y]=(250, 50, 50)
+      
+    
   def drawCircle(self):
-    # Draw them
     fig, ax = plt.subplots(ncols=1, nrows=1, figsize=(10, 4))
     for center_y, center_x, radius in zip(self._cy, self._cx, self._radii):
       print ("( "+str(center_x)+" , "+str(center_y)+" , "+str(radius)+" ) ")
@@ -234,7 +250,7 @@ class Clouding:
     
 
   def processFlattenBackwardSpherical(self):
-    self._flatten_image=0*self._imgRGB
+    self._flatten_image=0*self._imgRGB.copy()
     #self._flatten_image=rescale(self._flatten_image,1.5, multichannel=True)
     
     for ix in range(len(self._flatten_image)):
@@ -251,16 +267,27 @@ class Clouding:
     plt.show()
 
 
+  def writeImage(self,rep):
+    fn=os.path.basename(self._fn)
+    self.addCircle()
+    io.imsave(os.path.join(rep,"rgb-"+fn),self._imgRGB)
+    io.imsave(os.path.join(rep,"circle-"+fn),self._imgRGBcircle)
+    io.imsave(os.path.join(rep,"flat-"+fn)  ,self._flatten_image)
+
 def main():
-  
-  cl=Clouding("../../../data/large_processed/EPIC_00000.png",0.2)
-  #cl=Clouding("Happy-Test-Screen-01-825x510s.jpg")
-  #cl.fakeprocessCircle()
-  cl.processCircle()
-  #cl.drawCircle()
-  cl.processFlattenBackwardSpherical()
-  cl.drawFlatten()
-  #cl.writeImage("data")
+  for f in os.listdir("../../../data/large_processed/"):
+    if ("EPIC_" in f):
+      f=os.path.join("../../../data/large_processed/", f)
+      if os.path.isfile(f):
+        print("Processing "+f)
+        cl=Clouding(f,0.02)
+        #cl=Clouding("Happy-Test-Screen-01-825x510s.jpg")
+        cl.fakeprocessCircle()
+        #cl.processCircle()
+        #cl.drawCircle()
+        cl.processFlattenBackwardSpherical()
+        #cl.drawFlatten()
+        cl.writeImage("out")
   
 
 

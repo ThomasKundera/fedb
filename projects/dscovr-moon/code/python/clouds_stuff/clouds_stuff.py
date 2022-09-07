@@ -4,6 +4,8 @@ import math
 from math import sqrt, sin, cos, tan, atan2, asin
 
 import os
+from threading import Thread
+import queue
 
 import numpy as np
 import matplotlib.pyplot as plt
@@ -279,20 +281,42 @@ class Clouding:
     io.imsave(os.path.join(rep,"circle-"+fn),self._imgRGBcircle)
     io.imsave(os.path.join(rep,"flat-"+fn)  ,self._flatten_image)
 
+
+def run_thread(fn):
+  print("Processing "+fn)
+  cl=Clouding(fn,0.5)
+  #cl=Clouding("Happy-Test-Screen-01-825x510s.jpg")
+  #cl.fakeprocessCircle()
+  cl.processCircle()
+  #cl.drawCircle()
+  cl.processFlattenBackwardSpherical()
+  #cl.drawFlatten()
+  cl.writeImage("out")
+
+
+q = queue.Queue()
+
+def worker(q,i):
+    while True:
+        item = q.get()
+        print(f'Working on {item}')
+        run_thread(item)
+        print(f'Finished {item}')
+        q.task_done()
+
+
 def main():
+  for i in range(8):
+    t=Thread(target=worker, args=(q,i,), daemon=True).start()
+
   for f in os.listdir("../../../data/large_processed/"):
     if ("EPIC_" in f):
       f=os.path.join("../../../data/large_processed/", f)
       if os.path.isfile(f):
-        print("Processing "+f)
-        cl=Clouding(f,0.5)
-        #cl=Clouding("Happy-Test-Screen-01-825x510s.jpg")
-        #cl.fakeprocessCircle()
-        cl.processCircle()
-        #cl.drawCircle()
-        cl.processFlattenBackwardSpherical()
-        #cl.drawFlatten()
-        cl.writeImage("out")
+        #t = Thread(target=worker, args=(f,))
+        q.put(f)
+  
+  q.join()
   
 
 

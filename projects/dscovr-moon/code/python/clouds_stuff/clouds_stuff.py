@@ -51,7 +51,7 @@ class Clouding:
     self.findCircle()
 
 
-  def processFlatten(self):
+  def processFlattenForward(self):
     self._flatten_image=0*self._imgRGB
     self._flatten_image=rescale(self._flatten_image,1.5, multichannel=True)
     cx=self._cx[0]
@@ -103,6 +103,41 @@ class Clouding:
     io.imsave("titi.png",self._flatten_image)
 
 
+
+
+  def flattening_color(self,x,y):
+    cx=len(self._flatten_image)/2
+    cy=len(self._flatten_image[0])/2
+    
+    r=math.sqrt((x-cx)*(x-cx)+(y-cy)*(y-cy))
+    theta=math.atan2(y-cy,x-cx)
+    
+    x2=cx+r*math.cos(theta)
+    y2=cx+r*math.sin(theta)
+    
+    
+    
+    try:
+      color=self._imgRGB[int(x2),int(y2)]
+      if (1): # np.linalg.norm(color) > 0.1 ):
+        print("( "+str(x)+" , "+str(y)+" ) => ( "+str(x2)+" , "+str(y2)+" ) = ("+str(r)+" , "+str(theta*180/math.pi)+") = "+str(color))
+      return self._imgRGB[int(x2),int(y2)]
+    except IndexError:
+      return [0,0,0]
+
+  def processFlattenBackward(self):
+    self._flatten_image=0*self._imgRGB
+    self._flatten_image=rescale(self._flatten_image,1.5, multichannel=True)
+    
+    for ix in range(len(self._flatten_image)):
+      for iy in range(len(self._flatten_image[0])):
+        self._flatten_image[ix,iy]=self.flattening_color(ix,iy)
+        
+    
+    io.imsave("toto.png",self._imgRGB)
+    io.imsave("titi.png",self._flatten_image)
+
+
   def tester(self):
     for ix in range(xm,xM):
       for iy in range(ym,yM):
@@ -130,10 +165,10 @@ class Clouding:
 
 
 def main():
-  cl=Clouding("data/EPIC_00000.png",0.4)
+  cl=Clouding("data/EPIC_00000.png",0.05)
   cl.processCircle()
   #cl.drawCircle()
-  cl.processFlatten()
+  cl.processFlattenBackward()
   cl.drawFlatten()
   
 

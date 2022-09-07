@@ -202,15 +202,26 @@ class Clouding:
       phi=asin(cos(c)*sin(phi0)+(y*sin(c)*cos(phi0))/rho)
       lmd=lmd0+atan2(x*sin(c),rho*cos(c)*cos(phi0)-y*sin(c)*sin(phi0))
     else: # Equirectangular
-      lmd=x/R+lmd0
-      #if ( lmd <0):
+      #if (sqrt(x*x+y*y) > R):
       #  return [0,0,0]
+     
+      lmd=x/(R*cos(phi0))+lmd0
       phi=y/R+phi0
+      if (( math.fabs(lmd)> math.pi/2) or ( math.fabs(phi)> math.pi/2)):
+        return [0,0,0]
       
     
     # Then forward compute which color is that point on image
-    x1=cx+R*cos(phi)*sin(lmd-lmd0)
-    y1=cy+R*(cos(phi0)*sin(phi)-sin(phi0)*cos(phi)*cos(lmd-lmd0))
+    
+    # First ensure the point is in the circle
+    x1=R*cos(phi)*sin(lmd-lmd0)
+    y1=R*(cos(phi0)*sin(phi)-sin(phi0)*cos(phi)*cos(lmd-lmd0))
+    if (sqrt(x1*x1+y1*y1) > R):
+      return [0,0,0]
+    
+    # Then add the offest:
+    x1=x1+cx
+    y1=y1+cy
     
     try:
       color=self._imgRGB[int(x1),int(y1)]
@@ -230,11 +241,8 @@ class Clouding:
       for iy in range(len(self._flatten_image[0])):
         self._flatten_image[ix,iy]=self.flat_backward_spherical_color(ix,iy)
         
-    
-    io.imsave("toto.png",self._imgRGB)
-    io.imsave("titi.png",self._flatten_image)
-
-
+    #io.imsave("toto.png",self._imgRGB)
+    #io.imsave("titi.png",self._flatten_image)
 
     
   def drawFlatten(self):
@@ -244,13 +252,15 @@ class Clouding:
 
 
 def main():
-  #cl=Clouding("../../../data/large_processed/EPIC_00000.png",0.05)
-  cl=Clouding("Happy-Test-Screen-01-825x510s.jpg")
-  cl.fakeprocessCircle()
-  #cl.processCircle()
+  
+  cl=Clouding("../../../data/large_processed/EPIC_00000.png",0.2)
+  #cl=Clouding("Happy-Test-Screen-01-825x510s.jpg")
+  #cl.fakeprocessCircle()
+  cl.processCircle()
   #cl.drawCircle()
   cl.processFlattenBackwardSpherical()
   cl.drawFlatten()
+  #cl.writeImage("data")
   
 
 

@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 import math
-
+from math import sqrt, sin, cos, tan, atan2, asin
 import numpy as np
 import matplotlib.pyplot as plt
 
@@ -146,12 +146,16 @@ class Clouding:
     io.imsave("titi.png",self._flatten_image)
 
   
-  def flat_forward_spherical_color(self,x,y):
-    try:
-      color=self._imgRGB[int(x),int(y)]
-      return color
-    except IndexError:
-      return [0,0,0]
+  def find_forward_spherical(self,x,y):
+    cx=self._cx[0]
+    cy=self._cy[0]
+    theta=math.atan2(y-cy,x-cx)
+    
+    r=math.sqrt((x-cx)*(x-cx)+(y-cy)*(y-cy))
+    theta=math.atan2(y-cy,x-cx)
+    
+    
+    return (x,y)
    
 
   def processFlattenForwardSpherical(self):
@@ -160,13 +164,67 @@ class Clouding:
     
     for ix in range(len(self._imgRGB)):
       for iy in range(len(self._imgRGB[0])):
-        self._flatten_image[ix,iy]=self.flat_forward_spherical_color(ix,iy)
+        (theta,phi)=self.find_forward_spherical(ix,iy)
+        self._flatten_image[theta,phi]=self._imgRGB[ix,iy]
         
     
     io.imsave("toto.png",self._imgRGB)
     io.imsave("titi.png",self._flatten_image)
     
-         
+  # Wikipedia c'est la vie!
+  # https://en.wikipedia.org/wiki/Orthographic_map_projection#Mathematics
+
+  def flat_backward_spherical_color(self,x0,y0):
+    R =self._radii[0]
+    cx=self._cx[0]
+    cy=self._cy[0]
+    
+    x=x0-cx #len(self._flatten_image   )/2
+    y=y0-cy #len(self._flatten_image[0])/2
+    
+    
+    # First backward compute which coordinates is image point
+    lmd0=0
+    phi0=0
+    
+    rho=sqrt(x*x+y*y)
+    if (rho==0): rho=.0001 # will be enough
+    try:
+      c =asin(rho/R)
+    except ValueError:
+      return [0,0,0]
+    
+    phi=asin(cos(c)*sin(phi0)+(y*sin(c)*cos(phi0))/rho)
+    lmd=lmd0+atan2(x*sin(c),rho*cos(c)*cos(phi0)-y*sin(c)*sin(phi0))
+    
+    # Then forward compute which color is that point on image
+    x1=len(self._flatten_image   )/2+R*cos(phi)*sin(lmd-lmd0)
+    y1=len(self._flatten_image[0])/2+R*(cos(phi0)*sin(phi)-sin(phi0)*cos(phi)*cos(lmd-lmd0))
+    
+    try:
+      color=self._imgRGB[int(x1),int(y1)]
+      if (0): # np.linalg.norm(color) > 0.1 ):
+        print("( "+str(x0)+" , "+str(y0)+" ) => ( "+str(x2)+" , "+str(y2)+" ) = ("+str(r0)+" , "+str(theta0*180/math.pi)+") = "+str(color))
+      return color
+    except IndexError:
+      return [0,0,0]
+    
+    
+
+  def processFlattenBackwardSpherical(self):
+    self._flatten_image=0*self._imgRGB
+    #self._flatten_image=rescale(self._flatten_image,1.5, multichannel=True)
+    
+    for ix in range(len(self._flatten_image)):
+      for iy in range(len(self._flatten_image[0])):
+        self._flatten_image[ix,iy]=self.flat_backward_spherical_color(ix,iy)
+        
+    
+    io.imsave("toto.png",self._imgRGB)
+    io.imsave("titi.png",self._flatten_image)
+
+
+
     
   def drawFlatten(self):
     fig, ax = plt.subplots(ncols=1, nrows=1, figsize=(10, 4))
@@ -179,7 +237,7 @@ def main():
   cl=Clouding("Happy-Test-Screen-01-825x510s.jpg")
   cl.fakeprocessCircle()
   #cl.drawCircle()
-  cl.processFlattenForwardSpherical()
+  cl.processFlattenBackwardSpherical()
   cl.drawFlatten()
   
 

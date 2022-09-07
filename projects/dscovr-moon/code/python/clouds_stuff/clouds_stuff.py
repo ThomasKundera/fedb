@@ -175,6 +175,8 @@ class Clouding:
     
   # Wikipedia c'est la vie!
   # https://en.wikipedia.org/wiki/Orthographic_map_projection#Mathematics
+  # And this one:
+  # https://en.wikipedia.org/wiki/Equirectangular_projection
 
   def flat_backward_spherical_color(self,x0,y0):
     R =self._radii[0]
@@ -188,16 +190,23 @@ class Clouding:
     # First backward compute which coordinates is image point
     lmd0=0
     phi0=0
-    
-    rho=sqrt(x*x+y*y)
-    if (rho==0): rho=.0001 # will be enough
-    try:
-      c =asin(rho/R)
-    except ValueError:
-      return [0,0,0]
-    
-    phi=asin(cos(c)*sin(phi0)+(y*sin(c)*cos(phi0))/rho)
-    lmd=lmd0+atan2(x*sin(c),rho*cos(c)*cos(phi0)-y*sin(c)*sin(phi0))
+      
+    if (0): # Orthographic
+      rho=sqrt(x*x+y*y)
+      if (rho==0): rho=.0001 # will be enough
+      try:
+        c =asin(rho/R)
+      except ValueError:
+        return [0,0,0]
+      
+      phi=asin(cos(c)*sin(phi0)+(y*sin(c)*cos(phi0))/rho)
+      lmd=lmd0+atan2(x*sin(c),rho*cos(c)*cos(phi0)-y*sin(c)*sin(phi0))
+    else: # Equirectangular
+      lmd=x/R+lmd0
+      #if ( lmd <0):
+      #  return [0,0,0]
+      phi=y/R+phi0
+      
     
     # Then forward compute which color is that point on image
     x1=cx+R*cos(phi)*sin(lmd-lmd0)
@@ -215,7 +224,7 @@ class Clouding:
 
   def processFlattenBackwardSpherical(self):
     self._flatten_image=0*self._imgRGB
-    self._flatten_image=rescale(self._flatten_image,1.5, multichannel=True)
+    #self._flatten_image=rescale(self._flatten_image,1.5, multichannel=True)
     
     for ix in range(len(self._flatten_image)):
       for iy in range(len(self._flatten_image[0])):
@@ -235,11 +244,11 @@ class Clouding:
 
 
 def main():
-  cl=Clouding("../../../data/large_processed/EPIC_00000.png",0.05)
-  #cl=Clouding("Happy-Test-Screen-01-825x510s.jpg")
-  #cl.fakeprocessCircle()
-  cl.processCircle()
-  cl.drawCircle()
+  #cl=Clouding("../../../data/large_processed/EPIC_00000.png",0.05)
+  cl=Clouding("Happy-Test-Screen-01-825x510s.jpg")
+  cl.fakeprocessCircle()
+  #cl.processCircle()
+  #cl.drawCircle()
   cl.processFlattenBackwardSpherical()
   cl.drawFlatten()
   

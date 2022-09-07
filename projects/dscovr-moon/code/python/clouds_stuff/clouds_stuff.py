@@ -5,6 +5,7 @@ from math import sqrt, sin, cos, tan, atan2, asin
 
 import os
 from threading import Thread
+import multiprocessing
 import queue
 
 import numpy as np
@@ -19,11 +20,13 @@ from skimage.util import img_as_ubyte, img_as_uint
 
 
 class Clouding:
-  def __init__(self,fn,rscl=1):
+  def __init__(self,fn,rscl=1,edgrscl=1):
     print("Clouding __init__()")
     self._fn=fn
-    self._rescale=rscl # Rescale factor. 1 means 100%
-
+    self._rescale   =rscl    # Rescale factor. 1 means 100%
+    self._edgrescale=edgrscl # Rescale factor for edge and cirle detection
+                             # will multiply the image factor.
+    
     # Load picture and detect edges
     img0    = io.imread(self._fn, as_gray=True)
     imgRGB0 = io.imread(self._fn)
@@ -33,18 +36,27 @@ class Clouding:
     
   def findEdges(self):
     print("Clouding.findEdges(): START")
-    self._edges = canny(self._img)
+    self._edges = canny(rescale(self._img,self._edgrescale, anti_aliasing=True ))
     print("Clouding.findEdges(): END")
     
   def findCircle(self):
+    print("Clouding.findCircle(): START")
     # Detect two radii
-    hough_radii = np.arange(int(self._rescale*800), int(self._rescale*1000), 2)
+    hough_radii = np.arange(
+      int(self._edgrescale*self._rescale*800), 
+      int(self._edgrescale*self._rescale*1000), 2)
     hough_res = hough_circle(self._edges, hough_radii)
     # Select the most prominent 1 circles
     # The x/y inversion here seems needed.
     self._accums, self._cy, self._cx, self._radii = hough_circle_peaks(hough_res, hough_radii,total_num_peaks=1)
+    # Scaling back. WARNING: works only for one circle
+    self._cx   [0]=self._cx   [0]/self._edgrescale
+    self._cy   [0]=self._cy   [0]/self._edgrescale
+    self._radii[0]=self._radii[0]/self._edgrescale
+    print("Clouding.findCircle(): END")
 
   def addCircle(self):
+    print("Clouding.addCircle(): START")
     # Gots lots of problem with this, it seems to blacken the whole image
     # very often. That's why I put copy() everywhere
     # Problem, solved FIXME: remove all that
@@ -60,6 +72,7 @@ class Clouding:
       #print (self._imgRGBcircle[center_x+1,center_y+1])
       #print (self._imgRGBcircle[center_x,center_y])
     #self._imgRGBcircle=self._imgRGBcircle.copy()
+    print("Clouding.addCircle(): END")
       
     
   def drawCircle(self):
@@ -260,6 +273,7 @@ class Clouding:
     
 
   def processFlattenBackwardSpherical(self):
+    print("Clouding.processFlattenBackwardSpherical(): START")
     self._flatten_image=0*self._imgRGB.copy()
     #self._flatten_image=rescale(self._flatten_image,1.5, multichannel=True)
     
@@ -267,8 +281,7 @@ class Clouding:
       for iy in range(len(self._flatten_image[0])):
         self._flatten_image[ix,iy]=self.flat_backward_spherical_color(ix,iy)
         
-    #io.imsave("toto.png",self._imgRGB)
-    #io.imsave("titi.png",self._flatten_image)
+    print("Clouding.processFlattenBackwardSpherical(): END")
 
     
   def drawFlatten(self):
@@ -287,7 +300,7 @@ class Clouding:
 
 def run_thread(fn):
   print("Processing "+fn)
-  cl=Clouding(fn,0.5)
+  cl=Clouding(fn,0.5,0.5)
   #cl=Clouding("Happy-Test-Screen-01-825x510s.jpg")
   #cl.fakeprocessCircle()
   cl.processCircle()
@@ -310,8 +323,9 @@ def worker(q,i):
 
 def main():
   for i in range(8):
+    #t=multiprocessing.Process(target=worker, args=(q,i,), daemon=True).start()
     t=Thread(target=worker, args=(q,i,), daemon=True).start()
-
+    
   for f in os.listdir("../../../data/large_processed/"):
     if ("EPIC_" in f):
       f=os.path.join("../../../data/large_processed/", f)

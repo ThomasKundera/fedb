@@ -50,6 +50,11 @@ class Clouding:
     self.findEdges()
     self.findCircle()
 
+  def fakeprocessCircle(self):
+    self._cx   =[int(len(self._img   )/2)]
+    self._cy   =[int(len(self._img[0])/2)]
+    self._radii=[int(len(self._img   )/2.5)]
+
 
   def processFlattenForward(self):
     self._flatten_image=0*self._imgRGB
@@ -105,22 +110,25 @@ class Clouding:
 
 
 
-  def flattening_color(self,x,y):
+  def flattening_color(self,x0,y0):
+    cx0=self._cx[0]
+    cy0=self._cy[0]
+    r0=math.sqrt((x0-cx0)*(x0-cx0)+(y0-cy0)*(y0-cy0))
+    theta0=math.atan2(y0-cy0,x0-cx0)
+    
     cx=len(self._flatten_image)/2
     cy=len(self._flatten_image[0])/2
     
-    r=math.sqrt((x-cx)*(x-cx)+(y-cy)*(y-cy))
-    theta=math.atan2(y-cy,x-cx)
+    #theta=math.atan2(y-cy,x-cx)
     
-    x2=cx+r*math.cos(theta)
-    y2=cx+r*math.sin(theta)
-    
+    x2=cx+r0*math.cos(theta0)
+    y2=cx+r0*math.sin(theta0)
     
     
     try:
       color=self._imgRGB[int(x2),int(y2)]
       if (1): # np.linalg.norm(color) > 0.1 ):
-        print("( "+str(x)+" , "+str(y)+" ) => ( "+str(x2)+" , "+str(y2)+" ) = ("+str(r)+" , "+str(theta*180/math.pi)+") = "+str(color))
+        print("( "+str(x0)+" , "+str(y0)+" ) => ( "+str(x2)+" , "+str(y2)+" ) = ("+str(r0)+" , "+str(theta0*180/math.pi)+") = "+str(color))
       return self._imgRGB[int(x2),int(y2)]
     except IndexError:
       return [0,0,0]
@@ -165,8 +173,9 @@ class Clouding:
 
 
 def main():
-  cl=Clouding("data/EPIC_00000.png",0.05)
-  cl.processCircle()
+  #cl=Clouding("data/EPIC_00000.png",0.05)
+  cl=Clouding("Happy-Test-Screen-01-825x510s.jpg")
+  cl.fakeprocessCircle()
   #cl.drawCircle()
   cl.processFlattenBackward()
   cl.drawFlatten()

@@ -39,13 +39,6 @@ camera {
 }
 
 
-#declare simpleframe=union {
-    #local l=1.1*Earth_Radius/(1000*km);
-    cylinder {<l,0,0>,<-l,  0,  0> .1 texture {XaxisTexture}}
-    cylinder {<0,l,0>,<  0,-l,  0> .1 texture {YaxisTexture}}
-    cylinder {<0,0,l>,<  0,  0,-l> .1 texture {ZaxisTexture}}
-}
-
 union {
   object {Earth}
   object {simpleframe scale 1000*km} // Faster to render

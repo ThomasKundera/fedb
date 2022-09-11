@@ -36,9 +36,9 @@ camera {
   location camLoc
   look_at  <0,0,0>
   angle 0.61   // Figure from Wikipedia
-  angle 0.2 // Moon full scale
+  //angle 0.2 // Moon full scale
   right x*image_width/image_height
-  //rotate <0,0,25> // DSCOVR is tilted relative to ecliptic plane 
+  rotate <0,0,25> // DSCOVR is tilted relative to ecliptic plane 
 }
 
 
@@ -48,9 +48,15 @@ camera {
 // that is 4:55 h:m
 // Frames are 145 464
 #declare totalt=4*60+55;
-#declare t0 =floor(145*totalt/618);
-#declare t1=floor(464*totalt/618);
-#declare rot=-360*(t1-t0)/(28*24*60);
+#declare t1 = floor(145*totalt/618);
+#declare t2 = floor(464*totalt/618);
+#declare deltat=-138+t1;
+
+#declare TimeOfTheDay=TimeOfTheDay+deltat;
+
+#declare rot=-360*deltat/(28*24*60);
+
+
 
 //#debug str(rot, 0, 3))
 
@@ -58,14 +64,23 @@ union {
   union {
     object {Moon}
     object {simpleframe scale 1000*km}
-    rotate < 0,90+180+rot,  0>
-    rotate < 0,         0,-21>
-    rotate < 0,         5,  0>
-    rotate <-4,         0,  0>
+    rotate < 0,90+180    ,  0>
+//    rotate < 0,         0,-21>
+//    rotate < 0,         5,  0>
+//    rotate <-4,         0,  0>
  }
-  object {simpleframe scale 1800*km}
+ object {simpleframe scale 1800*km}
  translate <0*km,0,Moon_Distance>
+ rotate <0,         rot,  0>
 }
 
+union {
+  object {Earth}
+  rotate < 0,TimeOfTheDay-360*YearFraction, 0>  
+  // Put the tilt in, at Winter solstice reference
+  rotate < -declinaison_angle,0, 0>
+  // Year fraction rotation of the tilt (the time of the day is fixed above)
+  rotate < 0,+360*YearFraction, 0>
+}
 
 light_source{camLoc color White} 

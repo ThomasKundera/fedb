@@ -42,14 +42,26 @@ camera {
 }
 
 
+// Time computation: the file name contains data
+// it ranges from 0 to 618
+// during a real time of  3:50 p.m. to 8:45 p.m
+// that is 4:55 h:m
+// Frames are 145 464
+#declare totalt=4*60+55;
+#declare t0 =floor(145*totalt/618);
+#declare t1=floor(464*totalt/618);
+#declare rot=-360*(t1-t0)/(28*24*60);
+
+//#debug str(rot, 0, 3))
+
 union {
   union {
     object {Moon}
     object {simpleframe scale 1000*km}
-    rotate < 0,90+180,  0>
-    rotate < 0,     0,-21>
-    rotate < 0,     5,  0>
-    rotate <-4,     0,  0>
+    rotate < 0,90+180+rot,  0>
+    rotate < 0,         0,-21>
+    rotate < 0,         5,  0>
+    rotate <-4,         0,  0>
  }
   object {simpleframe scale 1800*km}
  translate <0*km,0,Moon_Distance>

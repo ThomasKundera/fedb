@@ -1,5 +1,5 @@
 # Moon rotation 
 
-- In progress
+- We compare frame 145 and 464
 
   

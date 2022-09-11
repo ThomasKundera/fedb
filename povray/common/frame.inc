@@ -130,3 +130,9 @@
   #end
 }
 
+#declare simpleframe=union {
+    cylinder {<l,0,0>,<-l,  0,  0> .003 texture {XaxisTexture}}
+    cylinder {<0,l,0>,<  0,-l,  0> .003 texture {YaxisTexture}}
+    cylinder {<0,0,l>,<  0,  0,-l> .003 texture {ZaxisTexture}}
+}
+

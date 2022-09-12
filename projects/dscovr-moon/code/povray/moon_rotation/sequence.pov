@@ -49,7 +49,7 @@ camera {
 #declare totalt=4*60+55;
 #declare t1 = floor(145*totalt/618);
 #declare t2 = floor(464*totalt/618);
-#declare deltat=t2;
+#declare deltat=0;
 #declare tm=-138+deltat;
 
 // Time is UTC, so noon at 12:00 over Greenwitch.

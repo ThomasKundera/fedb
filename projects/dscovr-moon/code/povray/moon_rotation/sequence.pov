@@ -29,11 +29,12 @@ global_settings { ambient_light 1.2 }
 
 #declare declinaison_angle=23.43643; // Value from Wikipedia  23° 26' 11,150" 
 
+#declare inclinaison_angle=5.145; // Wikipedia
 
 camera {
   location camLoc
   look_at  <0,0,0>
-  angle 0.65  // Figure from Wikipedia
+  angle 0.65  // FIXME: this is larger than Wikipedia data (0.61)
   //angle 0.2 // Moon full scale
   right x*image_width/image_height
   rotate <0,0,25> // DSCOVR is tilted relative to ecliptic plane 
@@ -48,7 +49,7 @@ camera {
 #declare totalt=4*60+55;
 #declare t1 = floor(145*totalt/618);
 #declare t2 = floor(464*totalt/618);
-#declare deltat=t1;
+#declare deltat=t2;
 #declare tm=-138+deltat;
 
 // Time is UTC, so noon at 12:00 over Greenwitch.
@@ -70,7 +71,9 @@ union {
  }
  object {simpleframe scale 1800*km}
  translate <0*km,0,Moon_Distance>
- rotate <0,         rot,  0>
+ 
+ rotate <0,         rot,                 0>
+ rotate <0,            0,-inclinaison_angle*0.4>
 }
 
 union {

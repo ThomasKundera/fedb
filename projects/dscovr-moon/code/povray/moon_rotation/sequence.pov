@@ -17,8 +17,6 @@ global_settings { ambient_light 1.2 }
 #declare dateM=50;
 #declare dateS=0;
 
-// Time is UTC, so noon at 12:00 over Greenwitch.
-#declare TimeOfTheDay=360*(-(dateH*3600+dateM*60+dateS)-6*3600)/86400;
 
 // Computing dates is too complex in Povray see auxiliary program "YearFraction.py"
 // that spits this answer.
@@ -35,7 +33,7 @@ global_settings { ambient_light 1.2 }
 camera {
   location camLoc
   look_at  <0,0,0>
-  angle 0.61   // Figure from Wikipedia
+  angle 0.65  // Figure from Wikipedia
   //angle 0.2 // Moon full scale
   right x*image_width/image_height
   rotate <0,0,25> // DSCOVR is tilted relative to ecliptic plane 
@@ -50,12 +48,13 @@ camera {
 #declare totalt=4*60+55;
 #declare t1 = floor(145*totalt/618);
 #declare t2 = floor(464*totalt/618);
-#declare deltat=-138+t1;
+#declare deltat=t1;
+#declare tm=-138+deltat;
 
-#declare TimeOfTheDay=TimeOfTheDay+deltat;
+// Time is UTC, so noon at 12:00 over Greenwitch.
+#declare TimeOfTheDay=360*(-(dateH*3600+dateM*60+dateS+deltat*60)-6*3600)/86400;
 
-#declare rot=-360*deltat/(28*24*60);
-
+#declare rot=-360*tm/(28*24*60);
 
 
 //#debug str(rot, 0, 3))

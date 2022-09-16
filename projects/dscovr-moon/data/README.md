@@ -14,8 +14,8 @@ Voir le code yearfraction-eutelsat.py pour l'extraction des frames.
 On trouve:
 ```
 0:04:42.794224
-0:04:42.849100
-0:00:00.054876
+0:04:43.028697
+0:00:00.234473
 ```
 
 

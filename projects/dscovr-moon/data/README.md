@@ -7,3 +7,7 @@ I couldn't yet find them.
 Under large_processed
 See the script get_epic_img1.sh
 
+### Meteo image EUMETSAT
+Taken from https://www.youtube.com/watch?v=i4mBYwBNULk
+
+

@@ -23,11 +23,11 @@ def main():
   videoDuration=datetime.timedelta(minutes=8,seconds=44.421)
   fracStart=videoDuration*(deltaStart/yearDuration)
   fracStop =videoDuration*(deltaStop/yearDuration)
-  
+  fracDelta=fracStop-fracStart
   
   print(fracStart)
   print(fracStop)
-  
+  print(fracDelta)
   
 # --------------------------------------------------------------------------
 if __name__ == '__main__':

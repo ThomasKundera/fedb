@@ -9,14 +9,13 @@ See the script get_epic_img1.sh
 
 ### Meteo image EUMETSAT
 Taken from https://www.youtube.com/watch?v=i4mBYwBNULk
-   - Durée: 00:08:44.421000000
-   - 30.000 trames/champs par seconde
 
-Donc 524.421s donc 15732.630 frames (bon, on est pas à une près, même is ça ne devrait pas).
-Une frame dure donc 33.4mn.
+Voir le code yearfraction-eutelsat.py pour l'extraction des frames.
+On trouve:
+0:04:42.794224
+0:04:42.849100
+0:00:00.054876
 
-365 jours en 2015, 196 jours depuis le premier janvier jusqu'au 16 juillet.
-Donc le 16 juillet commence à 281s (4:41) et fini à 283s (4:43)
 
 
 

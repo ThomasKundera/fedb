@@ -14,9 +14,8 @@ def main():
   
   # Begining and end
   utcStart=datetime.datetime.fromisoformat("2015-07-16 19:50:00.000+00:00")
-  utcEnd=datetime.datetime.fromisoformat("2015-07-16 20:45:00.000+00:00")
-  #utcDateOfPicture=datetime.datetime.fromisoformat("2015-09-23 19:50:00.000+00:00")
-    
+  utcEnd  =datetime.datetime.fromisoformat("2015-07-16 23:45:00.000+00:00")
+     
   deltaStart=utcStart-utc2015NewYear
   deltaStop =utcEnd-utc2015NewYear
   
@@ -28,6 +27,7 @@ def main():
   print(fracStart)
   print(fracStop)
   print(fracDelta)
+  
   
 # --------------------------------------------------------------------------
 if __name__ == '__main__':

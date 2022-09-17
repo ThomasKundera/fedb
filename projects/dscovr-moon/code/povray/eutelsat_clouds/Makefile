@@ -52,6 +52,12 @@ preplqanim:
 
 movie:
 	$(MENCODER) mf://sequence*.png $(ENCODEROPTIONS) -o output.avi
+
+gif:
+	convert -delay 50 -loop 0 sequence*.png sequence.gif
+	#ffmpeg -y  -framerate 3   -pattern_type glob   -i 'sequence*.png'  sequence.gif
+	
+	
 clean:  
 	@/bin/rm *.png
 	

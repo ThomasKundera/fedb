@@ -31,7 +31,9 @@ class RGB:
   
   def rgbsum(self):
     return self.rgb[0]+self.rgb[1]+self.rgb[2]
- 
+  
+  def dist(self,o):
+    return (self.rgb[0]-o.rgb[0]) ** 2 + (self.rgb[1]-o.rgb[1]) ** 2 + (self.rgb[2]-o.rgb[2]) ** 2
  
 class Idv:
   #deathcurve=[.1,.1,.2,.3,.4,.5,.6,1] # Likelihood of dying for each age
@@ -63,7 +65,9 @@ class Idv:
       idv.age=7 # Trick
     return idv
   
-  
+  # Genetic distance
+  def gendist(self,other):
+    return(self.rgb.dist(other.rgb))
 
 class WorldMap:
   def __init__(self):
@@ -136,7 +140,27 @@ class WorldMap:
           return [ixs,iys]
     return None
   
-  
+  def lookformateshuffledbiased(self,xy):
+    r=abs(random.gauss(0,kRadius))
+    ixl=range(-int(r)+xy[0],int(r)+xy[0])
+    iyl=range(-int(r)+xy[1],int(r)+xy[1])
+    random.shuffle(ixl)
+    random.shuffle(iyl)
+    candidates=[]
+    for ix in ixl:
+      for iy in iyl:
+        [ixs,iys]=self.loopmap([ix,iy])
+        if (self.array[ixs][iys]):
+          candidates.append([ixs,iys])
+    df=1000. # Large
+    nxy=None
+    for cxy in candidates:
+      d=self.array[xy[0]][xy[1]].gendist(self.array[cxy[0]][cxy[1]])
+      if (d<=df):
+        df=d
+        nxy=cxy
+    return nxy
+ 
   
   def lookforroomsafe(self,xy):
     r=abs(random.gauss(0,kRadius))
@@ -178,7 +202,7 @@ class WorldMap:
           #print("death "+str(xy))
         else:
           nl.append(xy)
-          xy2=self.lookformateshuffled(xy)
+          xy2=self.lookformateshuffledbiased(xy)
           if (xy2):
             xy3=self.lookforroomshuffled(xy)
             if (xy3):

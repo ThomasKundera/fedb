@@ -83,7 +83,7 @@ class WorldMap:
       self.addidv([        i,        i],Idv([1.,0.,0.]))
       self.addidv([kSize/2-i,        i],Idv([0.,1.,0.]))
       self.addidv([        i,kSize/2-i],Idv([0.,0.,1.]))
-      self.addidv([kSize/2-i,kSize/2-i],Idv([1.,1.,1.]))
+      #self.addidv([kSize/2-i,kSize/2-i],Idv([1.,1.,1.]))
  
   def addidv(self,xy,idv):
     self.array[xy[0]][xy[1]]=idv
@@ -123,6 +123,21 @@ class WorldMap:
           return [ixs,iys]
     return None
 
+  def lookformateshuffled(self,xy):
+    r=abs(random.gauss(0,kRadius))
+    ixl=range(-int(r)+xy[0],int(r)+xy[0])
+    iyl=range(-int(r)+xy[1],int(r)+xy[1])
+    random.shuffle(ixl)
+    random.shuffle(iyl)
+    for ix in ixl:
+      for iy in iyl:
+        [ixs,iys]=self.loopmap([ix,iy])
+        if (self.array[ixs][iys]):
+          return [ixs,iys]
+    return None
+  
+  
+  
   def lookforroomsafe(self,xy):
     r=abs(random.gauss(0,kRadius))
     for ix in range(-int(r)+xy[0],int(r)+xy[0]):
@@ -140,6 +155,19 @@ class WorldMap:
           return [ixs,iys]
     return None
   
+  def lookforroomshuffled(self,xy):
+    r=abs(random.gauss(0,kRadius))
+    ixl=range(-int(r)+xy[0],int(r)+xy[0])
+    iyl=range(-int(r)+xy[1],int(r)+xy[1])
+    random.shuffle(ixl)
+    random.shuffle(iyl)
+    for ix in ixl:
+      for iy in iyl:
+        [ixs,iys]=self.loopmap([ix,iy])
+        if (not self.array[ixs][iys]):
+          return [ixs,iys]
+    return None
+  
   def tick(self):
     nl=[]
     for xy in self.xyl:
@@ -150,12 +178,12 @@ class WorldMap:
           #print("death "+str(xy))
         else:
           nl.append(xy)
-          xy2=self.lookformate(xy)
+          xy2=self.lookformateshuffled(xy)
           if (xy2):
-            xy3=self.lookforroom(xy)
+            xy3=self.lookforroomshuffled(xy)
             if (xy3):
               #print("heureux evenement "+str(xy3))
-              self.array[xy3[0]][xy3[1]]=self.array[xy[0]][xy[1]].mate(self.array[xy2[0]][xy2[1]])
+              self.array[xy3[0]][xy3[1]]=self.array[xy[0]][xy[1]].matehard(self.array[xy2[0]][xy2[1]])
               nl.append(xy3)
     self.xyl=nl
  

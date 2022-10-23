@@ -5,11 +5,12 @@
 
 global_settings { ambient_light 2. }
 
-#declare pos=1;
+#declare pos=0;
 
 camera {
   location <-6,0,0>
   look_at  <0,0,0>
+  angle 40
   right x*image_width/image_height
 }
 
@@ -31,12 +32,15 @@ union {
       #case (1)
         rotate <40,30,60>
         #break
+      #case (2)
+        rotate <40,30,40>
+        #break
     #end
 }
-  
+
 
 light_source{<0,0,-10> color White} 
 light_source{<0,0, 10> color White} 
 light_source{<-10,0,0> color White} 
 
-object {simpleframe scale .059 translate <0,0,0>}
+object {simpleframe scale .025 translate <0,0,0>}

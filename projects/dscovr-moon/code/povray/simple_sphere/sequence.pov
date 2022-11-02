@@ -5,12 +5,12 @@
 
 global_settings { ambient_light 2. }
 
-#declare pos=0;
+#declare pos=2;
 
 camera {
-  location <-6,0,0>
+  location <-60,0,0>
   look_at  <0,0,0>
-  angle 40
+  angle 4
   right x*image_width/image_height
 }
 
@@ -33,7 +33,7 @@ union {
         rotate <40,30,60>
         #break
       #case (2)
-        rotate <40,30,40>
+        rotate <40,30,5>
         #break
     #end
 }

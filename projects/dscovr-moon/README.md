@@ -1,4 +1,4 @@
-# Analysing DSCOVR vtime-lapse of the Moon in 2015
+# Analysing DSCOVR time-lapse of the Moon in 2015
 
 ## Introduction
 

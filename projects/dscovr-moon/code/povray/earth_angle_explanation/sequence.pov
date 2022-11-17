@@ -15,7 +15,7 @@
 // 4: Axial tilt (but aligned to Greenwitch) at Winter Solstice
 // 5: Axial tilt at Winter Solstice at 19:50
 // 6: Axial tilt at 19:50 July 16 2015
-#declare mystep=6;
+#declare mystep=7;
 
 global_settings { ambient_light 1.2 }
 
@@ -29,6 +29,8 @@ global_settings { ambient_light 1.2 }
 // that spits this answer.
 #declare realYearFraction=-0.4336122195831841;
 #declare YearFraction=0;
+#declare real_dscovr_tilt=<0,0,25>;
+#declare dscovr_tilt=<0,0,0>;
 
 #switch ( mystep)
   #case (1)
@@ -65,6 +67,14 @@ global_settings { ambient_light 1.2 }
     #declare declinaison_angle=real_declinaison_angle;
     #declare YearFraction=realYearFraction;
   #break
+  #case (7)
+    #declare dateH=19;
+    #declare dateM=50;
+    #declare dateS=0;
+    #declare declinaison_angle=real_declinaison_angle;
+    #declare YearFraction=realYearFraction;
+    #declare dscovr_tilt=real_dscovr_tilt;
+  #break
 #end
 
 // Time is UTC, so noon at 12:00 over Greenwitch.
@@ -77,6 +87,8 @@ camera {
   look_at  <0,0,0>
   angle 0.61   // Figure from Wikipedia
   right x*image_width/image_height
+  
+  rotate dscovr_tilt // DSCOVR is tilted relative to ecliptic plane 
 }
 
 

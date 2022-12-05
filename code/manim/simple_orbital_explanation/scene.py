@@ -1,14 +1,30 @@
 from manim import *
+from math import sqrt
 
 class Point2:
   def __init__(self,x=0,y=0):
     self._x=x
     self._y=y
+
+  def norm2(self):
+    return (self._x*self._x+self._y*self._y)
+  
+  def norm(self):
+    return sqrt(self.norm2())
   
   def __add__(self,o):
     return Point2(self._x+o._x,self._y+o._y)
     
+  def __sub__(self,o):
+    return Point2(self._x-o._x,self._y-o._y)
 
+  def __rmul__(self,o):
+    return Point2(o*self._x,o*self._y)
+
+  def distance3(self,o):
+    n=self-o
+    d=n.norm()
+    return d*d*d
 
 class Momentum(Scene):
   
@@ -144,7 +160,54 @@ class FlatGravity(Scene):
           for j in range(0,min(i,len(txtstr))):
             text = Text(txtstr[j],slant=ITALIC).scale(.7)
             txt_group += text
-          txt_group.arrange(DOWN).to_edge(DR)
+          txt_group.arrange(DOWN).to_edge(DL)
+          playlist=[]
+          for j in range(len(ps)):
+            p=ps[j]
+            v=vs[j]
+            dot = Dot(plane.coords_to_point(p._x,p._y), color=GREEN)
+            plist.append(dot)
+            pn=p+v
+            l1 = Line(plane.coords_to_point(p._x,p._y),plane.coords_to_point(pn._x,pn._y))
+            a1 = Arrow(
+              plane.coords_to_point( p._x, p._y),
+              plane.coords_to_point(pn._x,pn._y),
+              color=BLUE)
+            alist.append(a1)
+            self.add(txt_group,a1,dot)
+            playlist.append(MoveAlongPath(dot, l1))
+            ps[j]=p+v
+            vs[j]=v+a
+          self.play(*playlist, rate_func=linear, run_time=2)
+          self.remove(txt_group)
+        self.wait(1)
+        self.remove(txt_group)
+        for a in alist: self.remove(a)
+        for p in plist: self.remove(p)
+        self.wait(1)
+
+        txtstr=[
+          'Note that this finite approximation is not correct:',
+          'here we are approximating integrals with summations',
+          'along finite discrete time steps.',
+          'That gives some idea of the real physics',
+          'but we would have to use differentil equations',
+          'to come to anything close to reality.',
+          'The goal here is only to feel how it works',
+          'whithout having to understand calculus',
+          ]
+        ps=[ Point2(0,14), Point2(2,14), Point2(4,14),Point2(6,14)]
+        vs=[ Point2(6, 0), Point2(4, 0), Point2(2, 0),Point2(0, 0)]
+        a=Point2(0,-1)
+
+        plist=[]
+        alist=[]
+        for i in range(8):
+          txt_group = VGroup()
+          for j in range(0,min(i,len(txtstr))):
+            text = Text(txtstr[j],slant=ITALIC).scale(.7)
+            txt_group += text
+          txt_group.arrange(DOWN).to_edge(DL)
           playlist=[]
           for j in range(len(ps)):
             p=ps[j]
@@ -171,3 +234,69 @@ class FlatGravity(Scene):
         self.wait(1)
 
         
+
+class RoundEarth(Scene):
+  
+    def myopenning(self):
+        text = Text('Trajectories around a globe').scale(1.1)
+        self.add(text)
+        self.wait(3)
+        self.remove(text)
+        
+    def construct(self):
+        self.myopenning()
+        plane = NumberPlane(
+          x_range=(-15, 15, 2),
+          y_range=(-10, 10, 2),
+          x_length=15, 
+          y_length=9)
+        plane.add_coordinates()
+        text = Text(
+          '... Now a central gravitational field...',
+          slant=ITALIC).scale(0.8).to_edge(DL)
+        
+        self.add(plane)
+        self.add(text)
+        self.wait(3)
+        self.remove(text)
+
+        txtstr=[
+          'Everything is attracted to center',
+          'by a force in 1/r²',
+          ]
+        ps=[ Point2(-8,-8), Point2(-8, 8), Point2( 8,-8),Point2( 8, 8)]
+        vs=[ Point2( 0, 0), Point2( 0, 0), Point2( 0, 0),Point2( 0, 0)]
+
+        plist=[]
+        alist=[]
+        for i in range(8):
+          txt_group = VGroup()
+          for j in range(0,min(i,len(txtstr))):
+            text = Text(txtstr[j],slant=ITALIC).scale(.7)
+            txt_group += text
+          txt_group.arrange(DOWN).to_edge(DL)
+          playlist=[]
+          for j in range(len(ps)):
+            p=ps[j]
+            v=vs[j]
+            dot = Dot(plane.coords_to_point(p._x,p._y), color=GREEN)
+            plist.append(dot)
+            pn=p+v
+            l1 = Line(plane.coords_to_point(p._x,p._y),plane.coords_to_point(pn._x,pn._y))
+            a1 = Arrow(
+              plane.coords_to_point( p._x, p._y),
+              plane.coords_to_point(pn._x,pn._y),
+              color=BLUE)
+            alist.append(a1)
+            self.add(txt_group,a1,dot)
+            playlist.append(MoveAlongPath(dot, l1))
+            ps[j]=p+v
+            a=(-20./p.distance3(Point2()))*p
+            vs[j]=v+a
+          self.play(*playlist, rate_func=linear, run_time=2)
+          self.remove(txt_group)
+        self.wait(1)
+        self.remove(txt_group)
+        for a in alist: self.remove(a)
+        for p in plist: self.remove(p)
+        self.wait(1)

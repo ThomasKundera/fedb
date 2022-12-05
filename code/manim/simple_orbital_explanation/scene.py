@@ -1,42 +1,48 @@
 from manim import *
 
-class mYNumberPlane(Scene):
-    def construct(self):
-        plane = NumberPlane(x_range=(-2, 28, 2),y_range=(-2, 18, 2),x_length=15, y_length=9)
-        axes = plane.get_axes()
-        #x_axis = axes[0]
-        #y_axis = axes[1]
-        plane.add_coordinates()
-        #x_axis.add_coordinates()
-        #y_axis.add_coordinates()
-        #ax = Axes(unit_size=1)
-        text = Text('Conservation of momentum').scale(2)
+class Momentum(Scene):
+  
+    def myopenning(self):
+        text = Text('Conservation of momentum').scale(1.5)
         self.add(text)
-        self.wait(2)
+        self.wait(3)
         self.remove(text)
+    
+    def construct(self):
+        self.myopenning()
+        plane = NumberPlane(
+          x_range=(-2, 28, 2),
+          y_range=(-2, 18, 2),
+          x_length=15, 
+          y_length=9)
+        plane.add_coordinates()
+        text = Text(
+          '... Lets suppose no forcefield anywhere...',
+          slant=ITALIC).scale(1).to_edge(DL)
+        
+        self.add(plane)
+        self.add(text)
+        self.wait(3)
+        self.remove(text)
+        
+        text = Text(
+          '... We have an object moving with some speed...',
+          slant=ITALIC).scale(.5).to_edge(DL)
         dot = Dot(plane.coords_to_point(0,14), color=GREEN)
+        a1 = Arrow(
+          plane.coords_to_point(0,14),
+          plane.coords_to_point(2,14),
+          color=BLUE)
+        self.add(text,a1,dot)
         
-        l1 = Line(plane.coords_to_point(0,14),plane.coords_to_point(2,14))
+        l1 = Line (plane.coords_to_point(0,14),plane.coords_to_point(2,14))
         
-        
-        #ax = Axes(x_range=(-1,20,1)).add_coordinates()
-
-        # a dot with respect to the axes
-        #dot_axes = Dot(ax.coords_to_point(2, 2), color=GREEN)
-        #lines = ax.get_lines_to_point(ax.c2p(2,2))
-
-        # a dot with respect to the scene
-        # the default plane corresponds to the coordinates of the scene.
-        #plane = NumberPlane()
-        #plane.align_to(ax)
-        #dot_scene = Dot((2,2,0), color=RED)
-
-        self.add(plane,dot) #, dot_scene, ax, dot_axes, lines)
+        self.add(plane) #, dot_scene, ax, dot_axes, lines)
         
         for i in range(10):
           dot = Dot(plane.coords_to_point(2*i,14), color=GREEN)
           l1 = Line(plane.coords_to_point(2*i,14),plane.coords_to_point(2*(i+1),14))
-          self.play(MoveAlongPath(dot, l1), rate_func=linear)
+          self.play(MoveAlongPath(dot, l1), rate_func=linear, run_time=1)
         
         
         

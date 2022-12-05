@@ -300,3 +300,58 @@ class RoundEarth(Scene):
         for a in alist: self.remove(a)
         for p in plist: self.remove(p)
         self.wait(1)
+        
+        txtstr=[
+          'Lets now give some initial speed to all those points...',
+          ]
+        ps=[ Point2(-8,-8), Point2(-8, 8), Point2( 8,-8),Point2( 8, 8),
+             Point2( 0,-8), Point2(-8, 0), Point2( 8, 0),Point2( 0, 8),
+            ]
+        v0=.2
+        vs=[ Point2(   v0, 0), Point2( 2*v0, 0), Point2( 3*v0, 0),Point2( 4*v0, 0),
+             Point2( 5*v0, 0), Point2( 6*v0, 0), Point2( 7*v0, 0),Point2( 8*v0, 0),
+           ]
+
+        plist=[]
+        alist=[]
+        for i in range(8):
+          txt_group = VGroup()
+          for j in range(0,min(i,len(txtstr))):
+            text = Text(txtstr[j],slant=ITALIC).scale(.7)
+            txt_group += text
+          txt_group.arrange(DOWN).to_edge(DL)
+          playlist=[]
+          for j in range(len(ps)):
+            if (ps[j].norm()<1):
+              vs[j]=Point2()
+            p=ps[j]
+            v=vs[j]
+            dot = Dot(plane.coords_to_point(p._x,p._y), color=GREEN)
+            plist.append(dot)
+            pn=p+v
+            l1 = Line(plane.coords_to_point(p._x,p._y),plane.coords_to_point(pn._x,pn._y))
+            a1 = Arrow(
+              plane.coords_to_point( p._x, p._y),
+              plane.coords_to_point(pn._x,pn._y),
+              color=BLUE)
+            alist.append(a1)
+            a=(-20./p.distance3(Point2()))*p
+            pa=p+a
+            a2 = Arrow(
+              plane.coords_to_point( p._x, p._y),
+              plane.coords_to_point(pa._x,pa._y),
+            color=RED)
+            alist.append(a2)
+            
+            self.add(txt_group,a1,a2,dot)
+            playlist.append(MoveAlongPath(dot, l1))
+            ps[j]=p+v
+            
+            vs[j]=v+a
+          self.play(*playlist, rate_func=linear, run_time=2)
+          self.remove(txt_group)
+        self.wait(1)
+        self.remove(txt_group)
+        for a in alist: self.remove(a)
+        for p in plist: self.remove(p)
+        self.wait(1)

@@ -153,7 +153,8 @@ class XvaList:
       playlist.append(MoveAlongPath(p0, l1))
     
     scene.play(*playlist, rate_func=linear, run_time=2*wtime)
-    scene.remove(txt_group)
+    if (txtstr):
+      scene.remove(txt_group)
     return(objlist)
 
 

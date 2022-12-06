@@ -2,6 +2,7 @@ from manim import *
 from math import sqrt
 from helpers import Point2
 from helpers import Xva
+from helpers import XvaList
 
 class Momentum(Scene):
   
@@ -132,36 +133,24 @@ class FlatGravity(Scene):
         vs=[ Point2(6, 0), Point2(4, 0), Point2(2, 0),Point2(0, 0)]
         a=Point2(0,-1)
 
-        plist=[]
-        alist=[]
+        xvalist=XvaList()
+        for i in range(len(ps)):
+          xvalist.append(Xva(ps[i],vs[i],a))
+
+        objlist=[]
         for i in range(8):
           txt_group = VGroup()
           for j in range(0,min(i,len(txtstr))):
             text = Text(txtstr[j],slant=ITALIC).scale(.7)
             txt_group += text
           txt_group.arrange(DOWN).to_edge(DL)
-          playlist=[]
-          for j in range(len(ps)):
-            p=ps[j]
-            v=vs[j]
-            dot = Dot(plane.coords_to_point(p._x,p._y), color=GREEN)
-            plist.append(dot)
-            pn=p+v
-            l1 = Line(plane.coords_to_point(p._x,p._y),plane.coords_to_point(pn._x,pn._y))
-            a1 = Arrow(
-              plane.coords_to_point( p._x, p._y),
-              plane.coords_to_point(pn._x,pn._y),
-              color=BLUE)
-            alist.append(a1)
-            self.add(txt_group,a1,dot)
-            playlist.append(MoveAlongPath(dot, l1))
-            ps[j]=p+v
-            vs[j]=v+a
-          self.play(*playlist, rate_func=linear, run_time=2)
+          self.add(txt_group)  
+          
+          objlist.extend(xvalist.draw_step(self,plane,1./(i+1)))
+          self.wait(1)
           self.remove(txt_group)
         self.wait(1)
-        for a in alist: self.remove(a)
-        for p in plist: self.remove(p)
+        for o in objlist: self.remove(o)
         self.wait(1)
         self.remove(txt_group)
 

@@ -61,7 +61,7 @@ class Xva:
     p0 = Dot(x.ipl(pl), color=GREEN)
     v0 = Arrow( x.ipl(pl)         ,(x+v ).ipl(pl)     , buff=0.1, color=BLUE_A)
     v1 = Arrow( x.ipl(pl)         ,(x+nv).ipl(pl)     , buff=0.1, color=BLUE_C)
-    a1 = Arrow((x+v).ipl(pl)      ,(x+nv).ipl(pl)     , buff=0.1, color=RED_C )
+    a1 = Arrow((x+v).ipl(pl)      ,(x+nv).ipl(pl)     , buff=.01, color=RED_C )
     l1 = Line ( x.ipl(pl)         ,nx.ipl(pl))
     
     return (p0,v0,v1,a1,l1)
@@ -85,7 +85,55 @@ class Xva:
     scene.play(MoveAlongPath(p0, l1), rate_func=linear, run_time=2)
     scene.wait(5)    
     
+
+class XvaList:
+  def __init__(self):
+    self._list=[]
+  
+  def append(self,o):
+    self._list.append(o)
     
+  def draw_step(self,scene,plane,wtime=1):
+    objlist=[]
+    p0list=[]
+    v0list=[]
+    v1list=[]
+    a1list=[]
+    l1list=[]
+    for xva in self._list:
+      (p0,v0,v1,a1,l1)=xva.graph_step(plane)
+      p0list.append(p0)
+      v0list.append(v0)
+      v1list.append(v1)
+      a1list.append(a1)
+      l1list.append(l1)
+    
+    for p0 in p0list:
+      scene.add(p0)
+      objlist.append(p0)
+    scene.wait(wtime)
+
+    for v0 in v0list:
+      scene.add(v0)
+      objlist.append(v0)
+    scene.wait(wtime)
+      
+    for a1 in a1list:
+      scene.add(a1)
+      objlist.append(a1)
+    scene.wait(wtime)
+    
+    for v1 in v1list:
+      scene.add(v1)
+      objlist.append(v1)
+    scene.wait(wtime)
+    playlist=[]
+    for p0,l1 in zip(p0list,l1list):
+      playlist.append(MoveAlongPath(p0, l1))
+    
+    scene.play(*playlist, rate_func=linear, run_time=2*wtime)
+    return(objlist)
+
 
 class TestMe(Scene):
   def construct(self):

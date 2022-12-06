@@ -1,6 +1,7 @@
 from manim import *
 from math import sqrt
 from helpers import Point2
+from helpers import Xva
 
 class Momentum(Scene):
   
@@ -35,22 +36,27 @@ class Momentum(Scene):
           'on a straight line.'
           ]
         
-        for i in range(10):
+        xva=Xva(Point2(0,14),Point2(2,0),Point2())
+        for i in range(8):
           txt_group = VGroup()
           for j in range(0,min(i,5)):
             text = Text(txtstr[j],slant=ITALIC).scale(.8)
             txt_group += text
           txt_group.arrange(DOWN).to_edge(DL)
-          dot = Dot(plane.coords_to_point(2*i,14), color=GREEN)
-          l1 = Line(plane.coords_to_point(2*i,14),plane.coords_to_point(2*(i+1),14))
-          a1 = Arrow(
-            plane.coords_to_point(2*i,14),
-            plane.coords_to_point(2*(i+1),14),
-            color=BLUE)
-          self.add(txt_group,a1,dot)
-          self.play(MoveAlongPath(dot, l1), rate_func=linear, run_time=2)
+          self.add(txt_group)
+          (p0,v0,v1,a1,l1)=xva.graph_step(plane)
+          self.add(p0)
+          #self.wait(1)
+          #self.add(v0)
+          #self.wait(1)
+          #self.add(a1)
+          #self.wait(1)
+          self.add(v1)
+          self.wait(1)
+          self.play(MoveAlongPath(p0, l1), rate_func=linear, run_time=2)
+          self.wait(1)
           self.remove(txt_group)
-        self.wait(1)
+        self.wait(2)
         
         
         

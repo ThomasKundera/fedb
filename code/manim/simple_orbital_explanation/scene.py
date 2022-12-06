@@ -362,36 +362,89 @@ class Orbiting(Scene):
         
         txtstr=[
           'We started to see objects rotating,',
-          'lets look again',
-          'at what\'s hapenning...'
+          'lets look again at what\'s hapenning',
+          'with different initial speeds',
+          'The slower ones are falling to ground,',
+          'the faster ones are escaping',
+          'but some seem to stay in between'
           ]
 
         xvalist=XvaList()
         a=Point2(0,0)
-        v0=.2
+        v0=.3
         for i in range(8):
           p=Point2()
           p.from_polar(8,i*2.*pi/8.)
           v=Point2()
-          v.from_polar((i+4)*v0,i*2.*pi/8.+pi/2.)
+          v.from_polar((i+2)*v0,i*2.*pi/8.+pi/2.)
           xvalist.append(Xva(p,v,a))
 
         objlist=[]
-        for i in range(7):
+        for i in range(12):
           txt_group = VGroup()
-          for j in range(0,min(i,len(txtstr))):
+          for j in range(max(0,min(i-3,len(txtstr),len(txtstr)-3)),min(i,len(txtstr))):
             text = Text(txtstr[j],slant=ITALIC).scale(.7)
             txt_group += text
           txt_group.arrange(DOWN).to_edge(DL)
           self.add(txt_group)
           for xva in xvalist._list:
             p=xva._x
-            xva._a=(-20./p.distance3(Point2()))*p
+            if (p.norm2()>20):
+              xva._a=(-20./p.distance3(Point2()))*p
+            else:
+              xva._v=Point2()
+              xva._a=Point2()
           
           objlist.extend(xvalist.draw_step(self,plane,1./(i+1)))
           self.wait(1)
           self.remove(txt_group)
         self.wait(1)
         for o in objlist: self.remove(o)
+        self.wait(1)
+        self.remove(txt_group)
+        
+        
+        txtstr=[
+          'Lets look for better initial speed...',
+        ]
+
+        xvalist=XvaList()
+        a=Point2(0,0)
+        v0=.015
+        for i in range(8):
+          p=Point2()
+          p.from_polar(8,i*2.*pi/8.)
+          v=Point2()
+          v.from_polar(i*v0+1.5,i*2.*pi/8.+pi/2.)
+          print(v.norm())
+          xvalist.append(Xva(p,v,a))
+
+        objlist=[]
+        for i in range(18):
+          txt_group = VGroup()
+          for j in range(0,1):
+            text = Text(txtstr[j],slant=ITALIC).scale(.7)
+            txt_group += text
+          txt_group.arrange(DOWN).to_edge(DL)
+          self.add(txt_group)
+          for xva in xvalist._list:
+            p=xva._x
+            if (p.norm2()>20):
+              xva._a=(-20./p.distance3(Point2()))*p
+            else:
+              xva._v=Point2()
+              xva._a=Point2()
+          
+          objlist.append(xvalist.draw_step(self,plane,1./(i+1)))
+          if (len(objlist)>3):
+            otd=objlist.pop(0)
+            for o in otd: self.remove(o)
+            
+          self.wait(1)
+          self.remove(txt_group)
+        self.wait(1)
+        for ol in objlist:
+          for o in ol:
+            self.remove(o)
         self.wait(1)
         self.remove(txt_group)

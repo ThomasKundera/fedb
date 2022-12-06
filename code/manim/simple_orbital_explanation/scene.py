@@ -94,33 +94,30 @@ class FlatGravity(Scene):
           'is accelerating things down,',
           'so speed increasse with time.',
           ]
-        y=14
-        v=0
-        a=-1
-        plist=[]
-        alist=[]
+        xva=Xva(Point2(2,14),Point2(0,0),Point2(0,-1))
+        objlist=[]
         for i in range(8):
           txt_group = VGroup()
           for j in range(0,min(i,len(txtstr))):
             text = Text(txtstr[j],slant=ITALIC).scale(.7)
             txt_group += text
           txt_group.arrange(DOWN).to_edge(DR)
-          dot = Dot(plane.coords_to_point(2,y), color=GREEN)
-          plist.append(dot)
-          l1 = Line(plane.coords_to_point(2,y),plane.coords_to_point(2,y+v))
-          a1 = Arrow(
-            plane.coords_to_point(2,y),
-            plane.coords_to_point(2,y+v),
-            color=BLUE)
-          alist.append(a1)
-          self.add(txt_group,a1,dot)
-          self.play(MoveAlongPath(dot, l1), rate_func=linear, run_time=2)
+          self.add(txt_group)
+          (p0,v0,v1,a1,l1)=xva.graph_step(plane)
+          self.add(p0)
+          self.wait(1)
+          self.add(v0)
+          self.wait(1)
+          self.add(a1)
+          self.wait(1)
+          self.add(v1)
+          self.wait(1)
+          self.play(MoveAlongPath(p0, l1), rate_func=linear, run_time=2)
+          self.wait(1)
+          objlist.extend((p0,v0,v1,a1,l1))
           self.remove(txt_group)
-          y=y+v
-          v=v+a
         self.wait(1)
-        for a in alist: self.remove(a)
-        for p in plist: self.remove(p)
+        for o in objlist: self.remove(o)
         self.wait(1)
         self.remove(txt_group)
        

@@ -47,11 +47,6 @@ class Momentum(Scene):
           self.add(txt_group)
           (p0,v0,v1,a1,l1)=xva.graph_step(plane)
           self.add(p0)
-          #self.wait(1)
-          #self.add(v0)
-          #self.wait(1)
-          #self.add(a1)
-          #self.wait(1)
           self.add(v1)
           self.wait(1)
           self.play(MoveAlongPath(p0, l1), rate_func=linear, run_time=2)
@@ -59,6 +54,56 @@ class Momentum(Scene):
           self.remove(txt_group)
         self.wait(2)
         
+
+class SpeedAcceleration(Scene):
+    def myopenning(self):
+        text = Text('A few words about speed and acceleration').scale(0.9)
+        self.add(text)
+        self.wait(3)
+        self.remove(text)
+    
+    def construct(self):
+        self.myopenning()
+        plane = NumberPlane(
+          x_range=(-2, 8, 1),
+          y_range=(-1, 5, 1),
+          x_length=15, 
+          y_length=10)
+        plane.add_coordinates()
+        self.add(plane)
+        
+        txtstr=[
+          'If we have an object',
+          'with a speed',
+          'and a force acting on it',
+          'it will modify the speed vector',
+          'and so the location',
+          ' where the object is heading.',
+          ]        
+        xva=Xva(Point2(1,4),Point2(4,0),Point2(0,-2))
+        xvalist=XvaList()
+        xvalist.append(xva)
+
+        objlist=[]
+        txt_group = VGroup()
+        for i in range(6):
+          if (i==0):
+            objlist.extend(xvalist.draw_step(self,plane,1,txtstr))
+          else:
+            txt_group = VGroup()
+            for j in range(0,min(i+5,len(txtstr))):
+              text = Text(txtstr[j],slant=ITALIC).scale(.7)
+              txt_group += text
+            txt_group.arrange(DOWN).to_edge(DL)
+            self.add(txt_group)
+            self.wait(1)
+            self.remove(txt_group)
+        self.wait(1)
+        for o in objlist: self.remove(o)
+        self.wait(1)
+        self.remove(txt_group)
+        
+
         
         
 class FlatGravity(Scene):

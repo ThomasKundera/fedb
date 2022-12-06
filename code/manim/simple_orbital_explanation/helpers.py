@@ -92,8 +92,18 @@ class XvaList:
   
   def append(self,o):
     self._list.append(o)
-    
-  def draw_step(self,scene,plane,wtime=1):
+  
+  
+  def draw_txt(self,scene,txtstr,i):
+    txt_group = VGroup()
+    for j in range(0,min(i,len(txtstr))):
+      text = Text(txtstr[j],slant=ITALIC).scale(.7)
+      txt_group += text
+    txt_group.arrange(DOWN).to_edge(DL)
+    scene.add(txt_group)
+    return txt_group
+
+  def draw_step(self,scene,plane,wtime=1,txtstr=None):
     objlist=[]
     p0list=[]
     v0list=[]
@@ -111,27 +121,39 @@ class XvaList:
     for p0 in p0list:
       scene.add(p0)
       objlist.append(p0)
+    if (txtstr):
+      txt_group=self.draw_txt(scene,txtstr,1)
     scene.wait(wtime)
 
     for v0 in v0list:
       scene.add(v0)
       objlist.append(v0)
+    if (txtstr):
+      scene.remove(txt_group)
+      txt_group=self.draw_txt(scene,txtstr,2)
     scene.wait(wtime)
       
     for a1 in a1list:
       scene.add(a1)
       objlist.append(a1)
+    if (txtstr):
+      scene.remove(txt_group)
+      txt_group=self.draw_txt(scene,txtstr,3)
     scene.wait(wtime)
     
     for v1 in v1list:
       scene.add(v1)
       objlist.append(v1)
+    if (txtstr):
+      scene.remove(txt_group)
+      txt_group=self.draw_txt(scene,txtstr,4)
     scene.wait(wtime)
     playlist=[]
     for p0,l1 in zip(p0list,l1list):
       playlist.append(MoveAlongPath(p0, l1))
     
     scene.play(*playlist, rate_func=linear, run_time=2*wtime)
+    scene.remove(txt_group)
     return(objlist)
 
 

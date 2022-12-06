@@ -41,19 +41,38 @@ class Xva:
     self._x=x
     self._v=v
     self._a=a
-
-  def do_it(self,scene,pl):
-    #print("Xva.do_it()")
+    
+  def comp_step(self):
     x=self._x
     v=self._v
     a=self._a
+
     nx=x+v+a
     nv=v+a
+    
+    self._x=nx
+    self._v=nv
+    
+    return (x,v,a,nx,nv)
+  
+  def graph_step(self,pl):
+    (x,v,a,nx,nv)=self.comp_step()
+
     p0 = Dot(x.ipl(pl), color=GREEN)
     v0 = Arrow( x.ipl(pl)         ,(x+v ).ipl(pl)     , buff=0.1, color=BLUE_A)
     v1 = Arrow( x.ipl(pl)         ,(x+nv).ipl(pl)     , buff=0.1, color=BLUE_C)
     a1 = Arrow((x+v).ipl(pl)      ,(x+nv).ipl(pl)     , buff=0.1, color=RED_C )
-    l1 = Line(self._x.ipl(pl),nx.ipl(pl))
+    l1 = Line ( x.ipl(pl)         ,nx.ipl(pl))
+    
+    return (p0,v0,v1,a1,l1)
+
+  def play_step(self,pl):
+    (p0,v0,v1,a1,l1)=self.graph_step(pl)
+    
+    
+
+  def do_it(self,scene,pl):
+    (p0,v0,v1,a1,l1)=self.graph_step(pl)
 
     scene.add(p0)
     scene.wait(1)
@@ -65,7 +84,7 @@ class Xva:
     scene.wait(1)
     scene.play(MoveAlongPath(p0, l1), rate_func=linear, run_time=2)
     scene.wait(5)    
-    return (p0,v0,a,nv)
+    
     
 
 class TestMe(Scene):
@@ -81,6 +100,6 @@ class TestMe(Scene):
     v=Point2(3,2)
     a=Point2(0,-1)
     xva=Xva(x,v,a)
-    (p0,v0,a,nv)=xva.do_it(self,plane)
-    print(p0)
+    xva.do_it(self,plane)
+    
     

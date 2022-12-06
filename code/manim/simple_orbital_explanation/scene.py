@@ -1,30 +1,6 @@
 from manim import *
 from math import sqrt
-
-class Point2:
-  def __init__(self,x=0,y=0):
-    self._x=x
-    self._y=y
-
-  def norm2(self):
-    return (self._x*self._x+self._y*self._y)
-  
-  def norm(self):
-    return sqrt(self.norm2())
-  
-  def __add__(self,o):
-    return Point2(self._x+o._x,self._y+o._y)
-    
-  def __sub__(self,o):
-    return Point2(self._x-o._x,self._y-o._y)
-
-  def __rmul__(self,o):
-    return Point2(o*self._x,o*self._y)
-
-  def distance3(self,o):
-    n=self-o
-    d=n.norm()
-    return d*d*d
+from helpers import Point2
 
 class Momentum(Scene):
   
@@ -137,10 +113,10 @@ class FlatGravity(Scene):
           y=y+v
           v=v+a
         self.wait(1)
-        self.remove(txt_group)
         for a in alist: self.remove(a)
         for p in plist: self.remove(p)
         self.wait(1)
+        self.remove(txt_group)
        
        
         txtstr=[
@@ -181,10 +157,10 @@ class FlatGravity(Scene):
           self.play(*playlist, rate_func=linear, run_time=2)
           self.remove(txt_group)
         self.wait(1)
-        self.remove(txt_group)
         for a in alist: self.remove(a)
         for p in plist: self.remove(p)
         self.wait(1)
+        self.remove(txt_group)
 
         txtstr=[
           'Note that this finite approximation is not correct:',
@@ -228,10 +204,10 @@ class FlatGravity(Scene):
           self.play(*playlist, rate_func=linear, run_time=2)
           self.remove(txt_group)
         self.wait(1)
-        self.remove(txt_group)
         for a in alist: self.remove(a)
         for p in plist: self.remove(p)
         self.wait(1)
+        self.remove(txt_group)
 
         
 

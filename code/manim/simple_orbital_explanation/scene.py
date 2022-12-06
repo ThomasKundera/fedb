@@ -3,6 +3,7 @@ from math import sqrt
 from helpers import Point2
 from helpers import Xva
 from helpers import XvaList
+from helpers import pi
 
 class Momentum(Scene):
   
@@ -299,7 +300,7 @@ class RoundEarth(Scene):
         txtstr=[
           'Lets now give some initial speed to all those points...',
           'We start to see that objects are rotating',
-          'Around the center when falling...'
+          'around the center when falling...'
           ]
         ps=[ Point2(-8,-8), Point2(-8, 8), Point2( 8,-8),Point2( 8, 8),
              Point2( 0,-8), Point2(-8, 0), Point2( 8, 0),Point2( 0, 8),
@@ -357,3 +358,40 @@ class Orbiting(Scene):
         self.add(text)
         self.wait(3)
         self.remove(text)
+        
+        
+        txtstr=[
+          'We started to see objects rotating,',
+          'lets look again',
+          'at what\'s hapenning...'
+          ]
+
+        xvalist=XvaList()
+        a=Point2(0,0)
+        v0=.2
+        for i in range(8):
+          p=Point2()
+          p.from_polar(8,i*2.*pi/8.)
+          v=Point2()
+          v.from_polar((i+4)*v0,i*2.*pi/8.+pi/2.)
+          xvalist.append(Xva(p,v,a))
+
+        objlist=[]
+        for i in range(7):
+          txt_group = VGroup()
+          for j in range(0,min(i,len(txtstr))):
+            text = Text(txtstr[j],slant=ITALIC).scale(.7)
+            txt_group += text
+          txt_group.arrange(DOWN).to_edge(DL)
+          self.add(txt_group)
+          for xva in xvalist._list:
+            p=xva._x
+            xva._a=(-20./p.distance3(Point2()))*p
+          
+          objlist.extend(xvalist.draw_step(self,plane,1./(i+1)))
+          self.wait(1)
+          self.remove(txt_group)
+        self.wait(1)
+        for o in objlist: self.remove(o)
+        self.wait(1)
+        self.remove(txt_group)

@@ -1,10 +1,16 @@
 from manim import *
-from math import sqrt
+from math import sqrt, atan, sin, cos
+
+pi=4*atan(1)
 
 class Point2:
   def __init__(self,x=0,y=0):
     self._x=x
     self._y=y
+
+  def from_polar(self,r,t):
+    self._x=r*cos(t)
+    self._y=r*sin(t)
 
   def norm2(self):
     return (self._x*self._x+self._y*self._y)

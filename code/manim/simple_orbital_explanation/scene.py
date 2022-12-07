@@ -30,13 +30,17 @@ class Momentum(Scene):
         self.wait(3)
         self.remove(text)
         
+        comment='''
+        Lets have an object moving with some speed,
+        advancing 2 units per unit of time
+        without any force acting on it.
+        That object will continue its trajectory at same speed,
+        on a straight line, as long as conditions don't change.
+        This is conservation of momentum.
+        '''
+        
         txtstr=[
-          'We have an object moving with some speed',
-          'advancing 2 units per unit of time',
-          'without any force acting on it.',
-          'That object will continue at same speed',
-          'on a straight line.'
-          'This is conservation of momentum'
+          'p=mv [kg m s⁻²]'
           ]
         
         xva=Xva(Point2(0,14),Point2(2,0),Point2())

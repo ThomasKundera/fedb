@@ -36,6 +36,7 @@ class Momentum(Scene):
           'without any force acting on it.',
           'That object will continue at same speed',
           'on a straight line.'
+          'This is conservation of momentum'
           ]
         
         xva=Xva(Point2(0,14),Point2(2,0),Point2())
@@ -405,7 +406,25 @@ class Orbiting(Scene):
         
         
         txtstr=[
-          'Lets look for better initial speed...',
+          'So we see that only with a central force',
+          'we can get three disting behaviors:',
+          '- Falling down',
+          '- Escaping',
+          '- Rotating',
+          'Quite something...',
+          ]
+        
+        txt_group = VGroup()
+        for j in range(len(txtstr)):
+          text = Text(txtstr[j],slant=ITALIC).scale(.7)
+          txt_group += text
+        txt_group.arrange(DOWN).to_edge(DL)
+        self.add(txt_group)
+        self.wait(4)
+        self.remove(txt_group)
+        
+        txtstr=[
+          'Lets look for orbits now...',
         ]
 
         xvalist=XvaList()
@@ -415,7 +434,7 @@ class Orbiting(Scene):
           p=Point2()
           p.from_polar(8,i*2.*pi/8.)
           v=Point2()
-          v.from_polar(i*v0+1.5,i*2.*pi/8.+pi/2.)
+          v.from_polar(i*v0+1.45,i*2.*pi/8.+pi/2.)
           print(v.norm())
           xvalist.append(Xva(p,v,a))
 
@@ -448,3 +467,24 @@ class Orbiting(Scene):
             self.remove(o)
         self.wait(1)
         self.remove(txt_group)
+        
+        txtstr=[
+          'We have to recall that our computations',
+          'using naive step integration',
+          'is to the most a crude approximation',
+          'of reality.',
+          'Our "orbits" cannot be really stable',
+          'using such a simple approach',
+          'We would have toa ctually do calculus',
+          'and we would find out perfect ellipses at solutions'
+          ]
+        
+        txt_group = VGroup()
+        for j in range(len(txtstr)):
+          text = Text(txtstr[j],slant=ITALIC).scale(.7)
+          txt_group += text
+        txt_group.arrange(DOWN).to_edge(DL)
+        self.add(txt_group)
+        self.wait(4)
+        self.remove(txt_group)
+        

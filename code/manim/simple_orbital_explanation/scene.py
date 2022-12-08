@@ -44,20 +44,17 @@ class Momentum(Scene):
           ]
         
         xva=Xva(Point2(0,14),Point2(2,0),Point2())
+        text = Text(txtstr[0],slant=ITALIC).scale(.8)
+        text.to_edge(DL)
+        self.add(text)
         for i in range(8):
-          txt_group = VGroup()
-          for j in range(0,min(i,5)):
-            text = Text(txtstr[j],slant=ITALIC).scale(.8)
-            txt_group += text
-          txt_group.arrange(DOWN).to_edge(DL)
-          self.add(txt_group)
           (p0,v0,v1,a1,l1)=xva.graph_step(plane)
           self.add(p0)
           self.add(v1)
           self.wait(1)
           self.play(MoveAlongPath(p0, l1), rate_func=linear, run_time=2)
           self.wait(1)
-          self.remove(txt_group)
+        self.remove(text)
         self.wait(2)
         
 
@@ -78,36 +75,23 @@ class SpeedAcceleration(Scene):
         plane.add_coordinates()
         self.add(plane)
         
-        txtstr=[
-          'If we have an object',
-          'with a speed',
-          'and a force acting on it',
-          'it will modify the speed vector',
-          'and so the location',
-          ' where the object is heading.',
-          ]        
+        comment='''
+          If we have an object with a given speed
+          and a force acting on it, that force will
+          create an acceleration (in red), and
+          it will modify the original speed vector
+          (in clear blue), to another value (deeper blue)
+          which will affect the move of that object.
+        '''
         xva=Xva(Point2(1,4),Point2(4,0),Point2(0,-2))
         xvalist=XvaList()
         xvalist.append(xva)
 
         objlist=[]
-        txt_group = VGroup()
-        for i in range(6):
-          if (i==0):
-            objlist.extend(xvalist.draw_step(self,plane,1,txtstr))
-          else:
-            txt_group = VGroup()
-            for j in range(0,min(i+5,len(txtstr))):
-              text = Text(txtstr[j],slant=ITALIC).scale(.7)
-              txt_group += text
-            txt_group.arrange(DOWN).to_edge(DL)
-            self.add(txt_group)
-            self.wait(1)
-            self.remove(txt_group)
+        objlist.extend(xvalist.draw_step(self,plane,1))
         self.wait(1)
         for o in objlist: self.remove(o)
         self.wait(1)
-        self.remove(txt_group)
         
 
         

@@ -476,3 +476,50 @@ class Orbiting(Scene):
         self.wait(4)
         self.remove(txt_group)
         
+class OrbitExpliq(Scene):
+  
+    def myopenning(self):
+        text = Text('Mode details on orbits').scale(1.1)
+        self.add(text)
+        self.wait(3)
+        self.remove(text)
+        
+    def construct(self):
+        self.myopenning()
+        plane = NumberPlane(
+          x_range=(-2, 8, 1),
+          y_range=(-1, 5, 1),
+          x_length=15, 
+          y_length=10)
+        plane.add_coordinates()
+        self.add(plane)
+        
+        comment='''
+          Lets take a singe step of our orbit.
+          The initial speed vector is altered by gravitational force
+          accelerating the object toward center.
+          But the net effect is not a change in 
+          the norm of that speed vector, but only in direction.
+          Speed remains same, it has just rotated by some angle.
+          
+        '''
+        objlist=[]
+        p=Point2(1,4)
+        v=Point2(2,0)
+        v2=Point2()
+        v2.from_polar(2,-pi/8)
+        a=v2-v
+        xva=Xva(p,v,a)
+        xvalist=XvaList()
+        xvalist.append(xva)
+        objlist.extend(xvalist.draw_step(self,plane,2.))
+
+        
+        v2.from_polar(2,-2*pi/8)
+        xva._a=v2-xva._v
+        #xva=Xva(p,v,a)
+        objlist.extend(xvalist.draw_step(self,plane,2.))
+
+        self.wait(1)
+        for o in objlist: self.remove(o)
+        self.wait(1)

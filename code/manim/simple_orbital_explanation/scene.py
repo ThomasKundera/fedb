@@ -514,6 +514,17 @@ class OrbitExpliq(Scene):
         xvalist.append(xva)
         objlist.extend(xvalist.draw_step(self,plane,2.))
 
+        comment='''
+          Here again, the finite steps analgy shows its limites:
+          If we proceed again we'll see that the force is a bit on
+          side of the previous center.
+          Only a differential computation, using
+          infinitesimal steps will come to match what we do observe.
+          But the idea is there: the object will turn around ther
+          center.
+          
+        '''
+
         
         v2.from_polar(2,-2*pi/8)
         xva._a=v2-xva._v

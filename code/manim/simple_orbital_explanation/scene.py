@@ -90,6 +90,18 @@ class SpeedAcceleration(Scene):
         objlist=[]
         objlist.extend(xvalist.draw_step(self,plane,1))
         self.wait(1)
+        comment='''
+          It's important to notice that force is creating acceleration,
+          not speed. That's the acceleration that will itself acts on speed,
+          and then on location.
+          The proper way to handle that is by derivatives.
+          Speed is teh derivates of position x agasint time.
+          Acceleration is the derivaes of speed against time.
+        '''
+        text = MathTex(r"\vect{v}(t)=\frac{d\vect{x}(t),dt} \vect{a }(t)=\frac{d\vect{v}(t),dt}").scale(.7)
+        self.add(text)
+        objlist.extend(xvalist.draw_step(self,plane,1))
+        self.wait(1)
         for o in objlist: self.remove(o)
         self.wait(1)
         
@@ -121,24 +133,18 @@ class FlatGravity(Scene):
         self.wait(3)
         self.remove(text)
         
-        txtstr=[
-          'At small scale, on Earth everything happens',
-          'like Earth would be flat',
-          'and gravitation would be constant.',
-          'Newtonnian gravity acts like a force',
-          '(called weight), and thus',
-          'is accelerating things down,',
-          'so speed increasse with time.',
-          ]
+        comment='''
+          At small scale, on Earth, everything happens
+          like Earth would be flat, as it's quite big.
+          Gravitation field looks also to be constant.
+          Newtonnian gravity acts like a force
+          (called weight), and thus
+          is accelerating things down,
+          so speed increasse at each test.
+        '''
         xva=Xva(Point2(2,14),Point2(0,0),Point2(0,-1))
         objlist=[]
         for i in range(8):
-          txt_group = VGroup()
-          for j in range(0,min(i,len(txtstr))):
-            text = Text(txtstr[j],slant=ITALIC).scale(.7)
-            txt_group += text
-          txt_group.arrange(DOWN).to_edge(DR)
-          self.add(txt_group)
           (p0,v0,v1,a1,l1)=xva.graph_step(plane)
           self.add(p0)
           self.wait(1)
@@ -151,19 +157,18 @@ class FlatGravity(Scene):
           self.play(MoveAlongPath(p0, l1), rate_func=linear, run_time=2)
           self.wait(1)
           objlist.extend((p0,v0,v1,a1,l1))
-          self.remove(txt_group)
         self.wait(1)
         for o in objlist: self.remove(o)
         self.wait(1)
-        self.remove(txt_group)
        
        
-        txtstr=[
-          'In those conditions',
-          'an object having some speed along x',
-          'will touch ground at same time',
-          'as those who have not',
-          ]
+        comemnt='''
+          In those conditions an object having any speed along x
+          will touch ground at same time
+          as those who have not. Which is what is
+          displayed here.
+          In those conditions, for sure orbiting is impossible.
+        '''
         ps=[ Point2(0,14), Point2(2,14), Point2(4,14),Point2(6,14)]
         vs=[ Point2(6, 0), Point2(4, 0), Point2(2, 0),Point2(0, 0)]
         a=Point2(0,-1)
@@ -174,31 +179,23 @@ class FlatGravity(Scene):
 
         objlist=[]
         for i in range(8):
-          txt_group = VGroup()
-          for j in range(0,min(i,len(txtstr))):
-            text = Text(txtstr[j],slant=ITALIC).scale(.7)
-            txt_group += text
-          txt_group.arrange(DOWN).to_edge(DL)
-          self.add(txt_group)  
-          
           objlist.extend(xvalist.draw_step(self,plane,1./(i+1)))
           self.wait(1)
-          self.remove(txt_group)
         self.wait(1)
         for o in objlist: self.remove(o)
         self.wait(1)
-        self.remove(txt_group)
 
-        txtstr=[
-          'Note that this finite approximation is not correct:',
-          'here we are approximating integrals with summations',
-          'along finite discrete time steps.',
-          'That gives some idea of the real physics',
-          'but we would have to use differential equations',
-          'to come to anything close to reality.',
-          'The goal here is only to feel how it works',
-          'whithout having to understand calculus',
-          ]
+        comment='''
+          Important note: this finite approximation is not 
+          physically correct:
+          we are approximating integrals with summations
+          along finite discrete time steps.
+          That gives some idea of the real physics involved.
+          We would have to use differential equations
+          to come closde to actual observations.
+          The goal here is only to feel how it works
+          whithout having to understand calculus.
+        '''
         ps=[ Point2(0,14), Point2(2,14), Point2(4,14),Point2(6,14)]
         vs=[ Point2(6, 0), Point2(4, 0), Point2(2, 0),Point2(0, 0)]
         a=Point2(0,-1)
@@ -209,20 +206,11 @@ class FlatGravity(Scene):
 
         objlist=[]
         for i in range(8):
-          txt_group = VGroup()
-          for j in range(0,min(i,len(txtstr))):
-            text = Text(txtstr[j],slant=ITALIC).scale(.7)
-            txt_group += text
-          txt_group.arrange(DOWN).to_edge(DL)
-          self.add(txt_group)  
-          
           objlist.extend(xvalist.draw_step(self,plane,1./(i+1)))
           self.wait(1)
-          self.remove(txt_group)
         self.wait(1)
         for o in objlist: self.remove(o)
         self.wait(1)
-        self.remove(txt_group)
 
         
 
@@ -251,10 +239,11 @@ class RoundEarth(Scene):
         self.wait(3)
         self.remove(text)
 
-        txtstr=[
-          'Everything is attracted to center',
-          'by a force in 1/r²',
-          ]
+        comment='''
+          Everything is attracted to center,
+          by a force in 1/r².
+          
+        '''
         ps=[ Point2(-8,-8), Point2(-8, 8), Point2( 8,-8),Point2( 8, 8),
              Point2( 0,-8), Point2(-8, 0), Point2( 8, 0),Point2( 0, 8),
             ]

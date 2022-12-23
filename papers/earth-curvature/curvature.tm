@@ -1,6 +1,6 @@
-<TeXmacs|1.99.2>
+<TeXmacs|1.99.17>
 
-<style|article>
+<style|<tuple|article|old-spacing|old-dots|old-lengths>>
 
 <\body>
   <\doc-data|<doc-title|Observing Earth ``curvature''>|<doc-author|<\author-data|<author-name|TK>>
@@ -20,11 +20,11 @@
   <big-figure|<image|figures/flat-earth-horizon-flat.jpg|12cm|8cm||>|<label|figflatflat>(from
   a flatter post)>
 
-  Very often, Flat-Earth (FE) propagandists (referred after as ``flatters'')
-  will show pictures like Figure <reference|figflatflat> and claim ``as you
-  can see, the horizon is flat, so the Earth can't be round''.
+  Very often, Flat-Earth (FE) propagandists (referred after as \Pflatters\Q)
+  will show pictures like Figure <reference|figflatflat> and claim \Pas you
+  can see, the horizon is flat, so the Earth can't be round\Q.
 
-  But what they expect to see and how the ``curve'' should look like is a bit
+  But what they expect to see and how the \Pcurve\Q should look like is a bit
   confuse for them.
 
   <subsection|What some expects and why it doesnt have much meaning>
@@ -36,7 +36,7 @@
   but at very low (less than <math|2 m>) to moderate (<math|10-30 km>)
   altitude.
 
-  But of course, it make little sense: what should that ``curvature'' become
+  But of course, it make little sense: what should that \Pcurvature\Q become
   when looking a bit on side ? If the highest point moves with the eyes of
   the observer, then it's obviously a geometric abheration, not a real
   curvature.
@@ -103,7 +103,7 @@
   <subsection|Generalities>
 
   As a ship is leaving the shore, or when looking at a distant island, the
-  question can be ``how far can I see a remote object?''. This will be
+  question can be \Phow far can I see a remote object?\Q. This will be
   computed in this section.
 
   On a flat Earth, the horizon should be pushed to infinity, meaning that
@@ -222,7 +222,7 @@
   <math|200 km> away.
 
   As one can see, there is no surprise in many reported observations and
-  pictures that flatters takes for a ``proof'' that the Earth could not be
+  pictures that flatters takes for a \Pproof\Q that the Earth could not be
   round.
 
   <\big-figure>
@@ -262,7 +262,7 @@
 
   The lowering of horizon for a FE model is a bit more tricky to compute
   (there are several incompatibles - and implausible - FE models). Most FE
-  propagandist believes the horizon to always stay at ``eye-level''.
+  propagandist believes the horizon to always stay at \Peye-level\Q.
 
   <subsection|Computation>
 
@@ -302,10 +302,10 @@
   So anyone expecting to see something significant at a lower altitude is
   misleaded.
 
-  <subsection|A note about ``8 inches per miles squared''>
+  <subsection|A note about \P8 inches per miles squared\Q>
 
-  A common value used by flatters to compute distance to horizon is ``8
-  inches per miles squared''. That formulation cant be correct (it's even no
+  A common value used by flatters to compute distance to horizon is \P8
+  inches per miles squared\Q. That formulation cant be correct (it's even no
   dimensionaly coherent), but it may give an numerical approximation of the
   correct value in some conditions.
 
@@ -316,10 +316,10 @@
   It is first important to recall that if one wants to know from how long an
   object will be visible, the correct method is described in Section
   <reference|SectVanishing>, not here. The computation done here is only able
-  to measure some ``drop''.
+  to measure some \Pdrop\Q.
 
-  There are at least two ways to consider a ``drop''. As seen in Figure
-  <reference|FigEightInches>, the ``drop'' can either be <math|h<rprime|'>>
+  There are at least two ways to consider a \Pdrop\Q. As seen in Figure
+  <reference|FigEightInches>, the \Pdrop\Q can either be <math|h<rprime|'>>
   (the distance to ground on a local verical) or <math|h<rprime|''>>
   (distance to ground according to a line normal to the horizontal at
   <math|A>). The distance can also be computed two ways: either <math|d>
@@ -328,8 +328,8 @@
   <math|<wide|AB<rprime|''>|\<invbreve\>>>, which would be the value given by
   any measure on a map.
 
-  This gives us four method to compute that ``drop'' (local or remote verical
-  and straight line or arc) plus the ``eight inches'' one.
+  This gives us four method to compute that \Pdrop\Q (local or remote verical
+  and straight line or arc) plus the \Peight inches\Q one.
 
   <subsubsection|Computing <math|h<rprime|'>>>
 
@@ -419,10 +419,10 @@
   <subsection|The question is not simple>
 
   What does the horizon looks like on a spherical Earth? We usually assume
-  that the horizon is a ``line'' without really understanding its true shape.
+  that the horizon is a \Pline\Q without really understanding its true shape.
 
   Of course, it cannot be a straight line, as when turning a bit on side, one
-  again see a `straight `line'' not aligned with the first so first question
+  again see a `straight `line\Q not aligned with the first so first question
   is to compute what the horizon line is and how it change with altitude.
 
   Then, as most flatters rely on pictures, the question will be to understand
@@ -441,8 +441,8 @@
 
   That's a very interesting point to notice, as a circle is not a straight
   line, and that one cannot apply the computation done in Section
-  <reference|SectVanishing> to determine its ``curvature''. But the way, the
-  ``curvature'' of the horizon is the curvature of the circle, and that
+  <reference|SectVanishing> to determine its \Pcurvature\Q. But the way, the
+  \Pcurvature\Q of the horizon is the curvature of the circle, and that
   cannot be seen easily from <math|A<rprime|'>>.
 
   <subsection|Properties of the horizon circle>
@@ -476,10 +476,11 @@
   The radius and location of the horizon circle is now known.
 
   If we suppose a cartesian frame centered on <math|A>, with <math|y> as
-  vertical axis, then, the equation of the circle can be wrote as:
+  vertical axis, then, the equation of the horizon circle for an observator
+  at height <math|h> above <math|A> can be wrote as:
 
   <\equation>
-    <choice|<tformat|<table|<row|<cell|x<rsup|2>+z<rsup|2>=l<rsup|2>>>|<row|<cell|y=-h<rprime|'>>>>>><label|eqhcircle>
+    <choice|<tformat|<table|<row|<cell|x<rsup|2>+z<rsup|2>=l<rsup|2>>>|<row|<cell|y=-h<rprime|'>>>|<row|<cell|With:>>|<row|<cell|l=r<frac|<sqrt|h<around*|(|2r+h|)>>|r+h>>>|<row|<cell|h<rprime|'>=<frac|rh|r+h>>>>>><label|eqhcircle>
   </equation>
 
   Note the fact that the equation impose <math|z\<in\><around*|[|-l,l|]>>, it
@@ -642,11 +643,9 @@
 <\references>
   <\collection>
     <associate|FigEightInches|<tuple|8|?>>
-    <associate|FigEigthInches|<tuple|8|?>>
     <associate|FigPinHole|<tuple|12|?>>
     <associate|FigShape1|<tuple|13|?>>
     <associate|Fighl|<tuple|11|?>>
-    <associate|Figure 1|<tuple|2|?>>
     <associate|SectVanishing|<tuple|3|?>>
     <associate|auto-1|<tuple|1|1>>
     <associate|auto-10|<tuple|2.3|2>>
@@ -703,25 +702,24 @@
     <associate|auto-7|<tuple|2|2>>
     <associate|auto-8|<tuple|2.1|2>>
     <associate|auto-9|<tuple|2.2|2>>
-    <associate|eq2|<tuple|3.3.2|4>>
-    <associate|eqata|<tuple|3|?>>
-    <associate|eqd|<tuple|1|?>>
-    <associate|eqda|<tuple|3|?>>
-    <associate|eqdb|<tuple|3|?>>
-    <associate|eqhcircle|<tuple|8|?>>
-    <associate|eqhda|<tuple|4|?>>
-    <associate|eqhl|<tuple|7|?>>
-    <associate|eqhp|<tuple|6|?>>
-    <associate|eqhprime|<tuple|4.4.1|?>>
-    <associate|eqhr|<tuple|5|?>>
+    <associate|eq2|<tuple|3|4>>
+    <associate|eqata|<tuple|4|?>>
+    <associate|eqd|<tuple|2|?>>
+    <associate|eqda|<tuple|1|?>>
+    <associate|eqdb|<tuple|4|?>>
+    <associate|eqhcircle|<tuple|10|?>>
+    <associate|eqhda|<tuple|6|?>>
+    <associate|eqhl|<tuple|9|?>>
+    <associate|eqhp|<tuple|8|?>>
+    <associate|eqhprime|<tuple|5|?>>
+    <associate|eqhr|<tuple|7|?>>
     <associate|eqmmp|<tuple|12|?>>
-    <associate|eqmpr|<tuple|9|?>>
+    <associate|eqmpr|<tuple|11|?>>
     <associate|figatana|<tuple|7|?>>
     <associate|figflatflat|<tuple|1|?>>
     <associate|fighorizonplot|<tuple|4|?>>
     <associate|figmathorizon|<tuple|3|?>>
     <associate|figspacecurve|<tuple|2|?>>
-    <associate|heq|<tuple|9|?>>
   </collection>
 </references>
 
@@ -731,34 +729,36 @@
       BibWikiLoomingwiki:Looming
     </associate>
     <\associate|figure>
-      <tuple|normal|(from a flatter post)|<pageref|auto-3>>
+      <tuple|normal|<surround|<hidden-binding|<tuple>|1>||(from a flatter
+      post)>|<pageref|auto-3>>
 
-      <tuple|normal|(Credit NASA)|<pageref|auto-5>>
+      <tuple|normal|<surround|<hidden-binding|<tuple>|2>||(Credit
+      NASA)>|<pageref|auto-5>>
 
-      <tuple|normal||<pageref|auto-17>>
+      <tuple|normal|<surround|<hidden-binding|<tuple>|3>||>|<pageref|auto-17>>
 
-      <tuple|normal||<pageref|auto-22>>
+      <tuple|normal|<surround|<hidden-binding|<tuple>|4>||>|<pageref|auto-22>>
 
-      <tuple|normal|Example of mirage and looming (credit :
-      Wikipedia[<write|bib|BibWikiLoomingwiki:Looming><reference|bib-BibWikiLoomingwiki:Looming>])|<pageref|auto-24>>
+      <tuple|normal|<surround|<hidden-binding|<tuple>|5>||Example of mirage
+      and looming (credit : Wikipedia[<write|bib|BibWikiLoomingwiki:Looming><reference|bib-BibWikiLoomingwiki:Looming>])>|<pageref|auto-24>>
 
-      <tuple|normal||<pageref|auto-29>>
+      <tuple|normal|<surround|<hidden-binding|<tuple>|6>||>|<pageref|auto-29>>
 
-      <tuple|normal||<pageref|auto-31>>
+      <tuple|normal|<surround|<hidden-binding|<tuple>|7>||>|<pageref|auto-31>>
 
-      <\tuple|normal>
+      <tuple|normal|<\surround|<hidden-binding|<tuple>|8>|>
         \;
-      </tuple|<pageref|auto-33>>
+      </surround>|<pageref|auto-33>>
 
-      <tuple|normal||<pageref|auto-40>>
+      <tuple|normal|<surround|<hidden-binding|<tuple>|9>||>|<pageref|auto-40>>
 
-      <tuple|normal||<pageref|auto-41>>
+      <tuple|normal|<surround|<hidden-binding|<tuple>|10>||>|<pageref|auto-41>>
 
-      <tuple|normal||<pageref|auto-46>>
+      <tuple|normal|<surround|<hidden-binding|<tuple>|11>||>|<pageref|auto-46>>
 
-      <tuple|normal||<pageref|auto-51>>
+      <tuple|normal|<surround|<hidden-binding|<tuple>|12>||>|<pageref|auto-51>>
 
-      <tuple|normal||<pageref|auto-54>>
+      <tuple|normal|<surround|<hidden-binding|<tuple>|13>||>|<pageref|auto-54>>
     </associate>
     <\associate|toc>
       <vspace*|1fn><with|font-series|<quote|bold>|math-font-series|<quote|bold>|1<space|2spc>Presentation
@@ -858,8 +858,8 @@
       <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
       <no-break><pageref|auto-30>>
 
-      <with|par-left|<quote|1tab>|4.4<space|2spc>A note about ``8 inches per
-      miles squared'' <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
+      <with|par-left|<quote|1tab>|4.4<space|2spc>A note about \P8 inches per
+      miles squared\Q <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
       <no-break><pageref|auto-32>>
 
       <with|par-left|<quote|2tab>|4.4.1<space|2spc>Computing

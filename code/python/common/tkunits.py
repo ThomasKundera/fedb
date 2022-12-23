@@ -36,4 +36,9 @@ lx=lm/(m**2)      # Lux
 # ========= Physics
 eV=1.602e-19*j    # Electron-volt
 
+# Local
+g_earth=9.81*m/(s*s)
+
+# common
+hour=60*60*s
 

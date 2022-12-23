@@ -3,5 +3,5 @@
 all: pinholecamera.eps
 
 %.eps: %.asy
-	asy -offscreen $<
+	asy -offscreen $< -o $@
 

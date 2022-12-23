@@ -43,6 +43,11 @@ draw(pMxy--pO,dotted);
 draw(pMp--pMpxy,dotted);
 draw(pM--pMxy,dotted);
 
+triple My=M*(0,1,0);
+write(M)
+write(My)
+
+
 
 transform3 projyz=planeproject(X);
 triple pMyz=projyz*pM;

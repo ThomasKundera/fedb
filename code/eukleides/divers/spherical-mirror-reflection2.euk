@@ -1,4 +1,4 @@
-frame -12,-1,12,8
+frame -1.5,-.5,10.5,7.5
 scale 2
 
 O = point(0,0)
@@ -66,7 +66,7 @@ draw  dashed
   l2op
 end
 
-label
+label "Helvetica-Bold-12"
   O   -45:
   i1  -45:
   P1  -45:

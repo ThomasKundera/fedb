@@ -39,7 +39,9 @@ def main():
   T=300*K
   n=Na*(P*V/(R*T))
   
-  print(Nb/n)
+  print("{:.2e}".format(Nb))
+  print("{:.2e}".format(n))
+  print("{:.2e}".format(Nb/n))
   
   
 # --------------------------------------------------------------------------

@@ -98,7 +98,7 @@ class SpeedAcceleration(Scene):
           Speed is teh derivates of position x agasint time.
           Acceleration is the derivaes of speed against time.
         '''
-        text = MathTex(r"\vect{v}(t)=\frac{d\vect{x}(t),dt} \vect{a }(t)=\frac{d\vect{v}(t),dt}").scale(.7)
+        text = MathTex(r"\vec{v}(t)=\frac{d\vec{x}(t)}{dt} \vec{a}(t)=\frac{d\vec{v}(t)}{dt}").scale(.7)
         self.add(text)
         objlist.extend(xvalist.draw_step(self,plane,1))
         self.wait(1)
@@ -256,30 +256,25 @@ class RoundEarth(Scene):
 
         objlist=[]
         for i in range(5):
-          txt_group = VGroup()
-          for j in range(0,min(i,len(txtstr))):
-            text = Text(txtstr[j],slant=ITALIC).scale(.7)
-            txt_group += text
-          txt_group.arrange(DOWN).to_edge(DL)
-          self.add(txt_group)
           for xva in xvalist._list:
             p=xva._x
             xva._a=(-20./p.distance3(Point2()))*p
           
           objlist.extend(xvalist.draw_step(self,plane,1./(i+1)))
           self.wait(1)
-          self.remove(txt_group)
         self.wait(1)
         for o in objlist: self.remove(o)
         self.wait(1)
-        self.remove(txt_group)
         
         
-        txtstr=[
-          'Lets now give some initial speed to all those points...',
-          'We start to see that objects are rotating',
-          'around the center when falling...'
-          ]
+        comment='''
+          Lets now give some initial speed to all those points,
+          quite randomly, just to have a look.
+          We start to see various behavior of the objects
+          depending of their initial speed.
+          Some will escape quickly, some will fall quickly,
+          but some will seems to rotates around the center.
+        '''
         ps=[ Point2(-8,-8), Point2(-8, 8), Point2( 8,-8),Point2( 8, 8),
              Point2( 0,-8), Point2(-8, 0), Point2( 8, 0),Point2( 0, 8),
             ]
@@ -294,23 +289,15 @@ class RoundEarth(Scene):
 
         objlist=[]
         for i in range(7):
-          txt_group = VGroup()
-          for j in range(0,min(i,len(txtstr))):
-            text = Text(txtstr[j],slant=ITALIC).scale(.7)
-            txt_group += text
-          txt_group.arrange(DOWN).to_edge(DL)
-          self.add(txt_group)
           for xva in xvalist._list:
             p=xva._x
             xva._a=(-20./p.distance3(Point2()))*p
           
           objlist.extend(xvalist.draw_step(self,plane,1./(i+1)))
           self.wait(1)
-          self.remove(txt_group)
         self.wait(1)
         for o in objlist: self.remove(o)
         self.wait(1)
-        self.remove(txt_group)
         
 class Orbiting(Scene):
   
@@ -338,14 +325,13 @@ class Orbiting(Scene):
         self.remove(text)
         
         
-        txtstr=[
-          'We started to see objects rotating,',
-          'lets look again at what\'s hapenning',
-          'with different initial speeds',
-          'The slower ones are falling to ground,',
-          'the faster ones are escaping',
-          'but some seem to stay in between'
-          ]
+        comment='''
+          We started to see some of the objects rotating,
+          lets look again at what's hapenning in more details.
+          The slower ones are falling to ground,
+          the faster ones are escaping
+          but some seem to stay in between'
+        '''
 
         xvalist=XvaList()
         a=Point2(0,0)
@@ -359,12 +345,6 @@ class Orbiting(Scene):
 
         objlist=[]
         for i in range(12):
-          txt_group = VGroup()
-          for j in range(max(0,min(i-3,len(txtstr),len(txtstr)-3)),min(i,len(txtstr))):
-            text = Text(txtstr[j],slant=ITALIC).scale(.7)
-            txt_group += text
-          txt_group.arrange(DOWN).to_edge(DL)
-          self.add(txt_group)
           for xva in xvalist._list:
             p=xva._x
             if (p.norm2()>20):
@@ -375,32 +355,23 @@ class Orbiting(Scene):
           
           objlist.extend(xvalist.draw_step(self,plane,1./(i+1)))
           self.wait(1)
-          self.remove(txt_group)
         self.wait(1)
         for o in objlist: self.remove(o)
         self.wait(1)
-        self.remove(txt_group)
         
         
-        txtstr=[
-          'So we see that only with a central force',
-          'we can get three disting behaviors:',
-          '- Falling down',
-          '- Escaping',
-          '- Rotating',
-          'Quite something...',
-          ]
+        comment='''
+          So we see that only with a central force
+          we can get three disting behaviors:
+          - Falling down'
+          - Escaping'
+          - Rotating'
+          Quite something...
+        '''
         
-        txt_group = VGroup()
-        for j in range(len(txtstr)):
-          text = Text(txtstr[j],slant=ITALIC).scale(.7)
-          txt_group += text
-        txt_group.arrange(DOWN).to_edge(DL)
-        self.add(txt_group)
         self.wait(4)
-        self.remove(txt_group)
-        
-        txtstr=[
+
+        comment=[
           'Lets look for orbits now...',
         ]
 
@@ -417,12 +388,6 @@ class Orbiting(Scene):
 
         objlist=[]
         for i in range(18):
-          txt_group = VGroup()
-          for j in range(0,1):
-            text = Text(txtstr[j],slant=ITALIC).scale(.7)
-            txt_group += text
-          txt_group.arrange(DOWN).to_edge(DL)
-          self.add(txt_group)
           for xva in xvalist._list:
             p=xva._x
             if (p.norm2()>20):
@@ -437,33 +402,24 @@ class Orbiting(Scene):
             for o in otd: self.remove(o)
             
           self.wait(1)
-          self.remove(txt_group)
         self.wait(1)
         for ol in objlist:
           for o in ol:
             self.remove(o)
         self.wait(1)
-        self.remove(txt_group)
         
-        txtstr=[
-          'We have to recall that our computations',
-          'using naive step integration',
-          'is to the most a crude approximation',
-          'of reality.',
-          'Our "orbits" cannot be really stable',
-          'using such a simple approach',
-          'We would have toa ctually do calculus',
-          'and we would find out perfect ellipses at solutions'
-          ]
+        comment='''
+          We have to recall that our computations
+          using naive step integration
+          is to the most a crude approximation',
+          of reality.
+          Our "orbits" cannot be really stable
+           using such a simple approach
+          We would have to actually do calculus
+          to find out perfect ellipses at solutions, as expected.
+        '''
         
-        txt_group = VGroup()
-        for j in range(len(txtstr)):
-          text = Text(txtstr[j],slant=ITALIC).scale(.7)
-          txt_group += text
-        txt_group.arrange(DOWN).to_edge(DL)
-        self.add(txt_group)
         self.wait(4)
-        self.remove(txt_group)
         
 class OrbitExpliq(Scene):
   

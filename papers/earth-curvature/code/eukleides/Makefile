@@ -8,3 +8,6 @@ all: distance-of-sigh.eps low-horizon.eps \
 %.eps: %.euk
 	eukleides $<
 
+%.png: %.eps
+	convert $< $@
+

@@ -29,7 +29,11 @@
 
   <subsection|Schéma et notations associées>
 
-  \;
+  L'ISS est à une altitude notée <math|h>, au dessus d'une Terre de rayon
+  <math|r>, le repère des abscisses va de l'ISS vers le centre de la Terre,
+  avec son origine à l'ISS.
+
+  La vitesse linéaire de l'ISS est notée <math|v<rsub|0>>.
 
   <subsection|Paramètres pertinents>
 

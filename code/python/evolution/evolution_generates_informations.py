@@ -99,7 +99,7 @@ def onemax(idv):
     #print("Error string: "+str(nc))
     raise
   # Fitness is being closest to that value
-  return ((abs(1234567.12345678-v))/1234567.12345678)
+  return ((abs(0.12345678-v))/0.12345678)
                
 # tournament selection
 def selection(pop, scores, k=3):

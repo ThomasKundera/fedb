@@ -154,7 +154,7 @@ class WorldMap:
           candidates.append([ixs,iys])
     df=1000. # Large
     nxy=None
-    for cxy in candidates:
+    for cxy in candidates[:3]:
       d=self.array[xy[0]][xy[1]].gendist(self.array[cxy[0]][cxy[1]])
       if (d<=df):
         df=d

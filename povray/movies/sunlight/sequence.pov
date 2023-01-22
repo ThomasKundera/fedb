@@ -1,7 +1,4 @@
 // --------------------------------------------------------------------------------
-// First sequence
-// Very simple case when the camera goes away from the Earth showing
-// change in perspective.
 // --------------------------------------------------------------------------------
 
 #include "colors.inc"
@@ -60,17 +57,20 @@ camera {
   #declare D=concat("0",D);
 #end
 
+#declare datestring=concat(Year,M,D)
+
 #declare mD=str(floor(seconde/d_t),0,0);
 
-#declare jpgname=concat("data/",mD,".jpg");
-#declare jpgnameflat=concat("data/",mD,"-flat.jpg");
+#declare pngname=concat("data/inputimages/",datestring,"T1200.png");
+#declare jpgname=concat("data/inputimages/",mD,".jpg");
+#declare jpgnameflat=concat("data/out1",mD,"-flat.jpg");
 
 #debug concat(jpgname,"\n")
 
 #declare MappedEarthTextureSun=texture {
   pigment{
     image_map {
-      jpeg jpgname
+      png pngname
       map_type 1
       interpolate 2
     }

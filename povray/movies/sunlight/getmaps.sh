@@ -1,7 +1,10 @@
 #!/bin/bash
 
 BASEURL=https://www.timeanddate.com/scripts/sunmap.php?iso=
-20170206T1646
+#20170206T1646
+
+mkdir -p data/inputimages
+
 for month in `seq 1 12` ; do
   if [ $month -lt 10 ]; then month="0$month"; fi
   for day in `seq 1 30`; do
@@ -9,8 +12,12 @@ for month in `seq 1 12` ; do
     thedate="2017${month}${day}T1200"
     URL="${BASEURL}$thedate"
     echo $URL
-    wget -nc  -O "data/${thedate}.png"  $URL
-    sleep 2
+    if [ -f "data/inputimages/${thedate}.png" ]; then
+      echo "File already here"
+    else
+      wget -nc  -O "data/inputimages/${thedate}.png"  $URL
+      sleep 2
+    fi
   done
 done
 

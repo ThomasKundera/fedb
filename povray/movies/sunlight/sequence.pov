@@ -43,29 +43,19 @@ camera {
   right x*image_width/image_height
 }
 
-#declare Year ="2017";
-#declare Month=1+floor(seconde/(d_t*30));
-#declare Day  =1+floor((seconde-(Month-1)*30)/d_t);
-
-#declare M=str(Month,0,0);
-#if (Month<10)
-  #declare M=concat("0",M);
-#end
-
-#declare D=str(Day,0,0);
-#if (Day<10)
-  #declare D=concat("0",D);
-#end
-
-#declare datestring=concat(Year,M,D)
-
 #declare mD=str(floor(seconde/d_t),0,0);
 
-#declare pngname=concat("data/inputimages/",datestring,"T1200.png");
-#declare jpgname=concat("data/inputimages/",mD,".jpg");
-#declare jpgnameflat=concat("data/out1",mD,"-flat.jpg");
+#if (floor(seconde/d_t)<10)
+  #declare mD=concat("0",mD);
+#end
+#if (floor(seconde/d_t)<100)
+  #declare mD=concat("0",mD);
+#end
 
-#debug concat(jpgname,"\n")
+#declare pngname=concat("data/out1/sequence",mD,".png");
+#declare pngnameflat=concat("data/out2/sequence",mD,".png");
+
+#debug concat(pngname,"\n")
 
 #declare MappedEarthTextureSun=texture {
   pigment{
@@ -81,7 +71,7 @@ camera {
 #declare MappedEarthTextureSunFlat=texture {
   pigment{
     image_map {
-      jpeg jpgnameflat
+      png pngnameflat
       map_type 0
       interpolate 2
       once

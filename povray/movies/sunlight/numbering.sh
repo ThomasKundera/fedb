@@ -1,12 +1,15 @@
 #!/bin/bash
 
-mkdir -p data/out1
+#echo "Using old data"
+#exit 0
 
-cd data/out1
+mkdir -p data/oldata/data/out1
+
+cd data/oldata/data/out1
 
 i=0
 
-for img0 in `ls ../inputimages/`; do
+for img0 in `ls ../out0/*.png`; do
   echo $img0
 
   it=$i
@@ -17,8 +20,8 @@ for img0 in `ls ../inputimages/`; do
   fi
   echo $it
 
-  img0=../inputimages/$img0
-  img1=sequence${it}.png
+  img0=../out0/$img0
+  img1=${it}.png
 
   ln -s $img0 $img1
 

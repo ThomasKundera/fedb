@@ -1,5 +1,8 @@
 #!/bin/bash
 
+echo "Using old data"
+exit 0
+
 mkdir -p data/out2
 
 i=0

@@ -1,5 +1,8 @@
 #!/bin/bash
 
+echo "Using old data"
+exit 0
+
 BASEURL=https://www.timeanddate.com/scripts/sunmap.php?iso=
 #20170206T1646
 

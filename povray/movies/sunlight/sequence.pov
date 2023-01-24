@@ -44,9 +44,9 @@ camera {
 }
 
 #declare mD=str(floor(seconde/d_t),0,0);
-
+#declare mD0=mD;
 #if (floor(seconde/d_t)<10)
-  #declare mD0=concat("0",mD);
+  #declare mD0=concat("0",mD0);
 #end
 #if (floor(seconde/d_t)<100)
   #declare mD0=concat("0",mD0);

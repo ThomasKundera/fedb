@@ -48,10 +48,10 @@ preplqanim:
 
 .pov.png: $(COMMONFILES) povray_hq.ini povray.ini
 	@echo "povray create  $<"
-	$(POVRAY)$<  povray.ini
+	/usr/bin/nice $(POVRAY)$<  povray.ini
 
 movie:
-	$(MENCODER) mf://data/out4/sequence*.png $(ENCODEROPTIONS) -o output.avi
+	/usr/bin/nice $(MENCODER) mf://data/out4/sequence*.png $(ENCODEROPTIONS) -o output.avi
 clean:  
 	@/bin/rm *.png
 	

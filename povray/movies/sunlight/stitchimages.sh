@@ -1,5 +1,9 @@
 #!/bin/bash
 
+BASEDIR=./data/oldata/data/
+
+mkdir -p $BASEDIR/out5
+
 for i in `seq 365`; do
     it=$i
   if   [ $i -lt  10 ]; then
@@ -9,11 +13,13 @@ for i in `seq 365`; do
   fi
   echo $it
   
-  img0=data/inputimages/${i}.jpg
-  img1=data/out1/sequence${it}.png
-  img2=data/out2/sequence${it}.png
-  img3=data/out3/sequence${it}.png
-  imgOUT=data/out4/sequence${it}.png
+  img0=$BASEDIR/out1/${it}.jpg
+  img1=$BASEDIR/out2/${i}-flat.jpg
+  img2=$BASEDIR/out3/sequence${it}.png
+  img3=$BASEDIR/out4/sequence${it}.png
+  imgOUT=$BASEDIR/out5/sequence${it}.png
 
-  montage -mode concatenate  -tile 2x2 $img0 -resize 1900x1080 $img2 $img1 $img3 $imgOUT
+  montage -background black  -geometry 950x540 -tile 2x2 $img0 -resize 400x400 $img2 $img1 $img3 -resize 1900x1080 $imgOUT
+
+  exit 0
 done

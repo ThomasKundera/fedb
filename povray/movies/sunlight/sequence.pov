@@ -18,7 +18,7 @@
 global_settings { ambient_light 1.2 }
 
 #declare FLAT=false;
-#declare VERTICAL=false;
+#declare VERTICAL=true;
 
 #declare mydist=100000*km;
 
@@ -39,7 +39,7 @@ global_settings { ambient_light 1.2 }
 camera {
   location camLoc
   look_at  <0,0,0>
-  angle 2*al
+  angle 1.3*al
   right x*image_width/image_height
 }
 

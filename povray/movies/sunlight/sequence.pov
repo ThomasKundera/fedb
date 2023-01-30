@@ -39,28 +39,28 @@ global_settings { ambient_light 1.2 }
 camera {
   location camLoc
   look_at  <0,0,0>
-  angle 2*al
+  angle 1.3*al
   right x*image_width/image_height
 }
 
 #declare mD=str(floor(seconde/d_t),0,0);
-
+#declare mD0=mD;
 #if (floor(seconde/d_t)<10)
-  #declare mD=concat("0",mD);
+  #declare mD0=concat("0",mD0);
 #end
 #if (floor(seconde/d_t)<100)
-  #declare mD=concat("0",mD);
+  #declare mD0=concat("0",mD0);
 #end
 
-#declare pngname=concat("data/out1/sequence",mD,".png");
-#declare pngnameflat=concat("data/out2/sequence",mD,".png");
+#declare pngname=concat("data/oldata/data/out1/",mD0,".jpg");
+#declare pngnameflat=concat("data/oldata/data/out2/",mD,"-flat.jpg");
 
 #debug concat(pngname,"\n")
 
 #declare MappedEarthTextureSun=texture {
   pigment{
     image_map {
-      png pngname
+      jpeg pngname
       map_type 1
       interpolate 2
     }
@@ -71,7 +71,7 @@ camera {
 #declare MappedEarthTextureSunFlat=texture {
   pigment{
     image_map {
-      png pngnameflat
+      jpeg pngnameflat
       map_type 0
       interpolate 2
       once

@@ -9,7 +9,7 @@ cd data/oldata/data/out1
 
 i=0
 
-for img0 in `ls ../out0/*.png`; do
+for img0 in `ls ../out0/*.jpg`; do
   echo $img0
 
   it=$i
@@ -20,8 +20,8 @@ for img0 in `ls ../out0/*.png`; do
   fi
   echo $it
 
-  img0=../out0/$img0
-  img1=${it}.png
+  img0=$img0
+  img1=${it}.jpg
 
   ln -s $img0 $img1
 

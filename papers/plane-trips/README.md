@@ -21,6 +21,6 @@ File are:
 
 Usage:
    - read-oneword.py to read the flight data and dump them in allflights.dat
-   - flight_data.py to read alkl flights, sort from the 40.000 ones the 1450 different routes, and 1399 direct routes. Dump them in simpleroutes.dat
+   - flight_data.py to read all flights, sort from the 40.000 ones the 1450 different routes, and 1399 direct routes. Dump them in simpleroutes.dat
    - routes_analysis.py to analyse routes and produce plots.
 

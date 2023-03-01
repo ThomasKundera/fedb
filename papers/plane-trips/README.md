@@ -1,6 +1,6 @@
 # Goal is to probe Earth metric using plane time of flight
 
-Unfortunately, there are two totally unrelkated works in that repository.
+Unfortunately, there are two totally unrelated works in that repository.
 
 A small manual test, that is taking some known distances to ensure linearity of distance vs time plane trips.
 Files are:

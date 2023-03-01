@@ -97,8 +97,8 @@ class OneRoute:
     self._direct=[]
     self._return=[]
     
-    self.GreatCircleDistance()
-    #self.FlaEarthDistance()
+    #self.GreatCircleDistance()
+    self.FlaEarthDistance()
     
     self.AddFlight(flight)
 
@@ -150,7 +150,7 @@ class OneRoute:
       )*r_earth
 
   def FlaEarthDistance(self):
-    r_earth = 20000
+    r_earth = 6371 #
     lat1=self._from.lat
     lat2=self._to.lat
     lon1=self._from.lng

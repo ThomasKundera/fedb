@@ -20,15 +20,20 @@ class RoutesAnalysis:
     a, b, r_value, p_value, std_err = scipy.stats.linregress(x,y)
     print ( "Distance (km) = "   +"{:.2f}".format(a)
            +" x Time (secondes) "+"{:.0f}".format(b)
+           +" (speed = "+"{:.0f}".format(a*3600)+" km/h"
            +" ( {:.6f}".format(p_value)+"- {:.6f}".format(std_err)+" )")
     yp=[]
     for xv in x:
       yp.append(a*xv+b)
 
+    plt.figure(figsize=(20,12))
     plt.scatter(x, y, c = 'red')
     plt.plot   (x, yp , color='blue',linewidth=3)
     plt.xlabel('Time of flight (s)')
     plt.ylabel('Distance of flight (km)')
+
+    plt.text(1, 10000," Average speed = "+"{:.0f}".format(a*3600)+" km/h" , style='italic', bbox={'facecolor': 'green', 'alpha': 0.5, 'pad': 10})
+
     plt.show()
 
 def main():

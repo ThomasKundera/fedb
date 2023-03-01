@@ -8,7 +8,7 @@ Files are:
    - plane-trips.tm
    - code/python/plane-trips.py
 
-A more ambitious code, parsing about 20.000 trips to probe metric using either plane or spherical hypothesis.
+A more ambitious code, parsing about 40.000 trips to probe metric using either plane or spherical hypothesis.
 File are:
    - data/GlobalAirportDatabase.txt :(taken from http://www.partow.net/miscellaneous/airportdatabase/index.html "The Global Airport Database Release Version 0.0.2 Author: Arash Partow")
    - data/airports.csv  : conversion of the above in csv (by unknown code)

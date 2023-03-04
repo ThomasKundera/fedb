@@ -1,7 +1,7 @@
 #!/bin/bash
 
-RAWBASE=raw66
-RAWN=1
+RAWBASE=raw
+RAWN=2
 
 RAWFILE=${RAWBASE}_${RAWN}
 
@@ -13,6 +13,6 @@ mkdir -p data/${RAWFILE}
 
 for raw in `cat ${RAWFILE}.txt`; do
   echo "For $raw"
-  wget -nc -P data/${RAWFILE}/ $raw
-  sleep 10
+  wget -w 10 -nc -P data/${RAWFILE}/ $raw
+  #sleep 10
 done

@@ -2,68 +2,56 @@ frame -5,-1,5,9
 scale 2
 
 O = point(0,0)
-r=8
+r=7
 c=circle (O,r)
 
-#la=line(O,90:)
-#lh=line(c,60:)
 la=line(O,60:)
 lb=line(O,120:)
-#lh2=line(c,120:)
-#lb2=line(O,120:)
-
 
 dummy.A=intersection(la,c)
 dummy.B=intersection(lb,c)
-#dummy.B2=intersection(lb2,c)
 
-#A'=intersection(la,lh)
+lc=line(B,-10:)
+C=intersection(lc,la)
 
-#lp=line(B,B2)
 
-#B'=intersection(lp,la)
+ld=perpendicular(la, A)
+le=perpendicular(lb, B)
+
+D=intersection(ld,le)
 
 draw
   c
   la
   lb
   A.B
-#  O
+  B.C
+  A.D
+  B.D
+  O
   A
-#  A'
   B
-#  B2
-#  B'
-  
-#  "h"  A.A'  45:
-#  "h'" A.B'  45: 
-#  "da" A'.B  45:
+  C
+  D
   "r-h"  O.A     0: 
   "r"    O.B   180:
-#  "l"  B.B' -90:
-  
-#  (A'.B'.B)
-#  (O.B'.B)
+  "h"    A.C     0:
 end
 
-#draw dashed
-#la
-#lb
-#lh
-#lb2
-#lh2
-#lp
-#end
+draw dashed
+O.D
+end
 
 label
-  O    0:
-  A    0:
-#  A'  45:
+  O     0:
+  A     0:
   B   180:
-#  B' 140:
-#  B2 160:
-#  A',B',B right
-#  O,B',B  right
+  C     0:
+  D    90:
+  
+  O,A,D  right
+  O,B,D  right
+
 end
 
 

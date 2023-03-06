@@ -1,4 +1,4 @@
-frame -5,-1,5,9
+frame -5,-1,8,9
 scale 2
 
 O = point(0,0)
@@ -8,8 +8,8 @@ c=circle (O,r)
 la=line(O,60:)
 lb=line(O,120:)
 
-dummy.A=intersection(la,c)
-dummy.B=intersection(lb,c)
+dummy.A=intersection(la,c) 
+dummy.B=intersection(lb,c) 
 
 lc=line(B,-10:)
 C=intersection(lc,la)
@@ -20,6 +20,8 @@ le=perpendicular(lb, B)
 
 D=intersection(ld,le)
 
+E=intersection(ld,lc)
+
 draw
   c
   la
@@ -28,11 +30,14 @@ draw
   B.C
   A.D
   B.D
+  A.E
+  C.E
   O
   A
   B
   C
   D
+  E
   "r-h"  O.A     0: 
   "r"    O.B   180:
   "h"    A.C     0:
@@ -48,10 +53,11 @@ label
   B   180:
   C     0:
   D    90:
-  
+  E     0:
   O,A,D  right
   O,B,D  right
-
+  C,A,E  right
+  A,E,C
 end
 
 

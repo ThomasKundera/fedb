@@ -1,0 +1,90 @@
+frame -5,-1,8,9
+scale 2
+
+O = point(0,0)
+r=7
+c=circle (O,r)
+
+loa=line(O,60:)
+lob=line(O,120:)
+
+dummy.A=intersection(loa,c) 
+dummy.B=intersection(lob,c) 
+
+lbc=line(B,-10:)
+C=intersection(lbc,loa)
+
+ld=perpendicular(loa, A)
+le=perpendicular(lob, B)
+
+D=intersection(ld,le)
+
+E=intersection(ld,lbc)
+
+lf=perpendicular(A.B, C)
+lab=line(A,B)
+F=intersection(lab,lf)
+
+lod=line(O,D)
+H=intersection(lab,lod)
+
+draw
+  c
+  loa
+  lob
+  A.B
+  B.C
+  A.D
+  B.D
+  A.E
+  C.E
+  O.D
+  C.F
+  O
+  A
+  B
+  C
+  D
+  E
+  F
+  H
+  "r-h"  O.A     0: 
+  "r"    O.B   180:
+  "h"    A.C     0:
+end
+
+draw 3, font("Symbol-Bold-12")
+  "a"    E     160:
+  "q"    O      75:
+  "b"    A     220:
+  "d"    B      -5:
+  "i"    B     -45:
+  "q"    A     165:
+end
+
+#draw dashed
+#O.D
+#end
+
+label
+  O     0:
+  A     0:
+  B   180:
+  C     0:
+  D    90:
+  E     0:
+  F    90:
+  H    45:
+  C,A,E  right
+  C,F,A  right
+  A,E,C
+  A,O,D
+  F,A,C
+  C,B,A
+  O,B,C  double
+  D,A,B  double
+end
+
+
+
+

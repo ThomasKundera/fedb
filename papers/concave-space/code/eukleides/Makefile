@@ -7,3 +7,6 @@ all: $(patsubst %.euk,%.png,$(wildcard *.euk))
 %.png: %.eps
 	convert $< $@
 
+%.pdf: %.eps
+	epstopdf $<
+	

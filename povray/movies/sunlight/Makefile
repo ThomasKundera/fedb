@@ -10,7 +10,7 @@ CONVERT  =       convert
 PPMTOMPEG=       $(NICE) -20 ppmtompeg
 MENCODER =       $(NICE) -20 mencoder
 
-ENCODEROPTIONS = -mf fps=25:type=png -ovc lavc -lavcopts vcodec=mpeg4:mbd=2:trell:vbitrate=7000 -oac copy
+ENCODEROPTIONS = -mf fps=12:type=png -ovc lavc -lavcopts vcodec=mpeg4:mbd=2:trell:vbitrate=7000 -oac copy
 
 IMG_FILE =       sequence.png
 
@@ -51,7 +51,7 @@ preplqanim:
 	/usr/bin/nice $(POVRAY)$<  povray.ini
 
 movie:
-	/usr/bin/nice $(MENCODER) mf://data/out4/sequence*.png $(ENCODEROPTIONS) -o output.avi
+	/usr/bin/nice $(MENCODER) mf://data/oldata/data/out5/sequence*.png $(ENCODEROPTIONS) -o output.avi
 clean:  
 	@/bin/rm *.png
 	

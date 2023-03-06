@@ -1,7 +1,7 @@
 #!/bin/bash
 
-RAWBASE=raw66
-RAWN=1
+RAWBASE=raw
+RAWN=3
 
 RAWFILE=${RAWBASE}_${RAWN}
 

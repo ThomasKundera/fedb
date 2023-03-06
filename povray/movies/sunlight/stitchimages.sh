@@ -4,7 +4,7 @@ BASEDIR=./data/oldata/data/
 
 mkdir -p $BASEDIR/out5
 
-for i in `seq 365`; do
+for i in `seq 263 365`; do
     it=$i
   if   [ $i -lt  10 ]; then
     it='00'${i}
@@ -20,6 +20,6 @@ for i in `seq 365`; do
   imgOUT=$BASEDIR/out5/sequence${it}.png
 
   montage -background black  -geometry 950x540 -tile 2x2 $img0 -resize 400x400 $img2 $img1 $img3 -resize 1900x1080 $imgOUT
-
-  exit 0
+  #sleep 2
+  #exit 0
 done

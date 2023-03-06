@@ -1,5 +1,5 @@
 #  Eukleides Makefile
-all: $(patsubst %.euk,%.png,$(wildcard *.euk))
+all: $(patsubst %.euk,%.eps,$(wildcard *.euk))
 
 %.eps: %.euk
 	eukleides $<

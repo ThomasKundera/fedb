@@ -67,7 +67,7 @@
   From isocele triangle <math|<wide|AOB|^>>, we easily get that:
 
   <\equation>
-    <inactive|<label|eq1>>\<beta\>=<frac|\<pi\>|2>-\<theta\>
+    <label|eq1>\<beta\>=<frac|\<pi\>|2>-\<theta\>
   </equation>
 
   \;
@@ -75,11 +75,11 @@
   Taking rectangle triange <math|<wide|AFC|^>>, we get:
 
   <\equation>
-    <inactive|<label|eq2>>FC=h <math-up|sin><around*|(|\<beta\>|)>
+    <label|eq2>FC=h <math-up|sin><around*|(|\<beta\>|)>
   </equation>
 
   <\equation>
-    <inactive|<label|eq3>>FA=h <math-up|cos><around*|(|\<beta\>|)>
+    <label|eq3>FA=h <math-up|cos><around*|(|\<beta\>|)>
   </equation>
 
   \;
@@ -87,7 +87,7 @@
   We can also note that:
 
   <\equation>
-    <inactive|<label|eq4>>FB=AB-FA
+    <label|eq4>FB=AB-FA
   </equation>
 
   \;
@@ -95,7 +95,7 @@
   Taking rectangle triange <math|<wide|OHA|^>>, we get:
 
   <\equation>
-    <inactive|<label|eq5>>AH=r <math-up|sin><around*|(|\<theta\>|)>
+    <label|eq5>AH=r <math-up|sin><around*|(|\<theta\>|)>
   </equation>
 
   \;
@@ -105,7 +105,7 @@
   \;
 
   <\equation>
-    <inactive|<label|eq6>>AB=2r <math-up|sin><around*|(|\<beta\>|)>
+    <label|eq6>AB=2r <math-up|sin><around*|(|\<beta\>|)>
   </equation>
 
   \;
@@ -141,7 +141,7 @@
   Taking triange <math|<wide|ABE|^>>, we get:
 
   <\equation>
-    <inactive|<label|eq10>>\<alpha\>+\<delta\>+\<beta\>+<frac|\<pi\>|2>=\<pi\>
+    <label|eq10>\<alpha\>+\<delta\>+\<beta\>+<frac|\<pi\>|2>=\<pi\>
   </equation>
 
   \;
@@ -159,11 +159,30 @@
   \;
 
   It's now time to put all that together. But it's too boring, so lets just
-  have Python doing it for us.
+  have Python doing it for us. See <monospaced|code/python/plotter.py> for
+  details.
+
+  Resulting plot is at Figure 2.
+
+  <\big-figure|<image|code/python/incidence.eps|18|||>>
+    \;
+  </big-figure>
 
   \;
 
   \;
+
+  <section|Conclusion>
+
+  \;
+
+  If angle of incidence actually grows to a maximum at <math|0\<degree\>>
+  (eye level), it's quickly going down again. Thus, if slightly under horizon
+  sky glow is visible, thus should slightly <embold|above horizon> glow
+  should also be visible.
+
+  As we don't see anything above horizon, thus Earth is very lilkely not
+  concave.
 
   \;
 </body>
@@ -178,6 +197,8 @@
 <\references>
   <\collection>
     <associate|auto-1|<tuple|1|1>>
+    <associate|auto-10|<tuple|2|?>>
+    <associate|auto-11|<tuple|4|?>>
     <associate|auto-2|<tuple|2|1>>
     <associate|auto-3|<tuple|3|?>>
     <associate|auto-4|<tuple|3.1|?>>
@@ -186,7 +207,14 @@
     <associate|auto-7|<tuple|1|?>>
     <associate|auto-8|<tuple|3.2.2|?>>
     <associate|auto-9|<tuple|3.2.3|?>>
+    <associate|eq1|<tuple|1|?>>
+    <associate|eq10|<tuple|10|?>>
     <associate|eq11|<tuple|11|?>>
+    <associate|eq2|<tuple|2|?>>
+    <associate|eq3|<tuple|3|?>>
+    <associate|eq4|<tuple|4|?>>
+    <associate|eq5|<tuple|5|?>>
+    <associate|eq6|<tuple|6|?>>
     <associate|eq7|<tuple|7|?>>
     <associate|eq8|<tuple|8|?>>
     <associate|eq9|<tuple|9|?>>

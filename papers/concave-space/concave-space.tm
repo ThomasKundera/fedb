@@ -55,11 +55,16 @@
 
   <subsection|Computation>
 
-  <subsubsection|Figure>
+  <subsubsection|Figure and conventions>
 
   <\big-figure|<image|code/eukleides/incident-angle.eps|17cm|||>>
     <label|fig2>
   </big-figure>
+
+  Observation point (balloon) is at <math|C>, that is at height <math|h>
+  above glowing atmosphere. The observer is looking at point <math|B>, which
+  is at angle <math|\<alpha\>> above horizon. The incident angle of that view
+  on the surface at <math|B> is <math|i>.\ 
 
   <subsubsection|Elementary equations>
 
@@ -185,7 +190,7 @@
   sky glow is visible, thus should slightly <embold|above horizon> glow
   should also be visible.
 
-  As we don't see anything above horizon, thus Earth is very lilkely not
+  As we don't see anything above horizon, thus Earth is very likely not
   concave.
 
   \;
@@ -226,11 +231,6 @@
     <associate|fig1|<tuple|1|?>>
     <associate|fig2|<tuple|2|?>>
     <associate|fig3|<tuple|3|?>>
-    <associate|footnote-1|<tuple|1|?>>
-    <associate|footnote-2|<tuple|2|?>>
-    <associate|footnote-3|<tuple|3|?>>
-    <associate|footnr-2|<tuple|2|?>>
-    <associate|footnr-3|<tuple|3|?>>
   </collection>
 </references>
 
@@ -239,13 +239,7 @@
     <\associate|figure>
       <tuple|normal|<surround|<hidden-binding|<tuple>|1>|| \ Picture taken at
       approximately 30 km above Oregon, United State, by Justin Hamel and
-      Chris Thomson <assign|footnote-nr|1><hidden-binding|<tuple>|1><\float|footnote|>
-        <with|font-size|<quote|0.771>|<with|par-mode|<quote|justify>|par-left|<quote|0cm>|par-right|<quote|0cm>|font-shape|<quote|right>|dummy|<quote|1.0fn>|dummy|<quote|7.5fn>|<\surround|<locus|<id|%481B46E98-483371900>|<link|hyperlink|<id|%481B46E98-483371900>|<url|#footnr-1>>|1>.
-        |<hidden-binding|<tuple|footnote-1>|1><specific|texmacs|<htab|0fn|first>>>
-          Source: https://commons.wikimedia.org/wiki/File:Picture_taken_at_aprox._100,000_feet_above_Oregon_by_Justin_Hamel_and_Chris_Thompson.jpg.
-        </surround>>>
-      </float><space|0spc><rsup|<with|font-shape|<quote|right>|<reference|footnote-1>>>
-      >|<pageref|auto-3>>
+      Chris Thomson (source Wikimedia Common)>|<pageref|auto-3>>
 
       <tuple|normal|<\surround|<hidden-binding|<tuple>|2>|>
         \;

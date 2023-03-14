@@ -68,6 +68,7 @@ def bolometric_absolute_magnitude_to_irradiance(M,d):
 
 def bolometric_relative_magnitude_to_irradiance(m):
   f0=bolometric_absolute_magnitude_to_irradiance(0,10*parsec)
+  # Value is in W/m²
   return (f0*math.pow(10,-0.4*m))
   
 
@@ -85,6 +86,10 @@ def self_coherency():
   
   
 def main():
+  # Light flux of a +8 Magnitude star:
+  f=bolometric_relative_magnitude_to_irradiance(8)
+  print(f)
+  return
   # Computing absolute light power of a satellite at 300 "miles"
   # that has an apparent magnitude of 3:
   #self_coherency()

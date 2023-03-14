@@ -79,9 +79,9 @@ def self_coherency():
     +str(bolometric_absolute_magnitude_to_luminosity(M_sun)))
   print("Ir_au_sun =\t1361W/m²\t=\t"+
         str(bolometric_absolute_magnitude_to_irradiance(M_sun,au)))
-  print("ϕ0 =\t??W/m²\t=\t"+
+  print("ϕ0 =\t2.518021002×10⁻⁸ W/m²\t=\t"+
         str(bolometric_absolute_magnitude_to_irradiance(0,10*parsec)))
-  print("Ir_au_sun =\t??\t=\t"+
+  print("Ir_au_sun =\t1361W/m²\t=\t"+
         str(bolometric_relative_magnitude_to_irradiance(-26.832)))
   
   

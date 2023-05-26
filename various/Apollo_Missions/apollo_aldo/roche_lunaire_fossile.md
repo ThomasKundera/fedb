@@ -1,3 +1,6 @@
+AS: This is a response to a French video, so in French.
+
+# Aldo et les missions Apollo: la fameuse "roche lunaire en bois pétrifié"
 
 
 \[ces trois astronautes\] toujours est-il que dans cette tournée de goodwill ils arrivent à Amsterdam il 

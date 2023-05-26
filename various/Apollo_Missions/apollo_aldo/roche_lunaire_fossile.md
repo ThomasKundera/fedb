@@ -2,6 +2,44 @@ AS: This is a response to a French video, so in French.
 
 # Aldo et les missions Apollo: la fameuse "roche lunaire en bois pétrifié"
 
+## Contexte
+La chaîne Youtube [Aldo Stérone](https://www.youtube.com/@AldoSterone111) a publié une série de vidéos sur le thème des missions Apollo, avec un discours complotiste déjà entendu maintes fois à ce sujet.
+
+On va débunker ici la partie consacrée à la la fameuse "roche lunaire en bois pétrifié" mentionnée dans deux vidéos:
+
+- [Mon Problème avec Apollo](https://www.youtube.com/watch?v=SNZG5v2PIP0) entre 00:21:32 et 00:23:22
+- [Les Missions Apollo : je m'explique](https://www.youtube.com/watch?v=S6Jzs-xSZ6c) entre 00:02:01 et 00:06:36
+
+Pour cela, on va se servir essentiellement de trois documents, ceux qu'Aldo lui-même utilise pour valider sa thèse dans la seconde vidéo (vers 00:05:00):
+
+- [‘Moon rock’ in museum is just petrified wood](https://www.nbcnews.com/id/wbna32581790)
+- [Moon rock at Dutch museum is just petrified wood](https://www.cbc.ca/news/science/moon-rock-at-dutch-museum-is-just-petrified-wood-1.788375)
+- [Fake Dutch 'moon rock' revealed](http://news.bbc.co.uk/2/hi/europe/8226075.stm)
+
+On notera que les informations correctes sont disponibles dans ces papiers, à quelques détails près. Un  papier d'une revue plus sérieuse en ce qui concerne les sciences fourni quelques détails [Moon Rock Turns Out to be Fake](https://phys.org/news/2009-09-moon-fake.html). ls se contredisent sur certains détails, mais le dernier est le plus complet et le plus proche de la source. Il aurait été utile qu'Aldo **lise les sources qu'ils cite**.
+
+Voici en résumé le déroulement des événements par ces sources:
+
+1. 1969: Durant la tournée "Goodwill" d'Apollo 11, la pierre est donnée à l'ancien Premier Ministre Willem Drees par l'Ambassadeur des États-Unis J. William Middendorf II. Elle est offerte [dans un cadre portant une plaque gravée](src/fake-moon-rock-cp-300-72211.webp) "avec les compliments de l'Ambassadeur des États-Unis d'Amérique J. Willam Middendorf II, pour commémorer la visite aux Pays-Bas des astronautes d'Apollo 11. Neil A. Armstrong, Michel Collons, Edwin E. Aldrin JR. R.A.I. International Exhibition and Congress Centre, Amsterdam, 9 octobre 1969".
+2. 1988: Willem Drees meurt. La pierre est récupérée par le Rijksmuseum
+3. 1988: Le Musée téléphone à la NASA pour en vérifier l’authenticité, et la NASA répond "bien sûr on vous adonné une pierre lunaire lors du Goodwill Tour".
+4. Le musée prend cela pour une confirmation et expose cette pierre
+5. 1969/1972: En vrai, les véritables échantillons des Goodwill tours d'Apollo 11 et 17 données aux Pays-Bas sont au [National Museum of the History of Science and Medicine in Leiden](https://en.wikipedia.org/wiki/Netherlands_lunar_sample_displays). La NASA a validée qu'ils en avaient bien reçu, mais pas cette pierre en particulier.
+6. De manière anecdotique, on lit qu'à un moment, le Musée avait fait assurer cette pierre pour environ 500,000$.
+7. 
+At one point it was insured for around $500,000 (£308,000), but tests have proved it was not the genuine article.
+
+The Rijksmuseum, which is perhaps better known for paintings by artists such as Rembrandt, says it will keep the piece as a curiosity.
+
+"It's a good story, with some questions that are still unanswered," Xandra van Gelder, who oversaw the investigation that proved the piece was a fake, was quoted as saying by the Associated Press news agency.
+
+"We can laugh about it."
+
+The "rock" had originally been been vetted through a phone call to Nasa, she added.
+
+The US agency gave moon rocks to more than 100 countries following lunar missions in the 1970s.
+
+US officials said they had no explanation for the Dutch discovery. 
 
 \[ces trois astronautes\] toujours est-il que dans cette tournée de goodwill ils arrivent à Amsterdam il 
 ramène tenez-vous bien une pierre de la lune une pierre il la ramène il 

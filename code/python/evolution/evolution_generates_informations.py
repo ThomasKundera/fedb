@@ -7,6 +7,8 @@
 import numpy.random
 import math
 
+#doprint=0 # to print sometimes only 
+
 #numpy.random.seed(seed=0)
 
 def isvalid(c):
@@ -18,7 +20,8 @@ def isvalid(c):
     if math. isinf(v):
       return False
     return True
-    
+
+
 
 
 # Individual 
@@ -41,7 +44,7 @@ class idv:
     r_mut_flip   = .3
     r_mut_insert = .3
     r_mut_remove = .3
-    if (len(self.c)>50):
+    if (len(self.c)>100):
       r_mut_insert = .001
       r_mut_remove = 1
       
@@ -82,7 +85,11 @@ class idv:
             nc=nc[:pt]+nc[pt+2:]
         if (isvalid(nc)):
           self.c=nc
+          #print (doprint)
+          #if (doprint==2):
           print(str(self)+" - "+str(onemax(self)*100))
+          #doprint=0
+          #doprint+=1
           return
         else:
           i+=1
@@ -102,7 +109,7 @@ def onemax(idv):
     raise
   # Fitness is being closest to that value
   fit=-1000.1234
-  return ((abs(fit-v))/fit)
+  return ((abs(fit-v)))
                
 # tournament selection
 def selection(pop, scores, k=3):
@@ -169,18 +176,27 @@ def genetic_algorithm(objective, n_bits, n_iter, n_pop, r_cross, r_mut):
                 #  print(p)
         return [best, best_eval]
  
-# define the total iterations
-n_iter = 500
-# bits
-n_bits = 20
-# define the population size
-n_pop = 500
-# crossover rate
-r_cross = 0.01
-# mutation rate
-r_mut = 1.0 / float(n_bits)
-# perform the genetic algorithm search
-best, score = genetic_algorithm(onemax, n_bits, n_iter, n_pop, r_cross, r_mut)
-print('Done!')
-print('f(%s) = %f' % (best, score))
+
+
+# --------------------------------------------------------------------------
+def main():
+  # define the total iterations
+  n_iter = 500
+  # bits
+  n_bits = 20
+  # define the population size
+  n_pop = 500
+  # crossover rate
+  r_cross = 0.01
+  # mutation rate
+  r_mut = 1.0 / float(n_bits)
+  # perform the genetic algorithm search
+  best, score = genetic_algorithm(onemax, n_bits, n_iter, n_pop, r_cross, r_mut)
+  print('Done!')
+  print('f(%s) = %f' % (best, score))
+
+
+# --------------------------------------------------------------------------
+if __name__ == '__main__':
+  main()
 

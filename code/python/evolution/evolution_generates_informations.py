@@ -6,12 +6,19 @@
 
 import numpy.random
 import math
+import string
 
-#doprint=0 # to print sometimes only 
+doprint1=0 # to print sometimes only 
+doprint2=0 # to print sometimes only 
 
 #numpy.random.seed(seed=0)
 
 def isvalid(c):
+  global doprint1
+  if (doprint1==1000):
+    print("before test c is: "+str(c))
+    doprint1=0
+  doprint1+=1
   try:
     v=float(eval(c))
   except (SyntaxError, NameError, ValueError,TypeError,ZeroDivisionError,AttributeError,OverflowError) as e:
@@ -20,8 +27,10 @@ def isvalid(c):
     if math. isinf(v):
       return False
     return True
+  
 
-
+# List of all printable ascci chars:
+characters = string.ascii_letters + string.digits + string.punctuation
 
 
 # Individual 
@@ -39,8 +48,9 @@ class idv:
     n.c=self.c
     return n
   
-  
   def mutation(self,r_mut):
+    global characters
+    global doprint2
     r_mut_flip   = .3
     r_mut_insert = .3
     r_mut_remove = .3
@@ -65,31 +75,31 @@ class idv:
       if (not (i%4)): # No more than 4 alterations in a row
         nc=ncc
       r=numpy.random.choice(3, p=vpn)
-      if (r==0):
+      if (r==0): # Flip
         what=numpy.random.rand()
         if (what<r_mut_flip):
           pt = numpy.random.randint(len(nc))
           xr=numpy.random.randint(128)
           c=chr(ord(nc[pt])^(xr))
           nc=nc[:pt]+c+nc[pt:]
-        elif (r==1):
+        elif (r==1): # Insert
           pt = numpy.random.randint(len(nc))
-          xr=numpy.random.bytes(1)
-          try:
-            nc=nc[:pt]+str(xr.decode("utf-8"))+nc[pt:]
-          except UnicodeDecodeError:
-            pass
-        elif (r==2):
+          xr=numpy.random.choice(characters)
+          nc=nc[:pt]+xr+nc[pt:]
+          #try:
+          #  nc=nc[:pt]+str(xr.decode("utf-8"))+nc[pt:]
+          #except UnicodeDecodeError:
+          #  pass
+        elif (r==2): # remove
           if (len(nc)>2):
             pt = numpy.random.randint(len(nc)-2)
             nc=nc[:pt]+nc[pt+2:]
         if (isvalid(nc)):
           self.c=nc
-          #print (doprint)
-          #if (doprint==2):
-          print(str(self)+" - "+str(onemax(self)*100))
-          #doprint=0
-          #doprint+=1
+          if (doprint2==400):
+            print(str(self)+" : "+str(onemax(self)*100))
+            doprint2=0
+          doprint2+=1
           return
         else:
           i+=1
@@ -108,9 +118,10 @@ def onemax(idv):
     #print("Error string: "+str(nc))
     raise
   # Fitness is being closest to that value
-  fit=-1000.1234
+  fit=2.3542e9
   return ((abs(fit-v)))
-               
+
+
 # tournament selection
 def selection(pop, scores, k=3):
         # first random selection

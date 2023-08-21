@@ -15,6 +15,8 @@ def isvalid(c):
   except (SyntaxError, NameError, ValueError,TypeError,ZeroDivisionError,AttributeError,OverflowError) as e:
     return False
   else:
+    if math. isinf(v):
+      return False
     return True
     
 
@@ -91,7 +93,7 @@ class idv:
       self.c='1'
 
 
-# objective function
+# Fitness function
 def onemax(idv):
   try:
     v= float(eval(idv.c))
@@ -99,7 +101,8 @@ def onemax(idv):
     #print("Error string: "+str(nc))
     raise
   # Fitness is being closest to that value
-  return ((abs(0.12345678-v))/0.12345678)
+  fit=-1000.1234
+  return ((abs(fit-v))/fit)
                
 # tournament selection
 def selection(pop, scores, k=3):

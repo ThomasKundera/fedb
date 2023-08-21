@@ -14,11 +14,11 @@ doprint2=0 # to print sometimes only
 #numpy.random.seed(seed=0)
 
 def isvalid(c):
-  global doprint1
-  if (doprint1==1000):
-    print("before test c is: "+str(c))
-    doprint1=0
-  doprint1+=1
+  #global doprint1
+  #if (doprint1==1000):
+  #  print("b: "+str(c))
+  #  doprint1=0
+  #doprint1+=1
   try:
     v=float(eval(c))
   except (SyntaxError, NameError, ValueError,TypeError,ZeroDivisionError,AttributeError,OverflowError) as e:
@@ -52,11 +52,11 @@ class idv:
     global characters
     global doprint2
     r_mut_flip   = .3
-    r_mut_insert = .3
+    r_mut_insert = .4
     r_mut_remove = .3
     if (len(self.c)>100):
       r_mut_insert = .001
-      r_mut_remove = 1
+      r_mut_remove = .999
       
     i=0
     vp=[r_mut_flip,r_mut_insert,r_mut_remove]
@@ -96,14 +96,15 @@ class idv:
             nc=nc[:pt]+nc[pt+2:]
         if (isvalid(nc)):
           self.c=nc
-          if (doprint2==400):
-            print(str(self)+" : "+str(onemax(self)*100))
+          if (doprint2==1000):
+            print("a: "+str(self)+" : "+str(onemax(self)*100))
             doprint2=0
           doprint2+=1
           return
         else:
           i+=1
           #print(str(i)+" "+nc)
+      #if (i==90): print("Already 90 loops!")
     #print("ncc="+ncc+" nc="+nc+" self.c="+self.c)
     #print(str(self)+" - "+str(onemax(self)*100))
     if (not isvalid(self.c)):
@@ -160,6 +161,7 @@ def genetic_algorithm(objective, n_bits, n_iter, n_pop, r_cross, r_mut):
         best, best_eval = 0, objective(pop[0])
         # enumerate generations
         for gen in range(n_iter):
+                #print("genetic_algorithm(): gen: "+str(gen))
                 # evaluate all candidates in the population
                 scores = [objective(c) for c in pop]
                 # check for new best solution
@@ -198,7 +200,7 @@ def main():
   # define the population size
   n_pop = 500
   # crossover rate
-  r_cross = 0.01
+  r_cross = .05
   # mutation rate
   r_mut = 1.0 / float(n_bits)
   # perform the genetic algorithm search

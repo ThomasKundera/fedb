@@ -37,6 +37,20 @@ class Individual:
   def GetProba(self):
     return (self.genome.count(1)/100.)
 
+  def mate(self,other):
+    ng=BitArray()
+    for i in range(len(self.genome)):
+      #print([self.genome[i],other.genome[i]])
+      c=random.choice([self.genome[i],other.genome[i]])
+      if c:
+        ng.append(BitArray(bin='0b1'))
+      else:
+        ng.append(BitArray(bin='0b0'))
+    #  print(ng)
+    # FIXME: add random mutations
+    return Individual(GenomeMethod.kCopy,ng)
+
+
 
 class Generation:
   """
@@ -53,10 +67,34 @@ class Generation:
     return (s/self.size)
 
 
+  def ReproduceOne(self):
+    ng=[]
+    # Choose parents
+    # FIXME: here we can choose two times same parent
+    # None will die
+    p1=random.choice(self.pop)
+    p2=random.choice(self.pop)
+    while True:
+      child=p1.mate(p2)
+      if (random.random() < child.GetProba()):
+        # Child alive
+        break
+      #else:
+        #print ("failed: "+str(child.GetProba()))
+    return child
+
+  def Reproduce(self):
+    ng=[]
+    for i in range(self.size):
+      ng.append(self.ReproduceOne())
+    self.pop=ng
+
 
 def main():
   g=Generation(1000,GenomeMethod.kRandom)
-  print (100*g.GetPopAverageProba())
+  for i in range(100):
+    print (100*g.GetPopAverageProba())
+    g.Reproduce()
   
 
 # --------------------------------------------------------------------------

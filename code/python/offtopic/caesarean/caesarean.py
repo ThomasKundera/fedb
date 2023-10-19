@@ -12,7 +12,6 @@ from bitstring import BitArray
 
 # Perfect genome
 kParadiseGenome=BitArray("0xFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF")
-
 class GenomeMethod:
   kParadise=0
   kRandom=1
@@ -31,7 +30,7 @@ class Individual:
       case GenomeMethod.kParadise:
         self.genome=kParadiseGenome
       case GenomeMethod.kRandom:
-        self.genome=BitArray(random.getrandbits(128))
+        self.genome=BitArray(random.getrandbits(128).to_bytes(16,'big'))
       case GenomeMethod.kCopy:
         self.genome=genome
 
@@ -47,12 +46,17 @@ class Generation:
     self.size=size
     self.pop=[ Individual(method) for i in range(self.size) ]
 
-#  def
+  def GetPopAverageProba(self):
+    s=0
+    for ind in self.pop:
+      s+=ind.GetProba()
+    return (s/self.size)
 
 
 
 def main():
-  g=Generation()
+  g=Generation(1000,GenomeMethod.kRandom)
+  print (100*g.GetPopAverageProba())
   
 
 # --------------------------------------------------------------------------

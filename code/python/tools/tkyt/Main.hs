@@ -1,11 +1,11 @@
+{-# LANGUAGE OverloadedStrings #-}
 {-# LANGUAGE DeriveGeneric #-}
 
 module Main where
 import Data.Aeson
 import Data.Text (Text)
 import GHC.Generics
-
-data Person = Person { name :: Text, age :: Int } deriving Show
+import qualified Data.ByteString.Lazy as B
 
 data Ytpost = Ytpost {
     cid :: Text,
@@ -20,8 +20,13 @@ data Ytpost = Ytpost {
     time_parsed :: Float
 } deriving Generic
 
+
+instance FromJSON Ytpost
+
 main :: IO ()
 main = do
-        contents <- readFile "educative.txt"
-
-        putStrLn "Hello, Haskell!"
+        contents <- B.readFile "DR1qnvMDh4w.json"
+        let mm = decode contents :: Maybe Ytpost
+        case mm of
+             Nothing -> print "error parsing JSON"
+             Just m -> print "Maybe parsing JSON"

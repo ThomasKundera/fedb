@@ -1,1 +1,5 @@
 dist-newstyle
+CHANGELOG.md.save*
+Setup.hs.save*
+tkyt.cabal.save*
+

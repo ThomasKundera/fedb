@@ -57,7 +57,7 @@ library
   -- other-extensions:
 
   -- Other library packages from which modules are imported.
-  build-depends:       base ^>=4.13.0.0, aeson ^>=1.4.7.1
+  build-depends:       base ^>=4.13.0.0, aeson ^>=1.4.7.1, text ^>=1.2.4.0
 
   -- Directories containing source files.
   -- hs-source-dirs:
@@ -80,5 +80,5 @@ test-suite tkyt-test
   main-is:             MyLibTest.hs
 
   -- Test dependencies.
-  build-depends:       base ^>=4.13.0.0, aeson ^>=1.4.7.1
+  build-depends:       base ^>=4.13.0.0, aeson ^>=1.4.7.1, text ^>=1.2.4.0
 

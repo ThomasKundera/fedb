@@ -47,7 +47,7 @@ main = do
         let mm = decode contents :: Maybe YtpostSimple
         case mm of
              Nothing -> print "error parsing JSON"
-             Just m -> print "Maybe parsing JSON"
+             Just m -> print mm -- "Maybe parsing JSON" ++ "toto"
 
 
 {-

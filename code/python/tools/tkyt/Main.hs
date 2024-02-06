@@ -8,16 +8,16 @@ import GHC.Generics
 import qualified Data.ByteString.Lazy as B
 
 data YtpostSimple = YtpostSimple {
-    cid :: Text
---    text :: Text,
---    time :: Text,
---    author :: Text,
---    channel :: Text,
---    votes :: Text, -- Maybe int?
---    photo :: Text,
---    heart :: Text, -- Actually boolean
---    reply :: Text, -- Actually boolean
---    time_parsed :: Float
+    cid :: Text,
+    text :: Text,
+    time :: Text,
+    author :: Text,
+    channel :: Text,
+    votes :: Text, -- Maybe int?
+    photo :: Text,
+    heart :: Bool, -- Actually boolean
+    reply :: Bool, -- Actually boolean
+    time_parsed :: Float
 } deriving (Generic , Show)
 
 -- data Ytpostsimple = Ytpostsimple {

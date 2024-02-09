@@ -7,6 +7,7 @@ import Data.Text (Text)
 import GHC.Generics
 import qualified Data.ByteString.Lazy as B
 
+{-
 data YtpostSimple = YtpostSimple {
     cid :: Text,
     text :: Text,
@@ -19,10 +20,13 @@ data YtpostSimple = YtpostSimple {
     reply :: Bool, -- Actually boolean
     time_parsed :: Float
 } deriving (Generic , Show)
+-}
 
--- data Ytpostsimple = Ytpostsimple {
---     cid :: Text
--- } deriving (Generic , Show)
+data YtPostList = YtPostList[YtpostSimple]
+
+data YtpostSimple = YtpostSimple {
+     cid :: Text
+} deriving (Generic , Show)
 
 -- newtype Clist = Clist {unCmt :: [Ytpost]}
 
@@ -41,13 +45,19 @@ data YtpostSimple = YtpostSimple {
 instance FromJSON YtpostSimple
 
 
+instance FromJSON YtPostList where
+    parseJSON = \case
+        Object o -> (o .: "comments") >>= fmap YtPostList . parseJSON
+        x -> fail $ "unexpected json: " ++ show x
+
+
 main :: IO ()
 main = do
-        contents <- B.readFile "simpletest.json"
-        let mm = decode contents :: Maybe YtpostSimple
+        contents <- B.readFile "simpletest2.json"
+        let mm = decode contents :: Maybe YtPostList
         case mm of
-             Nothing -> print "error parsing JSON"
-             Just m -> print mm -- "Maybe parsing JSON" ++ "toto"
+            Nothing -> print "error parsing JSON"
+            Just m  -> print "Maybe parsing JSON"
 
 
 {-

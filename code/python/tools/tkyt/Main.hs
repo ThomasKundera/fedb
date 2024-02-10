@@ -4,7 +4,7 @@ module Main where
 
 import Data.Aeson
 import qualified Data.ByteString.Lazy as B
-import Data.Text (Text)
+import Data.Text (Text, splitOn)
 import GHC.Generics
 
 {-
@@ -22,37 +22,33 @@ data YtpostSimple = YtpostSimple {
 } deriving (Generic , Show)
 -}
 
-data YtPostList = YtPostList [YtpostSimple]
-    deriving (Show, Generic)
-
-data YtpostSimple = YtpostSimple
-    { cid :: Text
+data YtPostList = YtPostList
+    { comments :: [YtPostSimple]
     }
     deriving (Show, Generic)
 
-instance FromJSON YtpostSimple
+data YtPostSimple = YtPostSimple
+    { cid :: Text
+    , cidParent :: Maybe Text
+    }
+    deriving (Show, Generic)
 
 instance FromJSON YtPostList
 
--- newtype Clist = Clist {unCmt :: [Ytpost]}
-
--- data Comments = Comments {
---         clist :: Array[Ytpost]
--- }
--- instance FromJSON Comments
--- instance FromJSON Clist
-
--- instance FromJSON Clist where
---    parseJSON (Object o) = Clist <$> (o .: "Clist")
---    parseJSON v = typeMismatch "Clist" v
+instance FromJSON YtPostSimple where
+    parseJSON = withObject "Comment" $ \v -> do
+        fullCid <- v .: "cid"
+        let cidComponents = splitOn "." fullCid
+        case cidComponents of
+            [cid] -> pure $ YtPostSimple{cid = fullCid, cidParent = Nothing}
+            [parent, cid] -> pure $ YtPostSimple{cid = fullCid, cidParent = Just parent}
 
 main :: IO ()
 main = do
-    contents <- B.readFile "simpletest2.json"
-    let mm = decode contents :: Maybe YtPostList
-    case mm of
-        Nothing -> print "error parsing JSON"
-        Just m -> print "Maybe parsing JSON"
+    mPostList <- decodeFileStrict "simpletest2.json" :: IO (Maybe YtPostList)
+    case mPostList of
+        Nothing -> print "error in JSON"
+        Just postList -> print postList
 
 {-
 {

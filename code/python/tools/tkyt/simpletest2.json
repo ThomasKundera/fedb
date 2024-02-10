@@ -1,3 +1,7 @@
 {
-            "comments": [ {"cid": "UgwVfk4Uuvs9LmTlsIJ4AaABAg"} ]
+  "comments": [
+    {"cid": "UgwVfk4Uuvs9LmTlsIJ4AaABAg"},
+    {"cid": "abcdefg"},
+    {"cid": "abcdefg.vwxyz"}
+  ]
 }

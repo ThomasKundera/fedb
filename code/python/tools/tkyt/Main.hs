@@ -1,11 +1,11 @@
-{-# LANGUAGE OverloadedStrings #-}
 {-# LANGUAGE DeriveGeneric #-}
 
 module Main where
+
 import Data.Aeson
+import qualified Data.ByteString.Lazy as B
 import Data.Text (Text)
 import GHC.Generics
-import qualified Data.ByteString.Lazy as B
 
 {-
 data YtpostSimple = YtpostSimple {
@@ -22,14 +22,19 @@ data YtpostSimple = YtpostSimple {
 } deriving (Generic , Show)
 -}
 
-data YtPostList = YtPostList[YtpostSimple]
+data YtPostList = YtPostList [YtpostSimple]
+    deriving (Show, Generic)
 
-data YtpostSimple = YtpostSimple {
-     cid :: Text
-} deriving (Generic , Show)
+data YtpostSimple = YtpostSimple
+    { cid :: Text
+    }
+    deriving (Show, Generic)
+
+instance FromJSON YtpostSimple
+
+instance FromJSON YtPostList
 
 -- newtype Clist = Clist {unCmt :: [Ytpost]}
-
 
 -- data Comments = Comments {
 --         clist :: Array[Ytpost]
@@ -41,24 +46,13 @@ data YtpostSimple = YtpostSimple {
 --    parseJSON (Object o) = Clist <$> (o .: "Clist")
 --    parseJSON v = typeMismatch "Clist" v
 
-
-instance FromJSON YtpostSimple
-
-
-instance FromJSON YtPostList where
-    parseJSON = \case
-        Object o -> (o .: "comments") >>= fmap YtPostList . parseJSON
-        x -> fail $ "unexpected json: " ++ show x
-
-
 main :: IO ()
 main = do
-        contents <- B.readFile "simpletest2.json"
-        let mm = decode contents :: Maybe YtPostList
-        case mm of
-            Nothing -> print "error parsing JSON"
-            Just m  -> print "Maybe parsing JSON"
-
+    contents <- B.readFile "simpletest2.json"
+    let mm = decode contents :: Maybe YtPostList
+    case mm of
+        Nothing -> print "error parsing JSON"
+        Just m -> print "Maybe parsing JSON"
 
 {-
 {

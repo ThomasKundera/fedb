@@ -1,11 +1,11 @@
-{-# LANGUAGE OverloadedStrings #-}
 {-# LANGUAGE DeriveGeneric #-}
 
 module Main where
+
 import Data.Aeson
-import Data.Text (Text)
-import GHC.Generics
 import qualified Data.ByteString.Lazy as B
+import Data.Text (Text, splitOn)
+import GHC.Generics
 
 {-
 data YtpostSimple = YtpostSimple {
@@ -22,43 +22,33 @@ data YtpostSimple = YtpostSimple {
 } deriving (Generic , Show)
 -}
 
-data YtPostList = YtPostList[YtpostSimple]
+data YtPostList = YtPostList
+    { comments :: [YtPostSimple]
+    }
+    deriving (Show, Generic)
 
-data YtpostSimple = YtpostSimple {
-     cid :: Text
-} deriving (Generic , Show)
+data YtPostSimple = YtPostSimple
+    { cid :: Text
+    , cidParent :: Maybe Text
+    }
+    deriving (Show, Generic)
 
--- newtype Clist = Clist {unCmt :: [Ytpost]}
+instance FromJSON YtPostList
 
-
--- data Comments = Comments {
---         clist :: Array[Ytpost]
--- }
--- instance FromJSON Comments
--- instance FromJSON Clist
-
--- instance FromJSON Clist where
---    parseJSON (Object o) = Clist <$> (o .: "Clist")
---    parseJSON v = typeMismatch "Clist" v
-
-
-instance FromJSON YtpostSimple
-
-
-instance FromJSON YtPostList where
-    parseJSON = \case
-        Object o -> (o .: "comments") >>= fmap YtPostList . parseJSON
-        x -> fail $ "unexpected json: " ++ show x
-
+instance FromJSON YtPostSimple where
+    parseJSON = withObject "Comment" $ \v -> do
+        fullCid <- v .: "cid"
+        let cidComponents = splitOn "." fullCid
+        case cidComponents of
+            [cid] -> pure $ YtPostSimple{cid = fullCid, cidParent = Nothing}
+            [parent, cid] -> pure $ YtPostSimple{cid = fullCid, cidParent = Just parent}
 
 main :: IO ()
 main = do
-        contents <- B.readFile "simpletest2.json"
-        let mm = decode contents :: Maybe YtPostList
-        case mm of
-            Nothing -> print "error parsing JSON"
-            Just m  -> print "Maybe parsing JSON"
-
+    mPostList <- decodeFileStrict "simpletest2.json" :: IO (Maybe YtPostList)
+    case mPostList of
+        Nothing -> print "error in JSON"
+        Just postList -> print postList
 
 {-
 {

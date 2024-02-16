@@ -50,22 +50,4 @@ main = do
         Nothing -> print "error in JSON"
         Just postList -> print postList
 
-{-
-{
-    "comments": [
-        {
-            "cid": "UgwVfk4Uuvs9LmTlsIJ4AaABAg",
-            "text": "Pour voir des preuves",
-            "time": "il y a 2 mois (modifié)",
-            "author": "@LesicsFR",
-            "channel": "UC7XvuBMRYoBdjKPIBOxt6XQ",
-            "votes": "63",
-            "photo": "https://yt3.ggpht.com/ytc/AIf8zZQl_U_avM0A3JY3fpq79FHDK-QGVXdtQH2fPJEA=s176-c-k-c0x00ffffff-no-rj",
-            "heart": false,
-            "reply": false,
-            "time_parsed": 1700831647.498626
-        },
-        ...
-        ]
-}
--}
+

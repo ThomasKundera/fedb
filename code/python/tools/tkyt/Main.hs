@@ -45,9 +45,10 @@ instance FromJSON YtPostSimple where
 
 main :: IO ()
 main = do
-    mPostList <- decodeFileStrict "simpletest2.json" :: IO (Maybe YtPostList)
-    case mPostList of
+    mPostObj <- decodeFileStrict "simpletest2.json" :: IO (Maybe YtPostList)
+    -- let parents = [ cid x | x <- Just comments mPostObj ]
+    case mPostObj of
         Nothing -> print "error in JSON"
-        Just postList -> print postList
+        Just postObj -> print postObj
 
 

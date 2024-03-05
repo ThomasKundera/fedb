@@ -139,7 +139,7 @@ class Comment:
           with tag('p',klass='comment'):
             doc.asis(text2html(yattag.simpledoc.html_escape(self.text)))
 
-  def is_of_interest(self):
+  def is_from_tk(self):
     if (self.author == "@ThomasKundera"):
       return True
     if (self.author == "@ThomasKunderaBis"):
@@ -149,6 +149,12 @@ class Comment:
 
     return False
 
+  def has_tk(self):
+    if (self.is_from_tk()):
+      return True
+    if "ThomasKundera" in self.text:
+      return True
+    return False
 
   def __eq__(self, other):
     return (self.cid is other.cid)
@@ -180,16 +186,25 @@ class OneThread:
       with tag('div',klass='onethreadhead'):
         self.op.to_html(doc,tag,text,line)
         with tag('div',klass='onethreadcontent'):
+          self.subcoms.sort(reverse=True)
           for c in self.subcoms:
             c.to_html(doc,tag,text,line)
 
-  def is_of_interest(self):
-    if (self.op.is_of_interest()):
+  def has_tk(self):
+    if (self.op.has_tk()):
       return True
     for c in self.subcoms:
-      if c.is_of_interest():
+      if c.has_tk():
         return True
-    return False
+
+  def is_of_interest(self):
+    if (not self.has_tk()):
+      return False
+    if (len(self.subcoms) ==0):
+      return False
+
+    self.subcoms.sort(reverse=True)
+    return not self.subcoms[0].has_tk()
 
   def __str__(self):
     s=self.op.cid
@@ -247,7 +262,7 @@ class YTPage:
 
 # --------------------------------------------------------------------------
 def main():
-  ytp=YTPage('DR1qnvMDh4w')
+  ytp=YTPage('j2GXgMIYgzU')
   ytp.generate_page()
 
   # Wait end of queue

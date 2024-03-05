@@ -115,9 +115,6 @@ class Comment:
     self.channel=d['channel']
     self.votes=int(d['votes'])
     self.photo=d['photo']
-    pp=ProfilPict()
-    #pp.download(self.photo)
-    self.photofile=pp.url2fn(self.photo)
     self.heart=d['heart']
     self.reply=d['reply']
     self.time_parsed=float(d['time_parsed'])
@@ -125,7 +122,17 @@ class Comment:
     #print(self)
 
   def to_html(self,doc,tag,text,line):
-    with tag('table',klass='comment'):
+    pp=ProfilPict()
+    #pp.download(self.photo)
+    self.photofile=pp.url2fn(self.photo)
+    cclass='comment'
+
+    if (self.has_tk()):
+      cclass='fortkcomment'
+    if (self.is_from_tk()):
+      cclass='bytkcomment'
+
+    with tag('table',klass=cclass):
       with tag('tr'):
         with tag('td',klass='commentmeta'):
           doc.stag('img', src=self.photofile, klass='pp')
@@ -185,7 +192,10 @@ class OneThread:
     with tag('div',klass='onethread'):
       with tag('div',klass='onethreadhead'):
         self.op.to_html(doc,tag,text,line)
-        with tag('div',klass='onethreadcontent'):
+        with tag('button',type="button", klass="collapsible"):
+          line('span',"OPEN/CLOSE ("+str(len(self.subcoms))+" )")
+        #with tag('div',klass='onethreadcontent content'):
+        with tag('div',klass='content'):
           self.subcoms.sort(reverse=True)
           for c in self.subcoms:
             c.to_html(doc,tag,text,line)
@@ -252,10 +262,17 @@ class YTPage:
     with self.tag('html'):
       with self.tag('head'):
         self.doc.stag('link',href='style.css',rel="stylesheet", type="text/css")
+        # Local use of js files seeems not to work. We'll embed it
+        #with self.tag('script',src="script.js"):
+
       with self.tag('body'):
         for t in self.cthreads.values():
           t.to_html(self.doc, self.tag, self.text, self.line)
 
+          with self.tag('script'):
+            # Local use of js files seeems not to work. Lest embed it
+            with open("script.js") as f:
+              self.doc.asis(f.read())
 
     f=open(self.pid+".html","wt")
     f.write(yattag.indent(self.doc.getvalue(), indent_text = True))

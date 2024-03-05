@@ -23,6 +23,19 @@ table.comment {
     border: 1px solid;
 }
 
+table.bytkcomment {
+    width: 100%;
+    border: 1px solid;
+    background-color: #FFEEEE;
+}
+
+table.fortkcomment {
+    width: 100%;
+    border: 1px solid;
+    background-color: #EEEEFF;
+}
+
+
 td.commentmeta {
    width: 20%;
 }
@@ -30,3 +43,28 @@ td.commentmeta {
 p.comment {
     font-size: small;
 }
+
+
+.collapsible {
+  background-color: #777;
+  color: white;
+  cursor: pointer;
+  padding: 18px;
+  width: 100%;
+  border: none;
+  text-align: left;
+  outline: none;
+  font-size: 15px;
+}
+
+.active, .collapsible:hover {
+  background-color: #555;
+}
+
+.content {
+  padding: 0 18px;
+  display: none;
+  overflow: hidden;
+  background-color: #f1f1f1;
+}
+

@@ -286,6 +286,14 @@ class YTPage:
 
 # --------------------------------------------------------------------------
 def main():
+  mpage=[]
+  with open("ytvideos.dat","rt") as df:
+    for line in df.readlines():
+      mpage.append(line.strip())
+
+  print(mpage)
+  return
+
   ytp=YTPage('yMy3IsA59AM')
   ytp.generate_page()
 

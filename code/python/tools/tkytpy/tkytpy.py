@@ -56,7 +56,7 @@ class DownloadThreaded(metaclass=SingletonMeta):
   def worker(self):
       while True:
           item = self.q.get()
-          print(f'Working on {item}')
+          print(f'Working on {item} ( about '+str(self.q.qsize())+' elements remaining )')
           time.sleep(10)
           url,fn=item
           res = requests.get(url, stream = True)
@@ -125,7 +125,7 @@ class Comment:
     #https://www.youtube.com/watch?v=yMy3IsA59AM&lc=UgzA_dKyZo4qlzd-oHJ4AaABAg.A0Z4N7ArSTuA0b7A8oRG3j
     curl="https://www.youtube.com/watch?v="+yid+"&lc="+self.cid
     pp=ProfilPict()
-    #pp.download(self.photo)
+    pp.download(self.photo)
     self.photofile=pp.url2fn(self.photo)
     cclass='comment'
 
@@ -234,7 +234,7 @@ class YTPage:
     self.select_threads()
 
   def read_comments(self):
-    f = open(self.yid+'.json')
+    f = open(os.path.join('json',self.yid+'.json'))
     data= json.load(f)
 
     self.cthreads={}
@@ -276,15 +276,15 @@ class YTPage:
 
       with self.tag('script'):
         # Local use of js files seeems not to work. Lest embed it
-        with open("script.js") as f:
+        with open("html/script.js") as f:
           self.doc.asis(f.read())
 
-    f=open(self.yid+".html","wt")
+    f=open(os.path.join('html',self.yid+".html"),"wt")
     f.write(yattag.indent(self.doc.getvalue(), indent_text = True))
 
 # --------------------------------------------------------------------------
 def main():
-  ytp=YTPage('j2GXgMIYgzU')
+  ytp=YTPage('yMy3IsA59AM')
   ytp.generate_page()
 
   # Wait end of queue

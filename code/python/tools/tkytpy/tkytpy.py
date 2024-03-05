@@ -121,7 +121,9 @@ class Comment:
     #self.date=datetime.datetime.fromtimestamp(self.time_parsed)
     #print(self)
 
-  def to_html(self,doc,tag,text,line):
+  def to_html(self,yid,doc,tag,text,line):
+    #https://www.youtube.com/watch?v=yMy3IsA59AM&lc=UgzA_dKyZo4qlzd-oHJ4AaABAg.A0Z4N7ArSTuA0b7A8oRG3j
+    curl="https://www.youtube.com/watch?v="+yid+"&lc="+self.cid
     pp=ProfilPict()
     #pp.download(self.photo)
     self.photofile=pp.url2fn(self.photo)
@@ -135,11 +137,12 @@ class Comment:
     with tag('table',klass=cclass):
       with tag('tr'):
         with tag('td',klass='commentmeta'):
-          doc.stag('img', src=self.photofile, klass='pp')
+          doc.stag('img', alt='PP', src=self.photofile, klass='pp')
           doc.stag('br')
           line('span',self.author)
           doc.stag('br')
-          line('span',self.time)
+          with tag('a',href=curl):
+            text(self.time)
           doc.stag('br')
           line('span',self.myid)
         with tag('td',klass='commentcontent'):
@@ -188,17 +191,17 @@ class OneThread:
     self.subcoms.append(c)
     self.myid+=1
 
-  def to_html(self,doc,tag,text,line):
+  def to_html(self,yid,doc,tag,text,line):
     with tag('div',klass='onethread'):
       with tag('div',klass='onethreadhead'):
-        self.op.to_html(doc,tag,text,line)
+        self.op.to_html(yid,doc,tag,text,line)
         with tag('button',type="button", klass="collapsible"):
           line('span',"OPEN/CLOSE ("+str(len(self.subcoms))+" )")
-        #with tag('div',klass='onethreadcontent content'):
-        with tag('div',klass='content'):
+        with tag('div',klass='onethreadcontent content'):
+        #with tag('div',klass='content'):
           self.subcoms.sort(reverse=True)
           for c in self.subcoms:
-            c.to_html(doc,tag,text,line)
+            c.to_html(yid,doc,tag,text,line)
 
   def has_tk(self):
     if (self.op.has_tk()):
@@ -225,13 +228,13 @@ class OneThread:
 
 
 class YTPage:
-  def __init__(self,pid):
-    self.pid=pid
+  def __init__(self,yid):
+    self.yid=yid
     self.read_comments()
     self.select_threads()
 
   def read_comments(self):
-    f = open(self.pid+'.json')
+    f = open(self.yid+'.json')
     data= json.load(f)
 
     self.cthreads={}
@@ -264,17 +267,19 @@ class YTPage:
         self.doc.stag('link',href='style.css',rel="stylesheet", type="text/css")
         # Local use of js files seeems not to work. We'll embed it
         #with self.tag('script',src="script.js"):
+        with self.tag('title'):
+          self.text("Comment summary of "+self.yid)
 
       with self.tag('body'):
         for t in self.cthreads.values():
-          t.to_html(self.doc, self.tag, self.text, self.line)
+          t.to_html(self.yid,self.doc, self.tag, self.text, self.line)
 
-          with self.tag('script'):
-            # Local use of js files seeems not to work. Lest embed it
-            with open("script.js") as f:
-              self.doc.asis(f.read())
+      with self.tag('script'):
+        # Local use of js files seeems not to work. Lest embed it
+        with open("script.js") as f:
+          self.doc.asis(f.read())
 
-    f=open(self.pid+".html","wt")
+    f=open(self.yid+".html","wt")
     f.write(yattag.indent(self.doc.getvalue(), indent_text = True))
 
 # --------------------------------------------------------------------------

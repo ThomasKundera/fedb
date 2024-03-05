@@ -122,12 +122,12 @@ class Comment:
     #print(self)
 
   def to_html(self,doc,tag,text,line):
-    with tag('table'):
+    with tag('table',klass='comment'):
       with tag('tr'):
-        with tag('td'):
+        with tag('td',klass='commentmeta'):
           doc.stag('img', src=self.photofile, klass='pp')
           line('span',self.author)
-        with tag('td'):
+        with tag('td',klass='commentcontent'):
           line('p',self.text)
 
 
@@ -153,9 +153,9 @@ class OneThread:
 
 
   def to_html(self,doc,tag,text,line):
-    with tag('div'):
-      line('p',self.op.cid)
-      with tag('div'):
+    with tag('div',klass='onethreadhead'):
+      self.op.to_html(doc,tag,text,line)
+      with tag('div',klass='onethreadcontent'):
         for c in self.subcoms:
           c.to_html(doc,tag,text,line)
 

@@ -1,6 +1,21 @@
 img.pp {
-  border: 1px solid #ddd;
-  border-radius: 4px;
   padding: 5px;
-  width: 150px;
+  width: 60px;
+}
+
+div.onethreadhead {
+    padding: 5px;
+}
+
+div.onethreadcontent {
+    padding: 5px;
+}
+
+table.comment {
+    width: 100%;
+    border: 1px solid;
+}
+
+td.commentmeta {
+   width: 20%;
 }

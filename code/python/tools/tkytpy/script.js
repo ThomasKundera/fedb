@@ -12,3 +12,8 @@ for (i = 0; i < coll.length; i++) {
     }
   });
 }
+
+function setLocalStorage(name, value)
+{
+    localStorage.setItem(name,value);
+}

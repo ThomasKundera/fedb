@@ -133,6 +133,8 @@ class Comment:
       cclass='fortkcomment'
     if (self.is_from_tk()):
       cclass='bytkcomment'
+    with tag('button',onclick="setLocalStorage('"+self.cid+"','Seen')"):
+        text("toto")
 
     with tag('table',klass=cclass):
       with tag('tr'):

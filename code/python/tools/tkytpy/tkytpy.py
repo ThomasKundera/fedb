@@ -1,6 +1,102 @@
 #!/usr/bin/env python3
+import os
 import json
 import yattag
+import requests
+import shutil
+import threading
+import queue
+import time
+import datetime
+
+# From https://refactoring.guru/fr/design-patterns/singleton/python/example
+class SingletonMeta(type):
+    """
+    This is a thread-safe implementation of Singleton.
+    """
+
+    _instances = {}
+
+    _lock: threading.Lock = threading.Lock()
+    """
+    We now have a lock object that will be used to synchronize threads during
+    first access to the Singleton.
+    """
+
+    def __call__(cls, *args, **kwargs):
+        """
+        Possible changes to the value of the `__init__` argument do not affect
+        the returned instance.
+        """
+        # Now, imagine that the program has just been launched. Since there's no
+        # Singleton instance yet, multiple threads can simultaneously pass the
+        # previous conditional and reach this point almost at the same time. The
+        # first of them will acquire lock and will proceed further, while the
+        # rest will wait here.
+        with cls._lock:
+            # The first thread to acquire the lock, reaches this conditional,
+            # goes inside and creates the Singleton instance. Once it leaves the
+            # lock block, a thread that might have been waiting for the lock
+            # release may then enter this section. But since the Singleton field
+            # is already initialized, the thread won't create a new object.
+            if cls not in cls._instances:
+                instance = super().__call__(*args, **kwargs)
+                cls._instances[cls] = instance
+        return cls._instances[cls]
+
+
+class DownloadThreaded(metaclass=SingletonMeta):
+  lastuse: datetime.datetime = None
+
+  def __init__(self):
+    self.lastuse=datetime.datetime.now()
+    self.q=queue.Queue()
+    threading.Thread(target=self.worker, daemon=True).start()
+
+  def worker(self):
+      while True:
+          item = self.q.get()
+          print(f'Working on {item}')
+          time.sleep(10)
+          url,fn=item
+          res = requests.get(url, stream = True)
+          if res.status_code == 200:
+            with open(fn,'wb') as f:
+              shutil.copyfileobj(res.raw, f)
+            print('OK download: ',fn)
+          else:
+            print('FAILED download:'+url)
+
+          #print(f'Finished {item}')
+          self.q.task_done()
+
+  def queueDownload(self,url,fout):
+    self.q.put((url,fout))
+    return
+
+  def join(self):
+    self.q.join()
+
+
+class ProfilPict:
+  def __init__(self):
+    self.ppdir="profilepics"
+    try:
+      os.makedirs(self.ppdir, exist_ok=True)
+    except OSError as error:
+      print(error)
+
+  def url2fn(self,url):
+    fn=os.path.join(self.ppdir,url.split('/')[-1])
+    return(fn)
+
+  def download(self,url):
+    f=self.url2fn(url)
+    if (os.path.isfile(f)):
+      print("IMG already downloaded")
+      return
+    dt=DownloadThreaded()
+    dt.queueDownload(url,f)
 
 
 
@@ -17,10 +113,22 @@ class Comment:
     self.channel=d['channel']
     self.votes=int(d['votes'])
     self.photo=d['photo']
+    pp=ProfilPict()
+    pp.download(self.photo)
     self.heart=d['heart']
     self.reply=d['reply']
     self.time_parsed=float(d['time_parsed'])
     #print(self)
+
+  def to_html(self,doc,tag,text,line):
+    with tag('table'):
+      with tag('tr'):
+        with tag('td'):
+          line('span',self.photo)
+          line('span',self.author)
+        with tag('td'):
+          line('p',self.text)
+
 
   def __eq__(self, other):
     return (self.cid is other.cid)
@@ -46,9 +154,9 @@ class OneThread:
   def to_html(self,doc,tag,text,line):
     with tag('div'):
       line('p',self.op.cid)
-      with tag('ul'):
+      with tag('div'):
         for c in self.subcoms:
-          line('li',c.cid)
+          c.to_html(doc,tag,text,line)
 
 
   def __str__(self):
@@ -80,7 +188,7 @@ class YTPage:
       else:
         self.cthreads[c.cid]=OneThread(c)
       i+=1
-      if i>=100: break # FIXME for tests
+      if i>=5: break
 
 
   def generate_page(self):
@@ -94,13 +202,17 @@ class YTPage:
 
 
     f=open(self.pid+".html","wt")
-    f.write(self.doc.getvalue())
-
+    f.write(yattag.indent(self.doc.getvalue(), indent_text = True))
 
 # --------------------------------------------------------------------------
 def main():
   ytp=YTPage('DR1qnvMDh4w')
   ytp.generate_page()
+
+  # Wait end of queue
+  dt=DownloadThreaded()
+  dt.join()
+
   return
 
   

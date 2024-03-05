@@ -114,7 +114,8 @@ class Comment:
     self.votes=int(d['votes'])
     self.photo=d['photo']
     pp=ProfilPict()
-    pp.download(self.photo)
+    #pp.download(self.photo)
+    self.photofile=pp.url2fn(self.photo)
     self.heart=d['heart']
     self.reply=d['reply']
     self.time_parsed=float(d['time_parsed'])
@@ -124,7 +125,7 @@ class Comment:
     with tag('table'):
       with tag('tr'):
         with tag('td'):
-          line('span',self.photo)
+          doc.stag('img', src=self.photofile, klass='pp')
           line('span',self.author)
         with tag('td'):
           line('p',self.text)
@@ -188,14 +189,15 @@ class YTPage:
       else:
         self.cthreads[c.cid]=OneThread(c)
       i+=1
-      if i>=5: break
-
+      if i>=100: break
 
   def generate_page(self):
     self.doc, self.tag, self.text, self.line = yattag.Doc().ttl()
     self.doc.asis('<!DOCTYPE html>')
 
     with self.tag('html'):
+      with self.tag('head'):
+        self.doc.stag('link',href='style.css',rel="stylesheet", type="text/css")
       with self.tag('body'):
         for t in self.cthreads.values():
           t.to_html(self.doc, self.tag, self.text, self.line)

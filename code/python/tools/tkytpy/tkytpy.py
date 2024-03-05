@@ -113,7 +113,7 @@ class Comment:
     self.time=d['time']
     self.author=d['author']
     self.channel=d['channel']
-    self.votes=int(d['votes'])
+    self.votes=d['votes']
     self.photo=d['photo']
     self.heart=d['heart']
     self.reply=d['reply']
@@ -233,11 +233,20 @@ class YTPage:
   def __init__(self,yid):
     self.yid=yid
     self.read_comments()
+    if not (self.success): return
     self.select_threads()
 
   def read_comments(self):
-    f = open(os.path.join('json',self.yid+'.json'))
-    data= json.load(f)
+    self.success=False
+    try:
+     f=open(os.path.join('json',self.yid+'.json'))
+    except FileNotFoundError:
+      return
+    try:
+      data= json.load(f)
+    except json.decoder.JSONDecodeError:
+      return
+    self.success=True
 
     self.cthreads={}
 
@@ -291,11 +300,10 @@ def main():
     for line in df.readlines():
       mpage.append(line.strip())
 
-  print(mpage)
-  return
-
-  ytp=YTPage('yMy3IsA59AM')
-  ytp.generate_page()
+  for page in mpage:
+    ytp=YTPage(page)
+    if (ytp.success):
+      ytp.generate_page()
 
   # Wait end of queue
   dt=DownloadThreaded()

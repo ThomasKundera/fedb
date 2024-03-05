@@ -98,7 +98,8 @@ class ProfilPict:
     dt=DownloadThreaded()
     dt.queueDownload(url,f)
 
-
+def text2html(txt):
+  return (txt.replace('\n','<br/>\n'))
 
 class Comment:
   def __init__(self,d):
@@ -109,6 +110,7 @@ class Comment:
     else:
       self.parent=None
     self.text=d['text']
+    self.time=d['time']
     self.author=d['author']
     self.channel=d['channel']
     self.votes=int(d['votes'])
@@ -119,6 +121,7 @@ class Comment:
     self.heart=d['heart']
     self.reply=d['reply']
     self.time_parsed=float(d['time_parsed'])
+    #self.date=datetime.datetime.fromtimestamp(self.time_parsed)
     #print(self)
 
   def to_html(self,doc,tag,text,line):
@@ -126,16 +129,33 @@ class Comment:
       with tag('tr'):
         with tag('td',klass='commentmeta'):
           doc.stag('img', src=self.photofile, klass='pp')
+          doc.stag('br')
           line('span',self.author)
+          doc.stag('br')
+          line('span',self.time)
+          doc.stag('br')
+          line('span',self.myid)
         with tag('td',klass='commentcontent'):
-          line('p',self.text)
+          with tag('p',klass='comment'):
+            doc.asis(text2html(yattag.simpledoc.html_escape(self.text)))
+
+  def is_of_interest(self):
+    if (self.author == "@ThomasKundera"):
+      return True
+    if (self.author == "@ThomasKunderaBis"):
+      return True
+    if (self.author == "@ThomasKunderaTer"):
+      return True
+
+    return False
 
 
   def __eq__(self, other):
     return (self.cid is other.cid)
 
   def __lt__(self, other):
-    return (self.time_parsed < other.time_parsed)
+    #return (self.time_parsed < other.time_parsed)
+    return (self.myid < other.myid)
 
   def __str__(self):
     s="cid: "+self.cid
@@ -147,18 +167,29 @@ class OneThread:
   def __init__(self,parent):
     self.op=parent
     self.subcoms=[]
+    self.op.myid=0
+    self.myid=1
 
   def append(self,c):
+    c.myid=self.myid
     self.subcoms.append(c)
-
+    self.myid+=1
 
   def to_html(self,doc,tag,text,line):
-    with tag('div',klass='onethreadhead'):
-      self.op.to_html(doc,tag,text,line)
-      with tag('div',klass='onethreadcontent'):
-        for c in self.subcoms:
-          c.to_html(doc,tag,text,line)
+    with tag('div',klass='onethread'):
+      with tag('div',klass='onethreadhead'):
+        self.op.to_html(doc,tag,text,line)
+        with tag('div',klass='onethreadcontent'):
+          for c in self.subcoms:
+            c.to_html(doc,tag,text,line)
 
+  def is_of_interest(self):
+    if (self.op.is_of_interest()):
+      return True
+    for c in self.subcoms:
+      if c.is_of_interest():
+        return True
+    return False
 
   def __str__(self):
     s=self.op.cid
@@ -172,6 +203,7 @@ class YTPage:
   def __init__(self,pid):
     self.pid=pid
     self.read_comments()
+    self.select_threads()
 
   def read_comments(self):
     f = open(self.pid+'.json')
@@ -189,7 +221,14 @@ class YTPage:
       else:
         self.cthreads[c.cid]=OneThread(c)
       i+=1
-      if i>=100: break
+      #if i>=100: break
+
+  def select_threads(self):
+    newthreads={}
+    for k,v in self.cthreads.items():
+      if v.is_of_interest():
+        newthreads[k]=v
+    self.cthreads=newthreads
 
   def generate_page(self):
     self.doc, self.tag, self.text, self.line = yattag.Doc().ttl()

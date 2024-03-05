@@ -3,12 +3,19 @@ img.pp {
   width: 60px;
 }
 
+div.onethread {
+    border: 3px solid;
+    border-color: #FF00AA;
+    padding: 5px;
+}
+
 div.onethreadhead {
     padding: 5px;
 }
 
 div.onethreadcontent {
     padding: 5px;
+    padding-left:20px;
 }
 
 table.comment {
@@ -18,4 +25,8 @@ table.comment {
 
 td.commentmeta {
    width: 20%;
+}
+
+p.comment {
+    font-size: small;
 }

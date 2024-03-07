@@ -93,7 +93,7 @@ class ProfilPict:
   def download(self,url):
     f=self.url2fn(url)
     if (os.path.isfile(f)):
-      print("IMG already downloaded")
+      #print("IMG already downloaded")
       return
     dt=DownloadThreaded()
     dt.queueDownload(url,f)
@@ -158,8 +158,27 @@ class Comment:
       return True
     if (self.author == "@ThomasKunderaTer"):
       return True
-
     return False
+
+  def is_from_skeptics(self):
+    if (self.author == "@bhromur"):
+      return True
+    if (self.author == "@astrorion33"):
+      return True
+    if (self.author == "@PierreBrandominiBrandomini"):
+      return True
+    if (self.author == "@guerrac1515"):
+      return True
+    if (self.author == "@lecologieenquestions191"):
+      return True
+    return False
+
+  def is_from_sc_tk(self):
+   if (self.is_from_tk()):
+     return True
+   if (self.is_from_skeptics()):
+     return True
+   return False
 
   def has_tk(self):
     if (self.is_from_tk()):
@@ -219,7 +238,7 @@ class OneThread:
       return False
 
     self.subcoms.sort(reverse=True)
-    return not self.subcoms[0].has_tk()
+    return not self.subcoms[0].is_from_sc_tk()
 
   def __str__(self):
     s=self.op.cid
@@ -256,7 +275,7 @@ class YTPage:
       if c.parent and (c.parent in self.cthreads):
         self.cthreads[c.parent].append(c)
       elif c.cid in self.cthreads:
-        print("WARNING")
+        print("WARNING: "+c.cid)
       else:
         self.cthreads[c.cid]=OneThread(c)
       i+=1

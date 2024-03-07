@@ -18,12 +18,12 @@ for yid in `cat ytvideos.dat`; do
         epm=`stat -c "%W" $fout`
         deltat=`echo "$now - $epm" | bc`
         #echo $now $epm $deltat
-        if [ $deltat -gt 36000 ]; then
+        if [ $deltat -gt 3600000 ]; then
             echo "Updating file ( $deltat )"
-        else
-            echo "File is recent enough"
             youtube-comment-downloader -p --youtubeid $yid --output $fout
             sleep 10
+        else
+            echo "File is recent enough"
         fi
     fi
 done

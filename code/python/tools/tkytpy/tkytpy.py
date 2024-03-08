@@ -9,6 +9,10 @@ import queue
 import time
 import datetime
 
+skeptdic={}
+
+
+
 # From https://refactoring.guru/fr/design-patterns/singleton/python/example
 class SingletonMeta(type):
     """
@@ -161,15 +165,7 @@ class Comment:
     return False
 
   def is_from_skeptics(self):
-    if (self.author == "@bhromur"):
-      return True
-    if (self.author == "@astrorion33"):
-      return True
-    if (self.author == "@PierreBrandominiBrandomini"):
-      return True
-    if (self.author == "@guerrac1515"):
-      return True
-    if (self.author == "@lecologieenquestions191"):
+    if self.author in skeptdic:
       return True
     return False
 
@@ -312,8 +308,15 @@ class YTPage:
     f=open(os.path.join('html',self.yid+".html"),"wt")
     f.write(yattag.indent(self.doc.getvalue(), indent_text = True))
 
+def fillskepdict():
+   with open("skeptics.dat","rt") as f:
+    for line in f.readlines():
+      skeptdic[line.strip()]=line.strip()
+
+
 # --------------------------------------------------------------------------
 def main():
+  fillskepdict()
   mpage=[]
   with open("ytvideos.dat","rt") as df:
     for line in df.readlines():

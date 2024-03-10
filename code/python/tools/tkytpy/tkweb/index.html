@@ -10,6 +10,43 @@
     <main>
         <h1>YT comments manager</h1>
     </main>
-	<script src="index.js"></script>
+
+<form id="userinfo">
+  <div>
+    <label for="username">Enter your name:</label>
+    <input type="text" id="username" name="username" value="Dominic" />
+  </div>
+
+  <input type="submit" value="Submit" />
+</form>
+
+
+  <script>
+  const form = document.querySelector("#userinfo");
+
+async function sendData() {
+  // Associate the FormData object with the form element
+  const formData = new FormData(form);
+
+  try {
+    const response = await fetch("http://localhost:8000/post", {
+      method: "POST",
+      // Set the FormData instance as the request body
+      body: formData,
+    });
+    console.log(await response.json());
+  } catch (e) {
+    console.error(e);
+  }
+}
+
+// Take over form submission
+form.addEventListener("submit", (event) => {
+  event.preventDefault();
+  sendData();
+});
+</script>
+
+
   </body>
 </html>

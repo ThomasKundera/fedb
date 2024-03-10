@@ -36,8 +36,6 @@ class TKYTGlobal:
     with self.tag('html'):
       with self.tag('head'):
         self.doc.stag('link',href='style.css',rel="stylesheet", type="text/css")
-        with self.tag('script', src='script.js'):
-          self.text()
         with self.tag('title'):
           self.text("YT comment manager - Main page")
 
@@ -46,6 +44,11 @@ class TKYTGlobal:
           self.text("YT comment manager - Main page")
 
       self.videos.to_html(self.doc, self.tag, self.text, self.line)
+      with self.tag('form', action = ""):
+        self.doc.input(name = 'title', type = 'text')
+
+      with self.tag('script', src='script.js'):
+        self.text()
 
     return (yattag.indent(self.doc.getvalue(), indent_text = True))
 
@@ -54,12 +57,21 @@ class Handler(http.server.SimpleHTTPRequestHandler):
     super().__init__(*args, directory=DIRECTORY, **kwargs)
 
   def do_GET(self):
+    super().do_GET()
+    return
     self.send_response(200)
     self.send_header("Content-type", "text/html")
     self.end_headers()
 
     self.wfile.write(bytes(gtkyp.return_page(self.path), "utf-8"))
+    self._set_response()
+    self.wfile.write("POST request for {}".format(self.path).encode('utf-8'))
 
+  def do_POST(self):
+    print("do_POST hit")
+    content_length = int(self.headers['Content-Length']) # <--- Gets the size of data
+    post_data = self.rfile.read(content_length) # <--- Gets the data itself
+    print(post_data)
 
 
 def runserver():

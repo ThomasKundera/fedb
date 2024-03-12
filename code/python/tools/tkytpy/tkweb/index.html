@@ -11,10 +11,10 @@
         <h1>YT comments manager</h1>
     </main>
 
-<form id="userinfo">
+<form id="addytvideo">
   <div>
-    <label for="username">Enter your name:</label>
-    <input type="text" id="username" name="username" value="Dominic" />
+    <label for="ytid">YT video link or ID:</label>
+    <input type="text" id="ytid" name="ytid" value="" />
   </div>
 
   <input type="submit" value="Submit" />
@@ -22,9 +22,9 @@
 
 
   <script>
-  const form = document.querySelector("#userinfo");
+  const form = document.querySelector("#addytvideo");
 
-async function sendData() {
+async function sendData2() {
   // Associate the FormData object with the form element
   const formData = new FormData(form);
 
@@ -39,6 +39,28 @@ async function sendData() {
     console.error(e);
   }
 }
+
+async function sendData() {
+  // Associate the FormData object with the form element
+  const formData = new FormData(form);
+
+  try {
+    const response = await fetch("http://localhost:8000/post", {
+      method: 'POST',
+      headers: {
+        'Accept': 'application/json',
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify((Object.fromEntries(formData)))
+    });
+    console.log(await response.json());
+  } catch (e) {
+    console.error(e);
+  }
+}
+
+
+
 
 // Take over form submission
 form.addEventListener("submit", (event) => {

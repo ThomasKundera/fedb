@@ -1,22 +1,17 @@
-async function sendData(data) {
-  // Construct a FormData instance
-  const formData = new FormData();
+const form = document.querySelector("#addytvideo");
 
-  // Add a text field
-  formData.append("name", "Pomegranate");
-
-  // Add a file
-  const selection = await window.showOpenFilePicker();
-  if (selection.length > 0) {
-    const file = await selection[0].getFile();
-    formData.append("file", file);
-  }
+async function sendData() {
+  // Associate the FormData object with the form element
+  const formData = new FormData(form);
 
   try {
-    const response = await fetch("https://example.org/post", {
-      method: "POST",
-      // Set the FormData instance as the request body
-      body: formData,
+    const response = await fetch("http://localhost:8000/post", {
+      method: 'POST',
+      headers: {
+        'Accept': 'application/json',
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify((Object.fromEntries(formData)))
     });
     console.log(await response.json());
   } catch (e) {
@@ -24,5 +19,8 @@ async function sendData(data) {
   }
 }
 
-const send = document.querySelector("#send");
-send.addEventListener("click", sendData);
+// Take over form submission
+form.addEventListener("submit", (event) => {
+  event.preventDefault();
+  sendData();
+});

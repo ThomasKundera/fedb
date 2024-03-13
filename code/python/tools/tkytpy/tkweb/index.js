@@ -1,3 +1,18 @@
+
+function populateVideoList(obj) {
+  const videodiv = document.querySelector("#videodiv");
+  videodiv.innerHTML = "";
+  const yidlist = obj.yidlist;
+
+  for (const yid of yidlist) {
+    const myp = document.createElement("p");
+
+    myp.textContent = yid;
+    videodiv.appendChild(myp);
+  }
+}
+
+
 const form = document.querySelector("#addytvideo");
 
 async function sendData() {
@@ -13,7 +28,10 @@ async function sendData() {
       },
       body: JSON.stringify((Object.fromEntries(formData)))
     });
-    console.log(await response.json());
+    const yidtext = await response.text();
+    const yidjson=JSON.parse(yidtext);
+    populateVideoList(yidjson);
+
   } catch (e) {
     console.error(e);
   }

@@ -20,12 +20,17 @@ class YTVideoList:
     self.videos={}
 
   def add(self,v):
-    self.videos[v.yid]=yid
+    self.videos[v.yid]=v
 
   def to_html(self,doc,tag,text,line):
     for v in  self.videos:
       with tag('p'):
         text(v.yid)
+  def to_dict(self):
+    l=[]
+    for v in self.videos.values():
+      l.append(v.yid)
+    return  {'yidlist': l}
 
 class TKYTGlobal:
   def __init__(self):
@@ -54,6 +59,12 @@ class TKYTGlobal:
 
     return (yattag.indent(self.doc.getvalue(), indent_text = True))
 
+  def get_video_dict(self):
+    return self.videos.to_dict()
+
+  def add_video(self,v):
+    self.videos.add(v)
+
 class Handler(http.server.SimpleHTTPRequestHandler):
   def __init__(self, *args, **kwargs):
     super().__init__(*args, directory=DIRECTORY, **kwargs)
@@ -71,37 +82,21 @@ class Handler(http.server.SimpleHTTPRequestHandler):
 
 
   def do_POST(self):
-    print ("MY SERVER: I got a POST request.")
-    if (True): #self.path == '/verify':
-        print ("MY SERVER: The POST request is for the /verify URL.")
+    print ("POST request: "+self.path)
+    content_length = int(self.headers['Content-Length'])
+    post_data_bytes = self.rfile.read(content_length)
+    print ("Received data:\n", post_data_bytes)
 
-        content_length = int(self.headers['Content-Length'])
-        post_data_bytes = self.rfile.read(content_length)
-        print ("MY SERVER: The post data I received from the request has following data:\n", post_data_bytes)
+    post_data_str = post_data_bytes.decode("UTF-8")
+    js=json.loads(post_data_str)
 
-        post_data_str = post_data_bytes.decode("UTF-8")
-        js=json.loads(post_data_str)
+    gtkyp.add_video(YTVideo(js['ytid']))
 
-        print(js)
-        jsr=json.dumps({'coucou': 'toto'})
-        self.send_response(200)
-        self.send_header('Content-type', 'application/json')
-        self.end_headers()
-        self.wfile.write(jsr.encode(encoding='utf_8'))
-
-
-  def do_POST_3(self):
-    print("do_POST hit")
-    length = int(self.headers['Content-Length'])
-    postvars = urllib.parse.parse_qs(self.rfile.read(length), keep_blank_values=1)
-
-    print(postvars)
-
-  def do_POST_2(self):
-    print("do_POST hit")
-    content_length = int(self.headers['Content-Length']) # <--- Gets the size of data
-    post_data = self.rfile.read(content_length) # <--- Gets the data itself
-    print(post_data)
+    jsr=json.dumps(gtkyp.get_video_dict())
+    self.send_response(200)
+    self.send_header('Content-type', 'application/json')
+    self.end_headers()
+    self.wfile.write(jsr.encode(encoding='utf_8'))
 
 
 def runserver():

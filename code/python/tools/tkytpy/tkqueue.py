@@ -66,6 +66,7 @@ class QueuWork(metaclass=SingletonMeta):
           item.run()
           self.q.task_done()
           time.sleep(10)
+          del self.taskdict[item.tid]
 
   def add(self,item):
     if item.tid in self.taskdict:

@@ -4,15 +4,59 @@ import socketserver
 import yattag
 import urllib
 import json
+import requests
+import asyncio
+import time
+
+import tkqueue
+
+from tksecrets import google_api_key
+from googleapiclient.discovery import build
 
 PORT = 8000
 DIRECTORY = "/var/tkweb"
 
 
 
+
+def valid_url(url):
+  r = requests.head(url)
+  return(r.status_code == 200)
+
 class YTVideo:
   def __init__(self,yid):
-    self.yid=yid
+    self.valid=False
+    self.yid=yid.strip()
+    self.url='https://www.youtube.com/watch?v='+self.yid
+    if not self.is_valid_id():
+      print("Not valid yid:"+self.yid)
+      return
+    self.valid=True
+    # Filling with temporary data
+    self.populate_variables_dummy()
+    # Queue filling with real data asynchronously
+    task=tkqueue.TkTask('populate:'+self.yid,self.populate_variables_from_youtube)
+    tkqueue.QueuWork().add(task)
+    #asyncio.run(self.populate_variables_from_youtube())
+
+  def is_valid_id(self):
+    if (len(self.yid) != 11): return False
+    return valid_url(self.url)
+
+  def get_data(self):
+    request = gtkyp.youtube.videos().list(part='snippet,statistics', id=self.yid)
+    self.rawytdata = request.execute()
+
+  def populate_variables_dummy(self):
+    self.populated=False
+    self.title="downloading..."
+    return
+
+  def populate_variables_from_youtube(self):
+    self.get_data()
+    self.title=self.rawytdata['items'][0]['snippet']['title']
+    self.populated=True
+    return
 
 
 class YTVideoList:
@@ -35,6 +79,7 @@ class YTVideoList:
 class TKYTGlobal:
   def __init__(self):
     self.videos=YTVideoList()
+    self.youtube = build('youtube','v3',developerKey=google_api_key)
     return
 
   def return_page(self,path):
@@ -109,9 +154,11 @@ def runserver():
 def main():
   global gtkyp
   gtkyp=TKYTGlobal()
+  #YTVideo('BHa4AJwZDZg')
   runserver()
-  
+  tkqueue.QueuWork().join()
+
 # --------------------------------------------------------------------------
 if __name__ == '__main__':
-        main()
+  main()
         

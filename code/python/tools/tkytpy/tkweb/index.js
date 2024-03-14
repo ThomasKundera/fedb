@@ -2,14 +2,18 @@
 function populateVideoList(obj) {
   const videodiv = document.querySelector("#videodiv");
   videodiv.innerHTML = "";
-  const yidlist = obj.yidlist;
+  const ytvlist = obj.ytvlist;
 
-  for (const yid of yidlist) {
-    const myp = document.createElement("p");
-
-    myp.textContent = yid;
-    videodiv.appendChild(myp);
+  const myli = document.createElement("li");
+  for (const ytv of ytvlist) {
+    const myul = document.createElement("ul");
+    const mya = document.createElement("a");
+    mya.textContent = ytv.title;
+    mya.setAttribute('href',ytv.url)
+    myul.appendChild(mya)
+    myli.appendChild(myul)
   }
+  videodiv.appendChild(myli);
 }
 
 

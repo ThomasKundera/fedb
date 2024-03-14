@@ -17,10 +17,9 @@ PORT = 8000
 DIRECTORY = "/var/tkweb"
 
 
-
-
 def valid_url(url):
   r = requests.head(url)
+  print(r)
   return(r.status_code == 200)
 
 class YTVideo:
@@ -46,17 +45,32 @@ class YTVideo:
   def get_data(self):
     request = gtkyp.youtube.videos().list(part='snippet,statistics', id=self.yid)
     self.rawytdata = request.execute()
+    if len(self.rawytdata['items']) != 1:
+      self.valid=False
+
 
   def populate_variables_dummy(self):
     self.populated=False
-    self.title="downloading..."
+    self.title=self.url
     return
 
   def populate_variables_from_youtube(self):
     self.get_data()
+    if not self.valid:
+      return
     self.title=self.rawytdata['items'][0]['snippet']['title']
     self.populated=True
-    return
+
+
+  def get_dict(self):
+    return {
+      'yid'  : self.yid,
+      'url'  : self.url,
+      'title': self.title
+      }
+
+  def __str__(self):
+    return self.yid
 
 
 class YTVideoList:
@@ -64,17 +78,22 @@ class YTVideoList:
     self.videos={}
 
   def add(self,v):
-    self.videos[v.yid]=v
+    if (v.valid):
+      self.videos[v.yid]=v
+    else:
+      print("Not adding invalid video: "+str(v))
 
   def to_html(self,doc,tag,text,line):
     for v in  self.videos:
       with tag('p'):
         text(v.yid)
+
   def to_dict(self):
     l=[]
     for v in self.videos.values():
-      l.append(v.yid)
-    return  {'yidlist': l}
+      if v.valid:
+        l.append(v.get_dict())
+    return  {'ytvlist': l}
 
 class TKYTGlobal:
   def __init__(self):

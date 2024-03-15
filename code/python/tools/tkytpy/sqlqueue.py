@@ -1,5 +1,8 @@
 #!/usr/bin/env python3
 import time
+import sqlalchemy
+from sqlalchemy.orm import sessionmaker
+from sqlalchemy.orm import scoped_session
 
 from tksecrets import localsqldb_pass
 import tkqueue
@@ -22,14 +25,53 @@ class TkSqlTask(tkqueue.TkTask):
 # without worrying of multitheads (hoppefully)
 class SqlQueue(tkqueue.QueueWork):
   def __init__(self):
-    sqlproto='mysql+mysqlconnector'
-    sqluser='tkyt'
-    sqlstring = sqlproto+'://'+sqluser+'@'+localsqldb_pass+'@localhost/tkyt'
-    self.engine = create_engine(sqlstring, echo=True)
+    db_url = sqlalchemy.engine.URL.create(
+      drivername="mysql+mysqlconnector",
+      username="tkyt",
+      password=localsqldb_pass,
+      host="127.0.0.1",
+      database="tkyt",
+    )
+    self.engine = sqlalchemy.create_engine(db_url, echo=True)
     session_factory = sessionmaker(bind=self.engine)
-    mksession = scoped_session(session_factory)
-    self.dbsession=mksession()
+    self.mksession = scoped_session(session_factory)
     super().__init__()
 
   def do_work(self,item):
-    item.run(self.dbsession)
+    dbsession=mksession()
+    item.run(dbsession)
+
+  def close(self):
+     self.engine.dispose()
+
+
+def classtest():
+  from sqlalchemy.ext.declarative import declarative_base
+  Base = declarative_base(bind=SqlQueue().engine)
+  Base.metadata.create_all()
+
+def directtest():
+  sqlproto='mysql+mysqlconnector'
+  sqluser='tkyt'
+  connection_url = sqlalchemy.engine.URL.create(
+    drivername="mysql+mysqlconnector",
+    username="tkyt",
+    password=localsqldb_pass,
+    host="127.0.0.1",
+    database="tkyt",
+  )
+  engine = sqlalchemy.create_engine(connection_url, echo=True)
+  from sqlalchemy.ext.declarative import declarative_base
+  Base = declarative_base(bind=engine)
+  Base.metadata.create_all()
+
+# --------------------------------------------------------------------------
+def main():
+  logging.debug("sqlqueue test: START")
+  #directtest()
+  classtest()
+  logging.debug("sqlqueue test: END")
+
+# --------------------------------------------------------------------------
+if __name__ == '__main__':
+  main()

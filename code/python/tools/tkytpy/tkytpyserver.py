@@ -2,6 +2,7 @@
 import http.server
 import socketserver
 
+
 import logging, sys
 logging.basicConfig(stream=sys.stderr, level=logging.DEBUG)
 
@@ -9,6 +10,7 @@ class HttpHandler(http.server.SimpleHTTPRequestHandler):
   DIRECTORY = "/var/tkweb"
   def __init__(self, *args, **kwargs):
     super().__init__(*args, directory=HttpHandler.DIRECTORY, **kwargs)
+
 
   def do_GET(self):
     super().do_GET()

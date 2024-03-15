@@ -5,14 +5,13 @@ import mysql.connector
 
 import tksecrets
 
-#from sqlalchemy import create_engine
-#connection_string = "mysql+mysqlconnector://user1:pscale_pw_abc123@us-east.connect.psdb.cloud:3306/sqlalchemy"
-#engine = create_engine(connection_string, echo=True)
+from sqlalchemy import create_engine
 
-cnx = mysql.connector.connect(user='tkyt', password=tksecrets.localsqldb_pass,
-                              host='127.0.0.1',
-                              database='tkyt')
-cnx.close()
+
+sqlproto='mysql+mysqlconnector'
+sqluser='tkyt'
+sqlstring = sqlproto+'://'+sqluser+'@'+tksecrets.localsqldb_pass+'@localhost/tkyt'
+engine = create_engine(sqlstring, echo=True)
 
 
 

@@ -9,7 +9,7 @@ import tkqueue
 import logging, sys
 logging.basicConfig(stream=sys.stderr, level=logging.DEBUG)
 
-class TkYtTask(tkqueue.TkTaskUniq):
+class YtTask(tkqueue.TkTaskUniq):
   def run(self,youtube):
     self.task(youtube)
 
@@ -31,7 +31,7 @@ class TestClass:
   def __init__(self,yid):
     self.yid=yid
     time.sleep(1)
-    task=TkYtTask('populate:'+self.yid,self.populate_variables_from_youtube)
+    task=YtTask('populate:'+self.yid,self.populate_variables_from_youtube)
     YtQueue().add(task)
 
   def populate_variables_from_youtube(self,youtube):

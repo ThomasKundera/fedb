@@ -45,7 +45,7 @@ class QueueWork(metaclass=tksingleton.SingletonMeta):
       print(f'Working on {item} ( about '+str(self.q.qsize())+' elements remaining )')
       self.do_work(item)
       self.q.task_done()
-      time.sleep(1)
+      #time.sleep(1)
 
   def add(self,item):
     self.q.put(item)

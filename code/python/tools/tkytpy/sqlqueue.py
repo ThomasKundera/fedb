@@ -10,9 +10,9 @@ import tkqueue
 import logging, sys
 logging.basicConfig(stream=sys.stderr, level=logging.DEBUG)
 
-class TkSqlTask(tkqueue.TkTask):
+class SqlTask(tkqueue.TkTask):
   def run(self,dbsession):
-    self.run(dbsession)
+    self.task(dbsession)
 
 # Of course this task makes way less sense than the
 # ggl api one (when we have limited access), however
@@ -38,8 +38,10 @@ class SqlQueue(tkqueue.QueueWork):
     super().__init__()
 
   def do_work(self,item):
-    dbsession=mksession()
+    dbsession=self.mksession()
     item.run(dbsession)
+    dbsession.commit()
+    dbsession.close()
 
   def close(self):
      self.engine.dispose()

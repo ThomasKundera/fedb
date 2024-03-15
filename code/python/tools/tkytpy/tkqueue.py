@@ -7,22 +7,22 @@ import datetime
 import tksingleton
 
 class TkTask:
-  def __init__(self,run):
-    self.run=run
+  def __init__(self,task):
+    self.task=task
 
   def run(self):
-    self.run()
+    self.task()
 
   def __str__(self):
-    return str(self)
+    return str(self.task)
 
 class TkTaskUniq(TkTask):
-  def __init__(self,tid,run):
+  def __init__(self,tid,task):
     self.tid=tid
-    self.run=run
+    self.task=task
 
   def run(self):
-    self.run()
+    self.task()
 
   def __str__(self):
     return self.tid

@@ -34,6 +34,7 @@ class SqlQueue(tkqueue.QueueWork):
     )
     self.engine = sqlalchemy.create_engine(db_url, echo=True)
     self.session_factory = sessionmaker(bind=self.engine)
+    #self.mksession = self.session_factory
     self.mksession = scoped_session(self.session_factory)
     super().__init__()
 

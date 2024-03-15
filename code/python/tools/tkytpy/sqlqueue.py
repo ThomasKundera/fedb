@@ -24,17 +24,17 @@ class SqlTask(tkqueue.TkTask):
 # Thus, we can queue SQL requests here,
 # without worrying of multitheads (hoppefully)
 class SqlQueue(tkqueue.QueueWork):
-  def __init__(self):
+  def __init__(self,db='tkyt'):
     db_url = sqlalchemy.engine.URL.create(
       drivername="mysql+mysqlconnector",
       username="tkyt",
       password=localsqldb_pass,
       host="127.0.0.1",
-      database="tkyt",
+      database=db,
     )
     self.engine = sqlalchemy.create_engine(db_url, echo=True)
-    session_factory = sessionmaker(bind=self.engine)
-    self.mksession = scoped_session(session_factory)
+    self.session_factory = sessionmaker(bind=self.engine)
+    self.mksession = scoped_session(self.session_factory)
     super().__init__()
 
   def do_work(self,item):

@@ -11,7 +11,7 @@ logging.basicConfig(stream=sys.stderr, level=logging.DEBUG)
 
 class TkYtTask(tkqueue.TkTaskUniq):
   def run(self,youtube):
-    self.run(youtube)
+    self.task(youtube)
 
 
 # There will only be one instance of this,

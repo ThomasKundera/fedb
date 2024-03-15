@@ -4,6 +4,7 @@ import requests
 import sqlalchemy
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy_utils import JSONType
+from sqlalchemy.orm import Session
 
 import ytqueue
 import sqlqueue
@@ -50,7 +51,10 @@ class YTVideo(Base):
 
 
   def db_create_or_load(self):
-    dbsession=sqlqueue.SqlQueue().mksession()
+    #dbsession=sqlqueue.SqlQueue().mksession()
+    dbsession=Session.object_session(self)
+    if not dbsession:
+      dbsession=sqlqueue.SqlQueue().mksession()
     v=dbsession.query(YTVideo).get(self.yid)
     if not v:
       print("New video: "+self.yid)
@@ -58,11 +62,12 @@ class YTVideo(Base):
       dbsession.add(self)
     else:
       self.copy_from(v)
-    dbsession.commit()
-    dbsession.close()
 
-    if self.populated: return
-    self.call_populate()
+    if not self.populated:
+      self.call_populate()
+    dbsession.commit()
+    #dbsession.close()
+
 
   def resurect(self):
     if not self.valid: return
@@ -129,7 +134,12 @@ class YTVideoList:
   def __init__(self):
     logging.debug("YTVideoList.__init__(): START")
     self.videos={}
+    logging.debug("YTVideoList.__init__(): 1")
+    print(sqlqueue)
+    print(sqlqueue.SqlQueue)
+    print(sqlqueue.SqlQueue())
     dbsession=sqlqueue.SqlQueue().mksession()
+    logging.debug("YTVideoList.__init__(): 2")
     self.fill_from_db(dbsession)
     dbsession.close()
     logging.debug("YTVideoList.__init__(): END")
@@ -146,6 +156,12 @@ class YTVideoList:
       logging.debug("YTVideoList.fill_from_db(): video: "+str(v.dump()))
       self.videos[v.yid]=v
     logging.debug("YTVideoList.fill_from_db(): END")
+
+  def add_from_yid(self,yid):
+    dbsession=sqlqueue.SqlQueue().mksession()
+    v=YTVideo(yid)
+    self.add(v)
+    dbsession.close()
 
   def add(self,v):
     if (v.valid):

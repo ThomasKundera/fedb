@@ -25,6 +25,7 @@ class YtQueue(tkqueue.QueueWorkUniq):
     super().__init__()
 
   def do_work(self,item):
+    time.sleep(1)
     item.run(self.youtube)
 
 class TestClass:

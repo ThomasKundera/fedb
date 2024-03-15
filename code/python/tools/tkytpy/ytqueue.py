@@ -9,7 +9,7 @@ import tkqueue
 import logging, sys
 logging.basicConfig(stream=sys.stderr, level=logging.DEBUG)
 
-class TkYtTask(tkqueue.TkTask):
+class TkYtTask(tkqueue.TkTaskUniq):
   def run(self,youtube):
     self.run(youtube)
 
@@ -18,22 +18,14 @@ class TkYtTask(tkqueue.TkTask):
 # as it derivates from SingletonMeta
 # Thus, we can queue googleapi requests here,
 # without worrying of multitheads (hoppefully)
-class YtQueue(tkqueue.QueueWork):
+class YtQueue(tkqueue.QueueWorkUniq):
   def __init__(self):
     self.youtube=build('youtube','v3',
                        developerKey=google_api_key, cache_discovery=False)
     super().__init__()
 
-  def worker(self):
-    while True:
-      item = self.q.get()
-      logging.debug(f'TkYoutube: Working on {item} ( about '
-                                                    +str(self.q.qsize())+' elements remaining )')
-      item.run(self.youtube)
-      self.q.task_done()
-      time.sleep(10)
-      del self.taskdict[item.tid]
-
+  def do_work(self,item):
+    item.run(self.youtube)
 
 class TestClass:
   def __init__(self,yid):

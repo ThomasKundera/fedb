@@ -13,3 +13,4 @@ class FieldStorage:
     vl={}
     for v in dbsession.query(YTVideo):
       vl[v.yid]=v
+    return vl

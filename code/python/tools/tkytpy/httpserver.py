@@ -52,7 +52,7 @@ class EventHandler(metaclass=tksingleton.SingletonMeta):
     return
 
   def get_video_list(self):
-    return json.dumps(self.tkyt.get_video_dict())
+    return json.dumps(self.tkyt.get_video_list())
 
 
 class HttpServer:

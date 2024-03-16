@@ -19,15 +19,42 @@ def valid_url(url):
   print(r)
   return(r.status_code == 200)
 
-
-
-class YTVideo(Base):
+class YTVideo2(Base):
   __tablename__ = 'ytvideos2'
   yid           = sqlalchemy.Column(sqlalchemy.Unicode(12),primary_key=True)
   valid         = sqlalchemy.Column(sqlalchemy.Boolean)
   populated     = sqlalchemy.Column(sqlalchemy.Boolean)
   url           = sqlalchemy.Column(sqlalchemy.Unicode(100))
   title         = sqlalchemy.Column(sqlalchemy.Unicode(200))
+  rawytdatajson = sqlalchemy.Column(           JSONType)
+
+  def __init__(self,yid):
+    self.yid=yid.strip()
+    self.db_create_or_load()
+
+  def db_create_or_load(self):
+    dbsession=Session.object_session(self)
+    if not dbsession:
+      dbsession=sqlqueue.SqlQueue().mksession()
+    v=dbsession.query(YTVideo).get(self.yid)
+    self.copy_from(v)
+    dbsession.commit()
+
+  def copy_from(self,o):
+    self.valid            =o.valid
+    self.populated        =o.populated
+    self.url              =o.url
+    self.title            =o.title
+
+
+class YTVideo(Base):
+  __tablename__ = 'ytvideos3'
+  yid           = sqlalchemy.Column(sqlalchemy.Unicode(12),primary_key=True)
+  valid         = sqlalchemy.Column(sqlalchemy.Boolean)
+  populated     = sqlalchemy.Column(sqlalchemy.Boolean)
+  url           = sqlalchemy.Column(sqlalchemy.Unicode(100))
+  title         = sqlalchemy.Column(sqlalchemy.Unicode(200))
+  thumb_url_s   = sqlalchemy.Column(sqlalchemy.Unicode(100))
   rawytdatajson = sqlalchemy.Column(           JSONType)
 
   def __init__(self,yid):
@@ -41,14 +68,16 @@ class YTVideo(Base):
     self.populated= False
     self.db_create_or_load()
 
-
-  def copy_from(self,o):
+  def copy_from2(self,o):
     self.valid            =o.valid
     self.populated        =o.populated
     self.url              =o.url
     self.title            =o.title
     self.rawytdatajson    =o.rawytdatajson
 
+  def copy_from(self,o):
+    self.copy_from2(o)
+    self.thumb_url_s=o.thumb_url_s
 
   def db_create_or_load(self):
     #dbsession=sqlqueue.SqlQueue().mksession()
@@ -67,7 +96,6 @@ class YTVideo(Base):
       self.call_populate()
     dbsession.commit()
     #dbsession.close()
-
 
   def resurect(self):
     if not self.valid: return
@@ -130,6 +158,13 @@ class YTVideo(Base):
       'title': self.title
       }
 
+class YTVideo3(YTVideo):
+  def __init__(self,v2):
+    self.yid=v2.yid
+    self.copy_from2(v2)
+    self.db_create_or_load()
+
+# --------------------------------------------------------------------------
 class YTVideoList:
   def __init__(self):
     logging.debug("YTVideoList.__init__(): START")
@@ -140,7 +175,8 @@ class YTVideoList:
     print(sqlqueue.SqlQueue())
     dbsession=sqlqueue.SqlQueue().mksession()
     logging.debug("YTVideoList.__init__(): 2")
-    self.fill_from_db(dbsession)
+    self.fill_from_db2to3(dbsession)
+    dbsession.commit()
     dbsession.close()
     logging.debug("YTVideoList.__init__(): END")
 
@@ -148,6 +184,13 @@ class YTVideoList:
     task=sqlqueue.SqlTask(self.fill_from_db)
     sqlqueue.SqlQueue().add(task)
 
+  def fill_from_db2to3(self,dbsession):
+    logging.debug("YTVideoList.fill_from_db(): START")
+    for v2 in dbsession.query(YTVideo2):
+      v3=YTVideo(v2.yid)
+      v3.copy_from2(v2)
+      self.videos[v3.yid]=v3
+    logging.debug("YTVideoList.fill_from_db(): END")
 
   def fill_from_db(self,dbsession):
     logging.debug("YTVideoList.fill_from_db(): START")

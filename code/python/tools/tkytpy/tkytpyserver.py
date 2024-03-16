@@ -11,8 +11,11 @@ import tkyt
 import logging, sys
 logging.basicConfig(stream=sys.stderr, level=logging.DEBUG)
 
+# --------------------------------------------------------------------------
+# --------------------------------------------------------------------------
 class HttpHandler(http.server.SimpleHTTPRequestHandler):
   DIRECTORY = "/var/tkweb"
+
   def __init__(self, *args, **kwargs):
     super().__init__(*args, directory=HttpHandler.DIRECTORY, **kwargs)
 
@@ -39,6 +42,8 @@ class HttpHandler(http.server.SimpleHTTPRequestHandler):
     self.wfile.write(jsr.encode(encoding='utf_8'))
     logging.debug("HttpHandle:do_POST: END")
 
+
+# --------------------------------------------------------------------------
 def runserver():
   PORT = 8000
   with socketserver.TCPServer(("", PORT), HttpHandler) as httpd:
@@ -50,9 +55,11 @@ def runserver():
       httpd.shutdown()
 
 
+# --------------------------------------------------------------------------
 def init_db():
   ytvideolist.Base.metadata.create_all()
   print("Initialized the db")
+
 
 # --------------------------------------------------------------------------
 def main():

@@ -1,25 +1,15 @@
 #!/usr/bin/env python3
-import json
-import requests
 import sqlalchemy
-from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy_utils import JSONType
 from sqlalchemy.orm import Session
 
-import ytqueue
-import sqlqueue
+from sqlsingleton import SqlSingleton, Base
 
 import logging, sys
 logging.basicConfig(stream=sys.stderr, level=logging.DEBUG)
 
-Base = declarative_base(bind=sqlqueue.SqlQueue('tkyttest').engine)
-
-def valid_url(url):
-  r = requests.head(url)
-  print(r)
-  return(r.status_code == 200)
-
-
+# --------------------------------------------------------------------------
+# --------------------------------------------------------------------------
 class YTVideoRecord(Base):
   __tablename__ = 'ytvideos3'
   yid           = sqlalchemy.Column(sqlalchemy.Unicode(12),primary_key=True)
@@ -43,10 +33,10 @@ class YTVideoRecord(Base):
     self.thumb_url_s=o.thumb_url_s
 
   def db_create_or_load(self):
-     dbsession=Session.object_session(self)
+    dbsession=Session.object_session(self)
     if not dbsession:
-      dbsession=sqlqueue.SqlQueue().mksession()
-    v=dbsession.query(YTVideo).get(self.yid)
+      dbsession=SqlSingleton().mksession()
+    v=dbsession.query(YTVideoRecord).get(self.yid)
     if not v:
       print("New video: "+self.yid)
       dbsession.add(self)
@@ -56,6 +46,27 @@ class YTVideoRecord(Base):
     if not self.populated:
       self.call_populate()
     dbsession.commit()
+
+  def call_populate(self):
+    task=ytqueue.YtTask('populate:'+self.yid,self.queued_populate)
+    ytqueue.YtQueue().add(task)
+
+  def queued_populate(self,youtube):
+    dbsession=SqlSingleton().mksession()
+    v=dbsession.query(YTVideoRecord).get(self.yid)
+    dbsession.add(v)
+    request=youtube.videos().list(part='snippet,statistics', id=self.yid)
+    v.rawytdata = request.execute()
+    if len(v.rawytdata['items']) != 1:
+      v.valid=False
+    else:
+      v.rawytdatajson=json.dumps(v.rawytdata)
+      #print(v.rawytdatajson)
+      #print(v.rawytdata)
+      v.title=v.rawytdata['items'][0]['snippet']['title']
+      v.populated=True
+    dbsession.commit()
+    dbsession.close()
 
   def populate_variables_dummy(self):
     self.populated     = False

@@ -5,15 +5,15 @@ import math
 
 pi=math.pi
 sr=1 # steradian
-m=1.
+m=1. # meter
 s=1. #second
 j=1. # Joule
 
 W=1*j/s           # Watt
 
-cd=(1./683.)*W/sr # Candela
-lm=cd*sr          # Lumen
-lx=lm/(m**2)      # Lux
+cd=(1./683.)*W/sr # Candela - (Human) Luminous intensity - Power/sr  (Radiant intensity)
+lm=cd*sr          # Lumen   - (Human) Luminous flux      - Power     (Radiant flux)
+lx=lm/(m**2)      # Lux     - (Human) Illuminance        - Power/m²  (Irradiance)
 
 cm=m/100.
 mm=m/1000.
@@ -108,14 +108,6 @@ def main():
 # --------------------------------------------------------------------------
 if __name__ == '__main__':
   main()
-
-
-
-
-
-
-
-
 
 
 def old():

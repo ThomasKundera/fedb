@@ -1,0 +1,39 @@
+frame -1,-1,10,70
+scale 1
+
+# Syene Alexandria distance
+d=8
+
+# Measured angle
+a=7.2
+ca=90-a
+
+O=point(0,2)
+gnd=line(O,0:)
+
+Al=O
+Sy=point(d,2)
+
+SySun=line(Sy,90:)
+AlSun=line(Al,ca:)
+
+Sun=intersection(SySun,AlSun)
+
+draw
+  gnd
+  Sy
+  Al
+  SySun
+  AlSun
+  Sun
+end
+
+
+label
+  Sy   -90:
+  Al   -90:
+  Sun  -90:
+end
+
+print Sun
+

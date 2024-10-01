@@ -69,6 +69,8 @@ def do_plot():
     # Plot a thin black vertical line at origin 
     ax.plot([0,0], [0,6500*km], color='black')
     erathostene_triangle(plt,ax, 800*km, 7.2, 'red')
+    # Add a caption
+    ax.text(0, 6550*km, "Figure A1.4", fontsize=20)
     plt.show()
 
 

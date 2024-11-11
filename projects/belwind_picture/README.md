@@ -78,6 +78,7 @@ $$pxy=\frac{15.7}{3264}=4.81μm$$
 
 The pixels are likley squares, but some dead border likley exists on the sensor, we'll take $$px=4.8μm$$ as a good approximation.
 
+### Pixel size of objects with convertion to actual size
 
 
 

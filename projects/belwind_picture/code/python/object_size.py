@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-from tkunits import mm, μm
+from tkunits import m, mm, μm
 
 kPixelSize=4.8*μm
 
@@ -44,4 +44,42 @@ measuredsizearray=[
     ["Sc1" , 3059,2314, 3128,2248],
 ]
 
+img1622636543163_objects_size= [
+    # Name     , blade length, yellow base length, white mast length 
+    ["E1", 478, 185, 551],
+    ["E2", 294, 117, 347]
+]
+blsize=90*m/2
+
+P1020928_objects_size= {
+    'ybh': 992,
+    'wph': 873,
+    'wpl': 1401
+}
+
+substation_length=19000*mm
+
+def windturbin_scale():
+    yblm=0
+    wmlm=0
+    for name, bl, ybl, wml in img1622636543163_objects_size:
+        scale=blsize/bl
+        yblm+=ybl*scale
+        wmlm+=wml*scale
+        print(name, ybl*scale, wml*scale, wml/ybl)
+        print("People: ", 14.0*scale)
+    print("yblm", yblm/2, "wmlm", wmlm/2, "ratio", wmlm/yblm)
+
+def substation_scale():
+    scale=substation_length/P1020928_objects_size['wpl']
+    print("substation yellow height", scale*P1020928_objects_size['ybh'],
+    "substation white height", scale*P1020928_objects_size['wph'],
+    "substation total height", scale*P1020928_objects_size['ybh']+scale*P1020928_objects_size['wph'])
+    
+def main():
+    substation_scale()
+
+# calling main
+if __name__ == "__main__":
+    main()
 

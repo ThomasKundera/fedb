@@ -78,7 +78,38 @@ $$pxy=\frac{15.7}{3264}=4.81μm$$
 
 The pixels are likley squares, but some dead border likley exists on the sensor, we'll take $$px=4.8μm$$ as a good approximation.
 
-### Pixel size of objects with convertion to actual size
+### Gathering data about apparent size of objects in the image
+
+Done. See code/python/object_size.py and crosscheck with code/python/representation.py
+
+### Gathering data about actual size of objects in the scene
+
+The turbines are Vestas V90/3000 Offshore models (https://www.commissiemer.nl/docs/mer/p29/p2959/2959-022generalspecification.pdf).
+Exact specifications of the mast are hard to guess, I couldn't get the exact offshore setup.
+However, rotor diameter is exactly specidfied and that's 90m. Which will allow us to get the rest from pictures.
+
+We'll use https://parkwind.eu/assets/uploads/general/_2048x1365_fit_center-center_80_none/1622636543163.jpg picture for the tubines.
+
+From ./code/python/object_size.py we get:
+- Height of yellow base: 17.5m
+- Height of white mast: 52.5m
+- Total height: 70m
+- White/Yellow ratio: 3
+
+#FIXME: we could slightly enhance those values if knowing the tide height.
+
+There are some data about the substation there: http://www.pianc-aipcn.be/figuren/5%20BTV/vrijdag/Presentation%20%20Haven%20Gent%2008%20May%202015.pdf
+
+We find (see ./code/python/object_size.py):
+- Substation total height: 25.3m
+- Substation height of yellow base: 13.5m
+- Substation height of white block: 12m
+- substation width: 15.4m (from data)
+
+### Extracting distances
+See ./code/python/object_distance.py
+
+- Distance to substation: about 2.5 km to 3.5 km
 
 
 

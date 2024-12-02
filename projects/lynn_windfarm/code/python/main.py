@@ -32,9 +32,11 @@ dxy = (dx+dy)/2.
 
 def object_identification():
     # Open original jpeg image
-    original_image = plt.imread(os.path.join('data', '51664909026_2877f487d2_o.jpg'))
+    original_image = plt.imread(os.path.join(
+        'data', '51664909026_2877f487d2_800.jpg'))
     # Open data point image
-    data_point_image = plt.imread(os.path.join('data', '51664909026_2877f487d2_o_data_800.png'))
+    data_point_image = plt.imread(os.path.join(
+        'data', '51664909026_2877f487d2_o_data_800.png'))
 
     # select blue pixels only from data imagepoint image
     rgb_data = rgba2rgb(data_point_image)
@@ -45,15 +47,37 @@ def object_identification():
     # Extract blue pixels from blue_data as a 2D array
     blue_data_point = np.array(blue_data)
 
+    x = []
+    y = []
     for raw in range(len(blue_data_point)):
         for col in range(len(blue_data_point[raw])):
             if (blue_data_point[raw][col] == True):
-                print (raw, col)
+                x.append(col)
+                y.append(raw)
 
-    # Draw blue_data_point_image
-    plt.imshow(blue_data, cmap='gray')
+    x = np.array(x)
+    y = np.array(y)
+
+    data = np.column_stack((x, y))
+
+    # Fit a line to the data points
+    model = LineModelND()
+    model.estimate(data)
+    
+    # generate coordinates of estimated models
+    line_x = np.arange(0, 800)
+    line_y = model.predict_y(line_x)
+
+    # Draw original image
+    plt.imshow(original_image)
+
+    # Draw data point image
+    # plt.imshow(data_point_image, alpha=0.5)
+
+    # Draw estimated line
+    plt.plot(line_x, line_y)
+
     plt.show()
-
 
 
 def main():

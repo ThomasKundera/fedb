@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 
-import os, sys
+import os
+import sys
 
 import numpy as np
 
@@ -65,36 +66,59 @@ def fit_horizon(hue_data):
 def plot_hsv(hsv_data):
     rgb = hsv_to_rgb(hsv_data)
     plt.imshow(rgb)
-    
+
+
+def find_white_blobs(hsv_data):
+    sat_data = hsv_data[:, :, 1]
+    sat_binary = sat_data < 0.9
+    val_data = hsv_data[:, :, 2]
+    val_binary = val_data > 0.1
+    white_data = np.logical_and(sat_binary, val_binary)
+
+    blobs_dog = blob_dog(white_data, min_sigma=0.001, threshold=0.00001)
+
+    return blobs_dog
+
+
+def find_yellow_blobs(hsv_data):
+    hue_data = hsv_data[:, :, 0]
+    #print(hue_data)
+    hue1_binary = hue_data > .1
+    hue2_binary = hue_data <.3
+    hue_binary = np.logical_and(hue1_binary, hue2_binary)
+    #print(hue_binary)
+    #fig, (ax0, ax1, ax2) = plt.subplots(ncols=3, figsize=(8, 2))
+    #ax0.imshow(hue1_binary, cmap='gray')
+    #ax1.imshow(hue2_binary, cmap='gray')
+    #ax2.imshow(hue_binary, cmap='gray')
+
+    #sat_data = hsv_data[:, :, 1]
+    #sat_binary = sat_data < 0.9
+    #val_data = hsv_data[:, :, 2]
+    #val_binary = val_data > 0.1
+ 
+    yellow_data = hue_binary
+    plt.imshow(yellow_data, cmap='gray')
+    plt.show()
+    #fig, (ax0, ax1, ax2,ax3) = plt.subplots(ncols=4, figsize=(8, 2))
+    #ax0.imshow(hue_binary, cmap='gray')
+    #ax1.imshow(sat_binary, cmap='gray')
+    #ax2.imshow(val_binary, cmap='gray')
+    #ax3.imshow(yellow_data, cmap='gray')
+    #plt.show()
+    #sys.exit()
+
+    blobs_dog = blob_dog(yellow_data, min_sigma=0.0001, threshold=0.0001)
+
+    return blobs_dog
+
 
 def find_windmills(hsv_data):
     windmills = []
-    
-    # Extract white pixels from hsv_data as a 2D array
-    val_data = hsv_data[:, :, 2]
-    #plt.imshow(val_data)
-    #plt.show()
-    val_binary = val_data > 0.1
-    #plt.imshow(val_binary, cmap='gray')
-    #plt.show()
-    #sys.exit(0)
-    sat_data = hsv_data[:, :, 1]
-    #plt.imshow(sat_data)
-    #plt.show()
-    sat_binary = sat_data < 0.9
-    #plt.imshow(sat_binary, cmap='gray')
-    #plt.show()
-    #sys.exit(0)
+    white_blobs = find_white_blobs(hsv_data)
+    yellow_blobs = find_yellow_blobs(hsv_data)
 
-    white_data = np.logical_and(sat_binary, val_binary)
-    
-    #plt.imshow(white_data, cmap='gray')
-    #plt.show()
-    #sys.exit(0)
-
-    blobs_dog = blob_dog(white_data, min_sigma=0.001, threshold=0.0001)
-
-    for blob in blobs_dog:
+    for blob in yellow_blobs:
         print(blob)
         windmills.append(blob)
 
@@ -110,13 +134,13 @@ def object_identification():
         'data', '51664909026_2877f487d2_o_detail_data.png'))
 
     # get hue data
-    rgb_data = rgba2rgb(data_point_image,background=(0, 0, 0))
+    rgb_data = rgba2rgb(data_point_image, background=(0, 0, 0))
     hsv_data = rgb2hsv(rgb_data)
 
     hue_data = hsv_data[:, :, 0]
 
     # fit horizon
-    line_x, line_y = fit_horizon(hue_data)
+    #line_x, line_y = fit_horizon(hue_data)
 
     # fit windmills
     windmills = find_windmills(hsv_data)
@@ -125,7 +149,7 @@ def object_identification():
     plt.imshow(original_image)
 
     # Draw estimated line
-    plt.plot(line_x, line_y)
+    #plt.plot(line_x, line_y)
 
     # Draw windmills
     for blob in windmills:
@@ -136,8 +160,6 @@ def object_identification():
 
     plt.tight_layout()
     plt.show()
-
-
 
     plt.show()
 

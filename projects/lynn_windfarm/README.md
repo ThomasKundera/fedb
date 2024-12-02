@@ -1,13 +1,15 @@
-# Belwind pictures analysis
+# Lynn windfarm pictures analysis
 
 ## Goal
 
-Analysing  to disqualify (once again) flat Earth fallacies.
+Analysing https://www.flickr.com/photos/37012317@N08/51664909026/ to disqualify (once again) flat Earth fallacies.
 
 ## Method
 We have to do:
 - Photogrammetry: measuring object pixel size on the image
 - Georeferencing: finding the location of the object in the image
+- Geolocation: finding the location of the camera
+- Reconstructing the scene
 
 ## Photogrammetry
 
@@ -15,40 +17,37 @@ We have to do:
 First, some basic data on the image:
 Exif:
 ```
-hFile name       : Belwind.jpg
-File size       : 6530162 Bytes
+File name       : 51664909026_2877f487d2_o.jpg
+File size       : 10955414 Bytes
 MIME type       : image/jpeg
-Image size      : 4490 x 3215
-Thumbnail       : image/jpeg, 4839 Bytes
-Camera make     : NIKON CORPORATION
-Camera model    : NIKON D7000
-Image timestamp : 2012:10:02 14:26:22
-File number     : 
+Image size      : 6240 x 3510
+Thumbnail       : image/jpeg, 6053 Bytes
+Camera make     : Canon
+Camera model    : Canon EOS 6D Mark II
+Image timestamp : 2021:10:30 15:08:54
+File number     : (0)
 Exposure time   : 1/320 s
-Aperture        : F9
-Exposure bias   : 0 EV
+Aperture        : F16
+Exposure bias   : -1/3 EV
 Flash           : No, compulsory
-Flash bias      : 
-Focal length    : 70.0 mm
-Subject distance: 
-ISO speed       : 100
-Exposure mode   : Not defined
-Metering mode   : Multi-segment
-Macro mode      : 
-Image quality   : 
-White balance   : Auto
-Copyright       : Hans Hillewaert                                       
-Exif comment    : charset=Ascii   
+Flash bias      : 0 EV
+Focal length    : 600.0 mm
+Subject distance: 0 m
+ISO speed       : 200
+Exposure mode   : Shutter priority (Tv)
+Metering mode   : Spot
+Macro mode      : Off
+Image quality   : Superfine
+White balance   : Daylight
+Copyright       : 
 ```
 
 Camera body:
 ```
-Nikon D7000
-Body type	Mid-size SLR
-Captor size: 23.6 x 15.7 mm
+Canon EOS 6D Mark II
+Captor size: 35.9 × 24.0 mm2 / 6240 × 4160 pixels
 ```
-The NIKON D7000 is a mid-size SLR, with a sensor of 4928 x 3264 pixels.
-So the image we have here has been slightly cropped. Hopefully not too much.
+So the image we have here has been cropped, veritically but not horizontally.
 
 We'll assume that the pixel size hasn't been altered (only crop, no resize), which is likley, and that the image is centered (which should be about correct).
 
@@ -73,10 +72,10 @@ Where:
 - $p$ is the number of pixels
 
 Numerically:
-$$pxx=\frac{23.6}{4928}=4.79μm$$
-$$pxy=\frac{15.7}{3264}=4.81μm$$
+$$pxx=\frac{35.9}{6240}=5.75μm$$
+$$pxy=\frac{24.0}{4160}=5.77μm$$
 
-The pixels are likley squares, but some dead border likley exists on the sensor, we'll take $$px=4.8μm$$ as a good approximation.
+The pixels are likley squares, but some dead border likley exists on the sensor, we'll take $$px=5.76μm$$ as a good approximation.
 
 ### Pixel size of objects with convertion to actual size
 

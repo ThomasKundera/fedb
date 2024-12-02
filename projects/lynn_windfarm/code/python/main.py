@@ -75,40 +75,45 @@ def find_white_blobs(hsv_data):
     val_binary = val_data > 0.1
     white_data = np.logical_and(sat_binary, val_binary)
 
-    blobs_dog = blob_dog(white_data, min_sigma=0.001, threshold=0.00001)
+    blobs_dog = blob_dog(white_data, min_sigma=0.1, threshold=0.1)
 
     return blobs_dog
 
 
 def find_yellow_blobs(hsv_data):
     hue_data = hsv_data[:, :, 0]
-    #print(hue_data)
     hue1_binary = hue_data > .1
     hue2_binary = hue_data <.3
     hue_binary = np.logical_and(hue1_binary, hue2_binary)
-    #print(hue_binary)
-    #fig, (ax0, ax1, ax2) = plt.subplots(ncols=3, figsize=(8, 2))
-    #ax0.imshow(hue1_binary, cmap='gray')
-    #ax1.imshow(hue2_binary, cmap='gray')
-    #ax2.imshow(hue_binary, cmap='gray')
-
-    #sat_data = hsv_data[:, :, 1]
-    #sat_binary = sat_data < 0.9
-    #val_data = hsv_data[:, :, 2]
-    #val_binary = val_data > 0.1
  
     yellow_data = hue_binary
-    plt.imshow(yellow_data, cmap='gray')
-    plt.show()
-    #fig, (ax0, ax1, ax2,ax3) = plt.subplots(ncols=4, figsize=(8, 2))
+    #plt.imshow(yellow_data, cmap='gray')
+    #plt.show()
+
+    blobs_dog = blob_dog(yellow_data, min_sigma=0.1, threshold=0.1)
+
+    return blobs_dog
+
+
+def find_red_blobs(hsv_data):
+    hue_data = hsv_data[:, :, 0]
+    hue_binary = hue_data == 0
+    sat_data = hsv_data[:, :, 1]
+    sat_binary = sat_data > 0.1
+    #val_data = hsv_data[:, :, 2]
+    #val_binary = val_data > 0.1
+    red_data = np.logical_and(hue_binary, sat_binary)
+    #fig, (ax0, ax1, ax2) = plt.subplots(ncols=3, figsize=(8, 2))
     #ax0.imshow(hue_binary, cmap='gray')
     #ax1.imshow(sat_binary, cmap='gray')
-    #ax2.imshow(val_binary, cmap='gray')
-    #ax3.imshow(yellow_data, cmap='gray')
+    #ax2.imshow(red_data, cmap='gray')
     #plt.show()
-    #sys.exit()
+    #sys.exit(0)
+    #red_data = hue_binary
+    #plt.imshow(red_data, cmap='gray')
+    #plt.show()
 
-    blobs_dog = blob_dog(yellow_data, min_sigma=0.0001, threshold=0.0001)
+    blobs_dog = blob_dog(red_data, min_sigma=0.1, threshold=0.1)
 
     return blobs_dog
 
@@ -117,8 +122,9 @@ def find_windmills(hsv_data):
     windmills = []
     white_blobs = find_white_blobs(hsv_data)
     yellow_blobs = find_yellow_blobs(hsv_data)
+    red_blobs = find_red_blobs(hsv_data)
 
-    for blob in yellow_blobs:
+    for blob in white_blobs:
         print(blob)
         windmills.append(blob)
 

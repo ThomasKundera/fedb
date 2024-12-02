@@ -17,6 +17,8 @@ from skimage.transform import warp, AffineTransform
 
 from tkunits import mm, μm
 
+from windmill import Windmill
+
 # Captor size
 lx = 35.9*mm
 ly = 24.0*mm
@@ -83,12 +85,12 @@ def find_white_blobs(hsv_data):
 def find_yellow_blobs(hsv_data):
     hue_data = hsv_data[:, :, 0]
     hue1_binary = hue_data > .1
-    hue2_binary = hue_data <.3
+    hue2_binary = hue_data < .3
     hue_binary = np.logical_and(hue1_binary, hue2_binary)
- 
+
     yellow_data = hue_binary
-    #plt.imshow(yellow_data, cmap='gray')
-    #plt.show()
+    # plt.imshow(yellow_data, cmap='gray')
+    # plt.show()
 
     blobs_dog = blob_dog(yellow_data, min_sigma=0.1, threshold=0.1)
 
@@ -100,21 +102,23 @@ def find_red_blobs(hsv_data):
     hue_binary = hue_data == 0
     sat_data = hsv_data[:, :, 1]
     sat_binary = sat_data > 0.1
-    #val_data = hsv_data[:, :, 2]
-    #val_binary = val_data > 0.1
     red_data = np.logical_and(hue_binary, sat_binary)
-    #fig, (ax0, ax1, ax2) = plt.subplots(ncols=3, figsize=(8, 2))
-    #ax0.imshow(hue_binary, cmap='gray')
-    #ax1.imshow(sat_binary, cmap='gray')
-    #ax2.imshow(red_data, cmap='gray')
-    #plt.show()
-    #sys.exit(0)
-    #red_data = hue_binary
-    #plt.imshow(red_data, cmap='gray')
-    #plt.show()
 
     blobs_dog = blob_dog(red_data, min_sigma=0.1, threshold=0.1)
 
+    return blobs_dog
+
+
+def find_green_blobs(hsv_data):
+    hue_data = hsv_data[:, :, 0]
+    hue1_binary = hue_data > .2
+    hue2_binary = hue_data < .6
+    hue_binary = np.logical_and(hue1_binary, hue2_binary)
+    green_data = hue_binary
+
+    blobs_dog = blob_dog(green_data, min_sigma=1, threshold=0.1)
+    #plt.imshow(green_data, cmap='gray')
+    #plt.show()
     return blobs_dog
 
 
@@ -123,13 +127,37 @@ def find_windmills(hsv_data):
     white_blobs = find_white_blobs(hsv_data)
     yellow_blobs = find_yellow_blobs(hsv_data)
     red_blobs = find_red_blobs(hsv_data)
+    green_blobs = find_green_blobs(hsv_data)
+    #windmills = []
+    #for blob in green_blobs:
+    #    y, x, r = blob
+    #    w=Windmill(x,y)
+    #    windmills.append(w)
+    #    print(w)
+    # Looks for red blobs, as being center of rotation of windmill
+    for blob in red_blobs:
+        y, x, r = blob
+        w=Windmill(x,y)
+        # Look for possible bottom of windmill
+        xpl=5000
+        xph=0
+        for blob in white_blobs:
+            y1, x1, r1 = blob
+            w.bottom_candidate(x1,y1)
+        # FIXME: have to look for yellow blobs too
+        windmills.append(w)
 
-    for blob in white_blobs:
-        print(blob)
-        windmills.append(blob)
+    # Looking for end of wings
+    for blob in green_blobs:
+        y, x, r = blob
+        print(x,y)
+        for w in windmills:
+            w.wing_candidate(x,y)
 
+    for w in windmills:
+        print(w)
     return windmills
-
+    
 
 def object_identification():
     # Open original jpeg image
@@ -146,7 +174,7 @@ def object_identification():
     hue_data = hsv_data[:, :, 0]
 
     # fit horizon
-    #line_x, line_y = fit_horizon(hue_data)
+    # line_x, line_y = fit_horizon(hue_data)
 
     # fit windmills
     windmills = find_windmills(hsv_data)
@@ -155,11 +183,13 @@ def object_identification():
     plt.imshow(original_image)
 
     # Draw estimated line
-    #plt.plot(line_x, line_y)
+    # plt.plot(line_x, line_y)
 
     # Draw windmills
-    for blob in windmills:
-        y, x, r = blob
+    for w in windmills:
+        r=10
+        x=w.center.x
+        y=w.center.y
         c = plt.Circle((x, y), r, color='red', linewidth=2, fill=False)
         # plot circles
         plt.gcf().gca().add_artist(c)
@@ -167,7 +197,6 @@ def object_identification():
     plt.tight_layout()
     plt.show()
 
-    plt.show()
 
 
 def main():

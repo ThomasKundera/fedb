@@ -61,6 +61,29 @@ class Windmill:
             if (d2 > d2m):
                 self.wings.append(Dot(x, y))
 
+    def settle(self):
+        if (len(self.wings) == 0):
+            print("No wings found")
+        elif (len(self.wings) >3):
+            print("Too many wings found")
+        else:
+            # Compute average wing length
+            l = 0
+            for w in self.wings:
+                l += math.sqrt(w.distance2(self.center.x, self.center.y))
+            l /= len(self.wings)
+            # Test wings being about same length
+            for w in self.wings:
+                if ((math.sqrt(w.distance2(self.center.x, self.center.y))-l)/l > .1):
+                    print("Wings length is incoherent")
+                else:
+                    print("Wings length is: "+str(l))
+
+            # Compute angle between wings
+            if (len(self.wings) == 2):
+                a = math.atan2(self.wings[1].y-self.wings[0].y, self.wings[1].x-self.wings[0].x)
+                print(a)
+            # Compute distance between the two wings
 
 def main():
     pass

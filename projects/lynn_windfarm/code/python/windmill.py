@@ -1,4 +1,6 @@
 #!/usr/bin/env python3
+import math
+
 
 class Dot:
     def __init__(self, x, y):
@@ -13,7 +15,8 @@ class Dot:
 
 
 class Windmill:
-    def __init__(self, x, y):
+    def __init__(self, horizon, x, y):
+        self.horizon = horizon
         self.center = Dot(x, y)
         self.bottom1 = Dot(0, 0)
         self.bottom2 = Dot(6000, 0)
@@ -23,11 +26,18 @@ class Windmill:
         s = "Windmill:\n"
         s += "Center: "+str(self.center)+"\n"
         s += "Bottom: "+str(self.bottom1)+" " + str(self.bottom2)
-        s+="\nWings:\n"
+        s += "\nWings:\n"
         for w in self.wings:
             s += "\t"+str(w)
-
         return s
+
+    def draw(self, ax):
+        ax.plot([self.center.x, self.bottom1.x], [
+                self.center.y, self.bottom1.y], color="white")
+        ax.plot([self.center.x, self.bottom2.x], [
+                self.center.y, self.bottom2.y], color="white")
+        for w in self.wings:
+            ax.plot([self.center.x, w.x], [self.center.y, w.y], color="white")
 
     def bottom_candidate(self, x, y):
         if (x < self.center.x):
@@ -38,17 +48,18 @@ class Windmill:
                 self.bottom2 = Dot(x, y)
 
     def wings_heuristic(self):
-        d2M = .9*self.center.y**2
-        d2m = 0.5*self.center.y**2
+        h = self.center.y-self.horizon.predict_y([self.center.x])[0]
+        d2M = 3*h*h
+        d2m = 0.9*h*h
         return (d2m, d2M)
 
     def wing_candidate(self, x, y):
         d2 = self.center.distance2(x, y)
         (d2m, d2M) = self.wings_heuristic()
+        print(d2, d2m, d2M)
         if (d2 < d2M):
             if (d2 > d2m):
                 self.wings.append(Dot(x, y))
-                print(d2, d2m, d2M)
 
 
 def main():

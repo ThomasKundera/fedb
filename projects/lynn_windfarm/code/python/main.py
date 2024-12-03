@@ -58,11 +58,7 @@ def fit_horizon(hue_data):
     model = LineModelND()
     model.estimate(data)
 
-    # generate coordinates of estimated models
-    line_x = np.arange(0, 800)
-    line_y = model.predict_y(line_x)
-
-    return line_x, line_y
+    return model
 
 
 def plot_hsv(hsv_data):
@@ -122,7 +118,7 @@ def find_green_blobs(hsv_data):
     return blobs_dog
 
 
-def find_windmills(hsv_data):
+def find_windmills(horizon,hsv_data):
     windmills = []
     white_blobs = find_white_blobs(hsv_data)
     yellow_blobs = find_yellow_blobs(hsv_data)
@@ -137,7 +133,7 @@ def find_windmills(hsv_data):
     # Looks for red blobs, as being center of rotation of windmill
     for blob in red_blobs:
         y, x, r = blob
-        w=Windmill(x,y)
+        w=Windmill(horizon,x,y)
         # Look for possible bottom of windmill
         xpl=5000
         xph=0
@@ -174,10 +170,12 @@ def object_identification():
     hue_data = hsv_data[:, :, 0]
 
     # fit horizon
-    # line_x, line_y = fit_horizon(hue_data)
-
+    horizon = fit_horizon(hue_data)
+    # generate coordinates of estimated models
+    line_x = np.arange(0, 800)
+    line_y = horizon.predict_y(line_x)
     # fit windmills
-    windmills = find_windmills(hsv_data)
+    windmills = find_windmills(horizon,hsv_data)
 
     # Draw original image
     plt.imshow(original_image)
@@ -187,12 +185,13 @@ def object_identification():
 
     # Draw windmills
     for w in windmills:
-        r=10
-        x=w.center.x
-        y=w.center.y
-        c = plt.Circle((x, y), r, color='red', linewidth=2, fill=False)
-        # plot circles
-        plt.gcf().gca().add_artist(c)
+        w.draw(plt.gca())
+    #    r=10
+    #    x=w.center.x
+    #    y=w.center.y
+    #    c = plt.Circle((x, y), r, color='red', linewidth=2, fill=False)
+    #    # plot circles
+    #    plt.gcf().gca().add_artist(c)
 
     plt.tight_layout()
     plt.show()

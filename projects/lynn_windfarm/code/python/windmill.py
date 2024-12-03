@@ -31,13 +31,20 @@ class Windmill:
             s += "\t"+str(w)
         return s
 
-    def draw(self, ax):
+    def draw(self, plt, ax):
         ax.plot([self.center.x, self.bottom1.x], [
                 self.center.y, self.bottom1.y], color="white")
         ax.plot([self.center.x, self.bottom2.x], [
                 self.center.y, self.bottom2.y], color="white")
         for w in self.wings:
             ax.plot([self.center.x, w.x], [self.center.y, w.y], color="white")
+        if (not self.wmean):
+            d2m,d2M = self.wings_heuristic()
+            # Plot circle around mean of wings
+            ax.add_patch(
+                plt.Circle((self.center.x, self.center.y), math.sqrt(d2m), color="red", fill=False))
+            ax.add_patch(
+                plt.Circle((self.center.x, self.center.y), math.sqrt(d2M), color="red", fill=False))
 
     def bottom_candidate(self, x, y):
         if (x < self.center.x):
@@ -62,6 +69,7 @@ class Windmill:
                 self.wings.append(Dot(x, y))
 
     def settle(self):
+        self.wmean=0
         if (len(self.wings) == 0):
             print("No wings found")
         elif (len(self.wings) >3):
@@ -72,6 +80,7 @@ class Windmill:
             for w in self.wings:
                 l += math.sqrt(w.distance2(self.center.x, self.center.y))
             l /= len(self.wings)
+            self.wmean=l
             # Test wings being about same length
             for w in self.wings:
                 if ((math.sqrt(w.distance2(self.center.x, self.center.y))-l)/l > .1):
@@ -82,7 +91,7 @@ class Windmill:
             # Compute angle between wings
             if (len(self.wings) == 2):
                 a = math.atan2(self.wings[1].y-self.wings[0].y, self.wings[1].x-self.wings[0].x)
-                print(a)
+                print("Angle between wings: "+str(a*180/math.pi))
             # Compute distance between the two wings
 
 def main():

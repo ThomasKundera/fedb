@@ -100,7 +100,7 @@ def find_red_blobs(hsv_data):
     sat_binary = sat_data > 0.1
     red_data = np.logical_and(hue_binary, sat_binary)
 
-    blobs_dog = blob_dog(red_data, min_sigma=0.1, threshold=0.1)
+    blobs_dog = blob_dog(red_data, min_sigma=1, threshold=0.4, overlap=0.1)
 
     return blobs_dog
 
@@ -113,51 +113,51 @@ def find_green_blobs(hsv_data):
     green_data = hue_binary
 
     blobs_dog = blob_dog(green_data, min_sigma=1, threshold=0.1)
-    #plt.imshow(green_data, cmap='gray')
-    #plt.show()
+    # plt.imshow(green_data, cmap='gray')
+    # plt.show()
     return blobs_dog
 
 
-def find_windmills(horizon,hsv_data):
+def find_windmills(horizon, hsv_data):
     windmills = []
     white_blobs = find_white_blobs(hsv_data)
     yellow_blobs = find_yellow_blobs(hsv_data)
     red_blobs = find_red_blobs(hsv_data)
     green_blobs = find_green_blobs(hsv_data)
-    
+
     # Looks for red blobs, as being center of rotation of windmill
     for blob in red_blobs:
         y, x, r = blob
-        w=Windmill(horizon,x,y)
+        w = Windmill(horizon, x, y)
         # Look for possible bottom of windmill
-        xpl=5000
-        xph=0
+        xpl = 5000
+        xph = 0
         for blob in white_blobs:
             y1, x1, r1 = blob
-            w.bottom_candidate(x1,y1)
+            w.bottom_candidate(x1, y1)
         # FIXME: have to look for yellow blobs too
         windmills.append(w)
 
     # Looking for end of wings
     for blob in green_blobs:
         y, x, r = blob
-        print(x,y)
+        print(x, y)
         for w in windmills:
-            w.wing_candidate(x,y)
+            w.wing_candidate(x, y)
 
     for w in windmills:
         w.settle()
         print(w)
     return windmills
-    
+
 
 def object_identification():
     # Open original jpeg image
     original_image = plt.imread(os.path.join(
-        'data', '51664909026_2877f487d2_o_detail.jpg'))
+        'data', '51664909026_2877f487d2_o_detail2.jpg'))
     # Open data point image
     data_point_image = plt.imread(os.path.join(
-        'data', '51664909026_2877f487d2_o_detail_data.png'))
+        'data', '51664909026_2877f487d2_o_detail2_data.png'))
 
     # get hue data
     rgb_data = rgba2rgb(data_point_image, background=(0, 0, 0))
@@ -171,7 +171,7 @@ def object_identification():
     line_x = np.arange(0, 200)
     line_y = horizon.predict_y(line_x)
     # fit windmills
-    windmills = find_windmills(horizon,hsv_data)
+    windmills = find_windmills(horizon, hsv_data)
 
     # Draw original image
     plt.imshow(original_image)
@@ -181,11 +181,10 @@ def object_identification():
 
     # Draw windmills
     for w in windmills:
-        w.draw(plt.gca())
+        w.draw(plt, plt.gca())
 
     plt.tight_layout()
     plt.show()
-
 
 
 def main():

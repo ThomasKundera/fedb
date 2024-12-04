@@ -17,7 +17,7 @@ from skimage.transform import warp, AffineTransform
 
 from tkunits import mm, μm
 
-from windmill import Windmill
+from windmill import Windmill, Wing
 
 # Captor size
 lx = 35.9*mm
@@ -119,7 +119,7 @@ def find_green_blobs(hsv_data):
 
 
 def find_windmills(horizon, hsv_data):
-    windmills = []
+    windmills = {}
     white_blobs = find_white_blobs(hsv_data)
     yellow_blobs = find_yellow_blobs(hsv_data)
     red_blobs = find_red_blobs(hsv_data)
@@ -128,27 +128,46 @@ def find_windmills(horizon, hsv_data):
     # Looks for red blobs, as being center of rotation of windmill
     for blob in red_blobs:
         y, x, r = blob
-        w = Windmill(horizon, x, y)
+        m = Windmill(horizon, x, y)
         # Look for possible bottom of windmill
         xpl = 5000
         xph = 0
         for blob in white_blobs:
             y1, x1, r1 = blob
-            w.bottom_candidate(x1, y1)
+            m.bottom_candidate(x1, y1)
         # FIXME: have to look for yellow blobs too
-        windmills.append(w)
+        windmills[m.idx]=m
 
     # Looking for end of wings
+    wings={}
     for blob in green_blobs:
         y, x, r = blob
-        print(x, y)
-        for w in windmills:
-            w.wing_candidate(x, y)
+        w=Wing(x, y)
+        wings[w.idx]=w
+        for m in windmills.values():
+            if (m.wing_candidate(w)):
+                w.mill_candidate(m)
 
-    for w in windmills:
-        w.settle()
+    wings2={}
+    for w in wings.values():
+        if (len(w.possible_mill) == 1):
+            windmills[w.possible_mill[0].idx].add_wing(w)
+        else:
+            wings2[w.idx]=w
+    wings=wings2
+    wings2={}
+    for m in windmills.values():
+        if (len(m.wings) > 0):
+            for w in wings.values():
+                if (m.wing_candidate(w)):
+                    m.add_wing(w)
+                else:
+                    wings2[w.idx]=w
+    wings=wings2
+
+    for m in windmills:
         print(w)
-    return windmills
+    return windmills.values()
 
 
 def object_identification():

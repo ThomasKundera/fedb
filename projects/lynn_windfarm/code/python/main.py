@@ -121,6 +121,8 @@ def find_green_blobs(hsv_data):
 
 def find_windmills(horizon, hsv_data):
     windmills = {}
+    fakewindmill=[]
+
     white_blobs = find_white_blobs(hsv_data)
     yellow_blobs = find_yellow_blobs(hsv_data)
     red_blobs = find_red_blobs(hsv_data)
@@ -139,10 +141,11 @@ def find_windmills(horizon, hsv_data):
         for blob in yellow_blobs:
             y1, x1, r1 = blob
             m.bottom_candidate_yellow(x1, y1)
+            f=FakeWindmill(horizon, x1, y1)
+            f.set_color('yellow')
+            fakewindmill.append(f)
         # FIXME: have to look for yellow blobs too
         windmills[m.idx]=m
-
-    fakewindmill=[]
 
     # Looking for end of wings
     wings={}
@@ -198,8 +201,10 @@ def find_windmills(horizon, hsv_data):
                         wings2[w.idx]=w
         wings=wings2
 
-    for m in windmills:
+    print("Windmills: ----------- ")
+    for m in windmills.values():
         print(w)
+    print("----------------")
     return list(windmills.values())+fakewindmill
 
 
@@ -226,14 +231,14 @@ def do_object_identification(imgname):
     
 
 def object_identification():
-    imgname="51664909026_2877f487d2_o_detail3"
+    imgname="51664909026_2877f487d2_o_detail4"
     # Open original jpeg image
     original_image = plt.imread(os.path.join(
         'data', imgname + '.jpg'))
  
     # See if we already have data for that image
     pkfile=os.path.join('data', imgname + '.pkl')
-    if (os.path.exists(pkfile)):
+    if (False and os.path.exists(pkfile)):
         print("Loading windmills from " + pkfile)
         with open(pkfile, 'rb') as f:
             windmills = pickle.load(f)

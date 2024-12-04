@@ -16,6 +16,30 @@ class Dot:
     def __str__(self):
         return "("+str(self.x)+", "+str(self.y)+")"
 
+    # To be able to sort dots
+    def __lt__(self, other):
+        return self.x < other.x
+
+    def __gt__(self, other):
+        return self.x > other.x
+
+    def __le__(self, other):
+        return self.x <= other.x
+
+    def __ge__(self, other):
+        return self.x >= other.x
+
+    def __eq__(self, other):
+        return self.x == other.x
+
+    def __ne__(self, other):
+        return self.x != other.x
+
+
+class TwoDots:
+    def __init__(self, d1, d2):
+        self.d1 = d1
+        self.d2 = d2
 
 class Wing(Dot):
     idx = 0
@@ -33,9 +57,34 @@ class Wing(Dot):
 
 class Yellow:
     def __init__(self):
-        self.ll=Dot(0, 6000)
-        self.rh=Dot(6000, 0)
-        
+        self.l=TwoDots(Dot(0,0),Dot(0,0))
+        self.r=TwoDots(Dot(6000,0),Dot(6000,0))
+
+    def evaluate_left(self,x,y):
+        d=Dot(x,y)
+        l=[d,self.l.d1,self.l.d2]
+        l.sort()
+        self.l.d1=l[1]
+        self.l.d2=l[2]
+
+    def evaluate_right(self,x,y):
+        d=Dot(x,y)
+        r=[d,self.r.d1,self.r.d2]
+        r.sort()
+        self.r.d1=r[0]
+        self.r.d2=r[1]
+    
+    def get_bottom(self):
+        xl=(self.l.d1.x+self.l.d2.x)/2
+        yl=min(self.l.d1.y,self.l.d2.y)
+        xr=(self.r.d1.x+self.r.d2.x)/2
+        yr=min(self.r.d1.y,self.r.d2.y)
+        ym=(yl+yr)/2
+        return (Dot(xl,ym),Dot(xr,ym))
+
+    def draw(self, plt, ax):
+        ax.add_patch(plt.Line2D((self.l.d1.x, self.l.d2.x), (self.l.d1.y, self.l.d2.y), color="yellow"))
+        ax.add_patch(plt.Line2D((self.r.d1.x, self.r.d2.x), (self.r.d1.y, self.r.d2.y), color="yellow"))
 
 class Windmill:
     idx = 0
@@ -84,8 +133,7 @@ class Windmill:
             ax.plot([self.center.x, w.x], [self.center.y, w.y], color="white")
    
         if (self.yellow):
-            ax.plot([self.yellow.ll.x, self.yellow.rh.x], [
-                self.yellow.ll.y, self.yellow.rh.y], color="yellow")
+            self.yellow.draw(plt, ax)
 
 
     def bottom_candidate(self, x, y):
@@ -101,23 +149,15 @@ class Windmill:
             if (x > self.bottom1.x):
                 if (not self.yellow):
                     self.yellow = Yellow()
-                if (x > self.yellow.ll.x):
-                    self.yellow.ll.x = x
-                    if (y < self.yellow.ll.y):
-                        self.yellow.ll.y = y
+                self.yellow.evaluate_left(x, y)
         else:
             if (x < self.bottom2.x):
                 if (not self.yellow):
                     self.yellow = Yellow()
-                if (x < self.yellow.rh.x):
-                    self.yellow.rh.x = x
-                    if (y > self.yellow.rh.y):
-                        self.yellow.rh.y = y
+                self.yellow.evaluate_right(x, y)
         if (self.yellow):
-            self.bottom1.x = self.yellow.ll.x
-            self.bottom1.y = self.yellow.rh.y
-            self.bottom2.x = self.yellow.rh.x
-            self.bottom2.y = self.yellow.rh.y
+            self.bottom1, self.bottom2 = self.yellow.get_bottom()
+
 
     def wings_distance_heuristic(self):
         hdata=[178,127,720]
@@ -143,7 +183,7 @@ class Windmill:
         if (len(self.wings) == 0):
             d2 = self.center.distance2(w.x, w.y)
             (d2m, d2M) = self.wings_distance_heuristic()
-            print(d2, d2m, d2M)
+            #print(d2, d2m, d2M)
             if (d2 < d2M):
                 if (d2 > d2m):
                     return True

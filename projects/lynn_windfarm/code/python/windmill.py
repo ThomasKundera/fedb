@@ -160,9 +160,9 @@ class Windmill:
 
 
     def wings_distance_heuristic(self):
-        hdata=[178,127,720]
-        ldata=[208,190,482]
-        z=np.polyfit(hdata, ldata, 2)
+        hdata=[178,127,720,894]
+        ldata=[208,190,482,620]
+        z=np.polyfit(hdata, ldata, 3)
         p = np.poly1d(z)
         h = math.fabs(self.center.y-self.horizon.predict_y([self.center.x])[0])
         d2M = 1.2*p(h)*p(h)

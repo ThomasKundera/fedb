@@ -165,6 +165,8 @@ def find_windmills(horizon, hsv_data):
         if (len(w.possible_mill) == 1):
             if (len(windmills[w.possible_mill[0].idx].wings) == 0):
                 windmills[w.possible_mill[0].idx].add_wing(w)
+            else:
+                wings2[w.idx]=w
         else:
             wings2[w.idx]=w
     wings=wings2
@@ -176,9 +178,11 @@ def find_windmills(horizon, hsv_data):
                     m.add_wing(w)
                 else:
                     wings2[w.idx]=w
+        else:
+            wings2[w.idx]=w
     wings=wings2
 
-    if (True):
+    for i in range(4):
         for w in wings.values():
             w.possible_mill=[]
             for m in windmills.values():
@@ -188,8 +192,10 @@ def find_windmills(horizon, hsv_data):
             if (len(w.possible_mill) == 1):
                 if (len(windmills[w.possible_mill[0].idx].wings) == 0):
                     windmills[w.possible_mill[0].idx].add_wing(w)
-        else:
-            wings2[w.idx]=w
+                else:
+                    wings2[w.idx]=w
+            else:
+                wings2[w.idx]=w
         wings=wings2
         wings2={}
         for m in windmills.values():
@@ -199,7 +205,10 @@ def find_windmills(horizon, hsv_data):
                         m.add_wing(w)
                     else:
                         wings2[w.idx]=w
+            else:
+                wings2[w.idx]=w
         wings=wings2
+        wings2={}
 
     print("Windmills: ----------- ")
     for m in windmills.values():
@@ -231,7 +240,7 @@ def do_object_identification(imgname):
     
 
 def object_identification():
-    imgname="51664909026_2877f487d2_o_detail4"
+    imgname="51664909026_2877f487d2_o_detail5"
     # Open original jpeg image
     original_image = plt.imread(os.path.join(
         'data', imgname + '.jpg'))

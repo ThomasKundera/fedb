@@ -2,6 +2,7 @@
 
 import os
 import sys
+import pickle
 
 import numpy as np
 
@@ -202,13 +203,10 @@ def find_windmills(horizon, hsv_data):
     return list(windmills.values())+fakewindmill
 
 
-def object_identification():
-    # Open original jpeg image
-    original_image = plt.imread(os.path.join(
-        'data', '51664909026_2877f487d2_o_detail3.jpg'))
-    # Open data point image
+def do_object_identification(imgname):
+   # Open data point image
     data_point_image = plt.imread(os.path.join(
-        'data', '51664909026_2877f487d2_o_detail3_data.png'))
+        'data', imgname + '_data.png'))
 
     # get hue data
     rgb_data = rgba2rgb(data_point_image, background=(0, 0, 0))
@@ -224,11 +222,32 @@ def object_identification():
     # fit windmills
     windmills = find_windmills(horizon, hsv_data)
 
+    return windmills
+    
+
+def object_identification():
+    imgname="51664909026_2877f487d2_o_detail3"
+    # Open original jpeg image
+    original_image = plt.imread(os.path.join(
+        'data', imgname + '.jpg'))
+ 
+    # See if we already have data for that image
+    pkfile=os.path.join('data', imgname + '.pkl')
+    if (os.path.exists(pkfile)):
+        print("Loading windmills from " + pkfile)
+        with open(pkfile, 'rb') as f:
+            windmills = pickle.load(f)
+    else:
+        print("Fitting windmills")
+        windmills = do_object_identification(imgname)
+        with open(pkfile, 'wb') as f:
+            pickle.dump(windmills, f)
+
     # Draw original image
     plt.imshow(original_image)
 
     # Draw estimated line
-    plt.plot(line_x, line_y)
+    #plt.plot(line_x, line_y)
 
     # Draw windmills
     for w in windmills:

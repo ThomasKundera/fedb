@@ -173,10 +173,10 @@ def find_windmills(horizon, hsv_data):
 def object_identification():
     # Open original jpeg image
     original_image = plt.imread(os.path.join(
-        'data', '51664909026_2877f487d2_o_detail2.jpg'))
+        'data', '51664909026_2877f487d2_o_detail.jpg'))
     # Open data point image
     data_point_image = plt.imread(os.path.join(
-        'data', '51664909026_2877f487d2_o_detail2_data.png'))
+        'data', '51664909026_2877f487d2_o_detail_data.png'))
 
     # get hue data
     rgb_data = rgba2rgb(data_point_image, background=(0, 0, 0))

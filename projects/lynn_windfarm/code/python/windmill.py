@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 import math
-
+import numpy as np
 
 class Dot:
     def __init__(self, x, y):
@@ -62,13 +62,19 @@ class Windmill:
         for w in self.wings:
             ax.plot([self.center.x, w.x], [self.center.y, w.y], color="white")
         if (not self.wmean):
-            d2m, d2M = self.wings_heuristic()
+            d2m, d2M = self.wings_distance_heuristic()
             # Plot circle around mean of wings
             ax.add_patch(
                 plt.Circle((self.center.x, self.center.y), math.sqrt(d2m), color="red", fill=False))
             ax.add_patch(
-                plt.Circle(elf.center.x, self.center.y), math.sqrt(d2M), color="red", fill=False)
-
+                plt.Circle((self.center.x, self.center.y), math.sqrt(d2M), color="red", fill=False))
+        if (self.wangle != None):
+            for i in range(3):
+                a = self.wangle+i*2*math.pi/3
+                p = Dot(self.center.x+math.cos(a)*self.wmean,
+                        self.center.y+math.sin(a)*self.wmean)
+                ax.add_patch(plt.Circle((p.x, p.y), 0.1*self.wmean, color="red", fill=False))
+    
     def bottom_candidate(self, x, y):
         if (x < self.center.x):
             if (x > self.bottom1.x):
@@ -78,9 +84,14 @@ class Windmill:
                 self.bottom2 = Dot(x, y)
 
     def wings_distance_heuristic(self):
-        h = self.center.y-self.horizon.predict_y([self.center.x])[0]
-        d2M = 2*h*h
-        d2m = 0.9*h*h
+        hdata=[178,127]
+        ldata=[208,190]
+        z=np.polyfit(hdata, ldata, 1)
+        p = np.poly1d(z)
+        h = math.fabs(self.center.y-self.horizon.predict_y([self.center.x])[0])
+        d2M = 1.2*p(h)*p(h)
+        d2m = 0.8*p(h)*p(h)
+        print("p( "+str(h)+" ) = ",str(p(h)))
         return (d2m, d2M)
 
     def wings_angle_heuristic(self):

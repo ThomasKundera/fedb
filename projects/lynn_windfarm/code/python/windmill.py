@@ -103,7 +103,7 @@ class Windmill:
                     self.yellow = Yellow()
                 if (x > self.yellow.ll.x):
                     self.yellow.ll.x = x
-                    if (y > self.yellow.ll.y):
+                    if (y < self.yellow.ll.y):
                         self.yellow.ll.y = y
         else:
             if (x < self.bottom2.x):
@@ -111,7 +111,7 @@ class Windmill:
                     self.yellow = Yellow()
                 if (x < self.yellow.rh.x):
                     self.yellow.rh.x = x
-                    if (y < self.yellow.rh.y):
+                    if (y > self.yellow.rh.y):
                         self.yellow.rh.y = y
         if (self.yellow):
             self.bottom1.x = self.yellow.ll.x
@@ -181,6 +181,16 @@ class Windmill:
         #self.wangle = a
         #print("Angle between wings: "+str(self.wangle*180/math.pi))
 
+class FakeWindmill(Windmill):
+    def __init__(self, horizon, x, y):
+        super(FakeWindmill, self).__init__(horizon, x, y)
+    
+    def set_color(self, color):
+        self.color = color
+
+    def draw(self, plt, ax):
+        ax.add_patch(plt.Circle((self.center.x, self.center.y), 
+        10, color=self.color, fill=False))
 
 def main():
     pass

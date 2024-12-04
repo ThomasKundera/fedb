@@ -17,7 +17,7 @@ from skimage.transform import warp, AffineTransform
 
 from tkunits import mm, μm
 
-from windmill import Windmill, Wing
+from windmill import Windmill, Wing, FakeWindmill
 
 # Captor size
 lx = 35.9*mm
@@ -141,16 +141,21 @@ def find_windmills(horizon, hsv_data):
         # FIXME: have to look for yellow blobs too
         windmills[m.idx]=m
 
+    fakewindmill=[]
+
     # Looking for end of wings
     wings={}
     for blob in green_blobs:
         y, x, r = blob
+        f=FakeWindmill(horizon, x, y)
+        f.set_color('green')
+        fakewindmill.append(f)
         w=Wing(x, y)
         wings[w.idx]=w
         for m in windmills.values():
             if (m.wing_candidate(w)):
                 w.mill_candidate(m)
-
+    
     wings2={}
     for w in wings.values():
         if (len(w.possible_mill) == 1):
@@ -169,9 +174,32 @@ def find_windmills(horizon, hsv_data):
                     wings2[w.idx]=w
     wings=wings2
 
+    if (True):
+        for w in wings.values():
+            w.possible_mill=[]
+            for m in windmills.values():
+                if (m.wing_candidate(w)):
+                    w.possible_mill.append(m)
+        for w in wings.values():
+            if (len(w.possible_mill) == 1):
+                if (len(windmills[w.possible_mill[0].idx].wings) == 0):
+                    windmills[w.possible_mill[0].idx].add_wing(w)
+        else:
+            wings2[w.idx]=w
+        wings=wings2
+        wings2={}
+        for m in windmills.values():
+            if (len(m.wings) > 0):
+                for w in wings.values():
+                    if (m.wing_candidate(w)):
+                        m.add_wing(w)
+                    else:
+                        wings2[w.idx]=w
+        wings=wings2
+
     for m in windmills:
         print(w)
-    return windmills.values()
+    return list(windmills.values())+fakewindmill
 
 
 def object_identification():

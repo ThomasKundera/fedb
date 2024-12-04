@@ -135,6 +135,9 @@ def find_windmills(horizon, hsv_data):
         for blob in white_blobs:
             y1, x1, r1 = blob
             m.bottom_candidate(x1, y1)
+        for blob in yellow_blobs:
+            y1, x1, r1 = blob
+            m.bottom_candidate_yellow(x1, y1)
         # FIXME: have to look for yellow blobs too
         windmills[m.idx]=m
 
@@ -151,7 +154,8 @@ def find_windmills(horizon, hsv_data):
     wings2={}
     for w in wings.values():
         if (len(w.possible_mill) == 1):
-            windmills[w.possible_mill[0].idx].add_wing(w)
+            if (len(windmills[w.possible_mill[0].idx].wings) == 0):
+                windmills[w.possible_mill[0].idx].add_wing(w)
         else:
             wings2[w.idx]=w
     wings=wings2
@@ -173,10 +177,10 @@ def find_windmills(horizon, hsv_data):
 def object_identification():
     # Open original jpeg image
     original_image = plt.imread(os.path.join(
-        'data', '51664909026_2877f487d2_o_detail.jpg'))
+        'data', '51664909026_2877f487d2_o_detail3.jpg'))
     # Open data point image
     data_point_image = plt.imread(os.path.join(
-        'data', '51664909026_2877f487d2_o_detail_data.png'))
+        'data', '51664909026_2877f487d2_o_detail3_data.png'))
 
     # get hue data
     rgb_data = rgba2rgb(data_point_image, background=(0, 0, 0))

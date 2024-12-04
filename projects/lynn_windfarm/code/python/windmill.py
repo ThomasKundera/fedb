@@ -31,6 +31,12 @@ class Wing(Dot):
         self.possible_mill.append(m)
 
 
+class Yellow:
+    def __init__(self):
+        self.ll=Dot(0, 6000)
+        self.rh=Dot(6000, 0)
+        
+
 class Windmill:
     idx = 0
 
@@ -39,6 +45,7 @@ class Windmill:
         self.center = Dot(x, y)
         self.bottom1 = Dot(0, 0)
         self.bottom2 = Dot(6000, 0)
+        self.yellow = None
         self.wings = []
         self.wangle = None
         self.wmean = None
@@ -55,12 +62,6 @@ class Windmill:
         return s
 
     def draw(self, plt, ax):
-        ax.plot([self.center.x, self.bottom1.x], [
-            self.center.y, self.bottom1.y], color="white")
-        ax.plot([self.center.x, self.bottom2.x], [
-                self.center.y, self.bottom2.y], color="white")
-        for w in self.wings:
-            ax.plot([self.center.x, w.x], [self.center.y, w.y], color="white")
         if (not self.wmean):
             d2m, d2M = self.wings_distance_heuristic()
             # Plot circle around mean of wings
@@ -74,7 +75,19 @@ class Windmill:
                 p = Dot(self.center.x+math.cos(a)*self.wmean,
                         self.center.y+math.sin(a)*self.wmean)
                 ax.add_patch(plt.Circle((p.x, p.y), 0.1*self.wmean, color="red", fill=False))
-    
+                ax.plot([self.center.x, p.x], [self.center.y, p.y], color="red")
+        ax.plot([self.center.x, self.bottom1.x], [
+            self.center.y, self.bottom1.y], color="white")
+        ax.plot([self.center.x, self.bottom2.x], [
+                self.center.y, self.bottom2.y], color="white")
+        for w in self.wings:
+            ax.plot([self.center.x, w.x], [self.center.y, w.y], color="white")
+   
+        if (self.yellow):
+            ax.plot([self.yellow.ll.x, self.yellow.rh.x], [
+                self.yellow.ll.y, self.yellow.rh.y], color="yellow")
+
+
     def bottom_candidate(self, x, y):
         if (x < self.center.x):
             if (x > self.bottom1.x):
@@ -83,15 +96,38 @@ class Windmill:
             if (x < self.bottom2.x):
                 self.bottom2 = Dot(x, y)
 
+    def bottom_candidate_yellow(self, x, y):
+        if (x < self.center.x):
+            if (x > self.bottom1.x):
+                if (not self.yellow):
+                    self.yellow = Yellow()
+                if (x > self.yellow.ll.x):
+                    self.yellow.ll.x = x
+                    if (y > self.yellow.ll.y):
+                        self.yellow.ll.y = y
+        else:
+            if (x < self.bottom2.x):
+                if (not self.yellow):
+                    self.yellow = Yellow()
+                if (x < self.yellow.rh.x):
+                    self.yellow.rh.x = x
+                    if (y < self.yellow.rh.y):
+                        self.yellow.rh.y = y
+        if (self.yellow):
+            self.bottom1.x = self.yellow.ll.x
+            self.bottom1.y = self.yellow.rh.y
+            self.bottom2.x = self.yellow.rh.x
+            self.bottom2.y = self.yellow.rh.y
+
     def wings_distance_heuristic(self):
-        hdata=[178,127]
-        ldata=[208,190]
-        z=np.polyfit(hdata, ldata, 1)
+        hdata=[178,127,720]
+        ldata=[208,190,482]
+        z=np.polyfit(hdata, ldata, 2)
         p = np.poly1d(z)
         h = math.fabs(self.center.y-self.horizon.predict_y([self.center.x])[0])
         d2M = 1.2*p(h)*p(h)
         d2m = 0.8*p(h)*p(h)
-        print("p( "+str(h)+" ) = ",str(p(h)))
+        #print("p( "+str(h)+" ) = ",str(p(h)))
         return (d2m, d2M)
 
     def wings_angle_heuristic(self):
@@ -121,6 +157,8 @@ class Windmill:
     def add_wing(self, w):
         if (len(self.wings) == 0):
             self.wings.append(w)
+            a=(math.atan2(w.y-self.center.y, w.x-self.center.x)) % (2*math.pi/3)
+            self.wangle = a
         if (w not in self.wings):
             self.wings.append(w)
         self.wingstuffing()
@@ -131,17 +169,17 @@ class Windmill:
             l += math.sqrt(w.distance2(self.center.x, self.center.y))
         l /= len(self.wings)
         self.wmean = l
-        for w in self.wings:
-            if ((math.sqrt(w.distance2(self.center.x, self.center.y))-l)/l > .1):
-                print("Wings length is incoherent")
-            else:
-                print("Wings length is: "+str(l))
-        a = 0
-        for w in self.wings:
-            a += (math.atan2(w.y-self.center.y,
-                  w.x-self.center.x)) % (2*math.pi/3)
-        self.wangle = a
-        print("Angle between wings: "+str(self.wangle*180/math.pi))
+        #for w in self.wings:
+        #    if ((math.sqrt(w.distance2(self.center.x, self.center.y))-l)/l > .1):
+        #        print("Wings length is incoherent")
+        #    else:
+        #        print("Wings length is: "+str(l))
+        #a = 0
+        #for w in self.wings:
+        #    a += (math.atan2(w.y-self.center.y,
+        #          w.x-self.center.x)) % (2*math.pi/3)
+        #self.wangle = a
+        #print("Angle between wings: "+str(self.wangle*180/math.pi))
 
 
 def main():

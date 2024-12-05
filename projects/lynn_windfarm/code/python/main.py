@@ -3,6 +3,7 @@
 import os
 import sys
 import pickle
+import datetime
 
 import numpy as np
 
@@ -35,8 +36,12 @@ dy = ly/py
 # Assumed square pixel
 dxy = (dx+dy)/2.
 
+# Print function with datestamp
+def logprint(*args, **kwargs):
+    print("[", datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S"), "]", *args, **kwargs)
 
 def fit_horizon(hue_data):
+    logprint("fit_horizon: Start")
     blue_data = hue_data > 0.5
 
     # Extract blue pixels from blue_data as a 2D array
@@ -58,7 +63,7 @@ def fit_horizon(hue_data):
     # Fit a line to the data points
     model = LineModelND()
     model.estimate(data)
-
+    logprint("fit_horizon: End")
     return model
 
 
@@ -68,6 +73,7 @@ def plot_hsv(hsv_data):
 
 
 def find_white_blobs(hsv_data):
+    logprint("find_white_blobs: Start")
     sat_data = hsv_data[:, :, 1]
     sat_binary = sat_data < 0.9
     val_data = hsv_data[:, :, 2]
@@ -76,6 +82,7 @@ def find_white_blobs(hsv_data):
 
     blobs_dog = blob_dog(white_data, min_sigma=0.1, threshold=0.1)
 
+    logprint("find_white_blobs: End")
     return blobs_dog
 
 
@@ -120,6 +127,7 @@ def find_green_blobs(hsv_data):
 
 
 def find_windmills(horizon, hsv_data):
+    logprint("find_windmills: Start")
     windmills = {}
     fakewindmill=[]
 
@@ -133,8 +141,6 @@ def find_windmills(horizon, hsv_data):
         y, x, r = blob
         m = Windmill(horizon, x, y)
         # Look for possible bottom of windmill
-        xpl = 5000
-        xph = 0
         for blob in white_blobs:
             y1, x1, r1 = blob
             m.bottom_candidate(x1, y1)
@@ -178,11 +184,9 @@ def find_windmills(horizon, hsv_data):
                     m.add_wing(w)
                 else:
                     wings2[w.idx]=w
-        else:
-            wings2[w.idx]=w
     wings=wings2
-
-    for i in range(4):
+    wings2={}
+    while (False): #for i in range(4):
         for w in wings.values():
             w.possible_mill=[]
             for m in windmills.values():
@@ -205,20 +209,27 @@ def find_windmills(horizon, hsv_data):
                         m.add_wing(w)
                     else:
                         wings2[w.idx]=w
-            else:
-                wings2[w.idx]=w
         wings=wings2
         wings2={}
 
+    # Create fake windmills from remainig wings locations
+    for w in wings.values():
+        f=FakeWindmill(horizon, w.x, w.y)
+        f.set_color('black')
+        fakewindmill.append(f)
+
     print("Windmills: ----------- ")
     for m in windmills.values():
-        print(w)
+        print(m)
     print("----------------")
+
+    logprint("find_windmills: End")
     return list(windmills.values())+fakewindmill
 
 
 def do_object_identification(imgname):
-   # Open data point image
+    logprint("do_object_identification: Start")
+    # Open data point image
     data_point_image = plt.imread(os.path.join(
         'data', imgname + '_data.png'))
 
@@ -236,17 +247,20 @@ def do_object_identification(imgname):
     # fit windmills
     windmills = find_windmills(horizon, hsv_data)
 
+    logprint("do_object_identification: End")
     return windmills
     
 
 def object_identification():
-    imgname="51664909026_2877f487d2_o_detail5"
+    logprint("object_identification: Start")
+    imgname="51664909026_2877f487d2_o_detail2"
     # Open original jpeg image
     original_image = plt.imread(os.path.join(
         'data', imgname + '.jpg'))
  
     # See if we already have data for that image
     pkfile=os.path.join('data', imgname + '.pkl')
+    logprint("object_identification: Windmilling")
     if (False and os.path.exists(pkfile)):
         print("Loading windmills from " + pkfile)
         with open(pkfile, 'rb') as f:
@@ -256,6 +270,7 @@ def object_identification():
         windmills = do_object_identification(imgname)
         with open(pkfile, 'wb') as f:
             pickle.dump(windmills, f)
+    logprint("object_identification: Windmilling done")
 
     # Draw original image
     plt.imshow(original_image)
@@ -269,10 +284,13 @@ def object_identification():
 
     plt.tight_layout()
     plt.show()
+    logprint("object_identification: End")
 
 
 def main():
+    logprint("main: Start")
     object_identification()
+    logprint("main: End")
 
 
 # if main call main

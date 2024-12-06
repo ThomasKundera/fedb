@@ -2,6 +2,10 @@
 import math
 import numpy as np
 
+def wing_search_radius(l):
+    return 5*math.sqrt(l/10)
+
+
 class Dot:
     def __init__(self, x, y):
         self.x = x
@@ -123,7 +127,7 @@ class Windmill:
                 a = self.wangle+i*2*math.pi/3
                 p = Dot(self.center.x+math.cos(a)*self.wmean,
                         self.center.y+math.sin(a)*self.wmean)
-                ax.add_patch(plt.Circle((p.x, p.y), 0.1*self.wmean, color="red", fill=False))
+                ax.add_patch(plt.Circle((p.x, p.y), wing_search_radius(self.wmean), color="red", fill=False))
                 ax.plot([self.center.x, p.x], [self.center.y, p.y], color="red")
         ax.plot([self.center.x, self.bottom1.x], [
             self.center.y, self.bottom1.y], color="white")
@@ -160,8 +164,8 @@ class Windmill:
 
 
     def wings_distance_heuristic(self):
-        hdata=[178,127,720,894]
-        ldata=[208,190,482,620]
+        hdata=[178,127,720,834,894]
+        ldata=[208,190,482,575,620]
         z=np.polyfit(hdata, ldata, 3)
         p = np.poly1d(z)
         h = math.fabs(self.center.y-self.horizon.predict_y([self.center.x])[0])
@@ -190,7 +194,7 @@ class Windmill:
             return False
         pl = self.wings_angle_heuristic()
         for p in pl:
-            if (w.distance2(p.x, p.y) < (0.1*self.wmean)**2):
+            if (w.distance2(p.x, p.y) < (wing_search_radius(self.wmean))**2):
                 return True
         return False
 
@@ -239,30 +243,3 @@ def main():
 # if main call main
 if __name__ == "__main__":
     main()
-
-    def settle(self):
-        self.wmean = 0
-        if (len(self.wings) == 0):
-            print("No wings found")
-        elif (len(self.wings) > 3):
-            print("Too many wings found")
-        else:
-            # Compute average wing length
-            l = 0
-            for w in self.wings:
-                l += math.sqrt(w.distance2(self.center.x, self.center.y))
-            l /= len(self.wings)
-            self.wmean = l
-            # Test wings being about same length
-            for w in self.wings:
-                if ((math.sqrt(w.distance2(self.center.x, self.center.y))-l)/l > .1):
-                    print("Wings length is incoherent")
-                else:
-                    print("Wings length is: "+str(l))
-
-            # Compute angle between wings
-            if (len(self.wings) == 2):
-                a = math.atan2(
-                    self.wings[1].y-self.wings[0].y, self.wings[1].x-self.wings[0].x)
-                print("Angle between wings: "+str(a*180/math.pi))
-            # Compute distance between the two wings

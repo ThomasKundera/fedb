@@ -248,7 +248,7 @@ def do_object_identification(imgname):
 
     # get hue data
     rgb_data = rgba2rgb(data_point_image, background=(0, 0, 0))
-    hsv_data = rgb2hsv(rgb_data)
+    hsv_data = rgb2hsv(rgb_data)!!
 
     hue_data = hsv_data[:, :, 0]
 
@@ -266,7 +266,7 @@ def do_object_identification(imgname):
 
 def object_identification():
     logprint("object_identification: Start")
-    imgname = "51664909026_2877f487d2_o_detail3"
+    imgname = "51664909026_2877f487d2_o"
     # Open original jpeg image
     original_image = plt.imread(os.path.join(
         'data', imgname + '.jpg'))

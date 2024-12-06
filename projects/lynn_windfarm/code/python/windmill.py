@@ -2,9 +2,15 @@
 import math
 import numpy as np
 
+from tkunits import m,km
+
+from size_n_angles import pxtoangle, angletodistance
+
+kWing_length=(107.0/2) * m
+
+
 def wing_search_radius(l):
     return 5*math.sqrt(l/10)
-
 
 class Dot:
     def __init__(self, x, y):
@@ -50,7 +56,6 @@ class Wing(Dot):
 
     def __init__(self, x, y, inferred=False):
         super().__init__(x, y)
-        self.inferred = inferred
         self.possible_mill = []
         self.idx = Wing.idx
         Wing.idx += 1
@@ -62,7 +67,7 @@ class Wing(Dot):
 class Yellow:
     def __init__(self):
         self.l=TwoDots(Dot(0,0),Dot(0,0))
-        self.r=TwoDots(Dot(6000,0),Dot(6000,0))
+        self.r=TwoDots(Dot(10000,0),Dot(10000,0))
 
     def evaluate_left(self,x,y):
         d=Dot(x,y)
@@ -94,10 +99,11 @@ class Windmill:
     idx = 0
 
     def __init__(self, horizon, x, y):
+        self.fake = False
         self.horizon = horizon
         self.center = Dot(x, y)
         self.bottom1 = Dot(0, 0)
-        self.bottom2 = Dot(6000, 0)
+        self.bottom2 = Dot(10000, 0)
         self.yellow = None
         self.wings = []
         self.wangle = None
@@ -138,6 +144,10 @@ class Windmill:
    
         if (self.yellow):
             self.yellow.draw(plt, ax)
+        # Print distance
+        if (self.wmean):
+            ax.text(self.center.x, self.center.y,
+                   str(int(self.distance/km))+" km", color="white")
 
 
     def bottom_candidate(self, x, y):
@@ -213,21 +223,17 @@ class Windmill:
             l += math.sqrt(w.distance2(self.center.x, self.center.y))
         l /= len(self.wings)
         self.wmean = l
-        #for w in self.wings:
-        #    if ((math.sqrt(w.distance2(self.center.x, self.center.y))-l)/l > .1):
-        #        print("Wings length is incoherent")
-        #    else:
-        #        print("Wings length is: "+str(l))
-        #a = 0
-        #for w in self.wings:
-        #    a += (math.atan2(w.y-self.center.y,
-        #          w.x-self.center.x)) % (2*math.pi/3)
-        #self.wangle = a
-        #print("Angle between wings: "+str(self.wangle*180/math.pi))
+ 
+    def compute_distance(self):
+        a=pxtoangle(self.wmean)
+        #print("Angle: " + str(a))
+        self.distance=angletodistance(a,kWing_length)
+        print("Distance: " + str(self.distance/km)+" km")
 
 class FakeWindmill(Windmill):
     def __init__(self, horizon, x, y):
         super(FakeWindmill, self).__init__(horizon, x, y)
+        self.fake=True
     
     def set_color(self, color):
         self.color = color

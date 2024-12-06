@@ -51,16 +51,6 @@ So the image we have here has been cropped, veritically but not horizontally.
 
 We'll assume that the pixel size hasn't been altered (only crop, no resize), which is likley, and that the image is centered (which should be about correct).
 
-### Crude approximation
-
-We'll start from the simple relation:
-$$α=2×\tan^{-1}\left(\frac{l}{2f}\right)$$
-Where:
-- $f$ is the focal length of the lens (in mm)
-- $l$ is the distance (in mm) measured on the sensor
-- $α$ is the angle (in radians) of the measured object
-
-This relation is exact only for objects spanning equaly from sensor center. We'll assume it's good enough for objects further away for now.
 
 ### Pixel size
 
@@ -79,6 +69,31 @@ The pixels are likley squares, but some dead border likley exists on the sensor,
 
 ### Pixel size of objects with convertion to actual size
 
+#### Crude approximation
+
+We'll start from the simple relation:
+$$α=2×\tan^{-1}\left(\frac{l}{2f}\right)$$
+Where:
+- $f$ is the focal length of the lens (in mm)
+- $l$ is the distance (in mm) measured on the sensor
+- $α$ is the angle (in radians) of the measured object
+
+This relation is exact only for objects spanning equaly from sensor center. We'll assume it's good enough as the focale is long enough (so the angles are small).
+
+
+If we reverse the above relation, we'll get:
+$$l=2f\tan\left(\frac{α}{2}\right)$$
 
 
 
+### Wind farm characteristics
+Basic data:
+https://en.wikipedia.org/wiki/Lynn_and_Inner_Dowsing_Wind_Farms
+
+The farm was completed in 2009, so the picture in 2021 shows a completed farm.
+
+The wind turbine is at SWT-3.7-107:
+https://en.wind-turbine-models.com/turbines/1272-siemens-swt-3.6-107-offshore
+
+
+Diameter: 107.0 m

@@ -208,7 +208,7 @@ def find_windmills(horizon, green_blobs, red_blobs, white_blobs, yellow_blobs):
     first_look = True
 
     wings = {}
-    for i in range(2):
+    for i in range(3):
         if (first_look):
             for blob in green_blobs:
                 y, x, r = blob
@@ -294,7 +294,7 @@ def do_object_identification(imgname):
 
 def object_identification():
     logprint("object_identification: Start")
-    imgname = "51664909026_2877f487d2_o_detail2"
+    imgname = "51664909026_2877f487d2_o"
     # Open original jpeg image
     original_image = plt.imread(os.path.join(
         'data', imgname + '.jpg'))
@@ -302,7 +302,7 @@ def object_identification():
     # See if we already have data for that image
     pkfile = os.path.join('data', imgname + '.pkl')
     logprint("object_identification: Windmilling")
-    if (False and os.path.exists(pkfile)):
+    if (True and os.path.exists(pkfile)):
         print("Loading windmills from " + pkfile)
         with open(pkfile, 'rb') as f:
             windmills = pickle.load(f)

@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 import math
 
-from tkunits import mm, μm
+from tkunits import km, m, mm, μm
 
 # Captor size
 lx = 35.9*mm
@@ -31,10 +31,16 @@ def angletodistance(a,l):
     # from the captor
     # l=d*math.tan(a)
     # d = l/tan(a)
-    return 2*l/math.tan(a/2)
+    return l/math.tan(a)
 
 def main():
-    pass
+    print("dxy = "+str(dxy/μm)+" μm")
+    pxl=py/2
+    print("l = "+str(pxl*dxy/mm)+" mm")
+    print("a = "+str(180*pxtoangle(pxl)/math.pi)+" deg")
+    s=100*m
+    print("d = "+str(angletodistance(pxl*dxy,s)/km)+" km")
+    
 
 # if main call main
 if __name__ == "__main__":

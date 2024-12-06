@@ -91,6 +91,7 @@ def find_white_blobs(hsv_data):
 
 
 def find_yellow_blobs(hsv_data):
+    logprint("find_yellow_blobs: Start")
     hue_data = hsv_data[:, :, 0]
     hue1_binary = hue_data > .1
     hue2_binary = hue_data < .3
@@ -101,11 +102,12 @@ def find_yellow_blobs(hsv_data):
     # plt.show()
 
     blobs_dog = blob_dog(yellow_data, min_sigma=0.1, threshold=0.1)
-
+    logprint("find_yellow_blobs: End")
     return blobs_dog
 
 
 def find_red_blobs(hsv_data):
+    logprint("find_red_blobs: Start")
     hue_data = hsv_data[:, :, 0]
     hue_binary = hue_data == 0
     sat_data = hsv_data[:, :, 1]
@@ -114,10 +116,12 @@ def find_red_blobs(hsv_data):
 
     blobs_dog = blob_dog(red_data, min_sigma=1, threshold=0.4, overlap=0.1)
 
+    logprint("find_red_blobs: End")
     return blobs_dog
 
 
 def find_green_blobs(hsv_data):
+    logprint("find_green_blobs: Start")
     hue_data = hsv_data[:, :, 0]
     hue1_binary = hue_data > .2
     hue2_binary = hue_data < .6
@@ -127,6 +131,8 @@ def find_green_blobs(hsv_data):
     blobs_dog = blob_dog(green_data, min_sigma=1, threshold=0.1)
     # plt.imshow(green_data, cmap='gray')
     # plt.show()
+
+    logprint("find_green_blobs: End")
     return blobs_dog
 
 
@@ -197,7 +203,7 @@ def find_windmills(horizon, hsv_data):
     first_look=True
 
     wings = {}
-    for i in range(1):
+    for i in range(2):
         if (first_look):
             for blob in green_blobs:
                 y, x, r = blob
@@ -260,7 +266,7 @@ def do_object_identification(imgname):
 
 def object_identification():
     logprint("object_identification: Start")
-    imgname = "51664909026_2877f487d2_o_detail2"
+    imgname = "51664909026_2877f487d2_o_detail3"
     # Open original jpeg image
     original_image = plt.imread(os.path.join(
         'data', imgname + '.jpg'))

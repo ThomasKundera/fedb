@@ -18,7 +18,7 @@ from skimage.measure import LineModelND, ransac
 from skimage.transform import warp, AffineTransform
 
 from tkunits import mm, μm
-
+from tkthread import TkThread
 from windmill import Windmill, Wing, FakeWindmill
 
 # Captor size
@@ -74,6 +74,16 @@ def fit_horizon(hue_data):
 def plot_hsv(hsv_data):
     rgb = hsv_to_rgb(hsv_data)
     plt.imshow(rgb)
+
+def find_blue_blobs(hsv_data):
+    logprint("find_blue_blobs: Start")
+    hue_data = hsv_data[:, :, 0]
+    hue_binary = hue_data > 0.5
+
+    blobs_dog = blob_dog(hue_binary, min_sigma=0.1, threshold=0.1)
+
+    logprint("find_blue_blobs: End")
+    return blobs_dog
 
 
 def find_white_blobs(hsv_data):
@@ -188,19 +198,14 @@ def find_wings(windmills, wings):
     return (wings)
 
 
-def find_windmills(horizon, hsv_data):
+def find_windmills(horizon, green_blobs, red_blobs, white_blobs, yellow_blobs):
     logprint("find_windmills: Start")
-
-    white_blobs = find_white_blobs(hsv_data)
-    yellow_blobs = find_yellow_blobs(hsv_data)
-    red_blobs = find_red_blobs(hsv_data)
-    green_blobs = find_green_blobs(hsv_data)
 
     (windmills, fakewindmills) = find_windmills_body(
         horizon, red_blobs, white_blobs, yellow_blobs)
 
     # First time, looking at blobs, then using existing wings
-    first_look=True
+    first_look = True
 
     wings = {}
     for i in range(2):
@@ -215,18 +220,18 @@ def find_windmills(horizon, hsv_data):
                 for m in windmills.values():
                     if (m.wing_candidate(w)):
                         w.mill_candidate(m)
-            first_look=False
+            first_look = False
         else:
             for w in wings.values():
                 w.possible_mill = []
                 for m in windmills.values():
                     if (m.wing_candidate(w)):
                         w.possible_mill.append(m)
-        wings=find_wings(windmills, wings)
-    
+        wings = find_wings(windmills, wings)
+
    # Create fake windmills from remainig wings locations
     for w in wings.values():
-        #print(w.idx)
+        # print(w.idx)
         f = FakeWindmill(horizon, w.x, w.y)
         f.set_color('purple')
         fakewindmills.append(f)
@@ -240,6 +245,29 @@ def find_windmills(horizon, hsv_data):
     return list(windmills.values())+fakewindmills
 
 
+def find_blobs(hsv_data):
+    # Find blobs in parallel
+    #blue_thread = TkThread(target=find_blue_blobs, args=[hsv_data])
+    green_thread = TkThread(target=find_green_blobs, args=[hsv_data])
+    red_thread = TkThread(target=find_red_blobs, args=[hsv_data])
+    white_thread = TkThread(target=find_white_blobs, args=[hsv_data])
+    yellow_thread = TkThread(target=find_yellow_blobs, args=[hsv_data])
+ 
+    #blue_thread.start()
+    green_thread.start()
+    red_thread.start()
+    white_thread.start()
+    yellow_thread.start()
+
+    #blue_blobs = blue_thread.join()
+    green_blobs = green_thread.join()
+    red_blobs = red_thread.join()
+    white_blobs = white_thread.join()
+    yellow_blobs = yellow_thread.join()
+    blue_blobs = []
+    return (blue_blobs, green_blobs, red_blobs, white_blobs, yellow_blobs)
+
+
 def do_object_identification(imgname):
     logprint("do_object_identification: Start")
     # Open data point image
@@ -248,17 +276,17 @@ def do_object_identification(imgname):
 
     # get hue data
     rgb_data = rgba2rgb(data_point_image, background=(0, 0, 0))
-    hsv_data = rgb2hsv(rgb_data)!!
-
-    hue_data = hsv_data[:, :, 0]
-
+    hsv_data = rgb2hsv(rgb_data)
+    (blue_blobs, green_blobs, red_blobs, white_blobs, yellow_blobs) = find_blobs(hsv_data)
+    
     # fit horizon
+    hue_data = hsv_data[:, :, 0]
     horizon = fit_horizon(hue_data)
     # generate coordinates of estimated models
     line_x = np.arange(0, 200)
     line_y = horizon.predict_y(line_x)
     # fit windmills
-    windmills = find_windmills(horizon, hsv_data)
+    windmills = find_windmills(horizon, green_blobs,red_blobs,white_blobs,yellow_blobs)
 
     logprint("do_object_identification: End")
     return windmills
@@ -266,7 +294,7 @@ def do_object_identification(imgname):
 
 def object_identification():
     logprint("object_identification: Start")
-    imgname = "51664909026_2877f487d2_o"
+    imgname = "51664909026_2877f487d2_o_detail2"
     # Open original jpeg image
     original_image = plt.imread(os.path.join(
         'data', imgname + '.jpg'))

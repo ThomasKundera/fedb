@@ -17,7 +17,7 @@ from skimage.feature import corner_harris, corner_subpix, corner_peaks, match_te
 from skimage.measure import LineModelND, ransac
 from skimage.transform import warp, AffineTransform
 
-from tkunits import mm, μm
+from tkunits import km, mm, μm
 from tkthread import TkThread
 from windmill import Windmill, Wing, FakeWindmill
 
@@ -315,14 +315,37 @@ def draw_scene(original_image, windmills):
     plt.show()
     logprint("object_identification: End")
 
+def draw_map(windmills):
+    logprint("draw_map: Start")
+    m=FakeWindmill(0,0,0)
+    m.x_simple=0
+    m.y_simple=0
+    m.set_color('red')
+    windmills.append(m)
+    # Set a grid ccoordinates
+    plt.xlim(-1.3, 1.3)
+    plt.ylim(0, 46)
+    plt.gca().set_aspect('equal', adjustable='box')
+
+    for m in windmills:
+        print("( "+str(m.x_simple)+", "+str(m.y_simple)+" )")
+        if (not m.fake):
+            plt.gca().add_patch(plt.Circle((m.x_simple/km, m.y_simple/km), .1, color='blue', fill=True))
+        else:
+            plt.gca().add_patch(plt.Circle((m.x_simple/km, m.y_simple/km), .1, color=m.color, fill=True))
+
+    #plt.tight_layout()
+    plt.show()
+    logprint("draw_map: End")
 
 def main():
     logprint("main: Start")
     (original_image, windmills) = object_identification()
     realmills = [ m for m in windmills if not m.fake ]
     for m in realmills:
-        m.compute_distance()
-    draw_scene(original_image, windmills)
+        m.compute_distances()
+    #draw_scene(original_image, windmills)
+    draw_map(realmills)
     logprint("main: End")
 
 

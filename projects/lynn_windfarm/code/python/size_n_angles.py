@@ -33,13 +33,17 @@ def angletodistance(a,l):
     # d = l/tan(a)
     return l/math.tan(a)
 
+def side_angle(p):
+    return pxtoangle(p-px/2)
+
 def main():
     print("dxy = "+str(dxy/μm)+" μm")
-    pxl=py/2
+    pxl=755
     print("l = "+str(pxl*dxy/mm)+" mm")
-    print("a = "+str(180*pxtoangle(pxl)/math.pi)+" deg")
-    s=100*m
-    print("d = "+str(angletodistance(pxl*dxy,s)/km)+" km")
+    a=pxtoangle(pxl)
+    print("a = "+str(180*a/math.pi)+" deg")
+    s=50*m
+    print("d = "+str(angletodistance(a,s)/km)+" km")
     
 
 # if main call main

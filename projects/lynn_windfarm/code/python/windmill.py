@@ -4,9 +4,10 @@ import numpy as np
 
 from tkunits import m,km
 
-from size_n_angles import pxtoangle, angletodistance
+from size_n_angles import pxtoangle, angletodistance, side_angle
 
-kWing_length=(107.0/2) * m
+kWing_length_Lynn=(107.0/2) * m
+kWing_length_Race=(154.0/2) * m
 
 
 def wing_search_radius(l):
@@ -224,11 +225,22 @@ class Windmill:
         l /= len(self.wings)
         self.wmean = l
  
-    def compute_distance(self):
+    def compute_depth_distance(self):
         a=pxtoangle(self.wmean)
         #print("Angle: " + str(a))
-        self.distance=angletodistance(a,kWing_length)
+        self.distance=angletodistance(a,kWing_length_Lynn)
+        if (self.distance>15*km): # Not Lynn, byt Race
+            self.distance=angletodistance(a,kWing_length_Race)
         print("Distance: " + str(self.distance/km)+" km")
+
+    def compute_simple_coordinates(self):
+        a=side_angle(self.center.x)
+        self.x_simple=self.distance*math.sin(a)
+        self.y_simple=self.distance*math.cos(a)
+
+    def compute_distances(self):
+        self.compute_depth_distance()
+        self.compute_simple_coordinates()
 
 class FakeWindmill(Windmill):
     def __init__(self, horizon, x, y):

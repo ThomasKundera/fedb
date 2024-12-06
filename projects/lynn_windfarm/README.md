@@ -87,13 +87,23 @@ $$l=2f\tan\left(\frac{α}{2}\right)$$
 
 
 ### Wind farm characteristics
+
+#### Lynn windfarm
 Basic data:
 https://en.wikipedia.org/wiki/Lynn_and_Inner_Dowsing_Wind_Farms
 
 The farm was completed in 2009, so the picture in 2021 shows a completed farm.
 
-The wind turbine is at SWT-3.7-107:
+The wind turbine are SWT-3.7-107:
 https://en.wind-turbine-models.com/turbines/1272-siemens-swt-3.6-107-offshore
 
-
 Diameter: 107.0 m
+
+#### Race Bank windfarm
+Basic data:
+https://en.wikipedia.org/wiki/Race_Bank_wind_farm
+
+The wind turbines are SWT-6.0-154:
+https://fr.wind-turbine-models.com/turbines/657-siemens-swt-6.0-154
+
+Diameter: 154.0 m

@@ -21,24 +21,8 @@ from tkunits import mm, μm
 from tkthread import TkThread
 from windmill import Windmill, Wing, FakeWindmill
 
-# Captor size
-lx = 35.9*mm
-ly = 24.0*mm
-
-# Captor pixel size
-px = 6240.
-py = 4160.
-
-# Captor pixel pitch
-dx = lx/px
-dy = ly/py
-
-# Assumed square pixel
-dxy = (dx+dy)/2.
 
 # Print function with datestamp
-
-
 def logprint(*args, **kwargs):
     print("[", datetime.datetime.now().strftime(
         "%Y-%m-%d %H:%M:%S"), "]", *args, **kwargs)
@@ -312,7 +296,11 @@ def object_identification():
         with open(pkfile, 'wb') as f:
             pickle.dump(windmills, f)
     logprint("object_identification: Windmilling done")
+    return(original_image, windmills)
 
+
+def draw_scene(original_image, windmills):
+    logprint("object_identification: Start")
     # Draw original image
     plt.imshow(original_image)
 
@@ -330,7 +318,11 @@ def object_identification():
 
 def main():
     logprint("main: Start")
-    object_identification()
+    (original_image, windmills) = object_identification()
+    realmills = [ m for m in windmills if not m.fake ]
+    for m in realmills:
+        m.compute_distance()
+    draw_scene(original_image, windmills)
     logprint("main: End")
 
 

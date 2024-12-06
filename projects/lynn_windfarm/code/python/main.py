@@ -37,8 +37,12 @@ dy = ly/py
 dxy = (dx+dy)/2.
 
 # Print function with datestamp
+
+
 def logprint(*args, **kwargs):
-    print("[", datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S"), "]", *args, **kwargs)
+    print("[", datetime.datetime.now().strftime(
+        "%Y-%m-%d %H:%M:%S"), "]", *args, **kwargs)
+
 
 def fit_horizon(hue_data):
     logprint("fit_horizon: Start")
@@ -126,16 +130,10 @@ def find_green_blobs(hsv_data):
     return blobs_dog
 
 
-def find_windmills(horizon, hsv_data):
-    logprint("find_windmills: Start")
+def find_windmills_body(horizon, red_blobs, white_blobs, yellow_blobs):
+    logprint("find_windmills_body: Start")
+    fakewindmills = []
     windmills = {}
-    fakewindmill=[]
-
-    white_blobs = find_white_blobs(hsv_data)
-    yellow_blobs = find_yellow_blobs(hsv_data)
-    red_blobs = find_red_blobs(hsv_data)
-    green_blobs = find_green_blobs(hsv_data)
-
     # Looks for red blobs, as being center of rotation of windmill
     for blob in red_blobs:
         y, x, r = blob
@@ -147,76 +145,85 @@ def find_windmills(horizon, hsv_data):
         for blob in yellow_blobs:
             y1, x1, r1 = blob
             m.bottom_candidate_yellow(x1, y1)
-            f=FakeWindmill(horizon, x1, y1)
+            f = FakeWindmill(horizon, x1, y1)
             f.set_color('yellow')
-            fakewindmill.append(f)
-        # FIXME: have to look for yellow blobs too
-        windmills[m.idx]=m
+            fakewindmills.append(f)
+        windmills[m.idx] = m
+    logprint("find_windmills_body: End")
+    return (windmills, fakewindmills)
 
-    # Looking for end of wings
-    wings={}
-    for blob in green_blobs:
-        y, x, r = blob
-        f=FakeWindmill(horizon, x, y)
-        f.set_color('green')
-        fakewindmill.append(f)
-        w=Wing(x, y)
-        wings[w.idx]=w
-        for m in windmills.values():
-            if (m.wing_candidate(w)):
-                w.mill_candidate(m)
-    
-    wings2={}
+
+def find_wings(windmills, wings):
+    logprint("find_wings: Start")
+    wings2 = {}
     for w in wings.values():
         if (len(w.possible_mill) == 1):
             if (len(windmills[w.possible_mill[0].idx].wings) == 0):
                 windmills[w.possible_mill[0].idx].add_wing(w)
             else:
-                wings2[w.idx]=w
+                wings2[w.idx] = w
         else:
-            wings2[w.idx]=w
-    wings=wings2
-    wings2={}
+            wings2[w.idx] = w
+    wings = wings2
+    wings2 = {}
     for m in windmills.values():
         if (len(m.wings) > 0):
             for w in wings.values():
                 if (m.wing_candidate(w)):
                     m.add_wing(w)
-                else:
-                    wings2[w.idx]=w
-    wings=wings2
-    wings2={}
-    while (False): #for i in range(4):
-        for w in wings.values():
-            w.possible_mill=[]
-            for m in windmills.values():
-                if (m.wing_candidate(w)):
-                    w.possible_mill.append(m)
-        for w in wings.values():
-            if (len(w.possible_mill) == 1):
-                if (len(windmills[w.possible_mill[0].idx].wings) == 0):
-                    windmills[w.possible_mill[0].idx].add_wing(w)
-                else:
-                    wings2[w.idx]=w
-            else:
-                wings2[w.idx]=w
-        wings=wings2
-        wings2={}
-        for m in windmills.values():
-            if (len(m.wings) > 0):
-                for w in wings.values():
-                    if (m.wing_candidate(w)):
-                        m.add_wing(w)
-                    else:
-                        wings2[w.idx]=w
-        wings=wings2
-        wings2={}
+                    wings2[w.idx] = w
 
-    # Create fake windmills from remainig wings locations
+    for w in wings2.values():
+        # If idx exists in wings, pop
+        if (w.idx in wings):
+            wings.pop(w.idx)
+
+    logprint("find_wings: End")
+    return (wings)
+
+
+def find_windmills(horizon, hsv_data):
+    logprint("find_windmills: Start")
+
+    white_blobs = find_white_blobs(hsv_data)
+    yellow_blobs = find_yellow_blobs(hsv_data)
+    red_blobs = find_red_blobs(hsv_data)
+    green_blobs = find_green_blobs(hsv_data)
+
+    (windmills, fakewindmills) = find_windmills_body(
+        horizon, red_blobs, white_blobs, yellow_blobs)
+
+    # First time, looking at blobs, then using existing wings
+    first_look=True
+
+    wings = {}
+    for i in range(1):
+        if (first_look):
+            for blob in green_blobs:
+                y, x, r = blob
+                f = FakeWindmill(horizon, x, y)
+                f.set_color('green')
+                fakewindmills.append(f)
+                w = Wing(x, y)
+                wings[w.idx] = w
+                for m in windmills.values():
+                    if (m.wing_candidate(w)):
+                        w.mill_candidate(m)
+            first_look=False
+        else:
+            for w in wings.values():
+                w.possible_mill = []
+                for m in windmills.values():
+                    if (m.wing_candidate(w)):
+                        w.possible_mill.append(m)
+        wings=find_wings(windmills, wings)
+    
+   # Create fake windmills from remainig wings locations
     for w in wings.values():
-        f=FakeWindmill(horizon, w.x, w.y)
-        f.set_color('black')
-        fakewindmill.append(f)
+        #print(w.idx)
+        f = FakeWindmill(horizon, w.x, w.y)
+        f.set_color('purple')
+        fakewindmills.append(f)
 
     print("Windmills: ----------- ")
     for m in windmills.values():
@@ -224,7 +231,7 @@ def find_windmills(horizon, hsv_data):
     print("----------------")
 
     logprint("find_windmills: End")
-    return list(windmills.values())+fakewindmill
+    return list(windmills.values())+fakewindmills
 
 
 def do_object_identification(imgname):
@@ -249,17 +256,17 @@ def do_object_identification(imgname):
 
     logprint("do_object_identification: End")
     return windmills
-    
+
 
 def object_identification():
     logprint("object_identification: Start")
-    imgname="51664909026_2877f487d2_o_detail2"
+    imgname = "51664909026_2877f487d2_o_detail2"
     # Open original jpeg image
     original_image = plt.imread(os.path.join(
         'data', imgname + '.jpg'))
- 
+
     # See if we already have data for that image
-    pkfile=os.path.join('data', imgname + '.pkl')
+    pkfile = os.path.join('data', imgname + '.pkl')
     logprint("object_identification: Windmilling")
     if (False and os.path.exists(pkfile)):
         print("Loading windmills from " + pkfile)
@@ -276,7 +283,7 @@ def object_identification():
     plt.imshow(original_image)
 
     # Draw estimated line
-    #plt.plot(line_x, line_y)
+    # plt.plot(line_x, line_y)
 
     # Draw windmills
     for w in windmills:

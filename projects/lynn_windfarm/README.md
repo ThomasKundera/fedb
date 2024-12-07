@@ -107,3 +107,10 @@ The wind turbines are SWT-6.0-154:
 https://fr.wind-turbine-models.com/turbines/657-siemens-swt-6.0-154
 
 Diameter: 154.0 m
+
+## Reconstructing the scene
+
+### Some computed data
+
+Horizon distance was estimated as about 11 km from the wind turbines bases.
+So, altitude of the camera is about 10m

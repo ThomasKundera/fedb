@@ -344,8 +344,18 @@ def main():
     realmills = [ m for m in windmills if not m.fake ]
     for m in realmills:
         m.compute_distances()
-    #draw_scene(original_image, windmills)
-    draw_map(realmills)
+    draw_scene(original_image, windmills)
+    #draw_map(realmills)
+    hmin=0
+    hmax=100*km
+    for m in realmills:
+        if (m.yellow):
+            if (m.beyond_horizon):
+                hmax=m.distance
+            else:
+                hmin=m.distance
+        print (str(hmin)+" < horizon < "+str(hmax))
+
     logprint("main: End")
 
 

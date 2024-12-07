@@ -84,11 +84,19 @@ class Yellow:
         self.r.d1=r[0]
         self.r.d2=r[1]
     
-    def get_bottom(self):
+    def get_top(self):
         xl=(self.l.d1.x+self.l.d2.x)/2
         yl=min(self.l.d1.y,self.l.d2.y)
         xr=(self.r.d1.x+self.r.d2.x)/2
         yr=min(self.r.d1.y,self.r.d2.y)
+        ym=(yl+yr)/2
+        return (Dot(xl,ym),Dot(xr,ym))
+
+    def get_bottom(self):
+        xl=(self.l.d1.x+self.l.d2.x)/2
+        yl=max(self.l.d1.y,self.l.d2.y)
+        xr=(self.r.d1.x+self.r.d2.x)/2
+        yr=max(self.r.d1.y,self.r.d2.y)
         ym=(yl+yr)/2
         return (Dot(xl,ym),Dot(xr,ym))
 
@@ -171,7 +179,7 @@ class Windmill:
                     self.yellow = Yellow()
                 self.yellow.evaluate_right(x, y)
         if (self.yellow):
-            self.bottom1, self.bottom2 = self.yellow.get_bottom()
+            self.bottom1, self.bottom2 = self.yellow.get_top()
 
 
     def wings_distance_heuristic(self):
@@ -179,7 +187,8 @@ class Windmill:
         ldata=[208,190,482,575,620]
         z=np.polyfit(hdata, ldata, 3)
         p = np.poly1d(z)
-        h = math.fabs(self.center.y-self.horizon.predict_y([self.center.x])[0])
+        self.local_horizon = self.horizon.predict_y([self.center.x])[0]
+        h = math.fabs(self.center.y-self.local_horizon)
         d2M = 1.2*p(h)*p(h)
         d2m = 0.8*p(h)*p(h)
         #print("p( "+str(h)+" ) = ",str(p(h)))
@@ -241,6 +250,14 @@ class Windmill:
     def compute_distances(self):
         self.compute_depth_distance()
         self.compute_simple_coordinates()
+        if (self.yellow):
+            bottom=self.yellow.get_bottom()[0].y
+            h = self.local_horizon-bottom
+            print("h = " + str(h))
+            if (h<-5):
+                self.beyond_horizon = False
+            else:
+                self.beyond_horizon = True
 
 class FakeWindmill(Windmill):
     def __init__(self, horizon, x, y):

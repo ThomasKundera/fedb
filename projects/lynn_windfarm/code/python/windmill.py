@@ -159,6 +159,11 @@ class Windmill:
                    str(int(self.distance/km))+" km", color="white")
 
 
+    def to_povray(self):
+        s = "windmill ("+ str(self.x_simple) + ", " + str(self.y_simple) + ")\n"
+        return s
+
+
     def bottom_candidate(self, x, y):
         if (x < self.center.x):
             if (x > self.bottom1.x):

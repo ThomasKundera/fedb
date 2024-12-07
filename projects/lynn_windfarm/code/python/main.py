@@ -338,23 +338,41 @@ def draw_map(windmills):
     plt.show()
     logprint("draw_map: End")
 
-def main():
-    logprint("main: Start")
-    (original_image, windmills) = object_identification()
-    realmills = [ m for m in windmills if not m.fake ]
-    for m in realmills:
-        m.compute_distances()
-    draw_scene(original_image, windmills)
-    #draw_map(realmills)
+
+def to_povray(windmills):
+    logprint("to_povray: Start")
+    f=open(os.path.join("data","windmill.pov"),"w")
+    
+    for m in windmills:
+        f.write(m.to_povray()+"\n")
+    f.close()
+    logprint("to_povray: End")
+
+
+def find_horizon_distance(windmill):
+    logprint("find_horizon_distance: Start")
     hmin=0
     hmax=100*km
-    for m in realmills:
+    for m in windmill:
         if (m.yellow):
             if (m.beyond_horizon):
                 hmax=m.distance
             else:
                 hmin=m.distance
         print (str(hmin)+" < horizon < "+str(hmax))
+    logprint("find_horizon_distance: End")
+    return (hmin+hmax)/2
+
+def main():
+    logprint("main: Start")
+    (original_image, windmills) = object_identification()
+    realmills = [ m for m in windmills if not m.fake ]
+    for m in realmills:
+        m.compute_distances()
+    #draw_scene(original_image, windmills)
+    #draw_map(realmills)
+    print(find_horizon_distance(realmills))
+    to_povray(realmills)
 
     logprint("main: End")
 

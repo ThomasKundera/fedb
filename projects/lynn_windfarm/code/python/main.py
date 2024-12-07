@@ -339,16 +339,6 @@ def draw_map(windmills):
     logprint("draw_map: End")
 
 
-def to_povray(windmills):
-    logprint("to_povray: Start")
-    f=open(os.path.join("data","windmill.pov"),"w")
-    
-    for m in windmills:
-        f.write(m.to_povray()+"\n")
-    f.close()
-    logprint("to_povray: End")
-
-
 def find_horizon_distance(windmill):
     logprint("find_horizon_distance: Start")
     hmin=0
@@ -363,6 +353,39 @@ def find_horizon_distance(windmill):
     logprint("find_horizon_distance: End")
     return (hmin+hmax)/2
 
+def find_windmill_size(windmill):
+    logprint("find_windmill_size: Start")
+    yellow_height=0
+    yellow_width=0
+    white_height=0
+    nb=0
+    for m in windmill:
+        if (m.yellow):
+            if (not m.beyond_horizon):
+                yellow_height+=m.yellow_height
+                yellow_width+=m.yellow_width
+                white_height+=m.white_height
+                nb+=1
+                print(str(m.yellow_height)+" "+str(m.yellow_width)+" "+str(m.white_height))
+
+    yellow_height=yellow_height/nb
+    yellow_width=yellow_width/nb
+    white_height=white_height/nb
+    print("Mean size: "+str(yellow_height)+" "+str(yellow_width)+" "+str(white_height))
+    logprint("find_windmill_size: End")
+
+
+def to_povray(windmills):
+    logprint("to_povray: Start")
+    f=open(os.path.join("data","windmill.pov"),"w")
+    
+    for m in windmills:
+        f.write(m.to_povray())
+    f.close()
+    logprint("to_povray: End")
+
+
+
 def main():
     logprint("main: Start")
     (original_image, windmills) = object_identification()
@@ -372,7 +395,8 @@ def main():
     #draw_scene(original_image, windmills)
     #draw_map(realmills)
     print(find_horizon_distance(realmills))
-    to_povray(realmills)
+    #to_povray(realmills)
+    find_windmill_size(realmills)
 
     logprint("main: End")
 

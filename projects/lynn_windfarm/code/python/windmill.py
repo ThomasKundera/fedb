@@ -100,6 +100,16 @@ class Yellow:
         ym=(yl+yr)/2
         return (Dot(xl,ym),Dot(xr,ym))
 
+    def get_height(self):
+        yt=min(self.l.d1.y,self.l.d2.y)
+        yb=max(self.r.d1.y,self.r.d2.y)
+        return yb-yt
+
+    def get_width(self):
+        xl=math.fabs(self.l.d1.x+self.l.d2.x)/2
+        xr=math.fabs(self.r.d1.x+self.r.d2.x)/2
+        return xr-xl
+
     def draw(self, plt, ax):
         ax.add_patch(plt.Line2D((self.l.d1.x, self.l.d2.x), (self.l.d1.y, self.l.d2.y), color="yellow"))
         ax.add_patch(plt.Line2D((self.r.d1.x, self.r.d2.x), (self.r.d1.y, self.r.d2.y), color="yellow"))
@@ -160,7 +170,7 @@ class Windmill:
 
 
     def to_povray(self):
-        s = "windmill ("+ str(self.x_simple) + ", " + str(self.y_simple) + ")\n"
+        s = "windmill ("+ str(self.x_simple) + ", " + str(self.y_simple) + "," + str(180*self.wangle/math.pi) +")\n"
         return s
 
 
@@ -252,6 +262,12 @@ class Windmill:
         self.x_simple=self.distance*math.sin(a)
         self.y_simple=self.distance*math.cos(a)
 
+    def compute_size(self):
+        scale=kWing_length_Lynn/self.wmean
+        self.yellow_height=scale*(self.yellow.get_height())
+        self.yellow_width=scale*(self.yellow.get_width())
+        self.white_height=scale*(self.local_horizon-self.center.y)
+
     def compute_distances(self):
         self.compute_depth_distance()
         self.compute_simple_coordinates()
@@ -261,8 +277,10 @@ class Windmill:
             print("h = " + str(h))
             if (h<-5):
                 self.beyond_horizon = False
+                self.compute_size()
             else:
                 self.beyond_horizon = True
+
 
 class FakeWindmill(Windmill):
     def __init__(self, horizon, x, y):

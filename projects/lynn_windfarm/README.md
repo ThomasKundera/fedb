@@ -114,3 +114,14 @@ Diameter: 154.0 m
 
 Horizon distance was estimated as about 11 km from the wind turbines bases.
 So, altitude of the camera is about 10m
+
+From picture, knowing the diameter of the Lynn windturbines, we can compute the size of the windturbines:
+- Height of the Yellow part: 15 m
+- Width of the Yellow part:  5 m
+- Height of the White part: 76 m
+
+To get similar data from the Race Bank windfarm, we'll use the following pictures:
+- https://www.alamy.com/the-6mw-siemens-swt-60-154-wind-turbines-on-the-race-bank-offshore-wind-farm-in-the-southern-north-sea-uk-image215430515.html
+- https://www.alamy.com/wind-turbines-on-the-race-bank-offshore-wind-farm-in-the-southern-north-sea-uk-image215430497.html
+
+On PEDKP9: Height: 380px, blades: 293, 282, 288

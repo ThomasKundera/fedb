@@ -5,9 +5,9 @@
 #include "colors.inc"
 #include "common.inc"
 
-#declare DoFlatEarth=false;
+#declare DoFlatEarth=true;
 
-#declare earthType=0;
+#declare earthType=3;
 #if (DoFlatEarth)
 #include "flat-earth-simple.inc"
 #else
@@ -95,7 +95,7 @@
 
 #macro windmill_sw37 (x_simple,z_simple,wangle)
   object {
-    Windmill(wangle, 91*m, 107*m/2)
+    Windmill(wangle, 76*m, 107*m/2)
     on_earth_translate (x_simple,z_simple)
   }
 #end
@@ -146,7 +146,11 @@ union {
 
 object {
   Earth
-  translate <0,-Earth_Radius,0>
+  #if (DoFlatEarth)
+    translate <0,0,0>
+  #else
+    translate <0,-Earth_Radius,0>
+  #end
 }
 
 

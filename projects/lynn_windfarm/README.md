@@ -25,7 +25,22 @@ Thumbnail       : image/jpeg, 6053 Bytes
 Camera make     : Canon
 Camera model    : Canon EOS 6D Mark II
 Image timestamp : 2021:10:30 15:08:54
-File number     : (0)
+File number   /*union {
+  #for (h,0,20)
+    difference {
+      sphere {<0,0,0>, Earth_Radius+(h+1)*10*m}
+      sphere {<0,0,0>, Earth_Radius+h*10*m}
+      pigment {Clear }
+      hollow
+      interior {
+        ior air_index(15-h/2)
+        #debug concat("index:",str(air_index(15-h/2),20,20),"\n")
+      }
+    }
+  #end
+  translate <0,-Earth_Radius,0>
+}*/
+  : (0)
 Exposure time   : 1/320 s
 Aperture        : F16
 Exposure bias   : -1/3 EV
@@ -86,9 +101,9 @@ $$l=2f\tan\left(\frac{α}{2}\right)$$
 
 
 
-### Wind farm characteristics
+## Wind farm characteristics
 
-#### Lynn windfarm
+### Lynn windfarm
 Basic data:
 https://en.wikipedia.org/wiki/Lynn_and_Inner_Dowsing_Wind_Farms
 
@@ -99,7 +114,7 @@ https://en.wind-turbine-models.com/turbines/1272-siemens-swt-3.6-107-offshore
 
 Diameter: 107.0 m
 
-#### Race Bank windfarm
+### Race Bank windfarm
 Basic data:
 https://en.wikipedia.org/wiki/Race_Bank_wind_farm
 

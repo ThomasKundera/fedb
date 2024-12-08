@@ -25,22 +25,7 @@ Thumbnail       : image/jpeg, 6053 Bytes
 Camera make     : Canon
 Camera model    : Canon EOS 6D Mark II
 Image timestamp : 2021:10:30 15:08:54
-File number   /*union {
-  #for (h,0,20)
-    difference {
-      sphere {<0,0,0>, Earth_Radius+(h+1)*10*m}
-      sphere {<0,0,0>, Earth_Radius+h*10*m}
-      pigment {Clear }
-      hollow
-      interior {
-        ior air_index(15-h/2)
-        #debug concat("index:",str(air_index(15-h/2),20,20),"\n")
-      }
-    }
-  #end
-  translate <0,-Earth_Radius,0>
-}*/
-  : (0)
+File number     : (0)
 Exposure time   : 1/320 s
 Aperture        : F16
 Exposure bias   : -1/3 EV
@@ -87,7 +72,9 @@ The pixels are likley squares, but some dead border likley exists on the sensor,
 #### Crude approximation
 
 We'll start from the simple relation:
+
 $$α=2×\tan^{-1}\left(\frac{l}{2f}\right)$$
+
 Where:
 - $f$ is the focal length of the lens (in mm)
 - $l$ is the distance (in mm) measured on the sensor
@@ -97,11 +84,14 @@ This relation is exact only for objects spanning equaly from sensor center. We'l
 
 
 If we reverse the above relation, we'll get:
+
 $$l=2f\tan\left(\frac{α}{2}\right)$$
 
 
+## Location
 
-## Wind farm characteristics
+![Map of the windfarms](data/windfarms_map.jpg)
+
 
 ### Lynn windfarm
 Basic data:
@@ -114,14 +104,21 @@ https://en.wind-turbine-models.com/turbines/1272-siemens-swt-3.6-107-offshore
 
 Diameter: 107.0 m
 
+The height of the windturbines is not specified, we'll have to measure them.
+
 ### Race Bank windfarm
+
 Basic data:
 https://en.wikipedia.org/wiki/Race_Bank_wind_farm
+
+The farm was completed in 2018, so the picture in 2021 shows a completed farm.
 
 The wind turbines are SWT-6.0-154:
 https://fr.wind-turbine-models.com/turbines/657-siemens-swt-6.0-154
 
 Diameter: 154.0 m
+
+The height of the windturbines is not specified, we'll have to measure them.
 
 ## Reconstructing the scene
 

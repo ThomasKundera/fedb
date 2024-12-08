@@ -120,8 +120,14 @@ From picture, knowing the diameter of the Lynn windturbines, we can compute the 
 - Width of the Yellow part:  5 m
 - Height of the White part: 76 m
 
+Total height: 91 m
+
 To get similar data from the Race Bank windfarm, we'll use the following pictures:
 - https://www.alamy.com/the-6mw-siemens-swt-60-154-wind-turbines-on-the-race-bank-offshore-wind-farm-in-the-southern-north-sea-uk-image215430515.html
 - https://www.alamy.com/wind-turbines-on-the-race-bank-offshore-wind-farm-in-the-southern-north-sea-uk-image215430497.html
 
 On PEDKP9: Height: 380px, blades: 293, 282, 288
+So, blade mean length $$bl=(293+282+288)/3=288$$
+Scale is $$pxl=(154/2)/288=0.27 m/px$$
+So, height of the mast is $$h=380*0.27=102 m$$
+

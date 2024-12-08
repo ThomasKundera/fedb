@@ -86,7 +86,7 @@
   translate <0,Earth_Radius,0>
   #declare ax=(360*x_simple*m/Earth_Circumference);
   #declare az=(360*z_simple*m/Earth_Circumference);
-  #debug concat("ax:",str(ax,20,20)," az:",str(az,20,20),"\n")
+  //#debug concat("ax:",str(ax,20,20)," az:",str(az,20,20),"\n")
   rotate <0,0,-ax>
   rotate <az,0,0>
   translate <0,-Earth_Radius,0>
@@ -110,6 +110,39 @@
 
 #include "windmill.pov"
 
+#declare air_index = function (T) {
+  1.0 + 0.0065*(273.15 - T)/273.15
+}
+
+
+// Atmosphere
+// This cannot work, Povray is not good enough for this
+/*
+union {
+  sphere {
+    <0,0,0>, Earth_Radius+1*km
+    pigment {Clear }
+    hollow
+    interior {
+      ior 1.1
+      #debug concat("index:",str(air_index(15),20,20),"\n")
+    }
+  }
+
+  #for (h,0,25)
+    sphere {
+      <0,0,0>, Earth_Radius+(25-h)*10*m
+      pigment {Clear }
+      hollow
+      interior {
+        ior air_index(15) //air_index(15-h/2)
+        //#debug concat("index:",str(air_index(15-h/2),20,20),"\n")
+      }
+    }
+  #end
+  translate <0,-Earth_Radius,0>
+}
+*/
 
 object {
   Earth

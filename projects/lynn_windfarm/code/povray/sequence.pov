@@ -1,5 +1,7 @@
 // Persistence Of Vision Ray Tracer Scene Description File
 // --------------------------------------------------------------------------------
+#version version;
+
 #include "colors.inc"
 #include "common.inc"
 
@@ -78,7 +80,17 @@
 #end
 
 #macro on_earth_translate (x_simple,z_simple)
+#if (DoFlatEarth)
   translate <x_simple*m, 0, z_simple*m>
+#else
+  translate <0,Earth_Radius,0>
+  #declare ax=(360*x_simple*m/Earth_Circumference);
+  #declare az=(360*z_simple*m/Earth_Circumference);
+  #debug concat("ax:",str(ax,20,20)," az:",str(az,20,20),"\n")
+  rotate <0,0,-ax>
+  rotate <az,0,0>
+  translate <0,-Earth_Radius,0>
+#end
 #end
 
 #macro windmill_sw37 (x_simple,z_simple,wangle)
@@ -97,6 +109,7 @@
 
 
 #include "windmill.pov"
+
 
 object {
   Earth

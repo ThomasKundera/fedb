@@ -394,9 +394,9 @@ def main():
         m.compute_distances()
     #draw_scene(original_image, windmills)
     #draw_map(realmills)
-    print(find_horizon_distance(realmills))
-    #to_povray(realmills)
-    find_windmill_size(realmills)
+    #print(find_horizon_distance(realmills))
+    to_povray(realmills)
+    #find_windmill_size(realmills)
 
     logprint("main: End")
 

@@ -168,9 +168,12 @@ class Windmill:
             ax.text(self.center.x, self.center.y,
                    str(int(self.distance/km))+" km", color="white")
 
-
     def to_povray(self):
-        s = "windmill ("+ str(self.x_simple) + ", " + str(self.y_simple) + "," + str(180*self.wangle/math.pi) +")\n"
+        if (self.distance < 15*km):
+            s="windmill_sw37"
+        else:
+            s="windmill_sw60"
+        s += " ("+ str(self.x_simple) + ", " + str(self.y_simple) + "," + str(180*self.wangle/math.pi) +")\n"
         return s
 
 
@@ -269,6 +272,9 @@ class Windmill:
         self.white_height=scale*(self.local_horizon-self.center.y)
 
     def compute_distances(self):
+        # The following line shouldn't be needed
+        self.local_horizon = self.horizon.predict_y([self.center.x])[0]
+ 
         self.compute_depth_distance()
         self.compute_simple_coordinates()
         if (self.yellow):

@@ -90,8 +90,10 @@ $$l=2f\tan\left(\frac{α}{2}\right)$$
 
 ## Location
 
-![Map of the windfarms](data/windfarms_map.jpg)
+![Figure 1: Map of the windfarms](data/windfarms_map.jpg)
+Figure 1: Map of the windfarms
 
+The two involved windfarms in this picture are the Lynn windfarm and the Race Bank windfarm.
 
 ### Lynn windfarm
 Basic data:
@@ -122,24 +124,50 @@ The height of the windturbines is not specified, we'll have to measure them.
 
 ## Reconstructing the scene
 
+The pictures has been analysed, windmills identified on the image for further analysis (see Figure 2). Note: the used algorithm was very simple and relied on manually pointing the key points on the images before reconstruction.
+
+![Figure 2: Identified windmills and relevant items on the picture](data/windmill_scene_ok.jpg)
+Figure 2: Identified windmills and relevant items on the picture. Computed lines are supperimposed to teh original photography.
+
+
 ### Some computed data
 
-Horizon distance was estimated as about 11 km from the wind turbines bases.
-So, altitude of the camera is about 10m
+#### Windmill height
 
 From picture, knowing the diameter of the Lynn windturbines, we can compute the size of the windturbines:
-- Height of the Yellow part: 15 m
-- Width of the Yellow part:  5 m
-- Height of the White part: 76 m
+- Height of the Yellow part: $15 m$
+- Width of the Yellow part:  $5 m$
+- Height of the White part: $71 m$
 
-Total height: 91 m
+Total height: 76 m
 
 To get similar data from the Race Bank windfarm, we'll use the following pictures:
 - https://www.alamy.com/the-6mw-siemens-swt-60-154-wind-turbines-on-the-race-bank-offshore-wind-farm-in-the-southern-north-sea-uk-image215430515.html
 - https://www.alamy.com/wind-turbines-on-the-race-bank-offshore-wind-farm-in-the-southern-north-sea-uk-image215430497.html
 
-On PEDKP9: Height: 380px, blades: 293, 282, 288
-So, blade mean length $$bl=(293+282+288)/3=288$$
-Scale is $$pxl=(154/2)/288=0.27 m/px$$
-So, height of the mast is $$h=380*0.27=102 m$$
+On PEDKP9: Height: $380 px$, blades: $293 px$, $282 px$, $288 px$.
+So, blade mean length is $bl=(293+282+288)/3=288$
+Scale is $pxl=(154/2)/288=0.27 m/px$
+So, height of the mast is $h=380*0.27=102 m$.
 
+#### Windmill distance and location
+
+From picture, knowing the size of the windturbines wings, we can compute their distances and location from viewing angle (see Figure 3).
+
+![Figure 3: Reconstructed windmills map](data/windmill_map.jpg)
+Figure 3: Location of windmills from photogrammetry. In green, mills closer than horizon, in blue, mills further than horizon.
+
+#### Altitude and horizon distance
+
+Horizon distance from camera was estimated to be between $9$ and $10.5 km$ (see Figure 3).
+So, altitude of the camera is between $7$ and $11 m$. For simulation, we fixed $10 m$.
+
+#### Reconstructions limits and notes
+
+For sure, the computed values have some errors. No attempt has been made to match the reconstructed windmill positions to the actual location on map.
+Not having teh location where the picture was taken makes it harder (but likely doable)
+
+However, the global reconstruction is globally correct (see Figure 4).
+
+![Figure 4: Reconstructed windmills map over the actual map](data/windmill_map_reconstructed.jpg)
+Figure 4: Reconstructed windmills map over the actual map, with an attempted location of the shot.

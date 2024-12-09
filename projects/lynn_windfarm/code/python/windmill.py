@@ -128,6 +128,8 @@ class Windmill:
         self.wangle = None
         self.wmean = None
         self.idx = Windmill.idx
+        self.h=None
+        self.distance=0
         Windmill.idx += 1
 
     def __str__(self):
@@ -163,6 +165,9 @@ class Windmill:
    
         if (self.yellow):
             self.yellow.draw(plt, ax)
+            if (self.h):
+                ax.text(self.yellow.l.d1.x, self.yellow.get_bottom()[0].y, str(int(self.h)), color="yellow")
+
         # Print distance
         if (self.wmean):
             ax.text(self.center.x, self.center.y,
@@ -205,7 +210,8 @@ class Windmill:
         ldata=[208,190,482,575,620]
         z=np.polyfit(hdata, ldata, 3)
         p = np.poly1d(z)
-        self.local_horizon = self.horizon.predict_y([self.center.x])[0]
+        self.local_horizon = self.horizon(self.center.x)
+        print("self.local_horizon = " + str(self.local_horizon))
         h = math.fabs(self.center.y-self.local_horizon)
         d2M = 1.2*p(h)*p(h)
         d2m = 0.8*p(h)*p(h)
@@ -273,7 +279,7 @@ class Windmill:
 
     def compute_distances(self):
         # The following line shouldn't be needed
-        self.local_horizon = self.horizon.predict_y([self.center.x])[0]
+        self.local_horizon = self.horizon(self.center.x)
  
         self.compute_depth_distance()
         self.compute_simple_coordinates()
@@ -281,7 +287,8 @@ class Windmill:
             bottom=self.yellow.get_bottom()[0].y
             h = self.local_horizon-bottom
             print("h = " + str(h))
-            if (h<-5):
+            self.h=h
+            if (h<-6):
                 self.beyond_horizon = False
                 self.compute_size()
             else:

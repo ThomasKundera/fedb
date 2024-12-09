@@ -21,6 +21,8 @@ from tkunits import km, mm, μm
 from tkthread import TkThread
 from windmill import Windmill, Wing, FakeWindmill
 
+kDatadir='data'
+kWorkDir='work'
 
 # Print function with datestamp
 def logprint(*args, **kwargs):
@@ -275,7 +277,7 @@ def do_object_identification(imgname):
     logprint("do_object_identification: Start")
     # Open data point image
     data_point_image = plt.imread(os.path.join(
-        'data', imgname + '_data.png'))
+        kDatadir, imgname + '_data.png'))
 
     # get hue data
     rgb_data = rgba2rgb(data_point_image, background=(0, 0, 0))
@@ -302,10 +304,10 @@ def object_identification(imgname):
     logprint("object_identification: Start")
     # Open original jpeg image
     original_image = plt.imread(os.path.join(
-        'data', imgname + '.jpg'))
+        kDatadir, imgname + '.jpg'))
 
     # See if we already have data for that image
-    pkfile = os.path.join('data', imgname + '.pkl')
+    pkfile = os.path.join('work', imgname + '.pkl')
     logprint("object_identification: Windmilling")
     if (True and os.path.exists(pkfile)):
         print("Loading windmills from " + pkfile)
@@ -327,17 +329,19 @@ def draw_scene(original_image, windmills):
 
     # Draw horison
     horizon = windmills[0].horizon
-    imglength=original_image.shape[0]
+    imglength=original_image.shape[1]
     if (horizon):
         line_x = np.arange(0, imglength)
         line_y = horizon(line_x)
         plt.plot(line_x, line_y)
 
+    plt.rcParams.update({'font.size': 7})
     # Draw windmills
     for w in windmills:
         w.draw(plt, plt.gca())
 
     plt.tight_layout()
+    plt.savefig(os.path.join(kWorkDir, 'windmill_scene.jpg'), bbox_inches='tight', dpi=400)
     plt.show()
     logprint("object_identification: End")
 
@@ -355,7 +359,6 @@ def draw_map(windmills):
     plt.gca().set_aspect('equal', adjustable='box')
 
     for m in windmills:
-        print("( "+str(m.x_simple)+", "+str(m.y_simple)+" )")
         if (not m.fake):
             if (not m.yellow):
                 plt.gca().add_patch(plt.Circle((m.x_simple/km, m.y_simple/km), .1, color='blue', fill=True))
@@ -368,7 +371,8 @@ def draw_map(windmills):
             plt.gca().add_patch(plt.Circle(
                 (m.x_simple/km, m.y_simple/km), .1, color=m.color, fill=True))
 
-    # plt.tight_layout()
+    plt.tight_layout()
+    plt.savefig(os.path.join(kWorkDir, 'windmill_map.png'), bbox_inches='tight', dpi=300)
     plt.show()
     logprint("draw_map: End")
 
@@ -380,10 +384,12 @@ def find_horizon_distance(windmill):
     for m in windmill:
         if (m.yellow):
             if (m.beyond_horizon):
-                hmax = m.distance
+                if (m.distance < hmax):
+                    hmax = m.distance
             else:
-                hmin = m.distance
-        print(str(hmin)+" < horizon < "+str(hmax))
+                if (m.distance > hmin):
+                    hmin = m.distance
+    print(str(hmin)+" < horizon < "+str(hmax))
     logprint("find_horizon_distance: End")
     return (hmin+hmax)/2
 
@@ -401,16 +407,16 @@ def find_windmill_size(windmill):
                 yellow_width += m.yellow_width
                 white_height += m.white_height
                 nb += 1
-                print(str(m.yellow_height)+" " +
-                      str(m.yellow_width)+" "+str(m.white_height))
     if (nb==0):
         print("No full windmill in scene: Aborting")
         return
     yellow_height = yellow_height/nb
     yellow_width = yellow_width/nb
     white_height = white_height/nb
-    print("Mean size: "+str(yellow_height)+" " +
-          str(yellow_width)+" "+str(white_height))
+    print("Lynn windmill yellow height: "+str(yellow_height))
+    print("Lynn windmill yellow width: "+str(yellow_width))
+    print("Lynn windmill white height: "+str(white_height-yellow_height))
+    print("Lynn windmill full height: "+str(white_height))
     logprint("find_windmill_size: End")
 
 
@@ -432,7 +438,7 @@ def main():
     for m in realmills:
        m.compute_distances()
     find_windmill_size(realmills)
-    print(find_horizon_distance(realmills))
+    find_horizon_distance(realmills)
     to_povray(realmills)
     draw_scene(original_image, windmills)
     draw_map(realmills)

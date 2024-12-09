@@ -165,13 +165,13 @@ class Windmill:
    
         if (self.yellow):
             self.yellow.draw(plt, ax)
-            if (self.h):
-                ax.text(self.yellow.l.d1.x, self.yellow.get_bottom()[0].y, str(int(self.h)), color="yellow")
+            #if (self.h):
+            #    ax.text(self.yellow.l.d1.x, self.yellow.get_bottom()[0].y, str(int(self.h)), color="yellow")
 
         # Print distance
         if (self.wmean):
             ax.text(self.center.x, self.center.y,
-                   str(int(self.distance/km))+" km", color="white")
+                   str(int(self.distance/km))+" km", color="black")
 
     def to_povray(self):
         if (self.distance < 15*km):
@@ -211,7 +211,7 @@ class Windmill:
         z=np.polyfit(hdata, ldata, 3)
         p = np.poly1d(z)
         self.local_horizon = self.horizon(self.center.x)
-        print("self.local_horizon = " + str(self.local_horizon))
+        #print("self.local_horizon = " + str(self.local_horizon))
         h = math.fabs(self.center.y-self.local_horizon)
         d2M = 1.2*p(h)*p(h)
         d2m = 0.8*p(h)*p(h)
@@ -264,7 +264,7 @@ class Windmill:
         self.distance=angletodistance(a,kWing_length_Lynn)
         if (self.distance>15*km): # Not Lynn, byt Race
             self.distance=angletodistance(a,kWing_length_Race)
-        print("Distance: " + str(self.distance/km)+" km")
+        #print("Distance: " + str(self.distance/km)+" km")
 
     def compute_simple_coordinates(self):
         a=side_angle(self.center.x)
@@ -286,7 +286,7 @@ class Windmill:
         if (self.yellow):
             bottom=self.yellow.get_bottom()[0].y
             h = self.local_horizon-bottom
-            print("h = " + str(h))
+            #print("h = " + str(h))
             self.h=h
             if (h<-6):
                 self.beyond_horizon = False

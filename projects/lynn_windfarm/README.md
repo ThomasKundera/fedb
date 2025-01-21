@@ -175,3 +175,11 @@ However, the global reconstruction is globally correct (see Figure 4).
 
 ![Figure 4: Reconstructed windmills map over the actual map](data/windmill_map_reconstructed.jpg)
 Figure 4: Reconstructed windmills map over the actual map, with an attempted location of the shot.
+
+## Povray simulation from data
+
+Using the data above, here is a simulation of the scene, assuming flat surface, and Earth curved surface. Original image added for reference.
+
+![](data/pov_flat.jpg)
+![](data/org.jpg)
+![](data/pov_globe_1200.jpg)

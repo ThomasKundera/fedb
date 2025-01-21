@@ -4,6 +4,10 @@
 
 Analysing https://www.flickr.com/photos/37012317@N08/51664909026/ to disqualify (once again) flat Earth fallacies.
 
+![Figure 0: The picture](data/original_1200.jpg)
+Figure 0: Thye picture we'll analyse (reduced in size). Credit: [Neil Storey](
+    https://www.flickr.com/photos/37012317@N08/)
+
 ## Method
 We have to do:
 - Photogrammetry: measuring object pixel size on the image
@@ -127,7 +131,7 @@ The height of the windturbines is not specified, we'll have to measure them.
 The pictures has been analysed, windmills identified on the image for further analysis (see Figure 2). Note: the used algorithm was very simple and relied on manually pointing the key points on the images before reconstruction.
 
 ![Figure 2: Identified windmills and relevant items on the picture](data/windmill_scene_ok.jpg)
-Figure 2: Identified windmills and relevant items on the picture. Computed lines are supperimposed to teh original photography.
+Figure 2: Identified windmills and relevant items on the picture. Computed lines are supperimposed to the original photography.
 
 
 ### Some computed data
@@ -165,7 +169,7 @@ So, altitude of the camera is between $7$ and $11 m$. For simulation, we fixed $
 #### Reconstructions limits and notes
 
 For sure, the computed values have some errors. No attempt has been made to match the reconstructed windmill positions to the actual location on map.
-Not having teh location where the picture was taken makes it harder (but likely doable)
+Not having the location where the picture was taken makes it harder (but likely doable)
 
 However, the global reconstruction is globally correct (see Figure 4).
 

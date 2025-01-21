@@ -182,4 +182,8 @@ Using the data above, here is a simulation of the scene, assuming flat surface, 
 
 ![](data/pov_flat.jpg)
 ![](data/org.jpg)
-![](data/pov_globe_1200.jpg)
+![](data/pov_globe.jpg)
+
+## Conclusion
+
+Quite compatible with a globe, again.

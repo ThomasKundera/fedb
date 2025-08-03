@@ -6,6 +6,8 @@ import glob
 import cv2
 import numpy as np
 from PIL import Image
+from PIL.ExifTags import TAGS
+from matplotlib import pyplot as plt
 
 # EXIF Dictionary
 exif_tags = {
@@ -59,23 +61,22 @@ def find_circles(imgfile):
             cv2.circle(image, (x, y), 2, (0, 0, 255), 3)  # Red center
             #logprint(f"Circle detected at (x: {x}, y: {y}), radius: {r}")
 
-    # Create unique window name based on image filename
-    window_name = f"Circles - {os.path.basename(imgfile)}"
-    
-    # Display image in its own window
-    cv2.imshow(window_name, image)
-    return circles
+    return (circles,image)
 
-def get_focal_length(imgfile):
+def get_exif(imgfile):
     image = Image.open(imgfile)
     exif_data = image._getexif()
-
-    focal_length = float(exif_data.get(0x920a))
-    if focal_length:
-        logprint(f"Focal length: {focal_length} mm")
-    # Close image
     image.close()
-    return focal_length
+
+    date_time = exif_data.get(0x0132)
+    if date_time is not None:
+        date_time = datetime.datetime.strptime(date_time, "%Y:%m:%d %H:%M:%S")
+        logprint(f"Date and time: {date_time}")
+    focal_length = float(exif_data.get(0x920a))
+    if (focal_length==0): # This is the manual Tamron 
+        focal_length=500
+    logprint(f"Focal length: {focal_length} mm")
+    return (date_time, focal_length)
 
 def px_to_angle(r,fl):
     # Canon 550D
@@ -97,8 +98,8 @@ class Analysis:
     def for_one_image(self, img):
         logprint(f"Processing: {img} --------")
         imgfile=os.path.join('data/500_sun',img)
-        fl=get_focal_length(imgfile)
-        circles=find_circles(imgfile)
+        (dt,fl)=get_exif(imgfile)
+        (circles,image)=find_circles(imgfile)
         if circles is None:
             logprint(f"WARNING: No circles found in {img} --------")
             return
@@ -107,17 +108,68 @@ class Analysis:
             return
         #print (circles)
         (x,y,r)=circles[0][0]
-        angle=px_to_angle(r,fl)
+        angle=2*px_to_angle(r,fl) # diameter
         print(60*angle*180/math.pi)
+        # Add filename as text at the top of the image
+        text = f"Fl: {fl:.1f} mm, Angle: {60*angle*180/math.pi:.1f}°"
+        cv2.putText(
+            image,
+            text,
+            (10, 30),  # Position (x, y) from top-left
+            cv2.FONT_HERSHEY_SIMPLEX,
+            0.7,  # Font scale
+            (255, 255, 255),  # White text
+            2,  # Thickness
+            cv2.LINE_AA  # Anti-aliased line type
+        )
+
+        # Create unique window name based on image filename
+        window_name = f"Circles - {img}"
+        # Display image in its own window
+        cv2.imshow(window_name, image)
+        return (dt,60*angle*180/math.pi)
+
+    def plot(self,dtl,al):
+        # Create the plot
+        plt.figure(figsize=(10, 5))
+        plt.plot(dtl, al, marker='o', linestyle='-', color='b', label='Float Values')
+
+        # Format the x-axis for datetimes
+        plt.gca().xaxis.set_major_formatter(plt.matplotlib.dates.DateFormatter('%Y-%m-%d %H:%M'))
+        plt.gca().xaxis.set_major_locator(plt.matplotlib.dates.AutoDateLocator())
+        plt.xticks(rotation=45)
+
+        # Add labels and title
+        plt.xlabel('DateTime')
+        plt.ylabel('Float Values')
+        plt.title('Float Values vs. DateTime')
+        plt.legend()
+
+        # Adjust layout to prevent label cutoff
+        plt.tight_layout()
+
+        # Show the plot
+        plt.show()
 
 
     def run(self):
         imgdir='data/500_sun'
         idx=0
+        dtl=[]
+        al=[]
         for img in os.listdir(imgdir):
-            self.for_one_image(img)
+            (dt,a)=self.for_one_image(img)
+            dtl.append(dt)
+            al.append(a)
             #return
             idx=idx+1
+        
+        # Pair dt and fl, sort by dt, then unzip
+        sorted_pairs = sorted(zip(dtl, al), key=lambda x: x[0])
+        dtl_sorted, al_sorted = zip(*sorted_pairs)
+        dtl = list(dtl_sorted)
+        al = list(al_sorted)
+        self.plot(dtl,al)
 
 def main():
     logprint("main: Start")

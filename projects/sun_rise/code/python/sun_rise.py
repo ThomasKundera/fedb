@@ -11,6 +11,8 @@ from matplotlib import pyplot as plt
 import suncalc
 import matplotlib.cm as cm
 
+kRSD=800
+
 # EXIF Dictionary
 exif_tags = {
     0x010e: "ImageDescription",
@@ -42,6 +44,12 @@ def find_circles(imgfile):
 
     gray = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
     gray_blurred = cv2.medianBlur(gray, 5)
+    # Parameters
+    minradius500=10
+    maxradius500=70
+
+    minradius=int(minradius500*kRSD/500)
+    maxradius=int(maxradius500*kRSD/500)
 
     # Detect circles using Hough Circle Transform
     circles = cv2.HoughCircles(
@@ -49,10 +57,10 @@ def find_circles(imgfile):
         cv2.HOUGH_GRADIENT_ALT,
         dp=1,  # Inverse ratio of resolution
         minDist=50,  # Minimum distance between circle centers
-        param1=300,  # Upper threshold for edge detection
-        param2=0.9,  # Threshold for circle detection
-        minRadius=10,  # Minimum circle radius
-        maxRadius=60   # Maximum circle radius (0 = no limit)
+        param1=50,  # Upper threshold for edge detection
+        param2=0.8,  # Threshold for circle detection
+        minRadius=minradius,  # Minimum circle radius
+        maxRadius=maxradius   # Maximum circle radius (0 = no limit)
     )
     return circles, image
 
@@ -90,9 +98,7 @@ def px_to_angle(r,fl):
     # Canon 550D
     # Sensor Size	22.3 x 14.9mm
     # Pixel Dimensions	5184 x 3456
-    #pxs=22.3/5184
-    #pys=14.9/3456
-    pxs=22.3/500
+    pxs=22.3/kRSD
     pys=pxs
     ps=(pxs+pys)/2
     #print(pxs,pys,ps)
@@ -106,12 +112,15 @@ class Analysis:
 
     def for_one_image(self, img):
         logprint(f"Processing: {img} --------")
-        imgfile = os.path.join('data/500_sun', img)
+        imgfile = os.path.join('data', str(kRSD) + '_sun', img)
         date_time, focal_length = get_exif(imgfile)
         if date_time is None or focal_length is None:
             return None, None, None, None
 
         circles, image = find_circles(imgfile)
+#        window_name = f"Circles - {img}"
+#        cv2.imshow(window_name, image)
+#        cv2.waitKey(0)
         if circles is None or image is None:
             logprint(f"WARNING: No circles found in {img}")
             return None, None, None, None
@@ -149,7 +158,7 @@ class Analysis:
         # Display image
         window_name = f"Circles - {img}"
         cv2.imshow(window_name, image)
-
+        #cv2.waitKey(0)
         return date_time, angle_mn, sunrise, sunset
 
     def plot(self, data_by_day):
@@ -188,13 +197,14 @@ class Analysis:
         plt.show()
 
     def run(self):
-        imgdir = 'data/500_sun'
+        imgdir = os.path.join('data', str(kRSD) + '_sun')
         data = []
 
         for img in sorted(os.listdir(imgdir)):  # Sort images for consistency
             result = self.for_one_image(img)
             if result:
                 data.append(result)
+            #break
 
         # Group data by day
         data_by_day = {}
@@ -213,7 +223,7 @@ def main():
     logprint("main: Start")
     an = Analysis()
     an.run()
-    cv2.waitKey(0)
+    #cv2.waitKey(0)
     cv2.destroyAllWindows()
     logprint("main: End")
 

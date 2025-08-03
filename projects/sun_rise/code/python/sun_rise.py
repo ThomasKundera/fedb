@@ -1,9 +1,29 @@
 #!/usr/bin/env python3
 import os
+import math
 import datetime
+import glob
 import cv2
 import numpy as np
+from PIL import Image
 
+# EXIF Dictionary
+exif_tags = {
+    0x010e: "ImageDescription",
+    0x010f: "Make",
+    0x0110: "Model",
+    0x0132: "DateTime",
+    0x829a: "ExposureTime",
+    0x829d: "FNumber",
+    0x8822: "ExposureProgram",
+    0x8827: "ISOSpeedRatings",
+    0x9000: "ExifVersion",
+    0x9204: "ExposureBiasValue",
+    0x9209: "Flash",
+    0x920a: "FocalLength",
+    0xa002: "PixelXDimension",
+    0xa003: "PixelYDimension",
+}
 
 # Print function with datestamp
 def logprint(*args, **kwargs):
@@ -37,7 +57,7 @@ def find_circles(imgfile):
             # Draw circle and center on the image
             cv2.circle(image, (x, y), r, (0, 255, 0), 2)  # Green circle
             cv2.circle(image, (x, y), 2, (0, 0, 255), 3)  # Red center
-            logprint(f"Circle detected at (x: {x}, y: {y}), radius: {r}")
+            #logprint(f"Circle detected at (x: {x}, y: {y}), radius: {r}")
 
     # Create unique window name based on image filename
     window_name = f"Circles - {os.path.basename(imgfile)}"
@@ -46,20 +66,58 @@ def find_circles(imgfile):
     cv2.imshow(window_name, image)
     return circles
 
+def get_focal_length(imgfile):
+    image = Image.open(imgfile)
+    exif_data = image._getexif()
+
+    focal_length = float(exif_data.get(0x920a))
+    if focal_length:
+        logprint(f"Focal length: {focal_length} mm")
+    # Close image
+    image.close()
+    return focal_length
+
+def px_to_angle(r,fl):
+    # Canon 550D
+    # Sensor Size	22.3 x 14.9mm
+    # Pixel Dimensions	5184 x 3456
+    #pxs=22.3/5184
+    #pys=14.9/3456
+    pxs=22.3/500
+    pys=pxs
+    ps=(pxs+pys)/2
+    #print(pxs,pys,ps)
+    a=2*math.atan2(r*ps,2*fl)
+    return a
+
 class Analysis:
     def __init__(self):
         pass
+
+    def for_one_image(self, img):
+        logprint(f"Processing: {img} --------")
+        imgfile=os.path.join('data/500_sun',img)
+        fl=get_focal_length(imgfile)
+        circles=find_circles(imgfile)
+        if circles is None:
+            logprint(f"WARNING: No circles found in {img} --------")
+            return
+        if len(circles)>1:
+            logprint(f"WARNING: Multiple circles found in {img} --------")
+            return
+        #print (circles)
+        (x,y,r)=circles[0][0]
+        angle=px_to_angle(r,fl)
+        print(60*angle*180/math.pi)
+
 
     def run(self):
         imgdir='data/500_sun'
         idx=0
         for img in os.listdir(imgdir):
-            idx+=1
-            #if (idx<30) or (idx>40):
-            #    continue
-            logprint(f"Processing: {img} --------")
-            imgfile=os.path.join(imgdir,img)
-            find_circles(imgfile)
+            self.for_one_image(img)
+            #return
+            idx=idx+1
 
 def main():
     logprint("main: Start")

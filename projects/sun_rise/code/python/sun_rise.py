@@ -21,11 +21,11 @@ def find_circles(imgfile):
     # Detect circles using Hough Circle Transform
     circles = cv2.HoughCircles(
         gray_blurred,
-        cv2.HOUGH_GRADIENT,
+        cv2.HOUGH_GRADIENT_ALT,
         dp=1,  # Inverse ratio of resolution
-        minDist=20,  # Minimum distance between circle centers
-        param1=50,  # Upper threshold for edge detection
-        param2=30,  # Threshold for circle detection
+        minDist=50,  # Minimum distance between circle centers
+        param1=300,  # Upper threshold for edge detection
+        param2=0.9,  # Threshold for circle detection
         minRadius=10,  # Minimum circle radius
         maxRadius=60   # Maximum circle radius (0 = no limit)
     )
@@ -52,11 +52,14 @@ class Analysis:
 
     def run(self):
         imgdir='data/500_sun'
+        idx=0
         for img in os.listdir(imgdir):
+            idx+=1
+            #if (idx<30) or (idx>40):
+            #    continue
             logprint(f"Processing: {img} --------")
             imgfile=os.path.join(imgdir,img)
             find_circles(imgfile)
-            return
 
 def main():
     logprint("main: Start")

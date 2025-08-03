@@ -11,7 +11,7 @@ from matplotlib import pyplot as plt
 import suncalc
 import matplotlib.cm as cm
 
-kRSD=800
+kRSD=3200
 
 # EXIF Dictionary
 exif_tags = {
@@ -57,8 +57,8 @@ def find_circles(imgfile):
         cv2.HOUGH_GRADIENT_ALT,
         dp=1,  # Inverse ratio of resolution
         minDist=50,  # Minimum distance between circle centers
-        param1=50,  # Upper threshold for edge detection
-        param2=0.8,  # Threshold for circle detection
+        param1=400,  # Upper threshold for edge detection
+        param2=0.9,  # Threshold for circle detection
         minRadius=minradius,  # Minimum circle radius
         maxRadius=maxradius   # Maximum circle radius (0 = no limit)
     )
@@ -105,6 +105,17 @@ def px_to_angle(r,fl):
     a=2*math.atan2(r*ps,2*fl)
     return a
 
+def resize_image_for_display(image, max_size=(1000, 1000)):
+    """Resize image for display while preserving aspect ratio."""
+    h, w = image.shape[:2]
+    max_width, max_height = max_size
+    scale = min(max_width / w, max_height / h, 1.0)  # Preserve aspect ratio
+    if scale < 1.0:
+        new_w, new_h = int(w * scale), int(h * scale)
+        return cv2.resize(image, (new_w, new_h), interpolation=cv2.INTER_AREA), scale
+    return image, 1.0
+
+
 class Analysis:
     def __init__(self):
         self.latitude = 43.7  # Nice, France; adjust as needed
@@ -116,32 +127,40 @@ class Analysis:
         date_time, focal_length = get_exif(imgfile)
         if date_time is None or focal_length is None:
             return None, None, None, None
-
+        fInvalid=False
         circles, image = find_circles(imgfile)
 #        window_name = f"Circles - {img}"
 #        cv2.imshow(window_name, image)
 #        cv2.waitKey(0)
         if circles is None or image is None:
             logprint(f"WARNING: No circles found in {img}")
-            return None, None, None, None
-        if len(circles[0]) > 1:
+            fInvalid=True
+        elif len(circles[0]) > 1:
             logprint(f"WARNING: Multiple circles found in {img}")
-            return None, None, None, None
+            fInvalid=True
 
         # Use subpixel precision for calculations
-        x, y, r = circles[0][0]  # Float values
-        angle = 2 * px_to_angle(r, focal_length)  # Diameter
-        angle_mn = 60 * angle * 180 / math.pi
+        if not fInvalid:
+            x, y, r = circles[0][0]  # Float values
+            angle = 2 * px_to_angle(r, focal_length)  # Diameter
+            angle_mn = 60 * angle * 180 / math.pi
+        else:
+            x=0
+            y=0
+            r=0
+            angle_mn=0
 
         # Get sunrise and sunset times
         sun_times = suncalc.get_times(date_time, self.latitude, self.longitude)
         sunrise = sun_times['sunrise']
         sunset = sun_times['sunset']
 
+        (display_image, scale) = image = resize_image_for_display(image)
+        x_display, y_display, r_display = int(x * scale), int(y * scale), int(r * scale)
         # Round for display only
         text = f"Fl: {focal_length:.1f} mm, Angle: {angle_mn:.1f}°"
         cv2.putText(
-            image,
+            display_image,
             text,
             (10, 30),
             cv2.FONT_HERSHEY_SIMPLEX,
@@ -152,13 +171,15 @@ class Analysis:
         )
 
         # Draw circle and center with rounded values
-        cv2.circle(image, (int(x), int(y)), int(r), (0, 255, 0), 2)
-        cv2.circle(image, (int(x), int(y)), 2, (0, 0, 255), 3)
+        cv2.circle(display_image, (int(x_display), int(y_display)), int(r_display), (0, 255, 0), 2)
+        cv2.circle(display_image, (int(x_display), int(y_display)), 2, (0, 0, 255), 3)
 
         # Display image
         window_name = f"Circles - {img}"
-        cv2.imshow(window_name, image)
+        cv2.imshow(window_name, display_image)
         #cv2.waitKey(0)
+        if fInvalid:
+            return None, None, None, None
         return date_time, angle_mn, sunrise, sunset
 
     def plot(self, data_by_day):
@@ -187,7 +208,7 @@ class Analysis:
 
         ax.set_xlabel('Time of Day (hours)')
         ax.set_ylabel('Angular Size (degrees)')
-        ax.set_xlim(20.5, 21.5)
+        ax.set_xlim(20.9, 21.15)
         ax.grid(True, linestyle='--', alpha=0.7)
         ax.legend(loc='best')
 
@@ -202,13 +223,13 @@ class Analysis:
 
         for img in sorted(os.listdir(imgdir)):  # Sort images for consistency
             result = self.for_one_image(img)
-            if result:
-                data.append(result)
-            #break
+            data.append(result)
 
         # Group data by day
         data_by_day = {}
         for date_time, angle_mn, sunrise, sunset in data:
+            if not date_time:
+                continue
             day = date_time.date()
             if day not in data_by_day:
                 data_by_day[day] = ([], [], [], [])
@@ -223,7 +244,7 @@ def main():
     logprint("main: Start")
     an = Analysis()
     an.run()
-    #cv2.waitKey(0)
+    cv2.waitKey(0)
     cv2.destroyAllWindows()
     logprint("main: End")
 

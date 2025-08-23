@@ -1,6 +1,8 @@
 #!/bin/bash
 
-DATADIR="../../data"
+kBATCH="2025_08_22"
+
+DATADIR="../../data/$kBATCH"
 
 cd $DATADIR
 

@@ -1,5 +1,13 @@
 # Sunrise
 
+## Prerequisites
+```
+pip install pillow
+pip install piexif
+pip install python-dateutil
+pip install opencv-python
+```
+
 ## Overview
 
 Analysis of sunrises/sunsets timelapse.

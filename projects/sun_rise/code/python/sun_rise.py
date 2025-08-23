@@ -12,8 +12,8 @@ from matplotlib import pyplot as plt
 import suncalc
 import matplotlib.cm as cm
 
-kBatch="2022_05_18"
-kRSD = 3200  # Global, selects directory e.g., data/3200_sun
+kBatch="2025_08_22" # Batch date
+kRSD = 500
 
 # EXIF Dictionary
 exif_tags = {
@@ -37,20 +37,47 @@ exif_tags = {
 def logprint(*args, **kwargs):
     print("[", datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S"), "]", *args, **kwargs)
 
-def find_circles(imgfile):
+import cv2
+import numpy as np
+
+def adjust_contrast(image, saturation_percentile=99):
+    """
+    Adjust image contrast to ensure ~1% of pixels saturate (255) in at least one channel.
+    
+    :param image: Input BGR image (from cv2.imread).
+    :param saturation_percentile: Percentile to map to 255 (default: 99 for 1% saturation).
+    :return: Contrast-adjusted image.
+    """
+    # Convert image to float32 for precise calculations
+    img_float = image.astype(np.float32)
+    
+    # Compute the 99th percentile across all channels
+    percentile_value = np.percentile(img_float, saturation_percentile, axis=(0, 1))
+    
+    # Scale each channel so the 99th percentile maps to 255
+    for channel in range(3):  # R, G, B
+        if percentile_value[channel] > 0:  # Avoid division by zero
+            scale = 255.0 / percentile_value[channel]
+            img_float[:, :, channel] *= scale
+    
+    # Clip to [0, 255] and convert back to uint8
+    img_adjusted = np.clip(img_float, 0, 255).astype(np.uint8)
+    
+    return img_adjusted
+
+
+def find_circles(imgfile, minradius, maxradius):
+    print (f"find_circles({imgfile}, {minradius}, {maxradius})")
     # Load image
     image = cv2.imread(imgfile, cv2.IMREAD_COLOR)
     if image is None:
         logprint(f"ERROR: Cannot load image {imgfile}")
         return None, None, None
 
+    image = adjust_contrast(image)
+
     gray = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
     gray_blurred = cv2.medianBlur(gray, 5)
-    # Parameters
-    minradius500 = 10
-    maxradius500 = 70
-    minradius = int(minradius500 * kRSD / 500)
-    maxradius = int(maxradius500 * kRSD / 500)
 
     # Detect circles using Hough Circle Transform
     circles = cv2.HoughCircles(
@@ -58,7 +85,7 @@ def find_circles(imgfile):
         cv2.HOUGH_GRADIENT_ALT,
         dp=1,
         minDist=50,
-        param1=300,
+        param1=150,
         param2=0.7,
         minRadius=minradius,
         maxRadius=maxradius
@@ -107,17 +134,34 @@ def get_exif(imgfile):
         return None, None
 
     focal_length = exif_data.get(0x920a, 0)
-    focal_length = float(focal_length) if focal_length else 400  # Default for manual Kenko lens (400mm f/8)
+    if (focal_length == 0):
+        #focal_length = 400  # Manual Kenko lens (400mm f/8)
+        #focal_length = 1000  # Manual Russian lens (1000mm f/10)
+        # The Russian lens has a 13mm extension ring, thus the focal length is larger.
+        focal_length = 1012  # 1000mm f/10 + 13mm extension.
     logprint(f"Focal length: {focal_length} mm")
     return date_time, focal_length
 
 def px_to_angle(r, fl):
+
     # Canon 550D: Sensor Size 22.3 x 14.9mm
     pxs = 22.3 / kRSD
     pys = pxs
     ps = (pxs + pys) / 2
     a = 2 * math.atan2(r * ps, 2 * fl)  # Diameter in radians
     return a
+
+def angle_to_px(a, fl):
+    """Convert angular diameter (radians) to pixel radius for Canon 550D sensor."""
+    pxs = 22.3 / kRSD  # Pixel size in mm (x-dimension)
+    pys = pxs          # Assume same pixel size for y
+    ps = (pxs + pys) / 2  # Average pixel size
+    r = (2 * fl * math.tan(a / 2)) / ps  # Pixel radius
+    return r
+
+def deg_to_px(a, fl):
+    """Convert angular diameter (degrees) to pixel radius for Canon 550D sensor."""
+    return angle_to_px(math.radians(a), fl)
 
 def resize_image_for_display(image, max_size=(1000, 1000)):
     """Resize image for display while preserving aspect ratio."""
@@ -142,7 +186,9 @@ class Analysis:
         if date_time is None or focal_length is None:
             return None, None, None, None
         fInvalid = False
-        circles, image, gray = find_circles(imgfile)
+        minradius = int(deg_to_px(0.2, focal_length)) # Sun is about 0.5 degrees
+        maxradius = int(deg_to_px(0.3, focal_length)) # Sun is about 0.5 degrees
+        circles, image, gray = find_circles(imgfile, minradius, maxradius)
         if circles is None or image is None:
             logprint(f"WARNING: No circles found in {img}")
             fInvalid = True
@@ -175,6 +221,8 @@ class Analysis:
         x_display, y_display, r_display = int(x * scale), int(y * scale), int(r * scale)
 
         # Round for display only
+        print (focal_length)
+        focal_length = round(focal_length, 1)
         text = f"Fl: {focal_length:.1f} mm, Angle: {angle_mn:.1f}'"
         cv2.putText(
             display_image,
@@ -194,7 +242,7 @@ class Analysis:
         # Display image
         window_name = f"Circles - {img}"
         cv2.imshow(window_name, display_image)
-        cv2.waitKey(0)
+        #cv2.waitKey(0)
 
         if fInvalid:
             return None, None, None, None
@@ -230,7 +278,7 @@ class Analysis:
 
         ax.set_xlabel('Time of Day (hours)')
         ax.set_ylabel('Angular Size (arc-minutes)')
-        ax.set_xlim(20.9, 21.15)  # From your code; adjust as needed
+        ax.set_xlim(0, 24)  # From your code; adjust as needed
         ax.grid(True, linestyle='--', alpha=0.7)
         ax.legend(loc='best')
 
@@ -240,16 +288,20 @@ class Analysis:
         plt.show()
 
     def run(self):
-        self.imgdir = os.path.join('data', str(kRSD) + '_sun')
+        self.imgdir = os.path.join('data', kBatch, str(kRSD) + '_sun')
         data = []
+        idx=0
         for img in sorted(os.listdir(self.imgdir)):
             result = self.for_one_image(img)
             if result:
                 data.append(result)
+                idx += 1
+                #if idx > 3:
+                #    break
 
         # Group data by day
         data_by_day = {}
-        for date_time, angle_mn, sunrise, sunset in dat:
+        for date_time, angle_mn, sunrise, sunset in data:
             if not date_time:
                 continue
             day = date_time.date()

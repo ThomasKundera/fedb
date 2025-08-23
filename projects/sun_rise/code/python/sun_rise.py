@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+
 import os
 import math
 import datetime
@@ -11,6 +12,7 @@ from matplotlib import pyplot as plt
 import suncalc
 import matplotlib.cm as cm
 
+kBatch="2022_05_18"
 kRSD = 3200  # Global, selects directory e.g., data/3200_sun
 
 # EXIF Dictionary
@@ -105,7 +107,7 @@ def get_exif(imgfile):
         return None, None
 
     focal_length = exif_data.get(0x920a, 0)
-    focal_length = float(focal_length) if focal_length else 500  # Default for manual Tamron
+    focal_length = float(focal_length) if focal_length else 400  # Default for manual Kenko lens (400mm f/8)
     logprint(f"Focal length: {focal_length} mm")
     return date_time, focal_length
 
@@ -131,7 +133,7 @@ class Analysis:
     def __init__(self):
         self.latitude = 43.7  # Nice, France
         self.longitude = 7.3
-        self.imgdir = os.path.join('data', str(kRSD) + '_sun')
+        self.imgdir = os.path.join('data', kBatch, str(kRSD) + '_sun')
 
     def for_one_image(self, img):
         logprint(f"Processing: {img} --------")
@@ -247,7 +249,7 @@ class Analysis:
 
         # Group data by day
         data_by_day = {}
-        for date_time, angle_mn, sunrise, sunset in data:
+        for date_time, angle_mn, sunrise, sunset in dat:
             if not date_time:
                 continue
             day = date_time.date()
@@ -270,4 +272,3 @@ def main():
 
 if __name__ == "__main__":
     main()
-    

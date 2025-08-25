@@ -211,8 +211,44 @@ class Analysis:
         self.disk_out_dir = os.path.join('data', kBatch, 'disk_out')
         os.makedirs(self.disk_out_dir, exist_ok=True)
 
-    def extract_full_disks(self, img, minradius, maxradius):
-        return
+    def extract_full_disks(self, imgfile, focal_length, x, y, r):
+        # Extract and save Sun disk for 1000mm lens (focal_length = 1012)
+        global disk_counter
+        image = cv2.imread(imgfile, cv2.IMREAD_COLOR)
+        # Reference disk: 0.6° diameter in pixels
+        ref_angle_deg = 0.6
+        ref_radius_px = deg_to_px(ref_angle_deg / 2, focal_length)  # Radius for 0.6° diameter
+        ref_side = int(2 * ref_radius_px)  # Square side
+
+        # Crop around Sun center (x, y)
+        h, w = image.shape[:2]
+        left = int(x - ref_side / 2)
+        top = int(y - ref_side / 2)
+        right = int(x + ref_side / 2)
+        bottom = int(y + ref_side / 2)
+
+        # Pad if crop exceeds borders
+        pad_left = max(0, -left)
+        pad_top = max(0, -top)
+        pad_right = max(0, right - w)
+        pad_bottom = max(0, bottom - h)
+
+        if pad_left or pad_top or pad_right or pad_bottom:
+            image = cv2.copyMakeBorder(image, pad_top, pad_bottom, pad_left, pad_right, cv2.BORDER_CONSTANT, value=(0, 0, 0))
+            # Adjust center for padding
+            x += pad_left
+            y += pad_top
+
+        # Crop the padded image
+        disk_image = image[int(y - ref_side / 2):int(y + ref_side / 2), int(x - ref_side / 2):int(x + ref_side / 2)]
+
+        # Save cropped disk image with zero-padded numbering
+        disk_counter += 1
+        disk_filename = f"img_{disk_counter:03d}.jpg"
+        disk_path = os.path.join('data', kBatch, 'disk_out', disk_filename)
+        cv2.imwrite(disk_path, disk_image)
+        logprint(f"Saved Sun disk for {imgfile} to {disk_path}")
+
 
     def for_one_image(self, img):
         logprint(f"Processing: {img} --------")
@@ -276,47 +312,11 @@ class Analysis:
         if (fInvalid):
             cv2.imshow(window_name, display_image)
         #cv2.waitKey(0)
+        if (focal_length == 1012):
+            self.extract_full_disks(imgfile, focal_length, x, y, r)
 
         if fInvalid:
             return None, None, None, None, None
-
-        # Extract and save Sun disk for 1000mm lens (focal_length = 1012)
-        if focal_length == 1012:
-            global disk_counter
-            # Reference disk: 0.6° diameter in pixels
-            ref_angle_deg = 0.6
-            ref_radius_px = deg_to_px(ref_angle_deg / 2, focal_length)  # Radius for 0.6° diameter
-            ref_side = int(2 * ref_radius_px)  # Square side
-
-            # Crop around Sun center (x, y)
-            h, w = image.shape[:2]
-            left = int(x - ref_side / 2)
-            top = int(y - ref_side / 2)
-            right = int(x + ref_side / 2)
-            bottom = int(y + ref_side / 2)
-
-            # Pad if crop exceeds borders
-            pad_left = max(0, -left)
-            pad_top = max(0, -top)
-            pad_right = max(0, right - w)
-            pad_bottom = max(0, bottom - h)
-
-            if pad_left or pad_top or pad_right or pad_bottom:
-                image = cv2.copyMakeBorder(image, pad_top, pad_bottom, pad_left, pad_right, cv2.BORDER_CONSTANT, value=(0, 0, 0))
-                # Adjust center for padding
-                x += pad_left
-                y += pad_top
-
-            # Crop the padded image
-            disk_image = image[int(y - ref_side / 2):int(y + ref_side / 2), int(x - ref_side / 2):int(x + ref_side / 2)]
-
-            # Save cropped disk image with zero-padded numbering
-            disk_counter += 1
-            disk_filename = f"img_{disk_counter:03d}.jpg"
-            disk_path = os.path.join('data', kBatch, 'disk_out', disk_filename)
-            cv2.imwrite(disk_path, disk_image)
-            logprint(f"Saved Sun disk for {img} to {disk_path}")
-
         return date_time, angle_mn, sunrise, sunset, focal_length
 
     def plot(self, data_by_day):

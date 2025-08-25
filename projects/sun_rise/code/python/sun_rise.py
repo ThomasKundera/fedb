@@ -62,8 +62,7 @@ def adjust_contrast(image, saturation_percentile=99):
     
     return img_adjusted
 
-
-def find_circles(imgfile, minradius, maxradius):
+def find_circles_hough(imgfile, minradius, maxradius):
     print(f"find_circles({imgfile}, {minradius}, {maxradius})")
     image = cv2.imread(imgfile, cv2.IMREAD_COLOR)
     if image is None:
@@ -83,6 +82,66 @@ def find_circles(imgfile, minradius, maxradius):
         maxRadius=maxradius
     )
     return circles, image, gray
+
+
+def find_circles(imgfile, minradius, maxradius):
+    print(f"find_circles({imgfile}, {minradius}, {maxradius})")
+    # Load image
+    image = cv2.imread(imgfile, cv2.IMREAD_COLOR)
+    if image is None:
+        logprint(f"ERROR: Cannot load image {imgfile}")
+        return None, None, None
+
+    # Adjust contrast to ensure ~1% of pixels saturate
+    image = adjust_contrast(image)
+
+    # Convert to grayscale and blur
+    gray = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
+    gray_blurred = cv2.medianBlur(gray, 5)
+
+    # Adaptive thresholding to enhance edges, especially for partial arcs
+    thresh = cv2.adaptiveThreshold(
+        gray_blurred, 255, cv2.ADAPTIVE_THRESH_GAUSSIAN_C, cv2.THRESH_BINARY_INV, 11, 2
+    )
+
+    # Find contours
+    contours, _ = cv2.findContours(thresh, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
+
+    # Filter contours and fit circle
+    best_circle = None
+    for contour in contours:
+        # Filter small contours (noise)
+        if cv2.contourArea(contour) < 100:
+            continue
+        # Fit minimum enclosing circle
+        (x, y), r = cv2.minEnclosingCircle(contour)
+        # Check if radius is within expected range
+        if minradius <= r <= maxradius:
+            best_circle = (x, y, r)
+            break  # Take the first valid circle (Sun should be dominant)
+
+    # If contour-based detection fails, fall back to HoughCircles
+    if best_circle is None:
+        circles = cv2.HoughCircles(
+            gray_blurred,
+            cv2.HOUGH_GRADIENT_ALT,
+            dp=1,
+            minDist=50,
+            param1=100,  # Lowered from 150 for weaker edges
+            param2=0.6,  # Lowered from 0.7 for partial circles
+            minRadius=minradius,
+            maxRadius=maxradius
+        )
+        if circles is not None:
+            best_circle = circles[0][0]  # Take first circle
+        else:
+            logprint(f"WARNING: No circles found in {imgfile}")
+            return None, image, gray
+
+    # Format as HoughCircles output
+    circles = np.array([[best_circle]], dtype=np.float32)
+    return circles, image, gray
+
 
 def check_overexposure(image, gray, x, y, r):
     """Check if >20% of pixels in the Sun disk are overexposed (intensity=255)."""
@@ -230,8 +289,8 @@ class Analysis:
 
         # Display image
         window_name = f"Circles - {img}"
-        if (fInvalid):
-            cv2.imshow(window_name, display_image)
+        #if (fInvalid):
+        cv2.imshow(window_name, display_image)
         #cv2.waitKey(0)
 
         if fInvalid:

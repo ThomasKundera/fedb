@@ -62,7 +62,6 @@ def adjust_contrast(image, saturation_percentile=99):
     
     return img_adjusted
 
-
 def find_circles(imgfile, minradius, maxradius):
     print(f"find_circles({imgfile}, {minradius}, {maxradius})")
     # Load image
@@ -70,22 +69,17 @@ def find_circles(imgfile, minradius, maxradius):
     if image is None:
         logprint(f"ERROR: Cannot load image {imgfile}")
         return None, None, None
-
     # Adjust contrast to ensure ~1% of pixels saturate
     #image = adjust_contrast(image)
-
     # Convert to grayscale and blur
     gray = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
     gray_blurred = cv2.medianBlur(gray, 5)
-
     # Adaptive thresholding to enhance edges, especially for partial arcs
     thresh = cv2.adaptiveThreshold(
         gray_blurred, 255, cv2.ADAPTIVE_THRESH_GAUSSIAN_C, cv2.THRESH_BINARY_INV, 11, 2
     )
-
     # Find contours
     contours, _ = cv2.findContours(thresh, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
-
     # Filter contours and fit ellipse
     best_ellipse = None
     for contour in contours:
@@ -102,11 +96,6 @@ def find_circles(imgfile, minradius, maxradius):
         if minradius <= r <= maxradius:
             best_ellipse = (x, y, r)
             break  # Take the first valid ellipse (Sun should be dominant)
-
-    #if best_ellipse is None:
-    #    logprint(f"WARNING: No ellipses found in {imgfile}")
-    #    return None, image, gray
-
     # If contour-based detection fails, fall back to HoughCircles
     if best_ellipse is None:
         circles = cv2.HoughCircles(
@@ -124,7 +113,6 @@ def find_circles(imgfile, minradius, maxradius):
         else:
             logprint(f"WARNING: No circles found in {imgfile}")
             return None, image, gray
-
     # Format as HoughCircles output
     circles = np.array([[best_ellipse]], dtype=np.float32)
     return circles, image, gray
@@ -181,7 +169,6 @@ def get_exif(imgfile):
     return date_time, focal_length
 
 def px_to_angle(r, fl):
-
     # Canon 550D: Sensor Size 22.3 x 14.9mm
     pxs = 22.3 / kRSD
     pys = pxs

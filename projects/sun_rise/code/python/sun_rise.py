@@ -62,27 +62,6 @@ def adjust_contrast(image, saturation_percentile=99):
     
     return img_adjusted
 
-def find_circles_hough(imgfile, minradius, maxradius):
-    print(f"find_circles({imgfile}, {minradius}, {maxradius})")
-    image = cv2.imread(imgfile, cv2.IMREAD_COLOR)
-    if image is None:
-        logprint(f"ERROR: Cannot load image {imgfile}")
-        return None, None, None
-    #image = adjust_contrast(image)
-    gray = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
-    gray_blurred = cv2.medianBlur(gray, 5)
-    circles = cv2.HoughCircles(
-        gray_blurred,
-        cv2.HOUGH_GRADIENT_ALT,
-        dp=1,
-        minDist=50,
-        param1=150,
-        param2=0.7,
-        minRadius=minradius,
-        maxRadius=maxradius
-    )
-    return circles, image, gray
-
 
 def find_circles(imgfile, minradius, maxradius):
     print(f"find_circles({imgfile}, {minradius}, {maxradius})")
@@ -93,7 +72,7 @@ def find_circles(imgfile, minradius, maxradius):
         return None, None, None
 
     # Adjust contrast to ensure ~1% of pixels saturate
-    image = adjust_contrast(image)
+    #image = adjust_contrast(image)
 
     # Convert to grayscale and blur
     gray = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
@@ -107,39 +86,47 @@ def find_circles(imgfile, minradius, maxradius):
     # Find contours
     contours, _ = cv2.findContours(thresh, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
 
-    # Filter contours and fit circle
-    best_circle = None
+    # Filter contours and fit ellipse
+    best_ellipse = None
     for contour in contours:
-        # Filter small contours (noise)
-        if cv2.contourArea(contour) < 100:
+        # Filter small contours (noise) and ensure enough points for ellipse fitting
+        if cv2.contourArea(contour) < 100 or len(contour) < 5:
             continue
-        # Fit minimum enclosing circle
-        (x, y), r = cv2.minEnclosingCircle(contour)
+        # Fit ellipse
+        ellipse = cv2.fitEllipse(contour)
+        (x, y), (minor_axis, major_axis), angle = ellipse
+        # Ensure major_axis is horizontal (angle ~0 or ~180 degrees)
+        #if abs(angle % 180) < 45 or abs(angle % 180) > 135:
+        r = major_axis / 2  # Use major axis as equivalent radius
         # Check if radius is within expected range
         if minradius <= r <= maxradius:
-            best_circle = (x, y, r)
-            break  # Take the first valid circle (Sun should be dominant)
+            best_ellipse = (x, y, r)
+            break  # Take the first valid ellipse (Sun should be dominant)
+
+    #if best_ellipse is None:
+    #    logprint(f"WARNING: No ellipses found in {imgfile}")
+    #    return None, image, gray
 
     # If contour-based detection fails, fall back to HoughCircles
-    if best_circle is None:
+    if best_ellipse is None:
         circles = cv2.HoughCircles(
             gray_blurred,
             cv2.HOUGH_GRADIENT_ALT,
             dp=1,
             minDist=50,
-            param1=100,  # Lowered from 150 for weaker edges
-            param2=0.6,  # Lowered from 0.7 for partial circles
+            param1=100,
+            param2=0.6,
             minRadius=minradius,
             maxRadius=maxradius
         )
         if circles is not None:
-            best_circle = circles[0][0]  # Take first circle
+            best_ellipse = circles[0][0]  # Take first circle
         else:
             logprint(f"WARNING: No circles found in {imgfile}")
             return None, image, gray
 
     # Format as HoughCircles output
-    circles = np.array([[best_circle]], dtype=np.float32)
+    circles = np.array([[best_ellipse]], dtype=np.float32)
     return circles, image, gray
 
 
@@ -289,8 +276,8 @@ class Analysis:
 
         # Display image
         window_name = f"Circles - {img}"
-        #if (fInvalid):
-        cv2.imshow(window_name, display_image)
+        if (fInvalid):
+            cv2.imshow(window_name, display_image)
         #cv2.waitKey(0)
 
         if fInvalid:

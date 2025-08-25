@@ -15,6 +15,8 @@ import matplotlib.cm as cm
 kBatch = "2025_08_22"  # Batch date
 kRSD = 500
 
+disk_counter = 0  # Global counter for disk images
+
 # EXIF Dictionary
 exif_tags = {
     0x010e: "ImageDescription",
@@ -40,26 +42,26 @@ def logprint(*args, **kwargs):
 def adjust_contrast(image, saturation_percentile=99):
     """
     Adjust image contrast to ensure ~1% of pixels saturate (255) in at least one channel.
-    
+
     :param image: Input BGR image (from cv2.imread).
     :param saturation_percentile: Percentile to map to 255 (default: 99 for 1% saturation).
     :return: Contrast-adjusted image.
     """
     # Convert image to float32 for precise calculations
     img_float = image.astype(np.float32)
-    
+
     # Compute the 99th percentile across all channels
     percentile_value = np.percentile(img_float, saturation_percentile, axis=(0, 1))
-    
+
     # Scale each channel so the 99th percentile maps to 255
     for channel in range(3):  # R, G, B
         if percentile_value[channel] > 0:  # Avoid division by zero
             scale = 255.0 / percentile_value[channel]
             img_float[:, :, channel] *= scale
-    
+
     # Clip to [0, 255] and convert back to uint8
     img_adjusted = np.clip(img_float, 0, 255).astype(np.uint8)
-    
+
     return img_adjusted
 
 def find_circles(imgfile, minradius, maxradius):
@@ -69,17 +71,21 @@ def find_circles(imgfile, minradius, maxradius):
     if image is None:
         logprint(f"ERROR: Cannot load image {imgfile}")
         return None, None, None
+
     # Adjust contrast to ensure ~1% of pixels saturate
     #image = adjust_contrast(image)
     # Convert to grayscale and blur
     gray = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
     gray_blurred = cv2.medianBlur(gray, 5)
+
     # Adaptive thresholding to enhance edges, especially for partial arcs
     thresh = cv2.adaptiveThreshold(
         gray_blurred, 255, cv2.ADAPTIVE_THRESH_GAUSSIAN_C, cv2.THRESH_BINARY_INV, 11, 2
     )
+
     # Find contours
     contours, _ = cv2.findContours(thresh, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
+
     # Filter contours and fit ellipse
     best_ellipse = None
     for contour in contours:
@@ -89,13 +95,12 @@ def find_circles(imgfile, minradius, maxradius):
         # Fit ellipse
         ellipse = cv2.fitEllipse(contour)
         (x, y), (minor_axis, major_axis), angle = ellipse
-        # Ensure major_axis is horizontal (angle ~0 or ~180 degrees)
-        #if abs(angle % 180) < 45 or abs(angle % 180) > 135:
         r = major_axis / 2  # Use major axis as equivalent radius
         # Check if radius is within expected range
         if minradius <= r <= maxradius:
             best_ellipse = (x, y, r)
             break  # Take the first valid ellipse (Sun should be dominant)
+
     # If contour-based detection fails, fall back to HoughCircles
     if best_ellipse is None:
         circles = cv2.HoughCircles(
@@ -113,10 +118,10 @@ def find_circles(imgfile, minradius, maxradius):
         else:
             logprint(f"WARNING: No circles found in {imgfile}")
             return None, image, gray
+
     # Format as HoughCircles output
     circles = np.array([[best_ellipse]], dtype=np.float32)
     return circles, image, gray
-
 
 def check_overexposure(image, gray, x, y, r):
     """Check if >20% of pixels in the Sun disk are overexposed (intensity=255)."""
@@ -203,6 +208,11 @@ class Analysis:
         self.latitude = 43.7  # Nice, France
         self.longitude = 7.3
         self.imgdir = os.path.join('data', kBatch, str(kRSD) + '_sun')
+        self.disk_out_dir = os.path.join('data', kBatch, 'disk_out')
+        os.makedirs(self.disk_out_dir, exist_ok=True)
+
+    def extract_full_disks(self, img, minradius, maxradius):
+        return
 
     def for_one_image(self, img):
         logprint(f"Processing: {img} --------")
@@ -269,6 +279,44 @@ class Analysis:
 
         if fInvalid:
             return None, None, None, None, None
+
+        # Extract and save Sun disk for 1000mm lens (focal_length = 1012)
+        if focal_length == 1012:
+            global disk_counter
+            # Reference disk: 0.6° diameter in pixels
+            ref_angle_deg = 0.6
+            ref_radius_px = deg_to_px(ref_angle_deg / 2, focal_length)  # Radius for 0.6° diameter
+            ref_side = int(2 * ref_radius_px)  # Square side
+
+            # Crop around Sun center (x, y)
+            h, w = image.shape[:2]
+            left = int(x - ref_side / 2)
+            top = int(y - ref_side / 2)
+            right = int(x + ref_side / 2)
+            bottom = int(y + ref_side / 2)
+
+            # Pad if crop exceeds borders
+            pad_left = max(0, -left)
+            pad_top = max(0, -top)
+            pad_right = max(0, right - w)
+            pad_bottom = max(0, bottom - h)
+
+            if pad_left or pad_top or pad_right or pad_bottom:
+                image = cv2.copyMakeBorder(image, pad_top, pad_bottom, pad_left, pad_right, cv2.BORDER_CONSTANT, value=(0, 0, 0))
+                # Adjust center for padding
+                x += pad_left
+                y += pad_top
+
+            # Crop the padded image
+            disk_image = image[int(y - ref_side / 2):int(y + ref_side / 2), int(x - ref_side / 2):int(x + ref_side / 2)]
+
+            # Save cropped disk image with zero-padded numbering
+            disk_counter += 1
+            disk_filename = f"img_{disk_counter:03d}.jpg"
+            disk_path = os.path.join('data', kBatch, 'disk_out', disk_filename)
+            cv2.imwrite(disk_path, disk_image)
+            logprint(f"Saved Sun disk for {img} to {disk_path}")
+
         return date_time, angle_mn, sunrise, sunset, focal_length
 
     def plot(self, data_by_day):

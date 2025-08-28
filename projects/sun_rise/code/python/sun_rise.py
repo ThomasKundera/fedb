@@ -254,6 +254,11 @@ class Analysis:
         logprint(f"Processing: {img} --------")
         imgfile = os.path.join(self.imgdir, img)
         date_time, focal_length = get_exif(imgfile)
+
+        #if (focal_length <= 1000):
+        #    logprint(f"WARNING: No focal length in EXIF for {img}")
+        #    return None, None, None, None, None
+
         if date_time is None or focal_length is None:
             return None, None, None, None, None
         fInvalid = False
@@ -268,6 +273,7 @@ class Analysis:
             fInvalid = True
 
         # Use subpixel precision for calculations
+        angle_mn = 0
         if not fInvalid:
             x, y, r = circles[0][0]
             is_overexposed, overexposed_ratio = check_overexposure(image, gray, x, y, r)
@@ -277,6 +283,8 @@ class Analysis:
             else:
                 angle = px_to_angle(r, focal_length)
                 angle_mn = 2*angle * 60 * 180 / math.pi  # Arc-minutes for diameter
+
+        #if angle_mn < 32: fInvalid = True
         if fInvalid:
             x, y, r = 0, 0, 0
             angle_mn = 0
@@ -349,9 +357,11 @@ class Analysis:
 
         ax.set_xlabel('Time of Day (hours)')
         ax.set_ylabel('Angular Size (arc-minutes)')
-        ax.set_xlim(0, 24)
+        ax.set_xlim(5, 22)
         ax.grid(True, linestyle='--', alpha=0.7)
         ax.legend(loc='best')
+
+        ax.text(0.5, 0.5, 'Preliminary', fontsize=60, color='gray', alpha=0.5, ha='center', va='center', rotation=30, transform=ax.transAxes)
 
         plt.title('Sun Angular Size and Sunrise/Sunset Times by Day')
         plt.tight_layout()

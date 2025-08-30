@@ -66,6 +66,7 @@ def adjust_contrast(image, saturation_percentile=99):
 
     return img_adjusted
 
+
 def find_circles(imgfile, minradius, maxradius, focal_length):
     print(f"find_circles({imgfile}, {minradius}, {maxradius})")
     # Load image
@@ -74,19 +75,27 @@ def find_circles(imgfile, minradius, maxradius, focal_length):
         logprint(f"ERROR: Cannot load image {imgfile}")
         return None, None, None
 
-    # Adjust contrast to ensure ~1% of pixels saturate, but not for small Sun (small focal)
-    if (focal_length > 300):
-        image = adjust_contrast(image)
+    # Adjust contrast for longer focal lengths (>300mm) to enhance Sun brightness
+    if focal_length > 300:
+        image = adjust_contrast(image, saturation_percentile=99)
+
     # Convert to grayscale and blur
     gray = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
     gray_blurred = cv2.medianBlur(gray, 5)
-    #gray_blurred = gray
-    # Adaptive thresholding to enhance edges, especially for partial arcs
-    thresh = cv2.adaptiveThreshold(
-        gray_blurred, 255, cv2.ADAPTIVE_THRESH_GAUSSIAN_C, cv2.THRESH_BINARY_INV, 11, 2
-    )
 
-    # Find contours
+    # Apply high-pass thresholding to zero out low-light regions
+    # Use a high threshold (e.g., 90th percentile of intensity) to isolate the Sun
+    if focal_length > 3000:
+        thresh_value = np.percentile(gray_blurred, 95)  # Adjust percentile if needed
+        _, thresh = cv2.threshold(gray_blurred, thresh_value, 255, cv2.THRESH_BINARY)
+
+        # Optional: Apply morphological closing to fill small gaps and smooth the edge
+        kernel = np.ones((3, 3), np.uint8)  # Small kernel for subtle cleaning
+        thresh = cv2.morphologyEx(thresh, cv2.MORPH_CLOSE, kernel, iterations=1)
+    else:
+        thresh=gray_blurred
+
+    # Find contours on the thresholded image
     contours, _ = cv2.findContours(thresh, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
 
     # Filter contours and fit ellipse
@@ -97,7 +106,6 @@ def find_circles(imgfile, minradius, maxradius, focal_length):
             continue
         # Fit ellipse
         ellipse = cv2.fitEllipse(contour)
-        #print("---\n", ellipse,"\n---")
         (x, y), (minor_axis, major_axis), angle = ellipse
         r = major_axis / 2  # Use major axis as equivalent radius
         # Check if radius is within expected range
@@ -106,10 +114,11 @@ def find_circles(imgfile, minradius, maxradius, focal_length):
             print(f"ELLIPSE CONTOUR FOUND: {x} {y} {minor_axis} {major_axis} {angle}")
             break  # Take the first valid ellipse (Sun should be dominant)
 
-    # If contour-based detection fails, fall back to HoughCircles
+    best_ellipse = None
+    # If contour-based detection fails, fall back to HoughCircles on the thresholded image
     if best_ellipse is None:
         circles = cv2.HoughCircles(
-            gray_blurred,
+            thresh,  # Use thresholded image instead of gray_blurred
             cv2.HOUGH_GRADIENT_ALT,
             dp=1,
             minDist=50,
@@ -126,7 +135,7 @@ def find_circles(imgfile, minradius, maxradius, focal_length):
 
     # Format as HoughCircles output
     circles = np.array([[best_ellipse]], dtype=np.float32)
-    return circles, image, gray
+    return circles, image, thresh
 
 def check_overexposure(image, gray, x, y, r):
     """Check if >20% of pixels in the Sun disk are overexposed (intensity=255)."""
@@ -303,7 +312,8 @@ class Analysis:
         sunset = sun_times['sunset']
 
         # Resize image for display
-        display_image, scale = resize_image_for_display(image)
+        display_image, scale = resize_image_for_display(gray)
+        display_image = cv2.cvtColor(display_image, cv2.COLOR_GRAY2BGR)
         x_display, y_display, r_display = int(x * scale), int(y * scale), int(r * scale)
         #print(focal_length)
         focal_length_display = round(focal_length, 1)
@@ -325,8 +335,8 @@ class Analysis:
 
         # Display image
         window_name = f"Circles - {img}"
-        if (fInvalid): 
-            cv2.imshow(window_name, display_image)
+        #if (fInvalid): 
+        cv2.imshow(window_name, display_image)
         #cv2.waitKey(0)
         if (focal_length == 1012):
             self.extract_full_disks(imgfile, focal_length, x, y, r)

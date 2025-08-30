@@ -1,7 +1,7 @@
 #!/bin/bash
 
 kBATCH="2025_08_22"
-kSIZE=1250
+kSIZE=1000
 
 DATADIR="../../data/$kBATCH"
 

@@ -80,7 +80,7 @@ def find_circles(imgfile, minradius, maxradius, focal_length):
     # Convert to grayscale and blur
     gray = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
     gray_blurred = cv2.medianBlur(gray, 5)
-
+    #gray_blurred = gray
     # Adaptive thresholding to enhance edges, especially for partial arcs
     thresh = cv2.adaptiveThreshold(
         gray_blurred, 255, cv2.ADAPTIVE_THRESH_GAUSSIAN_C, cv2.THRESH_BINARY_INV, 11, 2
@@ -325,8 +325,8 @@ class Analysis:
 
         # Display image
         window_name = f"Circles - {img}"
-        #if (fInvalid): 
-        cv2.imshow(window_name, display_image)
+        if (fInvalid): 
+            cv2.imshow(window_name, display_image)
         #cv2.waitKey(0)
         if (focal_length == 1012):
             self.extract_full_disks(imgfile, focal_length, x, y, r)
@@ -334,7 +334,6 @@ class Analysis:
         if fInvalid:
             return None, None, None, None, None, None
         return date_time, angle_mn, sunrise, sunset, focal_length, img_num
-
 
     def plot(self, data_by_day):
         if not data_by_day:
@@ -345,7 +344,7 @@ class Analysis:
         ax.text(0.5, 0.5, 'Preliminary', fontsize=60, color='gray', alpha=0.5, ha='center', va='center', rotation=30, transform=ax.transAxes)
 
         # Get a colormap for unique colors per day
-        cmap = cm.get_cmap('tab20')  # Supports up to 10 days
+        cmap = cm.get_cmap('tab20')  # Supports up to 20 days
         colors = [cmap(i / len(data_by_day)) for i in range(len(data_by_day))]
 
         cidx = 0
@@ -366,6 +365,15 @@ class Analysis:
                 sunset_hour = sunset[0].hour + sunset[0].minute / 60 + sunset[0].second / 3600
                 ax.axvline(sunrise_hour, color=colors[cidx], linestyle='--', alpha=0.5, label=f'Sunrise {day.strftime("%Y-%m-%d")}')
                 ax.axvline(sunset_hour, color=colors[cidx], linestyle=':', alpha=0.5, label=f'Sunset {day.strftime("%Y-%m-%d")}')
+
+            # Get theoretical Sun diameter for this day
+            # Use the first time of the day or midnight as a representative time
+            day_time = datetime.datetime.combine(day, datetime.time(12, 0))  # Noon on the day
+            theoretical_size_deg = astro_data_api.get_sun_diameter(day_time, (self.latitude, self.longitude))
+            theoretical_size_arcmin = theoretical_size_deg * 60  # Convert to arc-minutes
+            # Plot horizontal line for theoretical diameter in flashy pink
+            ax.axhline(y=theoretical_size_arcmin, color='hotpink', linestyle='-', alpha=0.7, label=f'Theoretical {day.strftime("%Y-%m-%d")}' if cidx == 0 else None)
+
             cidx += 1
 
         ax.set_xlabel('Time of Day (hours)')

@@ -12,8 +12,10 @@ from matplotlib import pyplot as plt
 import suncalc
 import matplotlib.cm as cm
 
+import astro_data_api
+
 kBatch = "2025_08_22"  # Batch date
-kRSD = 1250
+kRSD = 1000
 
 disk_counter = 0  # Global counter for disk images
 
@@ -343,7 +345,7 @@ class Analysis:
         ax.text(0.5, 0.5, 'Preliminary', fontsize=60, color='gray', alpha=0.5, ha='center', va='center', rotation=30, transform=ax.transAxes)
 
         # Get a colormap for unique colors per day
-        cmap = cm.get_cmap('tab10')  # Supports up to 10 days
+        cmap = cm.get_cmap('tab20')  # Supports up to 10 days
         colors = [cmap(i / len(data_by_day)) for i in range(len(data_by_day))]
 
         cidx = 0

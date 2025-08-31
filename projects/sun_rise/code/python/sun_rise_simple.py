@@ -36,45 +36,12 @@ class Analysis:
     def for_one_image(self, img):
         logprint(f"Processing: {img} --------")
         imgfile = os.path.join(self.imgdir, img)
-        
-        res=find_sun(imgfile)
-        print(res)
-        sys.exit(-1)
-        exif, img, x, y, r = find_sun(imgfile)
-        
-        # Resize image for display
-        display_image, scale = resize_image_for_display(img)
-        display_image = cv2.cvtColor(display_image, cv2.COLOR_GRAY2BGR)
-        x_display, y_display, r_display = int(x * scale), int(y * scale), int(r * scale)
-        #print(focal_length)
-        focal_length_display = round(focal_length, 1)
-        text = f"Fl: {focal_length_display:.1f} mm, Angle: {angle_mn:.1f}'"
-        cv2.putText(
-            display_image,
-            text,
-            (10, 30),
-            cv2.FONT_HERSHEY_SIMPLEX,
-            0.7,
-            (255, 255, 255),
-            2,
-            cv2.LINE_AA
-        )
-
+        exif, (imgp, x, y, r) = find_sun(imgfile)
+        #print(x, y, r)
+        angle_mn = 2*exif.px_to_mn(r)
+        focal_length = exif.focal_length
         # Extract image number from filename (e.g., IMG_1234.JPG -> 1234)
         img_num = img.split('_')[1].split('.')[0] if 'IMG_' in img else 'Unknown'
-
-        # Draw circle and center with scaled values
-        cv2.circle(display_image, (x_display, y_display), r_display, (0, 255, 0), 2)
-        cv2.circle(display_image, (x_display, y_display), 2, (0, 0, 255), 3)
-
-        # Display image
-        window_name = f"Circles - {img}"
-        #if (fInvalid): 
-        cv2.imshow(window_name, display_image)
-        #cv2.waitKey(0)
-
-        #if fInvalid:
-        #    return None, None, None
         return exif.date_time, angle_mn, focal_length, img_num
 
     def plot(self, data_by_day):
@@ -90,6 +57,9 @@ class Analysis:
         colors = [cmap(i / len(data_by_day)) for i in range(len(data_by_day))]
 
         cidx = 0
+
+        print(data_by_day)
+
         for day, (times, angles, focal_lengths, img_nums) in data_by_day.items():
             # Sort times within the day
             sorted_day_data = sorted(zip(times, angles, img_nums), key=lambda x: x[0])
@@ -132,11 +102,11 @@ class Analysis:
                 continue
             day = date_time.date()
             if day not in data_by_day:
-                data_by_day[day] = ([], [], [], [], [], [])  # Add list for img_num
+                data_by_day[day] = ([], [], [], [])  # Add list for img_num
             data_by_day[day][0].append(date_time)
             data_by_day[day][1].append(angle_mn)
-            data_by_day[day][4].append(focal_length)
-            data_by_day[day][5].append(img_num)  # Store img_num
+            data_by_day[day][2].append(focal_length)
+            data_by_day[day][3].append(img_num)  # Store img_num
         
         self.plot(data_by_day)
 

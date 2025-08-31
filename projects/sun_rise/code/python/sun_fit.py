@@ -6,18 +6,17 @@ import sys
 
 from exifer_simple import ExifData
 
+def resize_image_for_display(image, max_size=(1000, 1000)):
+    """Resize image for display while preserving aspect ratio."""
+    h, w = image.shape[:2]
+    max_width, max_height = max_size
+    scale = min(max_width / w, max_height / h, 1.0)
+    if scale < 1.0:
+        new_w, new_h = int(w * scale), int(h * scale)
+        return cv2.resize(image, (new_w, new_h), interpolation=cv2.INTER_AREA), scale
+    return image, 1.0
+
 def find_circle(imgfile, min_radius=10, max_radius=50,focal_length=100):
-    """
-    Fit a circle to the image using HoughCircles with basic Gaussian blur preprocessing.
-    
-    Args:
-        imgfile (str): Path to the image file.r testing).
-        min_radius (int): Minimum radius in pixels (default: 10).
-        max_radius (int): Maximum radius in pixels (default: 50).
-        focal_length (float): Focal length in mm for context (manual fo
-    Returns:
-        tuple: (image with circle drawn, x, y, r) or (None, None, None, None) if no circle found.
-    """
     # Load image
     image = cv2.imread(imgfile)
     if image is None:
@@ -48,9 +47,11 @@ def find_circle(imgfile, min_radius=10, max_radius=50,focal_length=100):
         print(f"Circle found: x={x}, y={y}, r={r}, image shape: {gray.shape}, focal_length={focal_length}mm")
 
         # Draw the circle and center on the original image (converted to BGR for color)
-        display_image = cv2.cvtColor(gray_blurred, cv2.COLOR_GRAY2BGR)  # Use blurred image for display
-        cv2.circle(display_image, (x, y), r, (0, 255, 0), 2)  # Green circle
-        cv2.circle(display_image, (x, y), 2, (0, 0, 255), 3)  # Red center
+        display_image, scale = resize_image_for_display(gray)
+        display_image = cv2.cvtColor(display_image, cv2.COLOR_GRAY2BGR)
+        x_display, y_display, r_display = int(x * scale), int(y * scale), int(r * scale)
+        cv2.circle(display_image, (x_display, y_display), int(r_display), (0, 255, 0), 2)  # Green circle
+        cv2.circle(display_image, (x_display, y_display), 2, (0, 0, 255), 3)  # Red center
 
         return display_image, x, y, r
     else:
@@ -63,17 +64,17 @@ def find_sun(imgfile):
     focal_length = exif.focal_length
     min_radius = int(exif.deg_to_px(0.15))  # Sun is about 0.5 degrees
     max_radius = int(exif.deg_to_px(0.35))
-    return find_circle(imgfile, min_radius, max_radius, focal_length)
+    return exif, find_circle(imgfile, min_radius, max_radius, focal_length)
 
 
 def main():
     # Check command-line argument
     if len(sys.argv) != 2:
-        print("Usage: python circle_fit_test.py <image_file>")
-        sys.exit(1)
-    imgfile = sys.argv[1]
+        imgfile = 'data/2025_08_22/full_sun/IMG_1347.JPG'
+    else:
+        imgfile = sys.argv[1]
 
-    img, x, y, r = find_sun(imgfile)
+    _, (img, x, y, r) = find_sun(imgfile)
 
     # Display the image
     if img is not None:

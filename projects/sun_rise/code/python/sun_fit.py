@@ -45,19 +45,23 @@ def find_circle(imgfile, min_radius=10, max_radius=50,focal_length=100):
         best_circle = circles[0][0]
         x, y, r = best_circle
         print(f"Circle found: x={x}, y={y}, r={r}, image shape: {gray.shape}, focal_length={focal_length}mm")
-
-        # Draw the circle and center on the original image (converted to BGR for color)
-        display_image, scale = resize_image_for_display(gray)
-        display_image = cv2.cvtColor(display_image, cv2.COLOR_GRAY2BGR)
+    else:
+        print(f"No circles found in {imgfile}")
+        r=None
+    # Draw the circle and center on the original image (converted to BGR for color)
+    display_image, scale = resize_image_for_display(gray)
+    display_image = cv2.cvtColor(display_image, cv2.COLOR_GRAY2BGR)
+    if (r is not None):
         x_display, y_display, r_display = int(x * scale), int(y * scale), int(r * scale)
         cv2.circle(display_image, (x_display, y_display), int(r_display), (0, 255, 0), 2)  # Green circle
         cv2.circle(display_image, (x_display, y_display), 2, (0, 0, 255), 3)  # Red center
 
-        return display_image, x, y, r
-    else:
-        print(f"No circles found in {imgfile}")
+    # Display image
+    window_name = f"Circles - {imgfile}"
+    if (r is None):
+        cv2.imshow(window_name, display_image)
         return None, None, None, None
-
+    return display_image, x, y, r
 
 def find_sun(imgfile):
     exif = ExifData(imgfile)
@@ -76,11 +80,8 @@ def main():
 
     _, (img, x, y, r) = find_sun(imgfile)
 
-    # Display the image
-    if img is not None:
-        cv2.imshow("Circle Fit", img)
-        cv2.waitKey(0)
-        cv2.destroyAllWindows()
+    cv2.waitKey(0)
+    cv2.destroyAllWindows()
 
 if __name__ == "__main__":
     main()

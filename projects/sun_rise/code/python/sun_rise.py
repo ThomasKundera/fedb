@@ -12,7 +12,8 @@ from matplotlib import pyplot as plt
 import suncalc
 import matplotlib.cm as cm
 
-import astro_data_api
+from astro_data_api import get_sun_diameter
+from sun_fit import find_circle
 
 kBatch = "2025_08_22"  # Batch date
 kRSD = 1000
@@ -67,7 +68,7 @@ def adjust_contrast(image, saturation_percentile=99):
     return img_adjusted
 
 
-def find_circles(imgfile, minradius, maxradius, focal_length):
+def find_circles_complex(imgfile, minradius, maxradius, focal_length):
     print(f"find_circles({imgfile}, {minradius}, {maxradius})")
     # Load image
     image = cv2.imread(imgfile, cv2.IMREAD_COLOR)
@@ -278,7 +279,7 @@ class Analysis:
         fInvalid = False
         minradius = int(deg_to_px(0.15, focal_length))  # Sun is about 0.5 degrees
         maxradius = int(deg_to_px(0.35, focal_length))
-        circles, image, gray = find_circles(imgfile, minradius, maxradius, focal_length)
+        circles, image, gray = find_circle(imgfile, minradius, maxradius, focal_length)
         if circles is None or image is None:
             logprint(f"WARNING: No circles found in {img}")
             fInvalid = True
@@ -379,7 +380,7 @@ class Analysis:
             # Get theoretical Sun diameter for this day
             # Use the first time of the day or midnight as a representative time
             day_time = datetime.datetime.combine(day, datetime.time(12, 0))  # Noon on the day
-            theoretical_size_deg = astro_data_api.get_sun_diameter(day_time, (self.latitude, self.longitude))
+            theoretical_size_deg = get_sun_diameter(day_time, (self.latitude, self.longitude))
             theoretical_size_arcmin = theoretical_size_deg * 60  # Convert to arc-minutes
             # Plot horizontal line for theoretical diameter in flashy pink
             ax.axhline(y=theoretical_size_arcmin, color='hotpink', linestyle='-', alpha=0.7, label=f'Theoretical {day.strftime("%Y-%m-%d")}' if cidx == 0 else None)

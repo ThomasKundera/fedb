@@ -37,7 +37,8 @@ class Analysis:
         logprint(f"Processing: {img} --------")
         imgfile = os.path.join(self.imgdir, img)
         exif, (imgp, x, y, r) = find_sun(imgfile)
-        #print(x, y, r)
+        if (r is None):
+            return None, None, None, None
         angle_mn = 2*exif.px_to_mn(r)
         focal_length = exif.focal_length
         # Extract image number from filename (e.g., IMG_1234.JPG -> 1234)
@@ -57,8 +58,6 @@ class Analysis:
         colors = [cmap(i / len(data_by_day)) for i in range(len(data_by_day))]
 
         cidx = 0
-
-        print(data_by_day)
 
         for day, (times, angles, focal_lengths, img_nums) in data_by_day.items():
             # Sort times within the day

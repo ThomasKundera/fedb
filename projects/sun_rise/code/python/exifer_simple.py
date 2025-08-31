@@ -45,7 +45,7 @@ class ExifData:
         # Get focal length:
         self.focal_length = self.exif_data.get(0x920a, 0)
         if self.focal_length == 0:
-            self.focal_length = 1012  # 1000mm f/10 + 13mm extension.
+            self.focal_length = 1100  # 1000mm f/10 + 13mm extension.
     
     def px_to_angle(self, r):
         # Canon 550D: Sensor Size 22.3 x 14.9mm

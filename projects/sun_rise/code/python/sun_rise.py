@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+
 import os
 import math
 import datetime
@@ -11,7 +12,13 @@ from matplotlib import pyplot as plt
 import suncalc
 import matplotlib.cm as cm
 
-kRSD = 3200  # Global, selects directory e.g., data/3200_sun
+from astro_data_api import get_sun_diameter
+from sun_fit import find_circle
+
+kBatch = "2025_08_22"  # Batch date
+kRSD = 1000
+
+disk_counter = 0  # Global counter for disk images
 
 # EXIF Dictionary
 exif_tags = {
@@ -35,33 +42,101 @@ exif_tags = {
 def logprint(*args, **kwargs):
     print("[", datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S"), "]", *args, **kwargs)
 
-def find_circles(imgfile):
+def adjust_contrast(image, saturation_percentile=99):
+    """
+    Adjust image contrast to ensure ~1% of pixels saturate (255) in at least one channel.
+
+    :param image: Input BGR image (from cv2.imread).
+    :param saturation_percentile: Percentile to map to 255 (default: 99 for 1% saturation).
+    :return: Contrast-adjusted image.
+    """
+    # Convert image to float32 for precise calculations
+    img_float = image.astype(np.float32)
+
+    # Compute the 99th percentile across all channels
+    percentile_value = np.percentile(img_float, saturation_percentile, axis=(0, 1))
+
+    # Scale each channel so the 99th percentile maps to 255
+    for channel in range(3):  # R, G, B
+        if percentile_value[channel] > 0:  # Avoid division by zero
+            scale = 255.0 / percentile_value[channel]
+            img_float[:, :, channel] *= scale
+
+    # Clip to [0, 255] and convert back to uint8
+    img_adjusted = np.clip(img_float, 0, 255).astype(np.uint8)
+
+    return img_adjusted
+
+
+def find_circles_complex(imgfile, minradius, maxradius, focal_length):
+    print(f"find_circles({imgfile}, {minradius}, {maxradius})")
     # Load image
     image = cv2.imread(imgfile, cv2.IMREAD_COLOR)
     if image is None:
         logprint(f"ERROR: Cannot load image {imgfile}")
         return None, None, None
 
+    # Adjust contrast for longer focal lengths (>300mm) to enhance Sun brightness
+    if focal_length > 300:
+        image = adjust_contrast(image, saturation_percentile=99)
+
+    # Convert to grayscale and blur
     gray = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
     gray_blurred = cv2.medianBlur(gray, 5)
-    # Parameters
-    minradius500 = 10
-    maxradius500 = 70
-    minradius = int(minradius500 * kRSD / 500)
-    maxradius = int(maxradius500 * kRSD / 500)
 
-    # Detect circles using Hough Circle Transform
-    circles = cv2.HoughCircles(
-        gray_blurred,
-        cv2.HOUGH_GRADIENT_ALT,
-        dp=1,
-        minDist=50,
-        param1=300,
-        param2=0.7,
-        minRadius=minradius,
-        maxRadius=maxradius
-    )
-    return circles, image, gray
+    # Apply high-pass thresholding to zero out low-light regions
+    # Use a high threshold (e.g., 90th percentile of intensity) to isolate the Sun
+    if focal_length > 3000:
+        thresh_value = np.percentile(gray_blurred, 95)  # Adjust percentile if needed
+        _, thresh = cv2.threshold(gray_blurred, thresh_value, 255, cv2.THRESH_BINARY)
+
+        # Optional: Apply morphological closing to fill small gaps and smooth the edge
+        kernel = np.ones((3, 3), np.uint8)  # Small kernel for subtle cleaning
+        thresh = cv2.morphologyEx(thresh, cv2.MORPH_CLOSE, kernel, iterations=1)
+    else:
+        thresh=gray_blurred
+
+    # Find contours on the thresholded image
+    contours, _ = cv2.findContours(thresh, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
+
+    # Filter contours and fit ellipse
+    best_ellipse = None
+    for contour in contours:
+        # Filter small contours (noise) and ensure enough points for ellipse fitting
+        if cv2.contourArea(contour) < 100 or len(contour) < 5:
+            continue
+        # Fit ellipse
+        ellipse = cv2.fitEllipse(contour)
+        (x, y), (minor_axis, major_axis), angle = ellipse
+        r = major_axis / 2  # Use major axis as equivalent radius
+        # Check if radius is within expected range
+        if minradius <= r <= maxradius:
+            best_ellipse = (x, y, r)
+            print(f"ELLIPSE CONTOUR FOUND: {x} {y} {minor_axis} {major_axis} {angle}")
+            break  # Take the first valid ellipse (Sun should be dominant)
+
+    best_ellipse = None
+    # If contour-based detection fails, fall back to HoughCircles on the thresholded image
+    if best_ellipse is None:
+        circles = cv2.HoughCircles(
+            thresh,  # Use thresholded image instead of gray_blurred
+            cv2.HOUGH_GRADIENT_ALT,
+            dp=1,
+            minDist=50,
+            param1=100,
+            param2=0.6,
+            minRadius=minradius,
+            maxRadius=maxradius
+        )
+        if circles is not None:
+            best_ellipse = circles[0][0]  # Take first circle
+        else:
+            logprint(f"WARNING: No circles found in {imgfile}")
+            return None, image, gray
+
+    # Format as HoughCircles output
+    circles = np.array([[best_ellipse]], dtype=np.float32)
+    return circles, image, thresh
 
 def check_overexposure(image, gray, x, y, r):
     """Check if >20% of pixels in the Sun disk are overexposed (intensity=255)."""
@@ -105,7 +180,11 @@ def get_exif(imgfile):
         return None, None
 
     focal_length = exif_data.get(0x920a, 0)
-    focal_length = float(focal_length) if focal_length else 500  # Default for manual Tamron
+    if (focal_length == 0):
+        #focal_length = 400  # Manual Kenko lens (400mm f/8)
+        #focal_length = 1000  # Manual Russian lens (1000mm f/10)
+        # The Russian lens has a 13mm extension ring, thus the focal length is larger.
+        focal_length = 1012  # 1000mm f/10 + 13mm extension.
     logprint(f"Focal length: {focal_length} mm")
     return date_time, focal_length
 
@@ -116,6 +195,18 @@ def px_to_angle(r, fl):
     ps = (pxs + pys) / 2
     a = 2 * math.atan2(r * ps, 2 * fl)  # Diameter in radians
     return a
+
+def angle_to_px(a, fl):
+    """Convert angular diameter (radians) to pixel radius for Canon 550D sensor."""
+    pxs = 22.3 / kRSD  # Pixel size in mm (x-dimension)
+    pys = pxs          # Assume same pixel size for y
+    ps = (pxs + pys) / 2  # Average pixel size
+    r = (2 * fl * math.tan(a / 2)) / ps  # Pixel radius
+    return r
+
+def deg_to_px(a, fl):
+    """Convert angular diameter (degrees) to pixel radius for Canon 550D sensor."""
+    return angle_to_px(math.radians(a), fl)
 
 def resize_image_for_display(image, max_size=(1000, 1000)):
     """Resize image for display while preserving aspect ratio."""
@@ -131,16 +222,64 @@ class Analysis:
     def __init__(self):
         self.latitude = 43.7  # Nice, France
         self.longitude = 7.3
-        self.imgdir = os.path.join('data', str(kRSD) + '_sun')
+        self.imgdir = os.path.join('data', kBatch, str(kRSD) + '_sun')
+        self.disk_out_dir = os.path.join('data', kBatch, 'disk_out')
+        os.makedirs(self.disk_out_dir, exist_ok=True)
+
+    def extract_full_disks(self, imgfile, focal_length, x, y, r):
+        # Extract and save Sun disk for 1000mm lens (focal_length = 1012)
+        global disk_counter
+        image = cv2.imread(imgfile, cv2.IMREAD_COLOR)
+        # Reference disk: 0.6° diameter in pixels
+        ref_angle_deg = 0.6
+        ref_radius_px = deg_to_px(ref_angle_deg / 2, focal_length)  # Radius for 0.6° diameter
+        ref_side = int(2 * ref_radius_px)  # Square side
+
+        # Crop around Sun center (x, y)
+        h, w = image.shape[:2]
+        left = int(x - ref_side / 2)
+        top = int(y - ref_side / 2)
+        right = int(x + ref_side / 2)
+        bottom = int(y + ref_side / 2)
+
+        # Pad if crop exceeds borders
+        pad_left = max(0, -left)
+        pad_top = max(0, -top)
+        pad_right = max(0, right - w)
+        pad_bottom = max(0, bottom - h)
+
+        if pad_left or pad_top or pad_right or pad_bottom:
+            image = cv2.copyMakeBorder(image, pad_top, pad_bottom, pad_left, pad_right, cv2.BORDER_CONSTANT, value=(0, 0, 0))
+            # Adjust center for padding
+            x += pad_left
+            y += pad_top
+
+        # Crop the padded image
+        disk_image = image[int(y - ref_side / 2):int(y + ref_side / 2), int(x - ref_side / 2):int(x + ref_side / 2)]
+
+        # Save cropped disk image with zero-padded numbering
+        disk_counter += 1
+        disk_filename = f"img_{disk_counter:03d}.jpg"
+        disk_path = os.path.join('data', kBatch, 'disk_out', disk_filename)
+        cv2.imwrite(disk_path, disk_image)
+        logprint(f"Saved Sun disk for {imgfile} to {disk_path}")
+
 
     def for_one_image(self, img):
         logprint(f"Processing: {img} --------")
         imgfile = os.path.join(self.imgdir, img)
         date_time, focal_length = get_exif(imgfile)
+
+        #if (focal_length <= 1000):
+        #    logprint(f"WARNING: No focal length in EXIF for {img}")
+        #    return None, None, None, None, None
+
         if date_time is None or focal_length is None:
-            return None, None, None, None
+            return None, None, None, None, None, None
         fInvalid = False
-        circles, image, gray = find_circles(imgfile)
+        minradius = int(deg_to_px(0.15, focal_length))  # Sun is about 0.5 degrees
+        maxradius = int(deg_to_px(0.35, focal_length))
+        circles, image, gray = find_circle(imgfile, minradius, maxradius, focal_length)
         if circles is None or image is None:
             logprint(f"WARNING: No circles found in {img}")
             fInvalid = True
@@ -148,10 +287,13 @@ class Analysis:
             logprint(f"WARNING: Multiple circles found in {img}")
             fInvalid = True
 
+        # Extract image number from filename (e.g., IMG_1234.JPG -> 1234)
+        img_num = img.split('_')[1].split('.')[0] if 'IMG_' in img else 'Unknown'
+
         # Use subpixel precision for calculations
+        angle_mn = 0
         if not fInvalid:
-            x, y, r = circles[0][0]  # Float values
-            # Check for overexposure
+            x, y, r = circles[0][0]
             is_overexposed, overexposed_ratio = check_overexposure(image, gray, x, y, r)
             if is_overexposed:
                 logprint(f"WARNING: Overexposed Sun disk in {img} ({overexposed_ratio*100:.1f}% pixels at 255)")
@@ -159,6 +301,8 @@ class Analysis:
             else:
                 angle = px_to_angle(r, focal_length)
                 angle_mn = 2*angle * 60 * 180 / math.pi  # Arc-minutes for diameter
+
+        #if angle_mn < 32: fInvalid = True
         if fInvalid:
             x, y, r = 0, 0, 0
             angle_mn = 0
@@ -169,11 +313,12 @@ class Analysis:
         sunset = sun_times['sunset']
 
         # Resize image for display
-        display_image, scale = resize_image_for_display(image)
+        display_image, scale = resize_image_for_display(gray)
+        display_image = cv2.cvtColor(display_image, cv2.COLOR_GRAY2BGR)
         x_display, y_display, r_display = int(x * scale), int(y * scale), int(r * scale)
-
-        # Round for display only
-        text = f"Fl: {focal_length:.1f} mm, Angle: {angle_mn:.1f}'"
+        #print(focal_length)
+        focal_length_display = round(focal_length, 1)
+        text = f"Fl: {focal_length_display:.1f} mm, Angle: {angle_mn:.1f}'"
         cv2.putText(
             display_image,
             text,
@@ -191,12 +336,15 @@ class Analysis:
 
         # Display image
         window_name = f"Circles - {img}"
+        #if (fInvalid): 
         cv2.imshow(window_name, display_image)
-        cv2.waitKey(0)
+        #cv2.waitKey(0)
+        if (focal_length == 1012):
+            self.extract_full_disks(imgfile, focal_length, x, y, r)
 
         if fInvalid:
-            return None, None, None, None
-        return date_time, angle_mn, sunrise, sunset
+            return None, None, None, None, None, None
+        return date_time, angle_mn, sunrise, sunset, focal_length, img_num
 
     def plot(self, data_by_day):
         if not data_by_day:
@@ -204,31 +352,44 @@ class Analysis:
             return
 
         fig, ax = plt.subplots(figsize=(10, 5))
+        ax.text(0.5, 0.5, 'Preliminary', fontsize=60, color='gray', alpha=0.5, ha='center', va='center', rotation=30, transform=ax.transAxes)
 
         # Get a colormap for unique colors per day
-        cmap = cm.get_cmap('tab10')  # Supports up to 10 days
+        cmap = cm.get_cmap('tab20')  # Supports up to 20 days
         colors = [cmap(i / len(data_by_day)) for i in range(len(data_by_day))]
 
         cidx = 0
-        for day, (times, angles, sunrise, sunset) in data_by_day.items():
+        for day, (times, angles, sunrise, sunset, focal_lengths, img_nums) in data_by_day.items():
             # Sort times within the day
-            sorted_day_data = sorted(zip(times, angles), key=lambda x: x[0])
-            times_sorted, angles_sorted = zip(*sorted_day_data) if sorted_day_data else ([], [])
+            sorted_day_data = sorted(zip(times, angles, img_nums), key=lambda x: x[0])
+            times_sorted, angles_sorted, img_nums_sorted = zip(*sorted_day_data) if sorted_day_data else ([], [], [])
             # Convert times to hours
             hours = [t.hour + t.minute / 60 + t.second / 3600 for t in times_sorted]
             # Plot angular sizes
             ax.plot(hours, angles_sorted, marker='o', color=colors[cidx], label=f'Angles {day.strftime("%Y-%m-%d")}')
+            # Annotate each point with image number
+            for h, a, img_num in zip(hours, angles_sorted, img_nums_sorted):
+                ax.text(h, a, img_num, fontsize=8, ha='right', va='bottom')
             # Plot sunrise/sunset as vertical lines (use first entry)
             if sunrise and sunset:  # Check lists are non-empty
                 sunrise_hour = sunrise[0].hour + sunrise[0].minute / 60 + sunrise[0].second / 3600
                 sunset_hour = sunset[0].hour + sunset[0].minute / 60 + sunset[0].second / 3600
                 ax.axvline(sunrise_hour, color=colors[cidx], linestyle='--', alpha=0.5, label=f'Sunrise {day.strftime("%Y-%m-%d")}')
                 ax.axvline(sunset_hour, color=colors[cidx], linestyle=':', alpha=0.5, label=f'Sunset {day.strftime("%Y-%m-%d")}')
+
+            # Get theoretical Sun diameter for this day
+            # Use the first time of the day or midnight as a representative time
+            day_time = datetime.datetime.combine(day, datetime.time(12, 0))  # Noon on the day
+            theoretical_size_deg = get_sun_diameter(day_time, (self.latitude, self.longitude))
+            theoretical_size_arcmin = theoretical_size_deg * 60  # Convert to arc-minutes
+            # Plot horizontal line for theoretical diameter in flashy pink
+            ax.axhline(y=theoretical_size_arcmin, color='hotpink', linestyle='-', alpha=0.7, label=f'Theoretical {day.strftime("%Y-%m-%d")}' if cidx == 0 else None)
+
             cidx += 1
 
         ax.set_xlabel('Time of Day (hours)')
         ax.set_ylabel('Angular Size (arc-minutes)')
-        ax.set_xlim(20.9, 21.15)  # From your code; adjust as needed
+        ax.set_xlim(5, 22)
         ax.grid(True, linestyle='--', alpha=0.7)
         ax.legend(loc='best')
 
@@ -237,28 +398,70 @@ class Analysis:
         plt.savefig("sun_plot.png")
         plt.show()
 
+    def plot_diameter_vs_focal(self, data):
+        """Plot Sun apparent diameter vs focal length."""
+        if not data:
+            logprint("ERROR: No valid data to plot")
+            return
+        fig, ax = plt.subplots(figsize=(10, 5))
+        ax.text(0.5, 0.5, 'Preliminary', fontsize=60, color='gray', alpha=0.5, ha='center', va='center', rotation=30, transform=ax.transAxes)
+        # Group data by focal length
+        data_by_focal = {}
+        for date_time, angle_mn, _, _, focal_length, img_num in data:
+            if not date_time or not focal_length:
+                continue
+            focal_length = round(focal_length, 1)  # Group by rounded focal length
+            if focal_length not in data_by_focal:
+                data_by_focal[focal_length] = []
+            data_by_focal[focal_length].append((angle_mn, img_num))
+        # Plot
+        cmap = cm.get_cmap('tab10')
+        colors = [cmap(i / len(data_by_focal)) for i in range(len(data_by_focal))]
+        cidx = 0
+        for focal_length, angle_data in sorted(data_by_focal.items()):
+            angles, img_nums = zip(*angle_data) if angle_data else ([], [])
+            ax.scatter([focal_length] * len(angles), angles, marker='o', color=colors[cidx], label=f'Fl: {focal_length:.1f} mm')
+            # Annotate each point with image number
+            for fl, a, img_num in zip([focal_length] * len(angles), angles, img_nums):
+                ax.text(fl, a, img_num, fontsize=8, ha='right', va='bottom')
+            cidx += 1
+        ax.set_xlabel('Focal Length (mm)')
+        ax.set_ylabel('Angular Size (arc-minutes)')
+        ax.grid(True, linestyle='--', alpha=0.7)
+        ax.legend(loc='best')
+        plt.title('Sun Apparent Diameter vs Focal Length')
+        plt.tight_layout()
+        plt.savefig("sun_diameter_vs_focal.png")
+        plt.show()
+
     def run(self):
-        self.imgdir = os.path.join('data', str(kRSD) + '_sun')
+        self.imgdir = os.path.join('data', kBatch, str(kRSD) + '_sun')
         data = []
+        idx = 0
         for img in sorted(os.listdir(self.imgdir)):
             result = self.for_one_image(img)
             if result:
                 data.append(result)
-
-        # Group data by day
+                idx += 1
+                # if idx > 3:
+                #     break
+        # Group data by day for first plot
         data_by_day = {}
-        for date_time, angle_mn, sunrise, sunset in data:
+        for date_time, angle_mn, sunrise, sunset, focal_length, img_num in data:
             if not date_time:
                 continue
             day = date_time.date()
             if day not in data_by_day:
-                data_by_day[day] = ([], [], [], [])
+                data_by_day[day] = ([], [], [], [], [], [])  # Add list for img_num
             data_by_day[day][0].append(date_time)
             data_by_day[day][1].append(angle_mn)
             data_by_day[day][2].append(sunrise)
             data_by_day[day][3].append(sunset)
-
+            data_by_day[day][4].append(focal_length)
+            data_by_day[day][5].append(img_num)  # Store img_num
+        
         self.plot(data_by_day)
+        self.plot_diameter_vs_focal(data)
 
 def main():
     logprint("main: Start")
@@ -270,4 +473,3 @@ def main():
 
 if __name__ == "__main__":
     main()
-    

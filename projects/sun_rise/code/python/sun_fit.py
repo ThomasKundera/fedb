@@ -4,7 +4,9 @@ import cv2
 import numpy as np
 import sys
 
-def find_circle(imgfile, min_radius=10, max_radius=50),focal_length=100):
+from exifer_simple import ExifData
+
+def find_circle(imgfile, min_radius=10, max_radius=50,focal_length=100):
     """
     Fit a circle to the image using HoughCircles with basic Gaussian blur preprocessing.
     
@@ -55,6 +57,15 @@ def find_circle(imgfile, min_radius=10, max_radius=50),focal_length=100):
         print(f"No circles found in {imgfile}")
         return None, None, None, None
 
+
+def find_sun(imgfile):
+    exif = ExifData(imgfile)
+    focal_length = exif.focal_length
+    min_radius = int(exif.deg_to_px(0.15))  # Sun is about 0.5 degrees
+    max_radius = int(exif.deg_to_px(0.35))
+    return find_circle(imgfile, min_radius, max_radius, focal_length)
+
+
 def main():
     # Check command-line argument
     if len(sys.argv) != 2:
@@ -62,15 +73,11 @@ def main():
         sys.exit(1)
     imgfile = sys.argv[1]
 
-    # Manual parameters for self-testing (adjust as needed)
-    focal_length = 1012.0  # Example focal length in mm (e.g., Russian lens + 13mm extension)
-    min_radius = 15  # Adjusted for ~0.45° diameter at 1012mm
-    max_radius = 25  # Adjusted for ~0.55° diameter at 1012mm
+    img, x, y, r = find_sun(imgfile)
 
-    # Fit circle and display
-    display_image, x, y, r = fit_circle(imgfile, focal_length, min_radius, max_radius)
-    if display_image is not None:
-        cv2.imshow("Circle Fit", display_image)
+    # Display the image
+    if img is not None:
+        cv2.imshow("Circle Fit", img)
         cv2.waitKey(0)
         cv2.destroyAllWindows()
 

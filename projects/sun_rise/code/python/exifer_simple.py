@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 
 import math
+import datetime
 from PIL import Image
 from PIL.ExifTags import TAGS
 
@@ -25,6 +26,19 @@ class ExifData:
             logprint(f"WARNING: No EXIF data for {self.imgfile}")
             raise
 
+        # Get datetime
+        self.date_time = self.exif_data.get(0x0132)
+        if self.date_time:
+            try:
+                self.date_time = datetime.datetime.strptime(self.date_time, "%Y:%m:%d %H:%M:%S")
+                logprint(f"Date and time: {self.date_time}")
+            except ValueError:
+                logprint(f"WARNING: Invalid DateTime format in {self.imgfile}")
+                raise
+        else:
+            logprint(f"WARNING: No DateTime in EXIF for {self.imgfile}")
+            raise
+
         # Get image size
         self.width, self.height = Image.open(self.imgfile).size
 
@@ -40,6 +54,9 @@ class ExifData:
         ps = (pxs + pys) / 2
         a = 2 * math.atan2(r * ps, 2 * self.focal_length)  # Diameter in radians
         return a
+
+    def px_to_mn(self, r):
+        return 60*math.degrees(self.px_to_angle(r))
 
     def angle_to_px(self, a):
         """Convert angle  (radians) to pixel size for Canon 550D sensor."""
@@ -58,6 +75,9 @@ def main():
     print(exif_data.focal_length)
     print(exif_data.width)
     print(exif_data.height)
+    print(exif_data.date_time)
+    print(exif_data.px_to_angle(1))
+    print(exif_data.deg_to_px(0.5))
     
 if __name__ == '__main__':
     main()

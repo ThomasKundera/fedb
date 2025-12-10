@@ -16,13 +16,12 @@ class Individual:
             # Inherit parent's survival rate, then possibly mutate
             child_rate = self.survival_rate
 
-            r = random.random()
-            if r < 0.90:        # 90% neutral
-                pass
-            elif r < 0.949:     # 4.9% detrimental
-                child_rate -= max(0.0, child_rate - 0.1)
-            elif r < 0.999:     # 0.1% beneficial
-                child_rate += min(1.0, child_rate + 0.001)
+            mutation_type = random.random()
+            if mutation_type < 0.049:           # 4.9% detrimental
+                child_rate = max(0.0, child_rate - 0.1)
+            elif mutation_type < 0.05:          # next 0.1% → beneficial (total 5% mutating)
+                child_rate = min(1.0, child_rate + 0.01)
+            # else: neutral
             offspring.append(Individual(child_rate, self.generation_born + 1))
         return offspring
 
@@ -35,7 +34,7 @@ class Individual:
 
 
 class Population:
-    def __init__(self, initial_size=1000, max_size=100_000):
+    def __init__(self, initial_size=10000, max_size=100_000):
         self.individuals = [Individual(0.01) for _ in range(initial_size)]  # All start with 1% survival
         self.max_size = max_size
         self.generation = 0
@@ -92,13 +91,13 @@ class Population:
         plt.ylabel('Survival Rate (fitness)')
         plt.grid(True, alpha=0.3)
         plt.legend()
-        plt.ylim(0, 1)
+        plt.ylim(0, 0.3)
         plt.show()
 
 
 # ==================== RUN THE SIMULATION ====================
 if __name__ == "__main__":
     random.seed(42)  # For reproducibility
-    pop = Population(initial_size=1000, max_size=10_000)
-    pop.run(generations=20)
+    pop = Population(initial_size=10000, max_size=100_000)
+    pop.run(generations=400)
     pop.plot()

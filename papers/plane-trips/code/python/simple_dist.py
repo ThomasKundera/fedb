@@ -76,7 +76,7 @@ def test():
     print_distances("Paris","Sydney")
 
 def main():
-    citylist=["Paris","Le_Cap","Sydney"]
+    citylist=["Paris","Le_Cap"]
     #,"Sydney","Osaka"]
     plot_cities(citylist)
     return

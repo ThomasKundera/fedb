@@ -3,9 +3,11 @@ from mathutils import Vector
 import bpy
 
 # Units
-m=1
+m=1./10000 # 1 unit is 10 km
 km=1000.*m
 ua=149597870700*m
+
+tk_earth_radius = 6371*km
 
 def look_at(camera_obj, camloc, target):
     """Make camera look at a target point (POV-Ray style).

@@ -4,12 +4,8 @@ import bpy
 
 # Units
 m=1
-
-from mathutils import Vector
-
-from mathutils import Vector
-
-from mathutils import Vector
+km=1000.*m
+ua=149597870700*m
 
 def look_at(camera_obj, camloc, target):
     """Make camera look at a target point (POV-Ray style).

@@ -82,7 +82,7 @@ def setup_camera(name,camloc, target):
     cam_data = bpy.data.cameras.new(name=name)
 
     # FOV
-    cam_data.lens = 30
+    cam_data.lens = 28
     #cam_data.lens = 50       # default
     # cam_data.lens = 85
 
@@ -189,7 +189,7 @@ def create_earth(km=1.0, earth_texture_path=None):
     earth.data.materials.append(mat)
 
     # Rotates for a nicer place
-    earth.rotation_euler = (0,math.radians(20), 0)
+    earth.rotation_euler = (0,math.radians(35), 0)
     #earth.rotation_euler = (math.radians(-10), 0,0)
     print(f"   ✅ Earth created successfully (radius {radius:.1f} units)")
     return earth
@@ -204,7 +204,6 @@ def create_iss(iss_location):
         iss = iss_objects[0]
         iss.location = iss_location
         iss.scale = (100*m, 100*m, 100*m)
-
 
 
 def setup_render_stamp():
@@ -237,15 +236,26 @@ def main():
     clear_scene()
     #setup_world_background()
     setup_space_ambient()
-
-    #add_axis_helpers(length=20000*km,thickness=100*km)
     setup_sun_light()
-    create_earth()
 
+    #add_axis_helpers(length=1000*km,thickness=1*km, translate=(0,0,0))
+
+    #iss_location=(10*km,0*km,5*km)
+    #cam_loc = Vector(iss_location)+Vector((2*km,-50*km,2*km))
+    #add_axis_helpers(length=1*km,thickness=10*m, translate=iss_location)
+    #create_iss(iss_location)
+
+    #setup_camera("camera",(1,-30,1),(0,0,0))
+    #add_axis_helpers(translate=(5,0,0))
+    create_earth()
     iss_location = (10*km, 10*km, tk_earth_radius+350*km)
+    cam_loc = Vector(iss_location) + Vector((20*km,20*km,30*km))
+
+    add_axis_helpers(length=20*km,thickness=100*m, translate=iss_location)
+
     create_iss(iss_location)
     #setup_camera("camera",(200*km,-19000*km,200*km),(0,0,0))
-    setup_camera("camera",(0,0,tk_earth_radius+400*km),iss_location)
+    setup_camera("camera",cam_loc,iss_location)
 
     # Set output filename
     scene = bpy.context.scene

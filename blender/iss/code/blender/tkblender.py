@@ -33,118 +33,110 @@ def look_at(camera_obj, camloc, target):
     # Camera looks along -Z (Blender default)
     rot_quat = direction.to_track_quat('-Z', up_axis)
     camera_obj.rotation_euler = rot_quat.to_euler()
-    
 
-def add_axis_helpers(length=50.0, thickness=0.05, arrow_size=0.3, add_labels=True):
-    """Add renderable X/Y/Z axis lines with arrowheads and optional text labels.
-    
-    Parameters:
-        length (float): Total length of each axis line
-        thickness (float): Diameter of the axis lines
-        arrow_size (float): Size of the arrowhead cones
-        add_labels (bool): Whether to add "X", "Y", "Z" text labels
+
+def add_axis_helpers(length=10.0, thickness=0.05, add_labels=True, translate=(0, 0, 0)):
     """
-    collection = bpy.context.scene.collection
-    
-    # Helper to create a thin cylinder for the axis line
-    def create_axis(name, color, direction):
-        # Cylinder (main line)
+    Add renderable X/Y/Z axis lines with arrowheads and optional text labels.
+    All parts are grouped under one parent Empty.
+    translate = (x, y, z) moves the entire axis system.
+    """
+    tx, ty, tz = translate
+    arrow_size = thickness * 2
+
+    print(f"🛠️ Creating axis helpers at position {translate}...")
+
+    # Create parent Empty at the desired location
+    bpy.ops.object.empty_add(type='PLAIN_AXES', location=(tx, ty, tz))
+    parent = bpy.context.active_object
+    parent.name = "Axis_Helpers"
+    parent.empty_display_size = length * 0.1
+
+    # Material helper (good visibility in Solid + Rendered)
+    def create_material(name, base_color, emission_strength=10.0):
+        mat = bpy.data.materials.new(name=name)
+        mat.use_nodes = True
+        nodes = mat.node_tree.nodes
+        links = mat.node_tree.links
+        for n in list(nodes):
+            nodes.remove(n)
+
+        bsdf = nodes.new('ShaderNodeBsdfPrincipled')
+        bsdf.inputs['Base Color'].default_value = base_color
+        bsdf.inputs['Roughness'].default_value = 0.0
+
+        emission = nodes.new('ShaderNodeEmission')
+        emission.inputs['Color'].default_value = base_color
+        emission.inputs['Strength'].default_value = emission_strength
+
+        mix = nodes.new('ShaderNodeMixShader')
+        mix.inputs['Fac'].default_value = 0.7
+
+        output = nodes.new('ShaderNodeOutputMaterial')
+
+        links.new(bsdf.outputs['BSDF'], mix.inputs[1])
+        links.new(emission.outputs['Emission'], mix.inputs[2])
+        links.new(mix.outputs['Shader'], output.inputs['Surface'])
+        return mat
+
+    # Helper to create one axis
+    def create_axis_part(name, color, line_rotation, arrow_rotation):
+        # Main axis line (cylinder) - offset from translate
         bpy.ops.mesh.primitive_cylinder_add(
             radius=thickness,
             depth=length,
-            location=(0, 0, 0),
-            rotation=direction
+            location=(0, 0, 0),           # start at translate position
+            rotation=line_rotation
         )
-        axis = bpy.context.active_object
-        axis.name = name
-        
-        # Simple emissive material so it glows a bit and is easy to see
-        mat = bpy.data.materials.new(name=f"Axis_{name}")
-        mat.use_nodes = True
-        nodes = mat.node_tree.nodes
-        for node in list(nodes):
-            nodes.remove(node)
-        
-        emission = nodes.new('ShaderNodeEmission')
-        emission.inputs['Color'].default_value = color
-        emission.inputs['Strength'].default_value = 10.0
-        
-        output = nodes.new('ShaderNodeOutputMaterial')
-        mat.node_tree.links.new(emission.outputs['Emission'], output.inputs['Surface'])
-        
-        axis.data.materials.append(mat)
-        collection.objects.link(axis)  # ensure it's in scene
-        return axis
+        line = bpy.context.active_object
+        line.name = f"Axis_{name}"
+        line.data.materials.append(create_material(f"Mat_Axis_{name}", color))
+        line.parent = parent
 
-    # X axis (red) - along positive X
-    rot_x = (0, math.radians(90), 0)
-    x_axis = create_axis("Axis_X", (1.0, 0.0, 0.0, 1.0), rot_x)
-    
-    # Y axis (green) - along positive Y
-    rot_y = (math.radians(-90), 0, 0)
-    y_axis = create_axis("Axis_Y", (0.0, 1.0, 0.0, 1.0), rot_y)
-    
-    # Z axis (blue) - along positive Z
-    rot_z = (0, 0, 0)
-    z_axis = create_axis("Axis_Z", (0.0, 0.0, 1.0, 1.0), rot_z)
+        # Arrowhead at the positive end
+        arrow_pos = (length/2 if name == "X" else 0,
+                     length/2 if name == "Y" else 0,
+                     length/2 if name == "Z" else 0)
 
-    # Add arrowheads (cones) at the end of each axis
-    def add_arrowhead(name, location, rotation, color):
         bpy.ops.mesh.primitive_cone_add(
             radius1=arrow_size,
             depth=arrow_size * 2,
-            location=location,
-            rotation=rotation
+            location=arrow_pos,
+            rotation=arrow_rotation
         )
         cone = bpy.context.active_object
         cone.name = f"Arrow_{name}"
-        
-        mat = bpy.data.materials.new(name=f"Arrow_{name}")
-        mat.use_nodes = True
-        nodes = mat.node_tree.nodes
-        for n in list(nodes): nodes.remove(n)
-        em = nodes.new('ShaderNodeEmission')
-        em.inputs['Color'].default_value = color
-        em.inputs['Strength'].default_value = 15.0
-        out = nodes.new('ShaderNodeOutputMaterial')
-        mat.node_tree.links.new(em.outputs['Emission'], out.inputs['Surface'])
-        
-        cone.data.materials.append(mat)
-        collection.objects.link(cone)
+        cone.data.materials.append(create_material(f"Mat_Arrow_{name}", color, 14.0))
+        cone.parent = parent
 
-    # Arrowheads
-    add_arrowhead("X", (length/2, 0, 0), (0, math.radians(90), 0), (1.0, 0.0, 0.0, 1.0))
-    add_arrowhead("Y", (0, length/2, 0), (math.radians(-90), 0, 0), (0.0, 1.0, 0.0, 1.0))
-    add_arrowhead("Z", (0, 0, length/2), (0, 0, 0), (0.0, 0.0, 1.0, 1.0))
+    # Create the three axes
+    create_axis_part("X", (1.0, 0.1, 0.1, 1.0), (0, math.radians(90), 0), (0, math.radians(90), 0))
+    create_axis_part("Y", (0.1, 1.0, 0.1, 1.0), (math.radians(-90), 0, 0), (math.radians(-90), 0, 0))
+    create_axis_part("Z", (0.1, 0.1, 1.0, 1.0), (0, 0, 0), (0, 0, 0))
 
-    # Optional text labels (always face camera approximately)
+    # Optional labels
     if add_labels:
-        def create_label(text, location, color):
-            bpy.ops.object.text_add(location=location)
+        def create_label(text, offset, color):
+            loc = (tx + offset[0], ty + offset[1], tz + offset[2])
+            bpy.ops.object.text_add(location=loc)
             txt = bpy.context.active_object
             txt.name = f"Label_{text}"
             txt.data.body = text
-            txt.data.size = 0.6
+            txt.data.size = length * 0.018
             txt.data.align_x = 'CENTER'
             txt.data.align_y = 'CENTER'
-            
-            mat = bpy.data.materials.new(name=f"Label_{text}")
-            mat.use_nodes = True
-            nodes = mat.node_tree.nodes
-            for n in list(nodes): nodes.remove(n)
-            em = nodes.new('ShaderNodeEmission')
-            em.inputs['Color'].default_value = color
-            em.inputs['Strength'].default_value = 20.0
-            out = nodes.new('ShaderNodeOutputMaterial')
-            mat.node_tree.links.new(em.outputs['Emission'], out.inputs['Surface'])
-            txt.data.materials.append(mat)
-            
-            # Simple rotation to face camera better (adjust if needed)
             txt.rotation_euler = (math.radians(90), 0, 0)
-            collection.objects.link(txt)
-        
-        create_label("X", (length/2 + 0.8, 0, 0), (1.0, 0.2, 0.2, 1.0))
-        create_label("Y", (0, length/2 + 0.8, 0), (0.2, 1.0, 0.2, 1.0))
-        create_label("Z", (0, 0, length/2 + 0.8), (0.2, 0.2, 1.0, 1.0))
 
-    print("✅ Axis helpers added (X=red, Y=green, Z=blue)")
+            mat = create_material(f"Mat_Label_{text}", color, 18.0)
+            txt.data.materials.append(mat)
+            txt.parent = parent
+
+        create_label("X", (length/2 + 2.0, 0, 0), (1.0, 0.3, 0.3, 1.0))
+        create_label("Y", (0, length/2 + 2.0, 0), (0.3, 1.0, 0.3, 1.0))
+        create_label("Z", (0, 0, length/2 + 2.0), (0.3, 0.3, 1.0, 1.0))
+
+    # Move the parent to the desired location
+    parent.location = translate
+
+    print(f"✅ Axis helpers created at {translate}. Parent: Axis_Helpers")
+    return parent

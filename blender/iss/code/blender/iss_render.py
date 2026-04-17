@@ -82,7 +82,7 @@ def setup_camera(name,camloc, target):
     cam_data = bpy.data.cameras.new(name=name)
 
     # FOV
-    cam_data.lens = 28
+    cam_data.lens = 17 # As NASA
     #cam_data.lens = 50       # default
     # cam_data.lens = 85
 
@@ -93,6 +93,9 @@ def setup_camera(name,camloc, target):
 
     cam_obj.data.clip_start = 10*m
     cam_obj.data.clip_end   = 20000*km
+
+    cam_obj.data.sensor_width = 36.0
+    cam_obj.data.sensor_height = 24.0     # 36:24 = 3:2
 
     bpy.context.scene.collection.objects.link(cam_obj)
     bpy.context.scene.camera = cam_obj
@@ -189,8 +192,8 @@ def create_earth(km=1.0, earth_texture_path=None):
     earth.data.materials.append(mat)
 
     # Rotates for a nicer place
-    earth.rotation_euler = (0,math.radians(35), 0)
-    #earth.rotation_euler = (math.radians(-10), 0,0)
+    earth.rotation_euler = (0,math.radians(30), 0)
+    earth.rotation_euler = (math.radians(-30), 0,0)
     print(f"   ✅ Earth created successfully (radius {radius:.1f} units)")
     return earth
 
@@ -203,7 +206,11 @@ def create_iss(iss_location):
     if iss_objects:
         iss = iss_objects[0]
         iss.location = iss_location
-        iss.scale = (100*m, 100*m, 100*m)
+        iss.scale = (10*m, 10*m, 10*m)
+        iss.rotation_mode = "XYZ"
+        iss.rotation_euler = (math.radians(90),0,math.radians(180))
+        print(f"✅ ISS created successfully")
+        return iss
 
 
 def setup_render_stamp():
@@ -249,13 +256,14 @@ def main():
     #add_axis_helpers(translate=(5,0,0))
     create_earth()
     iss_location = (10*km, 10*km, tk_earth_radius+350*km)
-    cam_loc = Vector(iss_location) + Vector((20*km,20*km,30*km))
+    cam_loc = Vector(iss_location) + Vector((75*m,-450*m,450*m))
+    cam_look_at = Vector(iss_location)+Vector((300*m,100*m,0*m))
 
-    add_axis_helpers(length=20*km,thickness=100*m, translate=iss_location)
+    add_axis_helpers(length=2*km,thickness=2*m, translate=iss_location)
 
     create_iss(iss_location)
     #setup_camera("camera",(200*km,-19000*km,200*km),(0,0,0))
-    setup_camera("camera",cam_loc,iss_location)
+    setup_camera("camera",cam_loc,cam_look_at)
 
     # Set output filename
     scene = bpy.context.scene
@@ -266,6 +274,9 @@ def main():
     # Render settings
     setup_render_stamp()
 
+    scene.render.resolution_x = 3072//2
+    scene.render.resolution_y = 2024//2
+    scene.render.resolution_percentage = 100
     # Render the scene
     bpy.ops.render.render(write_still=True)
     print("✅ Render finished! Image saved as iss.png")

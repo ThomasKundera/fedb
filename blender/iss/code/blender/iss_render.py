@@ -31,7 +31,7 @@ def setup_world_background():
 
     # Create a simple black background
     bg = nodes.new('ShaderNodeBackground')
-    bg.inputs['Color'].default_value = (0.0, 0.0, 0.0, 1.0)   # pure black
+    bg.inputs['Color'].default_value = (.0, .0, .0, 1.0)   # pure black
     bg.inputs['Strength'].default_value = 1.0
 
     output = nodes.new('ShaderNodeOutputWorld')
@@ -197,7 +197,8 @@ def create_earth(km=1.0, earth_texture_path=None):
     print(f"   ✅ Earth created successfully (radius {radius:.1f} units)")
     return earth
 
-def create_iss(iss_location):
+
+def create_iss0(iss_location):
     # Import the ISS GLB
     bpy.ops.import_scene.gltf(filepath=k_iss_glb)
 
@@ -205,18 +206,121 @@ def create_iss(iss_location):
     iss_objects = [obj for obj in bpy.context.selected_objects]
     if iss_objects:
         iss = iss_objects[0]
-
-        print("ISS dimensions:",iss.dimensions)
-
+        print("ISS dimensions (org):",iss.dimensions)
+        print_iss_hierarchy()
         iss.location = iss_location
-        iss.scale = (1*m, 1*m, 1*m)
+        issscale=2.9*m
+        iss.scale = (issscale,issscale,issscale)
+        print("ISS dimensions (rescaled):",iss.dimensions)
         iss.rotation_mode = "XYZ"
-        iss.rotation_euler = (math.radians(80),math.radians(0),math.radians(180))
+        iss.rotation_euler = (math.radians(90),math.radians(1),math.radians(180))
         print(f"✅ ISS created successfully")
         return iss
     else:
         print("⚠️ Could not find ISS object after import")
         return None
+
+def list_iss_objects(iss):
+    print("=== ALL OBJECTS AFTER IMPORT ===")
+    print(f"Total objects in scene: {len(bpy.data.objects)}")
+    
+    # List all objects with their names and basic info
+    for obj in sorted(bpy.data.objects, key=lambda o: o.name):
+        parent_name = obj.parent.name if obj.parent else "None"
+        print(f"  • {obj.name:12} | Type: {obj.type:6} | Parent: {parent_name}")
+
+    # === List all child objects (this should show ISS.001, ISS.002, etc.) ===
+    print("\n=== Child objects under ISS ===")
+    child_count = 0
+    for obj in iss.children_recursive:          # This is the key line
+        child_count += 1
+        if child_count <= 30 or "solar" in obj.name.lower() or "panel" in obj.name.lower():
+            print(f"  • {obj.name} | Type: {obj.type}")
+
+    print(f"Total child objects found: {child_count}")
+
+def create_iss(iss_location):
+    # Import the ISS GLB
+    bpy.ops.import_scene.gltf(
+        filepath=k_iss_glb,
+        import_scene_as_collection=True)
+
+    #list_iss_objects(None)
+
+    # Get the main ISS parent object
+    iss_objects = [obj for obj in bpy.context.selected_objects]
+    if not iss_objects:
+        print("⚠️ Could not find ISS object after import")
+        return None
+
+    iss = iss_objects[0]
+    print("ISS dimensions (org):",iss.dimensions)
+    iss.location = iss_location
+    issscale=2.9*m
+    iss.scale = (issscale,issscale,issscale)
+    print("ISS dimensions (rescaled):",iss.dimensions)
+    iss.rotation_mode = "XYZ"
+    iss.rotation_euler = (math.radians(90),math.radians(1),math.radians(180))
+
+    #return iss
+
+    # Go into Edit Mode and separate by loose parts (solar panels are usually separate islands)
+    bpy.context.view_layer.objects.active = iss
+    bpy.ops.object.mode_set(mode='EDIT')
+    bpy.ops.mesh.select_all(action='SELECT')
+    bpy.ops.mesh.separate(type='LOOSE')        # This splits into multiple objects
+    bpy.ops.object.mode_set(mode='OBJECT')
+    print("Separated ISS into multiple objects.")
+
+    # === Define ranges for deletion and rotation ===
+    # Format: list of (start, end) tuples. Single numbers can be (n, n)
+    to_delete = [
+        (66, 73),      # 066-073
+        (329, 505),    # 329-505
+        (806, 808)     # 806-808
+    ]
+
+    to_rotate = [
+        (74, 137),     # 074-137
+        (529, 552),    # 529-552
+        (560, 646),    # 560-646
+        (666, 689),    # 666-689
+        (697, 697),    # single: 697
+        (710, 710),    # single: 710
+        (714, 714),    # single: 714
+        (716, 787)     # 716-787
+    ]
+
+    # Delete unwanted objects
+    deleted_count = 0
+    for start, end in to_delete:
+        for i in range(start, end + 1):
+            obj_name = f"ISS.{i:03d}"          # e.g. ISS.066, ISS.073, etc.
+            obj = bpy.data.objects.get(obj_name)
+            if obj:
+                bpy.data.objects.remove(obj, do_unlink=True)
+                deleted_count += 1
+
+    print(f"✅ Deleted {deleted_count} unwanted objects")
+    #return iss
+    # Rotate solar panel objects
+    rotated_count = 0
+    solar_angle = math.radians(80)            # ← Change this value to adjust angle
+
+    for start, end in to_rotate:
+        for i in range(start, end + 1):
+            obj_name = f"ISS.{i:03d}"
+            obj = bpy.data.objects.get(obj_name)
+            if obj and obj.type == 'MESH':
+                # Rotate around X axis (most common for solar panels)
+                obj.rotation_euler[0] = solar_angle
+                rotated_count += 1
+
+    print(f"✅ Rotated {rotated_count} solar panel objects (angle = {math.degrees(solar_angle):.1f}°)")
+    print(f"✅ ISS created successfully at {iss_location}")
+    
+    return iss
+
 
 def setup_render_stamp():
     """Configure clean timestamp stamp (hide filename and scene name)."""
@@ -259,16 +363,16 @@ def main():
 
     #setup_camera("camera",(1,-30,1),(0,0,0))
     #add_axis_helpers(translate=(5,0,0))
-    create_earth()
+    #create_earth()
     iss_location = (10*km, 10*km, tk_earth_radius+350*km)
     #iss_location = (0, 0, 0)
 
-    cam_loc = Vector(iss_location) + Vector((0*m,-380*m,300*m))
-    cam_look_at = Vector(iss_location)+Vector((210*m,100*m,-90*m))
+    cam_loc = Vector(iss_location) + Vector((0*m,-126*m,63*m))
+    cam_look_at = Vector(iss_location)+Vector((49*m,0*m,11*m))
 
     #cam_loc = Vector(iss_location) + Vector((75*m,-450*m,450*m))
     #cam_look_at = Vector(iss_location)+Vector((300*m,100*m,-110*m))
-    add_axis_helpers(length=100*m,thickness=2*m, translate=iss_location)
+    #add_axis_helpers(length=100*m,thickness=1*m, translate=iss_location, add_labels=False)
 
     iss = create_iss(iss_location)
     #setup_camera("camera",(200*km,-19000*km,200*km),(0,0,0))

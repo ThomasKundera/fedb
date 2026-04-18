@@ -93,7 +93,7 @@ def add_axis_helpers(length=10.0, thickness=0.05, add_labels=True, translate=(0,
         line.name = f"Axis_{name}"
         line.data.materials.append(create_material(f"Mat_Axis_{name}", color))
         line.parent = parent
-        return
+        #return
         # Arrowhead at the positive end
         arrow_pos = (length/2 if name == "X" else 0,
                      length/2 if name == "Y" else 0,
@@ -112,8 +112,8 @@ def add_axis_helpers(length=10.0, thickness=0.05, add_labels=True, translate=(0,
 
     # Create the three axes
     create_axis_part("X", (1.0, 0.1, 0.1, 1.0), (0, math.radians(90), 0), (0, math.radians(90), 0))
-    #create_axis_part("Y", (0.1, 1.0, 0.1, 1.0), (math.radians(-90), 0, 0), (math.radians(-90), 0, 0))
-    #create_axis_part("Z", (0.1, 0.1, 1.0, 1.0), (0, 0, 0), (0, 0, 0))
+    create_axis_part("Y", (0.1, 1.0, 0.1, 1.0), (math.radians(-90), 0, 0), (math.radians(-90), 0, 0))
+    create_axis_part("Z", (0.1, 0.1, 1.0, 1.0), (0, 0, 0), (0, 0, 0))
 
     # Optional labels
     if add_labels:

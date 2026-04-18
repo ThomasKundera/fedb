@@ -1,7 +1,7 @@
 import os
 import bpy
 import math
-from mathutils import Vector
+from mathutils import Vector, Euler
 from tkblender import add_axis_helpers, look_at,m,km, tk_earth_radius
 
 k_fedb_dir = os.environ.get('FEDBDIR', '/tmp')
@@ -39,7 +39,7 @@ def setup_world_background():
     # Connect
     links.new(bg.outputs['Background'], output.inputs['Surface'])
 
-def setup_space_ambient(strength=0.8, color=(0.02, 0.03, 0.08)):
+def setup_space_ambient(strength=0.8, color=(0.01, 0.02, 0.04)):
     """
     Sets up soft ambient world lighting suitable for space scenes (ISS + Earth).
     Reduces harsh shadows from the Sun.
@@ -177,7 +177,7 @@ def create_earth(km=1.0, earth_texture_path=None):
     tex.location = (-300, 0)
     tex.interpolation = 'Cubic'
 
-    if False and k_earth_texture and os.path.exists(k_earth_texture):
+    if k_earth_texture and os.path.exists(k_earth_texture):
         print(f"   Loading Earth texture: {k_earth_texture}")
         tex.image = bpy.data.images.load(k_earth_texture)
         links.new(tex.outputs["Color"], bsdf.inputs["Base Color"])
@@ -239,31 +239,7 @@ def list_iss_objects(iss):
 
     print(f"Total child objects found: {child_count}")
 
-def create_iss(iss_location):
-    # Import the ISS GLB
-    bpy.ops.import_scene.gltf(
-        filepath=k_iss_glb,
-        import_scene_as_collection=True)
-
-    #list_iss_objects(None)
-
-    # Get the main ISS parent object
-    iss_objects = [obj for obj in bpy.context.selected_objects]
-    if not iss_objects:
-        print("⚠️ Could not find ISS object after import")
-        return None
-
-    iss = iss_objects[0]
-    print("ISS dimensions (org):",iss.dimensions)
-    iss.location = iss_location
-    issscale=2.9*m
-    iss.scale = (issscale,issscale,issscale)
-    print("ISS dimensions (rescaled):",iss.dimensions)
-    iss.rotation_mode = "XYZ"
-    iss.rotation_euler = (math.radians(90),math.radians(1),math.radians(180))
-
-    #return iss
-
+def customize_iss(iss):
     # Go into Edit Mode and separate by loose parts (solar panels are usually separate islands)
     bpy.context.view_layer.objects.active = iss
     bpy.ops.object.mode_set(mode='EDIT')
@@ -305,7 +281,7 @@ def create_iss(iss_location):
     #return iss
     # Rotate solar panel objects
     rotated_count = 0
-    solar_angle = math.radians(80)            # ← Change this value to adjust angle
+    solar_angle = math.radians(100)            # ← Change this value to adjust angle
 
     for start, end in to_rotate:
         for i in range(start, end + 1):
@@ -316,10 +292,39 @@ def create_iss(iss_location):
                 obj.rotation_euler[0] = solar_angle
                 rotated_count += 1
 
+    bpy.context.view_layer.objects.active = None
+
     print(f"✅ Rotated {rotated_count} solar panel objects (angle = {math.degrees(solar_angle):.1f}°)")
-    print(f"✅ ISS created successfully at {iss_location}")
     
     return iss
+
+
+def create_iss(iss_location):
+    # Import the ISS GLB
+    bpy.ops.import_scene.gltf(
+        filepath=k_iss_glb,
+        import_scene_as_collection=True)
+
+    #list_iss_objects(None)
+
+    # Get the main ISS parent object
+    iss_objects = [obj for obj in bpy.context.selected_objects]
+    if not iss_objects:
+        print("⚠️ Could not find ISS object after import")
+        return None
+
+    iss = iss_objects[0]
+    print("ISS dimensions (org):",iss.dimensions)
+    iss.location = iss_location
+    issscale=2.9*m
+    iss.scale = (issscale,issscale,issscale)
+    print("ISS dimensions (rescaled):",iss.dimensions)
+    iss.rotation_mode = "XYZ"
+    iss.rotation_euler = (math.radians(90),math.radians(1),math.radians(180))
+
+    print(f"✅ ISS created successfully at {iss_location}")
+    return iss
+
 
 
 def setup_render_stamp():
@@ -347,6 +352,157 @@ def setup_render_stamp():
     print("✅ Clean stamp enabled")
 
 
+def dumb_test1():
+    # 1. Create ISS and Camera first (with their own transforms)
+    iss = create_iss((0, 0, 0))
+    cam_loc = Vector((0*m, -126*m, 63*m))
+    cam_look_at = Vector((49*m, 0*m, 11*m))
+    cam = setup_camera("camera", cam_loc, cam_look_at)
+
+    # 2. Create the controlling Empty (this is your "group")
+    bpy.ops.object.empty_add(type='PLAIN_AXES', location=(0, 0, 0))
+    group_parent = bpy.context.active_object
+    group_parent.name = "ISS_Camera_Group"
+
+    # 3. Parent both to the group **after** they are fully set up
+    iss.parent = group_parent
+    cam.parent = group_parent
+
+    # 4. This is the crucial part that prevents resetting orientations
+    iss.matrix_parent_inverse = iss.matrix_world.inverted()
+    cam.matrix_parent_inverse = cam.matrix_world.inverted()
+
+    #issscale=2.9*m
+    #iss.scale = (issscale,issscale,issscale)
+
+    # 5. Now you can freely move and rotate the whole group like in POV-Ray
+    #group_parent.location = (500*m, 300*m, 800*m)     # move the whole thing
+    #group_parent.rotation_euler = (0, math.radians(25), 0)   # rotate the whole group
+
+    print("✅ ISS + Camera grouped.")
+
+
+def dumb_test2():
+    # 1. Create ISS and Camera first
+    iss = create_iss((0, 0, 0))
+    cam_loc = Vector((0*m, -126*m, 63*m))
+    cam_look_at = Vector((49*m, 0*m, 11*m))
+    cam = setup_camera("camera", cam_loc, cam_look_at)
+
+    # 2. Create the group Empty
+    bpy.ops.object.empty_add(type='PLAIN_AXES', location=(0, 0, 0))
+    group_parent = bpy.context.active_object
+    group_parent.name = "ISS_Camera_Group"
+
+    # 3. Parent both
+    iss.parent = group_parent
+    cam.parent = group_parent
+
+    # 4. CRITICAL: Preserve world transforms (this is what was missing or applied too late)
+    iss.matrix_parent_inverse = iss.matrix_world.inverted()
+    cam.matrix_parent_inverse = cam.matrix_world.inverted()
+
+    # 5. NOW you can move and rotate the group safely
+    group_parent.location = (500*m, 0, 800*m)           # Test move
+    group_parent.rotation_euler[1] = math.radians(20)   # Test rotation
+
+    print("✅ ISS + Camera grouped and transformed via group_parent")
+
+
+
+def rotate_around_iss0(iss, cam, rot_x=0, rot_y=0, rot_z=0):
+    """
+    Rotate both ISS and Camera around the center of the ISS using X, Y, Z angles (in degrees).
+    """
+    if not iss or not cam:
+        print("Error: ISS or Camera missing")
+        return
+
+    center = iss.location.copy()           # Rotation center = ISS center
+    rotation = Euler((
+        math.radians(rot_x),
+        math.radians(rot_y),
+        math.radians(rot_z)
+    ), 'XYZ')
+
+    # Rotate the ISS itself around its center
+    iss.rotation_mode = 'XYZ'
+    iss.rotation_euler.rotate(rotation)
+
+    # Rotate the Camera around the ISS center
+    cam.rotation_mode = 'XYZ'
+
+    # 1. Get camera position relative to ISS center
+    relative_vec = cam.location - center
+
+    # 2. Rotate that vector
+    relative_vec.rotate(rotation)
+
+    # 3. Put camera back at new position
+    cam.location = center + relative_vec
+
+    # 4. Also rotate the camera's own orientation
+    cam.rotation_euler.rotate(rotation)
+
+    print(f"✅ Rotated around ISS center → X:{rot_x}°  Y:{rot_y}°  Z:{rot_z}°")
+
+
+import mathutils
+
+def rotate_around_iss(iss, cam, rot_x=0, rot_y=0, rot_z=0, look_at_offset=(49*m, 0*m, 11*m)):
+    """
+    Rotate ISS and Camera around the ISS center.
+    Camera will also update its look-at direction after rotation.
+    """
+    if not iss or not cam:
+        print("Error: ISS or Camera missing")
+        return
+
+    center = iss.location.copy()
+
+    # Create rotation
+    rotation = mathutils.Euler((
+        math.radians(rot_x),
+        math.radians(rot_y),
+        math.radians(rot_z)
+    ), 'XYZ')
+
+    # Rotate the ISS
+    iss.rotation_mode = 'XYZ'
+    iss.rotation_euler.rotate(rotation)
+
+    # Rotate the Camera position around ISS center
+    cam.rotation_mode = 'XYZ'
+    relative_vec = cam.location - center
+    relative_vec.rotate(rotation)
+    cam.location = center + relative_vec
+
+    # Rotate the camera's own orientation
+    cam.rotation_euler.rotate(rotation)
+
+    # Make camera look at the desired point relative to ISS
+    lao=Vector(look_at_offset)
+    lao.rotate(rotation)
+    look_target = center + lao
+    #look_at(cam, cam.location, look_target)
+
+    print(f"✅ Rotated system → X:{rot_x}°  Y:{rot_y}°  Z:{rot_z}° | Camera re-oriented")
+
+
+def static_works():
+    iss_location = (10*km, 10*km, tk_earth_radius+350*km)
+
+    #add_axis_helpers(length=1*km,thickness=.5*m, translate=iss_location)
+
+    cam_loc = Vector(iss_location) + Vector((0*m,-126*m,63*m))
+    cam_look_at_offset = Vector((49*m,0*m,11*m))
+    cam_look_at = Vector(iss_location)+cam_look_at_offset
+    iss = create_iss(iss_location)
+    cam = setup_camera("camera",cam_loc,cam_look_at)
+    rotate_around_iss(iss, cam, rot_x=-22, rot_y=8, rot_z=0, look_at_offset=cam_look_at_offset)
+    iss = customize_iss(iss)
+
+
 def main():
     """Main function - orchestrates the entire scene creation and render."""
     clear_scene()
@@ -363,20 +519,58 @@ def main():
 
     #setup_camera("camera",(1,-30,1),(0,0,0))
     #add_axis_helpers(translate=(5,0,0))
-    #create_earth()
-    iss_location = (10*km, 10*km, tk_earth_radius+350*km)
-    #iss_location = (0, 0, 0)
+    create_earth()
 
-    cam_loc = Vector(iss_location) + Vector((0*m,-126*m,63*m))
-    cam_look_at = Vector(iss_location)+Vector((49*m,0*m,11*m))
+    static_works()
+
+    #dumb_test2()
+
+    #iss=create_iss((0,0,0))
+    #cam_loc = Vector((0*m,-126*m,63*m))
+    #cam_look_at = Vector((49*m,0*m,11*m))
+    #cam = setup_camera("camera",cam_loc,cam_look_at)
+
+    # === Create ISS + Camera grouped under 'ISS_Camera_Group' ===
+    #bpy.ops.object.empty_add(type='PLAIN_AXES', location=(0,0,0))
+    #group_parent = bpy.context.active_object
+    #group_parent.name = "ISS_Camera_Group"
+
+    #iss.parent = group_parent
+    #cam.parent = group_parent
+   
+    #iss.matrix_parent_inverse = iss.matrix_world.inverted()
+    #cam.matrix_parent_inverse = cam.matrix_world.inverted()
+    
+    #iss.parent = group_parent
+    #cam.parent = group_parent
+
+    #iss.matrix_parent_inverse = iss.matrix_world.inverted()
+    #cam.matrix_parent_inverse = cam.matrix_world.inverted()
+
+    #print("✅ ISS + Camera grouped under 'ISS_Camera_Group'")
+
+    #group_parent.rotation_euler[1] = math.radians(.01)
+
+    # === Create a parent Empty to rotate ISS + Camera together ===
+    #bpy.ops.object.empty_add(type='PLAIN_AXES', location=iss_location)
+    #group_parent = bpy.context.active_object
+    #group_parent.name = "ISS_Camera_Group"
+
+    # Parent both ISS and Camera to this Empty
+    #iss.parent = group_parent
+    #cam = cam_obj
+    #cam.parent = group_parent
+
+    # Optional: keep the current relative transforms (important!)
+    #iss.matrix_parent_inverse = iss.matrix_world.inverted()
+    #cam.matrix_parent_inverse = cam.matrix_world.inverted()
+
+    #print("✅ ISS + Camera grouped under 'ISS_Camera_Group'")    
 
     #cam_loc = Vector(iss_location) + Vector((75*m,-450*m,450*m))
     #cam_look_at = Vector(iss_location)+Vector((300*m,100*m,-110*m))
     #add_axis_helpers(length=100*m,thickness=1*m, translate=iss_location, add_labels=False)
-
-    iss = create_iss(iss_location)
     #setup_camera("camera",(200*km,-19000*km,200*km),(0,0,0))
-    setup_camera("camera",cam_loc,cam_look_at)
 
     # Set output filename
     scene = bpy.context.scene
@@ -387,8 +581,8 @@ def main():
     # Render settings
     setup_render_stamp()
 
-    scene.render.resolution_x = 4288//4
-    scene.render.resolution_y = 2848//4
+    scene.render.resolution_x = 4288//2
+    scene.render.resolution_y = 2848//2
     scene.render.resolution_percentage = 100
     # Render the scene
     bpy.ops.render.render(write_still=True)

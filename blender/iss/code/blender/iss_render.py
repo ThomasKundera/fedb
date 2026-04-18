@@ -87,9 +87,9 @@ def setup_camera(name,camloc, target):
     # cam_data.lens = 85
 
     cam_obj = bpy.data.objects.new("Camera", cam_data)
-
     cam_obj.location = camloc
     look_at(cam_obj,camloc,target)
+    cam_obj.rotation_euler[1] += math.radians(5)
 
     cam_obj.data.clip_start = 10*m
     cam_obj.data.clip_end   = 20000*km
@@ -177,13 +177,13 @@ def create_earth(km=1.0, earth_texture_path=None):
     tex.location = (-300, 0)
     tex.interpolation = 'Cubic'
 
-    if k_earth_texture and os.path.exists(k_earth_texture):
+    if False and k_earth_texture and os.path.exists(k_earth_texture):
         print(f"   Loading Earth texture: {k_earth_texture}")
         tex.image = bpy.data.images.load(k_earth_texture)
         links.new(tex.outputs["Color"], bsdf.inputs["Base Color"])
     else:
         print("   ⚠️ No texture provided → using fallback color")
-        bsdf.inputs["Base Color"].default_value = (0.05, 0.15, 0.65, 1.0)
+        bsdf.inputs["Base Color"].default_value = (0.25, 0.35, 0.65, 1.0)
 
     links.new(bsdf.outputs["BSDF"], output.inputs["Surface"])
 
@@ -205,13 +205,18 @@ def create_iss(iss_location):
     iss_objects = [obj for obj in bpy.context.selected_objects]
     if iss_objects:
         iss = iss_objects[0]
+
+        print("ISS dimensions:",iss.dimensions)
+
         iss.location = iss_location
-        iss.scale = (10*m, 10*m, 10*m)
+        iss.scale = (1*m, 1*m, 1*m)
         iss.rotation_mode = "XYZ"
-        iss.rotation_euler = (math.radians(90),0,math.radians(180))
+        iss.rotation_euler = (math.radians(80),math.radians(0),math.radians(180))
         print(f"✅ ISS created successfully")
         return iss
-
+    else:
+        print("⚠️ Could not find ISS object after import")
+        return None
 
 def setup_render_stamp():
     """Configure clean timestamp stamp (hide filename and scene name)."""
@@ -256,12 +261,16 @@ def main():
     #add_axis_helpers(translate=(5,0,0))
     create_earth()
     iss_location = (10*km, 10*km, tk_earth_radius+350*km)
-    cam_loc = Vector(iss_location) + Vector((75*m,-450*m,450*m))
-    cam_look_at = Vector(iss_location)+Vector((300*m,100*m,0*m))
+    #iss_location = (0, 0, 0)
 
-    add_axis_helpers(length=2*km,thickness=2*m, translate=iss_location)
+    cam_loc = Vector(iss_location) + Vector((0*m,-380*m,300*m))
+    cam_look_at = Vector(iss_location)+Vector((210*m,100*m,-90*m))
 
-    create_iss(iss_location)
+    #cam_loc = Vector(iss_location) + Vector((75*m,-450*m,450*m))
+    #cam_look_at = Vector(iss_location)+Vector((300*m,100*m,-110*m))
+    add_axis_helpers(length=100*m,thickness=2*m, translate=iss_location)
+
+    iss = create_iss(iss_location)
     #setup_camera("camera",(200*km,-19000*km,200*km),(0,0,0))
     setup_camera("camera",cam_loc,cam_look_at)
 
@@ -274,12 +283,17 @@ def main():
     # Render settings
     setup_render_stamp()
 
-    scene.render.resolution_x = 3072//2
-    scene.render.resolution_y = 2024//2
+    scene.render.resolution_x = 4288//4
+    scene.render.resolution_y = 2848//4
     scene.render.resolution_percentage = 100
     # Render the scene
     bpy.ops.render.render(write_still=True)
     print("✅ Render finished! Image saved as iss.png")
+
+    # Save the current scene as a .blend file so you can open it interactively
+    blend_path = os.path.join(os.environ.get('WORKDIR', '/tmp'), 'iss_scene.blend')
+    bpy.ops.wm.save_as_mainfile(filepath=blend_path)
+    print(f"✅ Scene saved as .blend file: {blend_path}")
 
 
 # ======================
